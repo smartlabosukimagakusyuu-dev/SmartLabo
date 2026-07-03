@@ -15,6 +15,34 @@
 
 ---
 
+## 2026-07-03 — Homepage初回実装(WEBSITE/、Version 0.1)
+
+CEOよりコーポレートサイト トップページの実制作指示を受領。添付の参考画像をレイアウトの雰囲気の参考としつつ、内容が [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) と矛盾する箇所(CTA数、色数、朝日の表現色)はPROJECT_BIBLEを優先して実装した。
+
+### 実装内容(`WEBSITE/index.html` / `css/style.css` / `js/main.js`)
+
+- 8セクション構成: Hero → 社長の1日をAIが支える流れ → 主要機能 → 導入メリット → 対応業種 → Mission → CTA → Footer
+- Hero: 左テキスト(ブランドコピー/サービスコピー/リード文)+ 右にSmart Labo Works管理画面のモックアップ、背景に控えめな都市シルエット+AIネットワーク、CTA3つ(無料デモを見る/導入相談をする/資料ダウンロード)
+- 配色はNavy / White / Smart Blue / Light Grayのみを使用。「朝日」の表現は、参考画像のオレンジ系グローではなく、カラールール([00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md))を優先しSmart Blueの光として表現
+- 主要機能セクションにサービスコピー「経営を、ひとつにつなぐ。」・説明コピー「社長の右腕になるAI経営プラットフォーム。」を使用し、機能→価値の変換パターンを適用
+- 「対応業種」は実際の導入実績が存在しない現状(β開発中)を踏まえ、「ご利用いただいています」ではなく「ご活用を想定しています」という誠実な表現に調整([00_Foundation/05_Value.md](00_Foundation/05_Value.md)「誠実さ」原則に基づく)
+- 「導入メリット」の統計は、裏付けのない具体的な数値(例: 稼働削減率)を掲載せず、24時間/365日という設計上の事実と、定性的な価値表現に留めた
+
+### 既知の未実装事項
+
+- フォーム送信の実処理(CTAは現状リンクのみ)
+- プライバシーポリシー・利用規約の実ページ(`LEGAL/`が未整備のためリンクはプレースホルダー)
+- 実写真素材(色ブロック+アイコンで代用中)
+
+### 更新したファイル
+
+- 新規: `WEBSITE/index.html`、`WEBSITE/css/style.css`、`WEBSITE/js/main.js`
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v1.0→v1.1) — Homepage Versionを0.0→0.1に更新、Current TaskをDashboard UI設計に更新
+
+**変更者:** Claude Code(Lead Software Engineer)/ 指示: CEO
+
+---
+
 ## 2026-07-03 — v2.3: CURRENT_STATUS.md新設とLead Software Engineer/Knowledge Manager体制の確立
 
 CEOより、Claude CodeをPROJECT_BIBLEおよびGitHubリポジトリの管理責任者として位置づけ、常に最新版を維持する体制を確立するよう指示を受けた。ChatGPT・Claude Code・将来のAI(Codex等)が同じPROJECT_BIBLEを参照しながら開発を進めるための「同期の仕組み」を整備した。
