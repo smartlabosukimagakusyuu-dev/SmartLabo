@@ -56,17 +56,18 @@ SmartLabo/
 新しくこのプロジェクトに関わる人(人間・AIエージェント問わず)は、以下の順番で読み進めてください。
 
 1. [PROJECT_BIBLE/README.md](PROJECT_BIBLE/README.md) — 会社のOS・憲法の使い方
-2. [PROJECT_BIBLE/00_Foundation/01_Company_Story.md](PROJECT_BIBLE/00_Foundation/01_Company_Story.md) — 会社のストーリー
-3. [PROJECT_BIBLE/00_Foundation/02_Founder_Message.md](PROJECT_BIBLE/00_Foundation/02_Founder_Message.md) — 創業者からのメッセージ
-4. [PROJECT_BIBLE/00_Foundation/03_Mission.md](PROJECT_BIBLE/00_Foundation/03_Mission.md) — ミッション
-5. [PROJECT_BIBLE/00_Foundation/04_Vision.md](PROJECT_BIBLE/00_Foundation/04_Vision.md) — ビジョン
-6. [PROJECT_BIBLE/00_Foundation/05_Value.md](PROJECT_BIBLE/00_Foundation/05_Value.md) — バリュー
-7. [PROJECT_BIBLE/00_Foundation/06_Philosophy.md](PROJECT_BIBLE/00_Foundation/06_Philosophy.md) — 会社を貫く哲学
-8. [PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) — ブランドアイデンティティ
-9. [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md) — プロダクト「Smart Labo Works」のコンセプト
-10. [PROJECT_BIBLE/10_Development_Rules.md](PROJECT_BIBLE/10_Development_Rules.md) — 開発ルール
-11. [PROJECT_BIBLE/20_UI_UX_Rules.md](PROJECT_BIBLE/20_UI_UX_Rules.md) — UI/UXルール
-12. [PROJECT_BIBLE/30_AI_Rules.md](PROJECT_BIBLE/30_AI_Rules.md) — AI利用ルール(Claude / Codex / ChatGPT共通)
+2. [PROJECT_BIBLE/CURRENT_STATUS.md](PROJECT_BIBLE/CURRENT_STATUS.md) — 現在のVersion・タスク状況(作業前に必ず確認)
+3. [PROJECT_BIBLE/00_Foundation/01_Company_Story.md](PROJECT_BIBLE/00_Foundation/01_Company_Story.md) — 会社のストーリー
+4. [PROJECT_BIBLE/00_Foundation/02_Founder_Message.md](PROJECT_BIBLE/00_Foundation/02_Founder_Message.md) — 創業者からのメッセージ
+5. [PROJECT_BIBLE/00_Foundation/03_Mission.md](PROJECT_BIBLE/00_Foundation/03_Mission.md) — ミッション
+6. [PROJECT_BIBLE/00_Foundation/04_Vision.md](PROJECT_BIBLE/00_Foundation/04_Vision.md) — ビジョン
+7. [PROJECT_BIBLE/00_Foundation/05_Value.md](PROJECT_BIBLE/00_Foundation/05_Value.md) — バリュー
+8. [PROJECT_BIBLE/00_Foundation/06_Philosophy.md](PROJECT_BIBLE/00_Foundation/06_Philosophy.md) — 会社を貫く哲学
+9. [PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) — ブランドアイデンティティ
+10. [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md) — プロダクト「Smart Labo Works」のコンセプト
+11. [PROJECT_BIBLE/10_Development_Rules.md](PROJECT_BIBLE/10_Development_Rules.md) — 開発ルール
+12. [PROJECT_BIBLE/20_UI_UX_Rules.md](PROJECT_BIBLE/20_UI_UX_Rules.md) — UI/UXルール
+13. [PROJECT_BIBLE/30_AI_Rules.md](PROJECT_BIBLE/30_AI_Rules.md) — AI利用ルール(Claude / Codex / ChatGPT共通)
 
 ---
 

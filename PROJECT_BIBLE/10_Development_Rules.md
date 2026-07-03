@@ -41,6 +41,21 @@
 - 機能開発は `feature/xxx`、修正は `fix/xxx` のようなブランチ名を推奨します。
 - コミットメッセージは「何を」「なぜ」変更したかがわかるように書きます。
 - 機密情報(APIキー、パスワード、個人情報を含む契約書等)は絶対にコミットしません。`.gitignore` を適切に設定してください。
+- 作業前後の手順(git status確認→最新版取得→PROJECT_BIBLE確認→作業→動作確認→CURRENT_STATUS更新→CHANGELOG更新→コミット→push→報告)は [60_Editorial_Workflow.md](60_Editorial_Workflow.md) の「GitHub運用フロー」を参照してください。
+
+### コミットメッセージ規約
+
+コミットの種類に応じて、以下のprefixを使用してください。
+
+| Prefix | 用途 |
+|---|---|
+| `feat:` | 新機能 |
+| `docs:` | Project Bible(ドキュメント)の更新 |
+| `design:` | デザイン変更 |
+| `fix:` | 不具合修正 |
+| `refactor:` | リファクタリング |
+| `style:` | UI/CSSの調整 |
+| `chore:` | フォルダ整理・設定変更 |
 
 ---
 
@@ -58,6 +73,7 @@
 - [00_Foundation/06_Philosophy.md](00_Foundation/06_Philosophy.md)
 - [20_UI_UX_Rules.md](20_UI_UX_Rules.md)
 - [30_AI_Rules.md](30_AI_Rules.md)
+- [60_Editorial_Workflow.md](60_Editorial_Workflow.md) — GitHub運用フロー・報告フォーマット
 - [SmartLaboWorks/README.md](../SmartLaboWorks/README.md)
 
 ---
@@ -68,5 +84,6 @@
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v2.0 | 2026-07-03 | Smart Labo | PROJECT_BIBLE再構成に伴い旧06_Development_Rules.mdから改番。00_Foundation/06_Philosophy.mdの8原則(AIファースト等)を反映 |
+| v2.1 | 2026-07-03 | Claude Code(CEO指示による) | コミットメッセージ規約(feat/docs/design/fix/refactor/style/chore)を追加。60_Editorial_Workflow.mdのGitHub運用フローへの参照を追加 |
 
 *最終更新: 2026-07-03*

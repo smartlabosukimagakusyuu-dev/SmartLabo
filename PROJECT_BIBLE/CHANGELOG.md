@@ -15,6 +15,30 @@
 
 ---
 
+## 2026-07-03 — v2.3: CURRENT_STATUS.md新設とLead Software Engineer/Knowledge Manager体制の確立
+
+CEOより、Claude CodeをPROJECT_BIBLEおよびGitHubリポジトリの管理責任者として位置づけ、常に最新版を維持する体制を確立するよう指示を受けた。ChatGPT・Claude Code・将来のAI(Codex等)が同じPROJECT_BIBLEを参照しながら開発を進めるための「同期の仕組み」を整備した。
+
+### 新規追加
+
+- **[CURRENT_STATUS.md](CURRENT_STATUS.md)** — PROJECT_BIBLE直下に新設。Project Bible Version・Brand Version・Design Bible Version・Homepage Version・Dashboard Version・Smart Labo Works Version・Current Project・Current Task・Next Task・Last Update・Maintainerの11項目を管理し、ChatGPTとの新セッション開始時に共有する「5行サマリー」を用意した。
+  - Homepage/Dashboard/Smart Labo Worksの各Versionは、設計プロンプトのバージョンとは別軸の「実装進捗」であることを明記。2026-07-03時点でこれらは実装未着手のため、正直に `0.0` として記録した(架空の進捗は記載していない)。
+
+### 役割・運用ルールの拡張
+
+- [60_Editorial_Workflow.md](60_Editorial_Workflow.md)(v1.0→v2.0)
+  - Claude Codeの役割を「Project Bible編集長」から「**Project Bible編集長 / Lead Software Engineer 兼 Knowledge Manager**」に拡張
+  - **GitHub運用フロー(10ステップ)** を新設: git status確認 → 最新版取得 → PROJECT_BIBLE確認 → 作業 → 動作確認 → CURRENT_STATUS更新 → CHANGELOG更新 → コミット → push → 報告
+  - **コミットメッセージ規約** を新設: `feat:` `docs:` `design:` `fix:` `refactor:` `style:` `chore:`
+  - **作業完了時の報告フォーマット** を新設: 変更/追加/削除ファイル、PROJECT_BIBLE・CURRENT_STATUS・CHANGELOG更新の有無、現在のVersion一覧、コミットメッセージ、次にやるべき作業
+  - **推測で判断しないエスカレーションルール** を新設: PROJECT_BIBLEに記載のない重要判断は、CEOへの確認またはChatGPTとの協議提案を必須とする
+- [10_Development_Rules.md](10_Development_Rules.md)(v2.0→v2.1) — コミットメッセージ規約を反映
+- [README.md](README.md)(v2.2→v2.3) — CURRENT_STATUS.mdへの導線、利用ルール7項目目(CURRENT_STATUS.mdを常に最新に保つ)、Git運用ルールの更新
+
+**変更者:** Claude Code(Project Bible編集長 / Lead Software Engineer 兼 Knowledge Manager)/ 指示: CEO
+
+---
+
 ## 2026-07-03 — v2.2: Enterprise AI Platform方針の再確認とブランドコピー階層の制定
 
 CEOより改めて「Enterprise AI Platformというブランド思想へ変更する」という指示を受領した。内容を確認した結果、ポジショニング・参照8ブランド(Microsoft/OpenAI/AWS/Stripe/Palantir/Datadog/Snowflake/Vercel)・カラー・Hero構成・CTA(3つ)・UI思想など、大部分は**v2.0(2026-07-03)で既に確定・実装済み**の内容と一致していた。そのため今回は「新たな方針転換」ではなく、「既存方針の正式な再確認」として扱い、その中に含まれていた新規要素を追加で反映した。
