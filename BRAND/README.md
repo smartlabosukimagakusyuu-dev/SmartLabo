@@ -14,12 +14,16 @@
 
 ```
 BRAND/
-├── logo/           ← ロゴファイル(SVG, PNG等、各種サイズ・カラーバリエーション)
+├── logo/           ← ロゴファイル(SVG, PNG等、各種サイズ・カラーバリエーション)※実ファイル未格納
 ├── colors/         ← カラーパレット定義(カラーコード一覧)
+│   └── palette.md  ← 正式カラーパレット(8色、Hexコード)
 ├── typography/     ← 使用フォントの定義・ライセンス情報
 ├── business-card/  ← 名刺デザインデータ
 └── guidelines/     ← ロゴの使用可否・禁止事項などのガイドライン文書
 ```
+
+- カラーパレットは [colors/palette.md](colors/palette.md) に定義済みです。
+- ロゴの構成(カラー/白抜き/アイコンの3バリエーション)は [PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) の「ロゴ」セクションに定義済みですが、**実データ(SVG/PNGファイル)はまだ格納されていません**([PROJECT_BIBLE/50_TODO.md](../PROJECT_BIBLE/50_TODO.md) 参照)。
 
 ---
 
@@ -51,5 +55,12 @@ BRAND/
 - ブランドの根幹に関わる変更(ロゴ差し替え等)はPull Requestでレビューを経てからマージしてください。
 
 ---
+
+## 変更履歴
+
+| バージョン | 日付 | 変更者 | 変更内容 |
+|---|---|---|---|
+| v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
+| v1.1 | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | [colors/palette.md](colors/palette.md) を新設し正式カラーパレットを追加。ロゴ構成の定義先を明記(実ファイルは未格納) |
 
 *最終更新: 2026-07-03*

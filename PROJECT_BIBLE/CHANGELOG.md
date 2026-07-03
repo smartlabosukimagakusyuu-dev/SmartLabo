@@ -12,6 +12,56 @@
 ## [Unreleased]
 
 - (次回の変更予定があればここに記載)
+- Homepage(`WEBSITE/`)のカラートークンを、正式パレット(`#0A1B3D` / `#2563EB` 等)へ更新する
+
+---
+
+## 2026-07-03 — v2.4: ブランドキット(ロゴ・カラー・アイコン・UIコンポーネント)の正式反映
+
+CEOより、ロゴ・背景・ダッシュボードUI・アイコン・UIコンポーネント・タイポグラフィ・カラーパレット・グラフィック要素を1枚にまとめたブランドキット参照資料が提供された。これを正式なデザインシステムとしてPROJECT_BIBLEへ反映した。
+
+### 正式カラーパレット(8色)
+
+| カラー | Hex |
+|---|---|
+| Primary Navy | `#0A1B3D` |
+| Smart Blue | `#2563EB` |
+| Light Blue | `#60A5FA` |
+| Accent Blue | `#00D4FF` |
+| White | `#FFFFFF` |
+| Light Gray | `#F3F6FA` |
+| Gray | `#64748B` |
+| Dark Gray | `#1E293B` |
+
+「アクセントカラーはSmart Blueのみ」という既存原則は、単一色ではなく **「Smart Blueファミリー(4階調)」** として精緻化した。あわせて、ステータスバッジ(完了=緑/進行中=青/未着手=グレー/遅延=赤)の意味色と、写真背景における自然な暖色(朝日・夕景)を、ブランドアクセントとは区別される例外として明記した。これにより、直前のHero背景修正で「UIはSmart Blueのみ、写真は暖色可」とした暫定判断が、正式にPROJECT_BIBLEへ組み込まれた形になる。
+
+### ロゴ
+
+カラー版・白抜き版・アイコン単体版の3バリエーションを定義。実データ(SVG/PNG)は未格納のため、[50_TODO.md](50_TODO.md) に追加。
+
+### アイコンセット・UIコンポーネント
+
+AI分析・タスク管理・顧客管理・売上管理・レポート・通知・設定・セキュリティの8アイコン、およびボタン(プライマリ/セカンダリ)・テキストリンク・入力フィールド(通常/フォーカス)・カード・ステータスバッジの型を定義。
+
+### ダッシュボード標準レイアウト
+
+サイドバーナビ(ダッシュボード/タスク管理/顧客管理/売上管理/AI分析/レポート/設定)+ 統計カード + データ可視化(折れ線グラフ+ドーナツチャート)+「AIからの提案」パネル + 「最近のアクティビティ」パネルという標準構成を [PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md) に明記。現在のCurrent Task「Dashboard UI設計」に直接活用する。
+
+### 更新・新設したファイル
+
+- [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)(v4.2→v4.3) — ロゴ・カラーパレット・タイポグラフィ階層を追加
+- [20_UI_UX_Rules.md](20_UI_UX_Rules.md)(v4.1→v4.2) — 配色・UIコンポーネントの型を更新
+- [PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md)(v2.1→v2.2) — カラー節を同期
+- [PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md)(v2.0→v2.1) — 標準レイアウトを追加
+- 新規: `BRAND/colors/palette.md`、`DESIGN/system/design-tokens.md`
+- [BRAND/README.md](../BRAND/README.md)、[DESIGN/README.md](../DESIGN/README.md) — 新規ファイルへの導線を追加
+
+### 既知の残タスク
+
+- Homepage(`WEBSITE/`)は暫定色(`#0A1A3C` 等)で実装済みのため、正式パレットへの色置換が必要(Next Taskに記録)
+- ロゴ・アイコンの実データ(SVG/PNG)は未格納
+
+**変更者:** Claude Code(Project Bible編集長 / Lead Software Engineer 兼 Knowledge Manager)/ 指示: CEO
 
 ---
 
