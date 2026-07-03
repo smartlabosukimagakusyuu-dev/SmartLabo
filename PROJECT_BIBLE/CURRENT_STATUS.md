@@ -12,7 +12,7 @@
 Project Bible Version：2.8
 Brand Version：4.4
 Design Bible Version：2.2
-Homepage Version：0.2(正式カラー・ロゴを反映)
+Homepage Version：0.3(Hero背景をCSS/SVGで強化)
 Current Task：Dashboard UI設計
 ```
 
@@ -25,7 +25,7 @@ Current Task：Dashboard UI設計
 | Project Bible Version | 2.8 |
 | Brand Version | 4.4 |
 | Design Bible Version | 2.2 |
-| Homepage Version | 0.2(正式カラーパレット `#0A1B3D`/`#2563EB` 系に更新済み。ロゴを暫定マークから「S」シンボル〈Brand Identity仕様準拠〉へ再デザイン) |
+| Homepage Version | 0.3(正式カラーパレット `#0A1B3D`/`#2563EB` 系に更新済み。ロゴを「S」シンボルへ再デザイン。Hero背景をCSS/SVGのみで強化し、フルワイドの都市シルエット・グロー・AIネットワークを表現) |
 | Dashboard Version | 0.0(設計プロンプト・標準レイアウト確定・実装未着手) |
 | Smart Labo Works Version | 0.0(未着手) |
 | Current Project | Company Setup |
@@ -60,6 +60,7 @@ Current Task：Dashboard UI設計
   - **未実装:** フォーム送信の実処理(現状はCTAのため実際の送信機能なし)、プライバシーポリシー・利用規約の実ページ(`LEGAL/`未整備のためリンクはプレースホルダー)、実写真素材(現状は色ブロック+アイコンで代用)、正式ロゴデータ(現在のSシンボルはCEO提供画像を参考にした暫定デザイン。正式データ到着後に差し替え予定)
 - `SmartLaboWorks/`・`DESIGN/` 配下は `README.md` 以外の実装ファイルが存在しないため、引き続き **0.0(未着手)** です。
 - 実装が進んだら、この3項目を `0.1`、`α0.1` のように更新してください。**達成していない進捗を先取りして記載しないこと。**
+- 2026-07-03、実装用の背景単体データがまだ届いていない間の暫定対応として、Hero背景をCSS/SVGのみで強化しました(新規バイナリ資産の追加なし)。フルワイドの都市シルエット(ビルの灯り付き)・AIネットワークのグロー演出・控えめなドットグリッドを追加し、以前より視覚的な密度を高めています。使用色は引き続きNavy/Smart Blue Familyの範囲内です。実装用の背景単体データ(写真)が届き次第、このCSS/SVG版から差し替えます。
 
 **Hero背景画像について(2026-07-03更新):** CEOより [AI_WORKSPACE/INBOX/HERO/](../AI_WORKSPACE/INBOX/README.md) 経由でHero候補5点の完成イメージ画像を受領しました。確認したところ、Smart Laboロゴ・見出し・CTAボタンが焼き込まれた「完成イメージのモックアップ」であり、そのままCSS背景画像として実装すると本物のHTMLテキストと二重表示になってしまうことが判明しました。CEOに確認のうえ、[DESIGN_ASSETS/01_HERO/Mockups/](../DESIGN_ASSETS/01_HERO/Mockups/README.md) に「参考資料」として格納しています。**実装用の背景単体データ(テキスト・ロゴが焼き込まれていないもの)は、引き続きCEOからの提供待ちです。**
 
@@ -96,5 +97,6 @@ Current Task：Dashboard UI設計
 | v1.6 | 2026-07-03 | Claude Code(CEO指示による) | [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) 新設を反映。Hero背景候補5点のメタデータ整備状況とファイル提供待ちである旨をNext Task・注記に追加 |
 | v1.7 | 2026-07-03 | Claude Code(CEO指示による) | Project Bible Version 2.6→2.7に更新。[AI_WORKSPACE/](../AI_WORKSPACE/README.md) 新設(ChatGPT発素材の正式な受け渡し経路)を反映し、Next TaskのHero背景画像受け取り口を`AI_WORKSPACE/INBOX/HERO/`に更新 |
 | v1.8 | 2026-07-03 | Claude Code(CEO提供による) | Project Bible Version 2.7→2.8に更新。AI_WORKSPACE経由でHero候補5点のモックアップを受領・[DESIGN_ASSETS/01_HERO/Mockups/](../DESIGN_ASSETS/01_HERO/Mockups/README.md) へ格納したことを反映。実装用の背景単体データが引き続き必要である旨をNext Taskに明記 |
+| v1.9 | 2026-07-03 | Claude Code(CEO指示による) | Homepage Versionを0.2→0.3に更新。Hero背景をCSS/SVGのみで強化(フルワイド都市シルエット・AIネットワークのグロー・ドットグリッド)した旨を反映。新規バイナリ資産の追加なし |
 
 *最終更新: 2026-07-03*

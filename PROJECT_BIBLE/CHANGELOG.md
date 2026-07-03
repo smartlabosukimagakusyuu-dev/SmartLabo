@@ -18,6 +18,30 @@
 
 ---
 
+## 2026-07-03 — Homepage v0.3: Hero背景をCSS/SVGで強化
+
+CEOより「ホームページのデザイン修正」の指示を受けた。実装用の背景単体データ(写真)がまだ届いていないため、新規バイナリ資産を追加せず、既存のCSS/SVGのみでHero背景の視覚的な密度を高める改善を行った。
+
+### 修正内容
+
+- **都市シルエット:** 左右の2クラスターのみだった建物配置を、フルワイド(0〜1440px)にわたる連続した4層のスカイラインに拡張。奥行きを出すため4段階の紺系トーンを使い分け、高層ビルの一部に小さな「灯り」(Smart Blue Light の点)を追加
+- **AIネットワーク:** ノード数を7→14に増やし、`feGaussianBlur`によるグロー効果を追加。表示範囲を55%→62%幅・260px→300px高に拡大し、より存在感のある構成に変更
+- **新規追加:** 控えめなドットグリッドのテクスチャ層(`.hero__grid`)と、Smart Blueのアンビエントグロー(`.hero__glow`)を追加し、Stripe/Datadog等の参照企業に近い「上品なテック感」を演出
+- 使用色はすべて既存の公式パレット(Navy / Smart Blue Family)の範囲内。禁止ビジュアル(ネオン・六角形・過度なサイバー演出)は使用していない
+
+### 確認事項
+
+デスクトップ(1440px)・モバイル(375px)双方でプレビュー確認し、コンソールエラーなし、テキストの可読性への影響なしを確認。[PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) の「Heroの背景に未来都市+控えめなAIネットワークが表現されているか」「使用カラーはNavy/White/Smart Blue/Light Grayの範囲内か」のチェック項目に適合。
+
+### 更新したファイル
+
+- `WEBSITE/index.html`、`WEBSITE/css/style.css`
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v1.8→v1.9) — Homepage Versionを0.2→0.3に更新
+
+**変更者:** Claude Code(Lead Software Engineer)/ 指示: CEO
+
+---
+
 ## 2026-07-03 — v2.8: AI_WORKSPACE初運用、Hero候補モックアップを受領
 
 CEOが [AI_WORKSPACE/INBOX/HERO/](../AI_WORKSPACE/INBOX/README.md) に、Hero候補5点をまとめた比較用画像(`ChatGPT Image 2026年7月3日 17_03_07.png`)を格納した。AI_WORKSPACE新設(v2.7)後、初めての実運用となった。
