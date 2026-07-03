@@ -8,7 +8,7 @@
 
 ChatGPT・Claude Code・Codex にタスクを依頼する際に使う、再利用可能なプロンプトのテンプレートを保管します。プロンプトを個人の頭の中やチャット履歴に留めず、会社の資産として蓄積することを目的とします。
 
-AI利用の共通ルールは [PROJECT_BIBLE/08_AI_Rules.md](../PROJECT_BIBLE/08_AI_Rules.md) を必ず参照してください。
+AI利用の共通ルールは [PROJECT_BIBLE/30_AI_Rules.md](../PROJECT_BIBLE/30_AI_Rules.md) を必ず参照してください。
 
 ---
 

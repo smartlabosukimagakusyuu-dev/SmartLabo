@@ -12,7 +12,7 @@
 
 ## 利用ルール
 
-- 顧客に提出する資料は、[PROJECT_BIBLE/04_Brand.md](../../PROJECT_BIBLE/04_Brand.md) のブランドガイドラインとトーン&マナーに従ってください。
+- 顧客に提出する資料は、[PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) のブランドガイドラインとトーン&マナーに従ってください。
 - テンプレートと、特定顧客向けにカスタマイズした資料は分けて管理してください(例: `templates/` と `customers/` のようなサブ構成を推奨)。
 - 顧客の個人情報・取引条件を含む資料は、社外共有時のアクセス範囲に注意してください。
 

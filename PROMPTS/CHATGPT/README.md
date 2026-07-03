@@ -12,7 +12,7 @@
 
 ## 利用ルール
 
-- ブランドのトーン&マナー([PROJECT_BIBLE/04_Brand.md](../../PROJECT_BIBLE/04_Brand.md))に沿った文章を生成させたい場合は、プロンプトにその旨を明記してください。
+- ブランドのトーン&マナー([PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md))に沿った文章を生成させたい場合は、プロンプトにその旨を明記してください。
 - 生成された文章・アイデアは、事実確認・ブランド整合性の確認をしてから採用してください。
 - 有効だったプロンプトはテンプレート化してこのフォルダに保存してください。
 
@@ -26,7 +26,7 @@
 
 ## 更新ルール
 
-- [PROJECT_BIBLE/08_AI_Rules.md](../../PROJECT_BIBLE/08_AI_Rules.md) の内容が変わった場合、それに合わせてテンプレートを更新してください。
+- [PROJECT_BIBLE/30_AI_Rules.md](../../PROJECT_BIBLE/30_AI_Rules.md) の内容が変わった場合、それに合わせてテンプレートを更新してください。
 
 ---
 

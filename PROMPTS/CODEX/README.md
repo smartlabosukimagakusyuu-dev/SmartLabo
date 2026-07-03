@@ -26,7 +26,7 @@ Codex を用いたコード生成・自動化スクリプト・CI関連タスク
 
 ## 更新ルール
 
-- [PROJECT_BIBLE/08_AI_Rules.md](../../PROJECT_BIBLE/08_AI_Rules.md) の内容が変わった場合、それに合わせてテンプレートを更新してください。
+- [PROJECT_BIBLE/30_AI_Rules.md](../../PROJECT_BIBLE/30_AI_Rules.md) の内容が変わった場合、それに合わせてテンプレートを更新してください。
 
 ---
 

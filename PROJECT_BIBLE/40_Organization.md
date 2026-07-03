@@ -1,4 +1,4 @@
-# 11. Organization — 組織図・役割分担
+# 40. Organization — 組織図・役割分担
 
 このドキュメントは、株式会社スマートラボの組織構造と役割分担を記録します。組織が拡大しても対応できるよう、役割ベースで記述します。
 
@@ -10,7 +10,7 @@
 
 | 役割 | 責務 | 主な参照フォルダ |
 |---|---|---|
-| 経営 | 会社全体の意思決定、Mission/Vision/Valueの最終承認 | [PROJECT_BIBLE/](README.md) |
+| 経営 | 会社全体の意思決定、Mission/Vision/Valueの最終承認 | [00_Foundation/](00_Foundation/README.md) |
 | プロダクト開発 | Smart Labo Works の設計・実装 | [SmartLaboWorks/](../SmartLaboWorks/README.md) |
 | デザイン | UI/UX、ブランド素材の制作 | [DESIGN/](../DESIGN/README.md)、[BRAND/](../BRAND/README.md) |
 | 営業 | 提案・契約対応 | [DOCUMENT/SALES/](../DOCUMENT/SALES/README.md) |
@@ -38,7 +38,7 @@
 
 ## 関連ドキュメント
 
-- [10_Company_History.md](10_Company_History.md)
+- [00_Foundation/01_Company_Story.md](00_Foundation/01_Company_Story.md)
 
 ---
 
@@ -47,5 +47,6 @@
 | バージョン | 日付 | 変更者 | 変更内容 |
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
+| v2.0 | 2026-07-03 | Smart Labo | PROJECT_BIBLE再構成に伴い旧11_Organization.mdから改番。参照先を00_Foundationに更新 |
 
 *最終更新: 2026-07-03*

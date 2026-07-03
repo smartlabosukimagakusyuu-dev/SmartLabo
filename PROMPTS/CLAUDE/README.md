@@ -13,7 +13,7 @@ Claude Code および Claude を用いた開発・作業で使用するプロン
 ## 利用ルール
 
 - Claude Code にプロジェクト全体の文脈を理解させる際は、[PROJECT_BIBLE/](../../PROJECT_BIBLE/README.md) の該当ドキュメントへの参照をプロンプトに含めてください。
-- コード実装を依頼するプロンプトには、[PROJECT_BIBLE/06_Development_Rules.md](../../PROJECT_BIBLE/06_Development_Rules.md) の遵守を明記することを推奨します。
+- コード実装を依頼するプロンプトには、[PROJECT_BIBLE/10_Development_Rules.md](../../PROJECT_BIBLE/10_Development_Rules.md) の遵守を明記することを推奨します。
 - 一度作成して有効だったプロンプトは、テンプレート化してこのフォルダに保存してください。
 
 ---
@@ -26,7 +26,7 @@ Claude Code および Claude を用いた開発・作業で使用するプロン
 
 ## 更新ルール
 
-- [PROJECT_BIBLE/08_AI_Rules.md](../../PROJECT_BIBLE/08_AI_Rules.md) の内容が変わった場合、それに合わせてテンプレートを更新してください。
+- [PROJECT_BIBLE/30_AI_Rules.md](../../PROJECT_BIBLE/30_AI_Rules.md) の内容が変わった場合、それに合わせてテンプレートを更新してください。
 
 ---
 

@@ -1,49 +1,88 @@
 # PROJECT_BIBLE
 
-**会社の設計図(Company Project Bible)**
+**株式会社スマートラボのOS(Operating System)**
 
-> ## Single Source of Truth
-> このフォルダは、株式会社スマートラボに関する**唯一の正しい設計書(Single Source of Truth)**です。
-> 会社の理念・ルール・ブランド・ロードマップについて、他の場所(チャット履歴、口頭の申し送り、個人のメモなど)に異なる情報がある場合、**必ずこのフォルダの内容が優先されます**。
-> 矛盾を見つけた場合は、放置せず該当ファイルを更新するか、[12_TODO.md](12_TODO.md) に記録してください。
+> ## これはドキュメントではありません。
+> `PROJECT_BIBLE` は、単なる資料集ではありません。
+>
+> - 株式会社スマートラボの **OS(Operating System)** です。すべての判断はここを基盤に動きます。
+> - 会社の **憲法** です。矛盾する運用が生まれたときは、必ずこちらが優先されます。
+> - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
+> - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
+>
+> **PROJECT_BIBLE Version: 1.0**
 
 ---
 
-## このフォルダの目的
+## Single Source of Truth
 
-`PROJECT_BIBLE` は、株式会社スマートラボという会社そのものの「思想」「設計」「ルール」を一元化した中枢ドキュメント群です。
+このフォルダは、株式会社スマートラボに関する**唯一の正しい設計書(Single Source of Truth)**です。
 
-このフォルダの内容が、以下すべての判断基準になります。
+会社の理念・ブランド・商品思想・デザイン思想・開発ルール・AIルール・歴史について、他の場所(チャット履歴、口頭の申し送り、個人のメモなど)に異なる情報がある場合、**必ずこのフォルダの内容が優先されます**。矛盾を見つけた場合は、放置せず該当ファイルを更新するか、[50_TODO.md](50_TODO.md) に記録してください。
 
-- 新しい機能を作るべきか迷ったとき → [05_Product.md](05_Product.md) を見る
-- コードの書き方に迷ったとき → [06_Development_Rules.md](06_Development_Rules.md) を見る
-- デザインに迷ったとき → [07_UI_UX_Rules.md](07_UI_UX_Rules.md) を見る
-- AIに指示を出す前に → [08_AI_Rules.md](08_AI_Rules.md) を見る
-- 会社としての判断に迷ったとき → [01_Mission.md](01_Mission.md) [02_Vision.md](02_Vision.md) [03_Value.md](03_Value.md) を見る
+AIが変わっても、社員が増えても、会社の思想が変わらないこと——それがこのフォルダの存在理由です。
+
+---
+
+## PROJECT_BIBLEを読むと何がわかるか
+
+このフォルダを読み進めるだけで、以下すべてが理解できる状態を目指しています。
+
+| 知りたいこと | 参照先 |
+|---|---|
+| 会社理念(Mission / Vision / Value) | [00_Foundation/03_Mission.md](00_Foundation/03_Mission.md)〜[05_Value.md](00_Foundation/05_Value.md) |
+| ブランド | [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) |
+| 商品思想(Smart Labo Works) | [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md) |
+| デザイン思想 | [20_UI_UX_Rules.md](20_UI_UX_Rules.md) |
+| 開発ルール | [10_Development_Rules.md](10_Development_Rules.md) |
+| AIルール | [30_AI_Rules.md](30_AI_Rules.md) |
+| UIルール | [20_UI_UX_Rules.md](20_UI_UX_Rules.md) |
+| 会社の歴史 | [00_Foundation/01_Company_Story.md](00_Foundation/01_Company_Story.md)、[00_Foundation/09_Product_History.md](00_Foundation/09_Product_History.md) |
 
 人間の社員だけでなく、ChatGPT・Claude Code・Codex などのAIエージェントも、作業前に必ずこのフォルダを参照することを前提としています。
 
 ---
 
-## ファイル構成
+## フォルダ・ファイル構成
 
-| ファイル | 内容 |
-|---|---|
-| [01_Mission.md](01_Mission.md) | 会社の使命(なぜ存在するのか) |
-| [02_Vision.md](02_Vision.md) | 会社が目指す未来 |
-| [03_Value.md](03_Value.md) | 大切にする価値観・行動指針 |
-| [04_Brand.md](04_Brand.md) | ブランドの核となる考え方(詳細素材は `BRAND/` を参照) |
-| [05_Product.md](05_Product.md) | プロダクト「Smart Labo Works」の思想と全体像 |
-| [06_Development_Rules.md](06_Development_Rules.md) | 開発全般のルール・コーディング規約の考え方 |
-| [07_UI_UX_Rules.md](07_UI_UX_Rules.md) | デザイン思想・UI/UXの原則 |
-| [08_AI_Rules.md](08_AI_Rules.md) | Claude / Codex / ChatGPT 利用時の共通ルール |
-| [09_Roadmap.md](09_Roadmap.md) | 会社・プロダクトのロードマップ |
-| [10_Company_History.md](10_Company_History.md) | 会社の沿革 |
-| [11_Organization.md](11_Organization.md) | 組織図・役割分担 |
-| [12_TODO.md](12_TODO.md) | 全社レベルの未対応タスク一覧 |
-| [13_CEO_NOTE.md](13_CEO_NOTE.md) | CEOノート(創業理由・経営判断の理由・大事にしたい価値観・将来の構想) |
+```
+PROJECT_BIBLE/
+├── README.md               ← このファイル(全体の入口)
+├── CHANGELOG.md             ← PROJECT_BIBLE全体の変更履歴
+│
+├── 00_Foundation/            ← 会社の土台となる思想(公式見解)
+│   ├── README.md
+│   ├── 01_Company_Story.md          会社のストーリー
+│   ├── 02_Founder_Message.md        創業者からのメッセージ
+│   ├── 03_Mission.md                ミッション
+│   ├── 04_Vision.md                 ビジョン
+│   ├── 05_Value.md                  バリュー
+│   ├── 06_Philosophy.md             会社を貫く哲学
+│   ├── 07_Brand_Identity.md         ブランドアイデンティティ
+│   ├── 08_SmartLaboWorks_Concept.md 商品コンセプト
+│   ├── 09_Product_History.md        プロダクトの歴史
+│   └── 10_Future_Roadmap.md         将来のロードマップ
+│
+├── 10_Development_Rules.md   ← 開発ルール
+├── 20_UI_UX_Rules.md         ← デザイン思想・UI/UXルール
+├── 30_AI_Rules.md            ← AI利用ルール(Claude / Codex / ChatGPT共通)
+├── 40_Organization.md        ← 組織図・役割分担
+├── 50_TODO.md                ← 全社レベルの未対応タスク
+│
+└── 99_CEO_MEMORY/             ← 代表個人の記憶(生の記録)
+    ├── README.md
+    ├── 01_Founding_Story.md         会社設立までの経緯
+    ├── 02_Key_Decisions.md          重要な経営判断
+    ├── 03_Future_Vision.md          将来構想
+    ├── 04_Brand_Philosophy.md       ブランド思想
+    └── 05_Important_Conversations.md 重要な会話
+```
 
-補足: PROJECT_BIBLE全体の変更履歴サマリは [CHANGELOG.md](CHANGELOG.md) に集約されています。各ファイル個別の変更履歴は、ファイル末尾の「変更履歴」テーブルを参照してください。
+### なぜこの番号体系なのか
+
+- **`00` (Foundation)** — すべての判断の土台。他のすべてのルールはここから導かれます。
+- **`10`〜`50`(実務ルール)** — 開発・デザイン・AI・組織・タスクという実務領域。10刻みにすることで、将来「15_Security_Rules.md」のようにルールが増えても、既存の番号を変更せずに挿入できます。
+- **`99` (CEO Memory)** — 会社のあらゆる物語が最終的に集約される場所。番号を末尾に置くことで、「00から始まり99に積み重なっていく」という会社の成長を表しています。
 
 ---
 
@@ -52,21 +91,29 @@
 1. **迷ったらまずここを読む。** 新しい施策・機能・デザインを検討する際は、必ず該当ドキュメントに目を通してから着手してください。
 2. **矛盾する判断をしない。** ここに書かれた内容と矛盾する意思決定を行う場合は、先にこのドキュメントを更新してから実行してください。「実装が先、ドキュメントは後回し」を避けます。
 3. **AIエージェントへの指示にも適用する。** ChatGPT・Claude Code・Codex にタスクを依頼する際は、関連するドキュメントを読み込ませた上で指示してください。`PROMPTS/` 内のテンプレートを活用してください。
-4. **番号順は変更しない。** `01〜13` の連番はドキュメント間の依存関係(理念→ルール→計画→CEOの肉声の順)を表しています。新しいドキュメントを追加する場合は末尾に追加し、番号を採番してください。
+4. **番号順は変更しない。** `00 → 10 → 20 → 30 → 40 → 50 → 99` の順序は、思想→実務ルール→個人の記憶という依存関係を表しています。新しいドキュメントを追加する場合は、この体系に沿って番号を採番してください。
 5. **唯一の正解として扱う。** 社員・AI・外部パートナーが異なる説明をしている場合でも、最終的な判断基準は常にこの PROJECT_BIBLE です。矛盾に気づいたら、口頭やチャットで済ませず、必ずここに反映してください。
+6. **00_Foundation と 99_CEO_MEMORY を混同しない。** `00_Foundation` は誰が読んでも通用する公式見解、`99_CEO_MEMORY` は代表個人の生の記録です。詳細は [99_CEO_MEMORY/README.md](99_CEO_MEMORY/README.md) を参照してください。
 
 ---
 
 ## Version管理
 
-- PROJECT_BIBLE 配下のすべてのファイルは Git で管理します。
+PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
+
+### 1. PROJECT_BIBLE 全体のバージョン
+
+- 現在: **Version 1.0**
+- 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
+- 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
+- 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
+
+### 2. ファイル個別のバージョン
+
 - 各ドキュメントは末尾に **「変更履歴」テーブル**(バージョン / 日付 / 変更者 / 変更内容)を持ちます。内容を変更した際は、必ずこのテーブルに1行追加してください。
 - 大きな方針変更は、変更前バージョンが Git履歴として残るため、削除ではなく上書き編集で問題ありません(詳細な差分は `git log` / `git blame` で追跡可能)。
-- ドキュメント単位の変更履歴に加えて、PROJECT_BIBLE全体としての重要な変更は [CHANGELOG.md](CHANGELOG.md) にも記録してください。
 
 ### 変更履歴テーブルの書式
-
-各ファイルの末尾には、以下の形式で変更履歴を記載します。
 
 ```markdown
 ## 変更履歴
@@ -76,17 +123,15 @@
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 ```
 
-- バージョンは `v1.0`, `v1.1` のように、内容に実質的な変更があった際にインクリメントしてください(誤字修正のみの場合は据え置きで構いません)。
-- 「変更者」は個人名でも役割名でも構いません。AIエージェントが編集した場合は `Claude Code` のように明記してください。
+「変更者」は個人名でも役割名でも構いません。AIエージェントが編集した場合は `Claude Code` のように明記してください。
 
 ---
 
 ## 更新ルール
 
-- **01〜04(Mission / Vision / Value / Brand)** は会社の根幹です。変更には経営層の承認が必要です。
-- **05〜08(Product / Development / UI-UX / AI Rules)** はプロダクト責任者・開発リード承認のもとで更新してください。
-- **09〜12(Roadmap / History / Organization / TODO)** は現状に応じて随時更新して構いません。特に `12_TODO.md` は積極的に更新してください。
-- **13(CEO Note)** はCEO本人が更新することを基本とします。代筆・編集を行う場合は必ず本人の確認を得てください。
+- **`00_Foundation`(会社の土台)** は会社の根幹です。特に `01`〜`05`(Company Story / Founder Message / Mission / Vision / Value)の変更には経営層(代表)の承認が必要です。`06`〜`10` はプロダクト責任者・開発リード承認のもとで更新してください。
+- **`10`〜`50`(実務ルール)** はプロダクト責任者・開発リードの承認のもとで更新してください。`50_TODO.md` は積極的に随時更新して構いません。
+- **`99_CEO_MEMORY`** はCEO本人が更新することを基本とします。代筆・編集を行う場合は必ず本人の確認を得てください。
 - 更新時は、影響を受ける他のドキュメント(README、PROMPTS内のAI指示文など)との整合性を必ず確認してください。
 - 内容を変更したら、そのファイルの「変更履歴」テーブルに追記し、重要な変更であれば [CHANGELOG.md](CHANGELOG.md) にも記録してください。
 
@@ -95,9 +140,9 @@
 ## Git運用ルール
 
 - コミットメッセージには、どのドキュメントの何を変更したかを明記してください。
-  - 例: `docs: PROJECT_BIBLE/03_Value.mdに「誠実」を追加`
-- 経営層承認が必要な変更(01〜04)は、Pull Requestを作成しレビューを経てから `main` にマージしてください。
-- 09〜13 の軽微な更新は直接コミットで構いません。
+  - 例: `docs: PROJECT_BIBLE/00_Foundation/05_Value.mdに「誠実」を追加`
+- 経営層承認が必要な変更(`00_Foundation` の01〜05)は、Pull Requestを作成しレビューを経てから `master` にマージしてください。
+- それ以外の軽微な更新は直接コミットで構いません。
 - コミットする際は、対象ファイルの「変更履歴」テーブル更新を含めてコミットしてください(変更内容と履歴の記録を1コミットにまとめる)。
 
 ---
@@ -106,7 +151,8 @@
 
 | バージョン | 日付 | 変更者 | 変更内容 |
 |---|---|---|---|
-| v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
-| v1.1 | 2026-07-03 | Claude Code | Single Source of Truth宣言、13_CEO_NOTE.mdの追加、変更履歴テーブルの運用ルールを追加 |
+| v0.1 (draft) | 2026-07-03 | Smart Labo | 試作版作成(01〜12の連番フラット構成) |
+| v0.2 (draft) | 2026-07-03 | Claude Code | Single Source of Truth宣言、CEO Noteの追加を試作 |
+| **v1.0** | 2026-07-03 | Claude Code | **正式版として全面再設計・確定。** `00_Foundation/`(会社の土台)と `99_CEO_MEMORY/`(代表の記憶)を新設し、10/20/30/40/50番台へ実務ルールを再編。会社のOS・憲法としての位置づけを明記し、PROJECT_BIBLEをVersion 1.0として正式運用開始 |
 
 *最終更新: 2026-07-03*

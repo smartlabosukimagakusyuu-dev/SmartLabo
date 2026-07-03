@@ -2,11 +2,15 @@
 
 **株式会社スマートラボ 開発基盤リポジトリ / Company Project Bible**
 
-このリポジトリは、株式会社スマートラボ(Smart Labo Inc.)の思想・設計・ブランド・開発ルールをすべて一元管理する「会社全体の設計図(Project Bible)」です。
+このリポジトリは、株式会社スマートラボ(Smart Labo Inc.)の思想・設計・ブランド・開発ルールをすべて一元管理する、**会社のOS・憲法・知識ベース**です。
 
-ChatGPT・Claude Code・Codex、そして将来加わる開発メンバー全員が、同じ思想・同じ設計・同じブランド基準を参照しながら仕事ができることを目的としています。
+ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー全員が、同じ思想・同じ設計・同じブランド基準を参照しながら仕事ができることを目的としています。
 
-> **[PROJECT_BIBLE/](PROJECT_BIBLE/README.md) は、株式会社スマートラボに関する唯一の正しい設計書(Single Source of Truth)です。** 会社の理念・ルール・ブランドについて他の情報源と矛盾がある場合、常に PROJECT_BIBLE の内容が優先されます。
+> **[PROJECT_BIBLE/](PROJECT_BIBLE/README.md) は、株式会社スマートラボに関する唯一の正しい設計書(Single Source of Truth)、Version 1.0です。** 会社の理念・ルール・ブランドについて他の情報源と矛盾がある場合、常に PROJECT_BIBLE の内容が優先されます。
+
+**Mission:** AIで、社長が本来の仕事に集中できる世界をつくる。
+**Vision:** 日本で最も信頼される、中小企業向けAI経営プラットフォームになる。
+**Catchphrase:** 「会社を動かすAI。」
 
 ---
 
@@ -51,15 +55,18 @@ SmartLabo/
 
 新しくこのプロジェクトに関わる人(人間・AIエージェント問わず)は、以下の順番で読み進めてください。
 
-1. [PROJECT_BIBLE/README.md](PROJECT_BIBLE/README.md) — 会社の設計図の使い方
-2. [PROJECT_BIBLE/01_Mission.md](PROJECT_BIBLE/01_Mission.md) — 会社のミッション
-3. [PROJECT_BIBLE/02_Vision.md](PROJECT_BIBLE/02_Vision.md) — 会社のビジョン
-4. [PROJECT_BIBLE/03_Value.md](PROJECT_BIBLE/03_Value.md) — 大切にする価値観
-5. [PROJECT_BIBLE/05_Product.md](PROJECT_BIBLE/05_Product.md) — プロダクト「Smart Labo Works」の思想
-6. [PROJECT_BIBLE/06_Development_Rules.md](PROJECT_BIBLE/06_Development_Rules.md) — 開発ルール
-7. [PROJECT_BIBLE/07_UI_UX_Rules.md](PROJECT_BIBLE/07_UI_UX_Rules.md) — UI/UXルール
-8. [PROJECT_BIBLE/08_AI_Rules.md](PROJECT_BIBLE/08_AI_Rules.md) — AI利用ルール(Claude / Codex / ChatGPT共通)
-9. [PROJECT_BIBLE/13_CEO_NOTE.md](PROJECT_BIBLE/13_CEO_NOTE.md) — 代表からのノート(創業理由・経営判断の理由・大事にしたい価値観・将来の構想)
+1. [PROJECT_BIBLE/README.md](PROJECT_BIBLE/README.md) — 会社のOS・憲法の使い方
+2. [PROJECT_BIBLE/00_Foundation/01_Company_Story.md](PROJECT_BIBLE/00_Foundation/01_Company_Story.md) — 会社のストーリー
+3. [PROJECT_BIBLE/00_Foundation/02_Founder_Message.md](PROJECT_BIBLE/00_Foundation/02_Founder_Message.md) — 創業者からのメッセージ
+4. [PROJECT_BIBLE/00_Foundation/03_Mission.md](PROJECT_BIBLE/00_Foundation/03_Mission.md) — ミッション
+5. [PROJECT_BIBLE/00_Foundation/04_Vision.md](PROJECT_BIBLE/00_Foundation/04_Vision.md) — ビジョン
+6. [PROJECT_BIBLE/00_Foundation/05_Value.md](PROJECT_BIBLE/00_Foundation/05_Value.md) — バリュー
+7. [PROJECT_BIBLE/00_Foundation/06_Philosophy.md](PROJECT_BIBLE/00_Foundation/06_Philosophy.md) — 会社を貫く哲学
+8. [PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) — ブランドアイデンティティ
+9. [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md) — プロダクト「Smart Labo Works」のコンセプト
+10. [PROJECT_BIBLE/10_Development_Rules.md](PROJECT_BIBLE/10_Development_Rules.md) — 開発ルール
+11. [PROJECT_BIBLE/20_UI_UX_Rules.md](PROJECT_BIBLE/20_UI_UX_Rules.md) — UI/UXルール
+12. [PROJECT_BIBLE/30_AI_Rules.md](PROJECT_BIBLE/30_AI_Rules.md) — AI利用ルール(Claude / Codex / ChatGPT共通)
 
 ---
 
@@ -95,9 +102,9 @@ SmartLabo/
 
 株式会社スマートラボの主力プロダクトです。開発思想の軸は次の一言に集約されます。
 
-> **「会社を動かすAI」**
+> **「会社を動かすAI。」**
 
-詳細は [PROJECT_BIBLE/05_Product.md](PROJECT_BIBLE/05_Product.md) および [SmartLaboWorks/README.md](SmartLaboWorks/README.md) を参照してください。
+詳細は [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md) および [SmartLaboWorks/README.md](SmartLaboWorks/README.md) を参照してください。
 
 ---
 
@@ -110,7 +117,7 @@ Smart Labo が手がけるすべてのプロダクト・サイト・資料は、
 - **Linear** — スピード感と精度のあるインターフェース
 - **Stripe** — 信頼感のある高級感とドキュメントの美しさ
 
-共通するキーワードは「シンプル・高級感・余白」です。詳細は [PROJECT_BIBLE/07_UI_UX_Rules.md](PROJECT_BIBLE/07_UI_UX_Rules.md) を参照してください。
+共通するキーワードは「シンプル・余白・高級感・信頼感・ミニマル」です。詳細は [PROJECT_BIBLE/20_UI_UX_Rules.md](PROJECT_BIBLE/20_UI_UX_Rules.md) を参照してください。
 
 ---
 

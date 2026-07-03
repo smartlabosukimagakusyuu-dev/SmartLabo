@@ -6,7 +6,7 @@
 
 ## このフォルダの目的
 
-株式会社スマートラボのコーポレートサイトに関するソースコード・コンテンツ・運用資料を管理します。会社の「顔」となるサイトであるため、[PROJECT_BIBLE/04_Brand.md](../PROJECT_BIBLE/04_Brand.md) および [PROJECT_BIBLE/07_UI_UX_Rules.md](../PROJECT_BIBLE/07_UI_UX_Rules.md) に厳密に準拠します。
+株式会社スマートラボのコーポレートサイトに関するソースコード・コンテンツ・運用資料を管理します。会社の「顔」となるサイトであるため、[PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) および [PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) に厳密に準拠します。
 
 ---
 

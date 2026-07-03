@@ -6,15 +6,15 @@
 
 ## このフォルダの目的
 
-株式会社スマートラボの主力プロダクトである Smart Labo Works の開発一式(ソースコード、技術ドキュメント、モジュールごとの仕様)を管理します。プロダクトの思想的な背景は [PROJECT_BIBLE/05_Product.md](../PROJECT_BIBLE/05_Product.md) を必ず参照してください。
+株式会社スマートラボの主力プロダクトである Smart Labo Works の開発一式(ソースコード、技術ドキュメント、モジュールごとの仕様)を管理します。プロダクトの思想的な背景は [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](../PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md) を必ず参照してください。
 
 ---
 
 ## プロダクトコンセプト
 
-> **「会社を動かすAI」**
+> **「会社を動かすAI。」**
 
-Smart Labo Works は、企業の日々の業務判断・作業をAIが担う「AI社員」として機能するプロダクト群です。詳細思想は [PROJECT_BIBLE/05_Product.md](../PROJECT_BIBLE/05_Product.md) を参照してください。
+Smart Labo Works は、社長が本来の仕事に集中できるよう、企業の日々の業務判断・作業をAIが担うAI経営プラットフォームです。詳細思想は [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](../PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md) を参照してください。
 
 ---
 
@@ -34,9 +34,9 @@ SmartLaboWorks/
 
 ## 利用ルール
 
-- 新しいモジュールを追加する際は、[PROJECT_BIBLE/05_Product.md](../PROJECT_BIBLE/05_Product.md) の「プロダクト開発時の判断基準」に照らして要否を検討してください。
-- コーディング規約は [PROJECT_BIBLE/06_Development_Rules.md](../PROJECT_BIBLE/06_Development_Rules.md) に従ってください。
-- UIを実装する際は [PROJECT_BIBLE/07_UI_UX_Rules.md](../PROJECT_BIBLE/07_UI_UX_Rules.md) および [DESIGN/](../DESIGN/README.md) のデザインシステムに準拠してください。
+- 新しいモジュールを追加する際は、[PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](../PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md) の「プロダクト開発時の判断基準」に照らして要否を検討してください。
+- コーディング規約は [PROJECT_BIBLE/10_Development_Rules.md](../PROJECT_BIBLE/10_Development_Rules.md) に従ってください。
+- UIを実装する際は [PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) および [DESIGN/](../DESIGN/README.md) のデザインシステムに準拠してください。
 
 ---
 
