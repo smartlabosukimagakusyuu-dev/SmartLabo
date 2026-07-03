@@ -15,6 +15,37 @@
 
 ---
 
+## 2026-07-03 — v1.2: ブランドデザイン「Quiet Intelligence」の制定
+
+CEO(Chief Design Officer指示)より、Smart Laboのブランドデザイン方針が示され、PROJECT_BIBLEおよび新設の `PROMPTS/DESIGN/` に反映しました。「作るのはホームページではなくブランドである」という前提のもと、ブランドコンセプトからUI原則までを制定しています。
+
+### ポジショニング・ブランドコンセプト
+
+- **ポジショニング:** 「Smart LaboはAI会社ではない。社長の右腕になる会社である」
+- **ブランドコンセプト:** **Quiet Intelligence(静かな知性)** — 派手ではない、説明しすぎない、余白を大切にする、長く愛されるデザイン
+- 参照企業を Apple / Notion / Linear / Stripe に **Porsche** を追加した5社に拡張(コピーではなく思想の継承として扱う)
+
+### PROJECT_BIBLE側の変更
+
+- [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) にポジショニング・Quiet Intelligence・使用カラー(White/Black/Smart Blueのみ)・禁止ビジュアルの概要を追加
+- [20_UI_UX_Rules.md](20_UI_UX_Rules.md) の原則を6→9項目に拡充(配色をSmart Blueのみに限定、ボタン/モーション/情報量より理解しやすさ/禁止ビジュアルを追加)、レビューチェックリストを更新
+- [99_CEO_MEMORY/04_Brand_Philosophy.md](99_CEO_MEMORY/04_Brand_Philosophy.md) の記入ガイドをQuiet Intelligence・5社構成に更新
+
+### 新規追加: PROMPTS/DESIGN/
+
+- [PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md) — ブランドの完全版デザイン指針。あらゆる制作物の起点となるマスタープロンプト(参照企業分析、デザインルール、カラー、禁止事項、推奨ビジュアル、UI思想を網羅)
+- [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) — コーポレートサイト トップページの構成(Hero→共感→Smart Labo Works→導入メリット→ブランドストーリー→会社理念→お問い合わせ)とHero文言を制定
+- [PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md) — Smart Labo Works プロダクト画面向けの設計指示
+- [PROMPTS/DESIGN/LandingPage.md](../PROMPTS/DESIGN/LandingPage.md) — 個別施策向けランディングページの設計指示
+
+### 禁止事項(全成果物共通)
+
+AIロボット / サイバー演出 / ネオン / 未来都市CG / 青い地球 / 六角形 / 基板イラスト / 過度なエフェクト / 派手なアニメーション / 情報過多のUI
+
+**変更者:** Claude Code(Project Bible編集長)/ 指示: CEO(Chief Design Officer方針として)
+
+---
+
 ## 2026-07-03 — v1.1: 編集体制・更新フローの制定
 
 PROJECT_BIBLEを継続的に正しく保つための「編集体制」を正式に制定しました。CEOより、ChatGPT・CEO・Claude Codeの三者による運用フローの指示を受け反映したものです。

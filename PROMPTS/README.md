@@ -19,6 +19,7 @@ AI利用の共通ルールは [PROJECT_BIBLE/30_AI_Rules.md](../PROJECT_BIBLE/30
 | [CLAUDE/](CLAUDE/README.md) | Claude Code / Claude 向けのプロンプト・設定(CLAUDE.md のひな形など) |
 | [CODEX/](CODEX/README.md) | Codex 向けのプロンプト・自動化タスク定義 |
 | [CHATGPT/](CHATGPT/README.md) | ChatGPT 向けの企画・文章作成プロンプト |
+| [DESIGN/](DESIGN/README.md) | Smart Laboブランド・デザイン用プロンプト(Design Bible、Homepage、Dashboard、LandingPage) |
 
 ---
 

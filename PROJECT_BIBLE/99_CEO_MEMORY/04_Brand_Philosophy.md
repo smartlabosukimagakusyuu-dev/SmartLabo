@@ -1,14 +1,18 @@
 # 04. Brand Philosophy — ブランドに込めた思想
 
-> *記入ガイド: [00_Foundation/07_Brand_Identity.md](../00_Foundation/07_Brand_Identity.md) で定義したブランド(Apple / Notion / Linear / Stripeを参照点とする、シンプル・余白・高級感・信頼感・ミニマル)は、代表自身のどんな経験・美意識・信条から来ているか。なぜ派手さではなく信頼を選んだか、個人的な言葉で記録してください。*
+> *記入ガイド: [00_Foundation/07_Brand_Identity.md](../00_Foundation/07_Brand_Identity.md) で定義したブランド(Apple / Notion / Linear / Stripe / Porscheを参照点とする、Quiet Intelligence=静かな知性)は、代表自身のどんな経験・美意識・信条から来ているか。なぜ派手さではなく信頼を選んだか、個人的な言葉で記録してください。*
 
 このファイルは代表本人が、自分の言葉で書き・更新していくものです。以下は記入のための構成案です。
 
 ---
 
-## なぜこの4社を参照点に選んだか
+## なぜこの5社を参照点に選んだか
 
-[Apple / Notion / Linear / Stripe をなぜ選んだか、個人的な原体験があれば記入してください。]
+[Apple / Notion / Linear / Stripe / Porsche をなぜ選んだか、個人的な原体験があれば記入してください。]
+
+## なぜ「Quiet Intelligence(静かな知性)」なのか
+
+[AIを見せるのではなく、安心・信頼・品格を感じてもらうというコンセプトに至った個人的な思いを記入してください。]
 
 ## 「派手さより信頼」を選んだ理由
 
@@ -36,5 +40,6 @@
 | バージョン | 日付 | 変更者 | 変更内容 |
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成(構成とガイドを整備。本文は代表による記入待ち) |
+| v1.1 | 2026-07-03 | Claude Code | Quiet Intelligenceコンセプト・Porsche追加(5社)に合わせて記入ガイドを更新 |
 
 *最終更新: 2026-07-03*
