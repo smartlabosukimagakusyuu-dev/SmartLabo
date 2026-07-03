@@ -1,0 +1,77 @@
+# PROJECT_BIBLE
+
+**会社の設計図(Company Project Bible)**
+
+---
+
+## このフォルダの目的
+
+`PROJECT_BIBLE` は、株式会社スマートラボという会社そのものの「思想」「設計」「ルール」を一元化した中枢ドキュメント群です。
+
+このフォルダの内容が、以下すべての判断基準になります。
+
+- 新しい機能を作るべきか迷ったとき → [05_Product.md](05_Product.md) を見る
+- コードの書き方に迷ったとき → [06_Development_Rules.md](06_Development_Rules.md) を見る
+- デザインに迷ったとき → [07_UI_UX_Rules.md](07_UI_UX_Rules.md) を見る
+- AIに指示を出す前に → [08_AI_Rules.md](08_AI_Rules.md) を見る
+- 会社としての判断に迷ったとき → [01_Mission.md](01_Mission.md) [02_Vision.md](02_Vision.md) [03_Value.md](03_Value.md) を見る
+
+人間の社員だけでなく、ChatGPT・Claude Code・Codex などのAIエージェントも、作業前に必ずこのフォルダを参照することを前提としています。
+
+---
+
+## ファイル構成
+
+| ファイル | 内容 |
+|---|---|
+| [01_Mission.md](01_Mission.md) | 会社の使命(なぜ存在するのか) |
+| [02_Vision.md](02_Vision.md) | 会社が目指す未来 |
+| [03_Value.md](03_Value.md) | 大切にする価値観・行動指針 |
+| [04_Brand.md](04_Brand.md) | ブランドの核となる考え方(詳細素材は `BRAND/` を参照) |
+| [05_Product.md](05_Product.md) | プロダクト「Smart Labo Works」の思想と全体像 |
+| [06_Development_Rules.md](06_Development_Rules.md) | 開発全般のルール・コーディング規約の考え方 |
+| [07_UI_UX_Rules.md](07_UI_UX_Rules.md) | デザイン思想・UI/UXの原則 |
+| [08_AI_Rules.md](08_AI_Rules.md) | Claude / Codex / ChatGPT 利用時の共通ルール |
+| [09_Roadmap.md](09_Roadmap.md) | 会社・プロダクトのロードマップ |
+| [10_Company_History.md](10_Company_History.md) | 会社の沿革 |
+| [11_Organization.md](11_Organization.md) | 組織図・役割分担 |
+| [12_TODO.md](12_TODO.md) | 全社レベルの未対応タスク一覧 |
+
+---
+
+## 利用ルール
+
+1. **迷ったらまずここを読む。** 新しい施策・機能・デザインを検討する際は、必ず該当ドキュメントに目を通してから着手してください。
+2. **矛盾する判断をしない。** ここに書かれた内容と矛盾する意思決定を行う場合は、先にこのドキュメントを更新してから実行してください。「実装が先、ドキュメントは後回し」を避けます。
+3. **AIエージェントへの指示にも適用する。** ChatGPT・Claude Code・Codex にタスクを依頼する際は、関連するドキュメントを読み込ませた上で指示してください。`PROMPTS/` 内のテンプレートを活用してください。
+4. **番号順は変更しない。** `01〜12` の連番はドキュメント間の依存関係(理念→ルール→計画の順)を表しています。新しいドキュメントを追加する場合は末尾に追加し、番号を採番してください。
+
+---
+
+## Version管理
+
+- PROJECT_BIBLE 配下のすべてのファイルは Git で管理します。
+- 各ドキュメントは冒頭または末尾に `最終更新日` を明記してください。
+- 大きな方針変更は、変更前バージョンが Git履歴として残るため、削除ではなく上書き編集で問題ありません(履歴は `git log` / `git blame` で追跡可能)。
+
+---
+
+## 更新ルール
+
+- **01〜04(Mission / Vision / Value / Brand)** は会社の根幹です。変更には経営層の承認が必要です。
+- **05〜08(Product / Development / UI-UX / AI Rules)** はプロダクト責任者・開発リード承認のもとで更新してください。
+- **09〜12(Roadmap / History / Organization / TODO)** は現状に応じて随時更新して構いません。特に `12_TODO.md` は積極的に更新してください。
+- 更新時は、影響を受ける他のドキュメント(README、PROMPTS内のAI指示文など)との整合性を必ず確認してください。
+
+---
+
+## Git運用ルール
+
+- コミットメッセージには、どのドキュメントの何を変更したかを明記してください。
+  - 例: `docs: PROJECT_BIBLE/03_Value.mdに「誠実」を追加`
+- 経営層承認が必要な変更(01〜04)は、Pull Requestを作成しレビューを経てから `main` にマージしてください。
+- 09〜12 の軽微な更新は直接コミットで構いません。
+
+---
+
+*最終更新: 2026-07-03*
