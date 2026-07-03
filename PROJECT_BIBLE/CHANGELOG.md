@@ -15,6 +15,27 @@
 
 ---
 
+## 2026-07-03 — Homepage Hero背景の視認性修正(WEBSITE/、Version 0.1継続)
+
+CEOより「PROJECT_BIBLEとCURRENT_STATUS.mdを確認したうえで、Hero→CTA→機能バー→レスポンシブの優先順位でトップページ作成に入る」旨の指示を受けたが、CURRENT_STATUS.md確認の結果、Homepage v0.1として該当範囲は実装済みであることが判明。無駄な再実装を避けるため、既存実装をDesign Bible v2.1の基準でレビューし、発見した不具合を修正する方針とした(CEO承認済み)。
+
+### レビューで発見した不具合と修正
+
+- **Hero背景の視認性不足:** 都市シルエット・AIネットワークの背景SVGが、Heroの2カラムコンテンツ(テキスト・ダッシュボードモックアップ)とほぼ完全に重なっており、実質的に見えない状態だった。[PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md)の「Heroの背景に未来都市+控えめなAIネットワークが表現されているか」というチェック項目を満たしていなかったため、以下を修正:
+  - AIネットワークをヘッダー直下〜ダッシュボード上部の空きスペース(右上)に再配置し、コンテンツと重ならないようにした
+  - 都市シルエットをHero下部の専用帯(210px)に固定し、Hero下部の余白を96px→152pxに拡大して視認できる領域を確保
+  - 建物のシルエットカラーを明るめのNavy階調(#1B4488, #234E93等)に変更し、背景グラデーションとのコントラストを改善
+- CTA・機能バー(主要機能セクション)・レスポンシブ(モバイル/タブレット/デスクトップ)は、既存実装がPROJECT_BIBLEの基準を満たしていることを確認(修正なし)
+
+### 更新したファイル
+
+- `WEBSITE/index.html`、`WEBSITE/css/style.css`
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v1.1→v1.2)
+
+**変更者:** Claude Code(Lead Software Engineer)/ 指示: CEO
+
+---
+
 ## 2026-07-03 — Homepage初回実装(WEBSITE/、Version 0.1)
 
 CEOよりコーポレートサイト トップページの実制作指示を受領。添付の参考画像をレイアウトの雰囲気の参考としつつ、内容が [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) と矛盾する箇所(CTA数、色数、朝日の表現色)はPROJECT_BIBLEを優先して実装した。
