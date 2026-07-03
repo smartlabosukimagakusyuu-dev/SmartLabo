@@ -6,7 +6,7 @@
 
 ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー全員が、同じ思想・同じ設計・同じブランド基準を参照しながら仕事ができることを目的としています。
 
-> **[PROJECT_BIBLE/](PROJECT_BIBLE/README.md) は、株式会社スマートラボに関する唯一の正しい設計書(Single Source of Truth)、Version 1.0です。** 会社の理念・ルール・ブランドについて他の情報源と矛盾がある場合、常に PROJECT_BIBLE の内容が優先されます。
+> **[PROJECT_BIBLE/](PROJECT_BIBLE/README.md) は、株式会社スマートラボに関する唯一の正しい設計書(Single Source of Truth)です。最新版は [PROJECT_BIBLE/README.md](PROJECT_BIBLE/README.md) に記載のVersionを正としてください。** 会社の理念・ルール・ブランドについて他の情報源と矛盾がある場合、常に PROJECT_BIBLE の内容が優先されます。
 
 **Mission:** AIで、社長が本来の仕事に集中できる世界をつくる。
 **Vision:** 日本で最も信頼される、中小企業向けAI経営プラットフォームになる。
@@ -108,16 +108,20 @@ SmartLabo/
 
 ---
 
-## デザイン思想
+## デザイン思想: Enterprise AI Platform
 
-Smart Labo が手がけるすべてのプロダクト・サイト・資料は、以下のブランドを参照点とするデザイン哲学に基づきます。
+Smart Laboは「AIを売る会社」ではなく「会社を進化させる会社」です。目指すのは世界トップクラスのBtoB SaaSブランドと肩を並べる完成度で、以下のブランドを思想的な参照点とします(コピーではなく思想の継承)。
 
-- **Apple** — 削ぎ落とされたシンプルさ
-- **Notion** — 情報設計の柔軟さと明快さ
-- **Linear** — スピード感と精度のあるインターフェース
-- **Stripe** — 信頼感のある高級感とドキュメントの美しさ
+- **Microsoft** — エンタープライズが安心して任せられる信頼感
+- **OpenAI** — 先進性を静かな自信として見せるトーン
+- **AWS** — スケールと堅牢さを感じさせるインフラ的な安心感
+- **Palantir** — 重厚で洗練されたデータ表現
+- **Stripe** — ドキュメントとタイポグラフィの美しさ
+- **Datadog** — リアルタイムデータを上品かつ迫力を持って見せる表現
+- **Snowflake** — クリーンなブルー基調のエンタープライズサイト
+- **Vercel** — 削ぎ落とされたタイポグラフィと上品なグラデーション
 
-共通するキーワードは「シンプル・余白・高級感・信頼感・ミニマル」です。詳細は [PROJECT_BIBLE/20_UI_UX_Rules.md](PROJECT_BIBLE/20_UI_UX_Rules.md) を参照してください。
+共通するキーワードは「Premium・Enterprise・Professional・Minimal・Modern・Trust・Innovation・AI First」です。使用カラーはNavy・White・Smart Blue・Light Gray(アクセントはSmart Blueのみ)。詳細は [PROJECT_BIBLE/20_UI_UX_Rules.md](PROJECT_BIBLE/20_UI_UX_Rules.md) を参照してください。
 
 ---
 

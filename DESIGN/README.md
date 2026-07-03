@@ -27,7 +27,7 @@ DESIGN/
 ## 利用ルール
 
 - 新しいUIコンポーネントを作る前に、既存のデザインシステムに同等のものがないか確認してください。
-- デザイントークン(色・余白・フォントサイズ)は、[PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) の原則(シンプル・余白・高級感・信頼感・ミニマル)に沿って定義してください。
+- デザイントークン(色・余白・フォントサイズ)は、[PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) の原則(Premium・Enterprise・Trust・Innovation等、Enterprise AI Platform方針)に沿って定義してください。
 - 外部デザインツール(Figma等)を使う場合は、リンクをこのフォルダ内のMarkdownに記録してください。
 
 ---

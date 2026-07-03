@@ -15,6 +15,49 @@
 
 ---
 
+## 2026-07-03 — v2.0: ブランド方針の全面ピボット — Quiet Intelligence → Enterprise AI Platform
+
+CEO(Chief Design Officer方針)より、v1.2で確定したばかりの「Quiet Intelligence」方針とは大きく異なる新しいブランドブリーフが示されました。Claude Code(Project Bible編集長)は、両方針の矛盾点(ポジショニング、参照ブランド、禁止/推奨ビジュアル、カラー、ボタンサイズ、CTA数、ページ構成)を洗い出してCEOに提示し、**「最新指示を優先し、Enterprise AI Platformへ全面ピボットする」**という明示的な承認を得て本改訂を実施しました。
+
+### なぜ全面ピボットとして扱うか
+
+矛盾が部分的ではなく、ブランドの人格そのもの(「静かに信頼を積み上げる」から「先進性とスケールを堂々と見せる」へ)に及んでいたため、部分的なマージではなく方針の置き換えとして扱っています。旧方針は以下の通り、履歴として保存されます。
+
+### 旧方針(Quiet Intelligence, v1.2まで)の要点 [SUPERSEDED]
+
+- ポジショニング: 「AI会社ではなく社長の右腕」
+- 参照企業: Apple / Notion / Linear / Stripe / Porsche(5社)
+- カラー: White / Black / Smart Blueのみ
+- 禁止: 未来都市CG・AIネットワーク・六角形・過度な発光 等
+- ボタン: 小さめ・控えめ
+- CTA: 「デモを見る」「お問い合わせ」の2つのみ
+- Homepage構成: Hero→共感→Smart Labo Works→導入メリット→ブランドストーリー→会社理念→お問い合わせ
+
+### 新方針(Enterprise AI Platform, v2.0)の要点
+
+- ポジショニング: 「AIを売る会社ではなく、会社を進化させる会社」
+- 参照企業: Microsoft / OpenAI / AWS / Palantir / Stripe / Datadog / Snowflake / Vercel(8社、Stripeのみ共通)
+- カラー: Navy / White / Smart Blue / Light Gray、グラデーションは上品に許容
+- 禁止基準を「安っぽさ・過度さ」へ変更(未来都市・AIネットワーク自体は推奨ビジュアルへ)
+- ボタン: 大きめ・美しい角丸・ホバーアニメーション・高級感
+- CTA: 「無料デモを見る」「導入相談をする」「資料ダウンロード」の3つ、営業導線重視
+- Homepage構成: Hero(左テキスト/右に管理画面表示、背景に未来都市+控えめなAIネットワーク)→社長の1日の業務をAIが支える流れ→主要機能→導入メリット→対応業種→Mission→CTA→Footer
+
+### 更新したファイル
+
+- [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) — ポジショニング・参照8社・カラー・禁止/推奨ビジュアルを全面改訂(v3.0→v4.0)
+- [20_UI_UX_Rules.md](20_UI_UX_Rules.md) — デザイン原則・チェックリストを全面改訂(v3.0→v4.0)
+- [PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md) — マスタープロンプトを全面改訂、「機能→価値」変換パターンを追加(v1.0→v2.0)
+- [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) — ページ構成・Hero・CTAを全面改訂(v1.0→v2.0)
+- [PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md) — 配色・データ表現方針を更新(v1.0→v2.0)
+- [PROMPTS/DESIGN/LandingPage.md](../PROMPTS/DESIGN/LandingPage.md) — カラー・ボタンスタイルを同期(v1.0→v2.0)
+- [99_CEO_MEMORY/04_Brand_Philosophy.md](99_CEO_MEMORY/04_Brand_Philosophy.md) — 記入ガイドを新方針・方針転換の経緯記録用に更新
+- ルート [README.md](../README.md)、[WEBSITE/README.md](../WEBSITE/README.md)、[BRAND/README.md](../BRAND/README.md)、[DESIGN/README.md](../DESIGN/README.md) の関連記述を同期
+
+**変更者:** Claude Code(Project Bible編集長)/ 指示・最終承認: CEO
+
+---
+
 ## 2026-07-03 — v1.2: ブランドデザイン「Quiet Intelligence」の制定
 
 CEO(Chief Design Officer指示)より、Smart Laboのブランドデザイン方針が示され、PROJECT_BIBLEおよび新設の `PROMPTS/DESIGN/` に反映しました。「作るのはホームページではなくブランドである」という前提のもと、ブランドコンセプトからUI原則までを制定しています。

@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 1.2**
+> **PROJECT_BIBLE Version: 2.0**
 
 ---
 
@@ -118,7 +118,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 1.2**
+- 現在: **Version 2.0**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -172,5 +172,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v1.0** | 2026-07-03 | Claude Code | **正式版として全面再設計・確定。** `00_Foundation/`(会社の土台)と `99_CEO_MEMORY/`(代表の記憶)を新設し、10/20/30/40/50番台へ実務ルールを再編。会社のOS・憲法としての位置づけを明記し、PROJECT_BIBLEをVersion 1.0として正式運用開始 |
 | v1.1 | 2026-07-03 | Claude Code | [60_Editorial_Workflow.md](60_Editorial_Workflow.md) を新設。ChatGPT(意思決定パートナー)/CEO(最終承認者)/Claude Code(Project Bible編集長)の三者役割体制と、6ステップ更新フロー(方向性決定→更新指示→Bible更新→Version更新→CHANGELOG更新→コミット)を正式制定 |
 | v1.2 | 2026-07-03 | Claude Code(CEO指示による) | ブランドコンセプト「Quiet Intelligence(静かな知性)」を正式制定。ポジショニング「AI会社ではなく社長の右腕」、参照企業にPorscheを追加(5社)、使用カラーをWhite/Black/Smart Blueに限定、UI/UXルールを9原則に拡充。`PROMPTS/DESIGN/` を新設し、Design Bible・Homepage・Dashboard・LandingPageの制作プロンプトを整備 |
+| **v2.0** | 2026-07-03 | Claude Code(CEO指示による全面ピボット) | **ブランド方針をQuiet IntelligenceからEnterprise AI Platformへ全面ピボット。** ポジショニングを「会社を進化させる会社」に、参照企業をMicrosoft/OpenAI/AWS/Palantir/Stripe/Datadog/Snowflake/Vercelの8社に刷新。カラーにNavy/Light Grayを追加、ボタンを大きめ・ホバーアニメーションに、Homepageの構成・CTA(2→3)を変更。詳細な変更理由は [CHANGELOG.md](CHANGELOG.md) を参照 |
 
 *最終更新: 2026-07-03*

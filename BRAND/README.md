@@ -27,7 +27,7 @@ BRAND/
 
 - ロゴを使用する際は、必ず `guidelines/` 内の使用規定を確認してください(余白の取り方、禁止色、最小サイズなど)。
 - カラーコードは `colors/` の定義を正としてください。プロダクト・サイトごとに独自に色を決めないでください。
-- 新しいブランド素材を作成した場合は、[PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) の原則(シンプル・余白・高級感・信頼感・ミニマル)に沿っているか確認してください。
+- 新しいブランド素材を作成した場合は、[PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) の原則(Premium・Enterprise・Trust・Innovation等、Enterprise AI Platform方針)に沿っているか確認してください。
 
 ---
 
