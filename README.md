@@ -6,6 +6,8 @@
 
 ChatGPT・Claude Code・Codex、そして将来加わる開発メンバー全員が、同じ思想・同じ設計・同じブランド基準を参照しながら仕事ができることを目的としています。
 
+> **[PROJECT_BIBLE/](PROJECT_BIBLE/README.md) は、株式会社スマートラボに関する唯一の正しい設計書(Single Source of Truth)です。** 会社の理念・ルール・ブランドについて他の情報源と矛盾がある場合、常に PROJECT_BIBLE の内容が優先されます。
+
 ---
 
 ## このリポジトリの目的
@@ -57,6 +59,7 @@ SmartLabo/
 6. [PROJECT_BIBLE/06_Development_Rules.md](PROJECT_BIBLE/06_Development_Rules.md) — 開発ルール
 7. [PROJECT_BIBLE/07_UI_UX_Rules.md](PROJECT_BIBLE/07_UI_UX_Rules.md) — UI/UXルール
 8. [PROJECT_BIBLE/08_AI_Rules.md](PROJECT_BIBLE/08_AI_Rules.md) — AI利用ルール(Claude / Codex / ChatGPT共通)
+9. [PROJECT_BIBLE/13_CEO_NOTE.md](PROJECT_BIBLE/13_CEO_NOTE.md) — 代表からのノート(創業理由・経営判断の理由・大事にしたい価値観・将来の構想)
 
 ---
 
@@ -70,7 +73,8 @@ SmartLabo/
 
 - すべての変更は Git でバージョン管理します。
 - 重要な意思決定を伴う変更(理念・ルールの変更など)は、コミットメッセージに変更理由を明記してください。
-- 各ドキュメントの末尾に更新履歴(Changelog)を記載することを推奨します。
+- PROJECT_BIBLE配下の各ドキュメントは、末尾に「変更履歴」テーブル(バージョン/日付/変更者/変更内容)を持ちます。変更時は必ず追記してください。
+- PROJECT_BIBLE全体としての重要な変更は [PROJECT_BIBLE/CHANGELOG.md](PROJECT_BIBLE/CHANGELOG.md) に集約して記録します。
 
 ### 更新ルール
 
