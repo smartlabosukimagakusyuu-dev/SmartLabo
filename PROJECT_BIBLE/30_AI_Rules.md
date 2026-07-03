@@ -9,8 +9,9 @@
 1. **AIは「会社を動かすAI」という思想を体現する存在として扱う。** [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md) の思想を、社内でのAI活用そのものにも適用します。
 2. **AIファーストで考える。** タスクを人がやるか迷ったら、まずAIに任せられないかを検討します([00_Foundation/06_Philosophy.md](00_Foundation/06_Philosophy.md) 原則6)。
 3. **AIに文脈を渡してから指示する。** タスクを依頼する前に、関連する PROJECT_BIBLE のドキュメントをAIに読み込ませてください。
-4. **AIの出力は必ず人間が確認する。** コード・文章・デザイン、いずれの生成物も、公開・実装前に責任者が確認します。
-5. **事実に基づかない出力を公開しない。** AIが生成した数値・引用・主張は、裏付けを確認してから採用してください([00_Foundation/05_Value.md](00_Foundation/05_Value.md)「誠実さ」)。
+4. **コードより先にBibleを読む。** Claude Codeは、コードを書く前に必ずPROJECT_BIBLEを参照します。実装がPROJECT_BIBLEと矛盾する場合、あるいはPROJECT_BIBLEに記載のない判断が必要な場合は、実装前にCEOへ確認しPROJECT_BIBLEを更新します。詳細は [60_Editorial_Workflow.md](60_Editorial_Workflow.md) を参照してください。
+5. **AIの出力は必ず人間が確認する。** コード・文章・デザイン、いずれの生成物も、公開・実装前に責任者が確認します。
+6. **事実に基づかない出力を公開しない。** AIが生成した数値・引用・主張は、裏付けを確認してから採用してください([00_Foundation/05_Value.md](00_Foundation/05_Value.md)「誠実さ」)。
 
 ---
 
@@ -18,11 +19,11 @@
 
 | ツール | 主な用途 | 関連フォルダ |
 |---|---|---|
-| **Claude Code** | コード実装、リファクタリング、ファイル構成の設計、ドキュメント作成 | [PROMPTS/CLAUDE/](../PROMPTS/CLAUDE/README.md) |
+| **Claude Code** | **Project Bible編集長。** コード実装、リファクタリング、ファイル構成の設計、CEOの承認を経た意思決定のPROJECT_BIBLEへの反映 | [PROMPTS/CLAUDE/](../PROMPTS/CLAUDE/README.md) |
 | **Codex** | コード生成・自動化スクリプト・CI関連タスク | [PROMPTS/CODEX/](../PROMPTS/CODEX/README.md) |
-| **ChatGPT** | 企画・文章作成・アイデア出し・資料のドラフト作成 | [PROMPTS/CHATGPT/](../PROMPTS/CHATGPT/README.md) |
+| **ChatGPT** | **意思決定パートナー。** 経営戦略・ブランド・UI/UX・営業・商品設計・会社方針についての意思決定の材料・案をCEOに提示する。企画・文章作成・アイデア出し・資料のドラフト作成 | [PROMPTS/CHATGPT/](../PROMPTS/CHATGPT/README.md) |
 
-厳密な排他ルールではなく、得意領域に応じた使い分けの目安です。将来新しいAIツールが登場した場合は、この表に行を追加してください。
+厳密な排他ルールではなく、得意領域に応じた使い分けの目安です。将来新しいAIツールが登場した場合は、この表に行を追加してください。PROJECT_BIBLE自体の編集体制・更新フローの詳細は [60_Editorial_Workflow.md](60_Editorial_Workflow.md) を参照してください。
 
 ---
 
@@ -73,6 +74,7 @@ PROJECT_BIBLEは将来、Smart Labo Works 自体にAIの前提知識として組
 - [PROMPTS/README.md](../PROMPTS/README.md)
 - [10_Development_Rules.md](10_Development_Rules.md)
 - [00_Foundation/06_Philosophy.md](00_Foundation/06_Philosophy.md)
+- [60_Editorial_Workflow.md](60_Editorial_Workflow.md) — PROJECT_BIBLE編集体制・更新フローの詳細
 
 ---
 
@@ -82,5 +84,6 @@ PROJECT_BIBLEは将来、Smart Labo Works 自体にAIの前提知識として組
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v2.0 | 2026-07-03 | Smart Labo | PROJECT_BIBLE再構成に伴い旧08_AI_Rules.mdから改番。「Smart Labo Worksへの将来的な組み込み」を見据えた記述ルールを追加 |
+| v2.1 | 2026-07-03 | Claude Code | ChatGPT/CEO/Claude Codeの三者役割体制を明記。「コードより先にBibleを読む」原則と60_Editorial_Workflow.mdへの参照を追加 |
 
 *最終更新: 2026-07-03*

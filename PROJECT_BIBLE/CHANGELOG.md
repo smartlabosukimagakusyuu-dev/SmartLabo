@@ -15,6 +15,21 @@
 
 ---
 
+## 2026-07-03 — v1.1: 編集体制・更新フローの制定
+
+PROJECT_BIBLEを継続的に正しく保つための「編集体制」を正式に制定しました。CEOより、ChatGPT・CEO・Claude Codeの三者による運用フローの指示を受け反映したものです。
+
+- [60_Editorial_Workflow.md](60_Editorial_Workflow.md) を新設
+  - 役割体制: ChatGPT(意思決定パートナー: 経営戦略・ブランド・UI/UX・営業・商品設計・会社方針)/ CEO(最終承認者)/ Claude Code(Project Bible編集長)
+  - 6ステップ更新フロー: ①ChatGPTとの会話で方向性決定 → ②CEOが更新指示 → ③Claude CodeがPROJECT_BIBLEを更新 → ④Version更新 → ⑤CHANGELOG更新 → ⑥Gitへコミット
+  - 「コードより先にBible」原則、Project Bible更新チェックリストを明記
+- [README.md](README.md) に運用体制セクションを追加し、フォルダツリー・番号体系説明・更新ルール・変更履歴を更新
+- [30_AI_Rules.md](30_AI_Rules.md) のツール別役割分担表・基本原則を更新し、60_Editorial_Workflow.mdへの参照を追加
+
+**変更者:** Claude Code(Project Bible編集長)/ 承認: CEO
+
+---
+
 ## 2026-07-03 — v1.0: 正式版 — 会社のOS・憲法として全面再設計
 
 PROJECT_BIBLEを「ドキュメント集」から「会社のOS・憲法・知識ベース」として位置づけ直し、正式版 Version 1.0 として確定しました。
