@@ -15,6 +15,29 @@
 
 ---
 
+## 2026-07-03 — v2.2: Enterprise AI Platform方針の再確認とブランドコピー階層の制定
+
+CEOより改めて「Enterprise AI Platformというブランド思想へ変更する」という指示を受領した。内容を確認した結果、ポジショニング・参照8ブランド(Microsoft/OpenAI/AWS/Stripe/Palantir/Datadog/Snowflake/Vercel)・カラー・Hero構成・CTA(3つ)・UI思想など、大部分は**v2.0(2026-07-03)で既に確定・実装済み**の内容と一致していた。そのため今回は「新たな方針転換」ではなく、「既存方針の正式な再確認」として扱い、その中に含まれていた新規要素を追加で反映した。
+
+### 新規に追加した内容
+
+- **ブランドコピー階層の制定:** ブランドコピー「会社を動かすAI。」/ サービスコピー「経営を、ひとつにつなぐ。」/ 説明コピー「社長の右腕になるAI経営プラットフォーム。」の3階層を正式化
+- **CEO判断記録:** 「AIツールを提供する会社」ではなく「会社全体をAIで進化させる企業」という方向性を、ホームページ・管理画面・営業資料・パンフレット・デモ画面・Smart Labo Worksすべての基準とすることを明記
+- ブランドキーワードにGrowth(成長)・Future(未来)・AI Platform(経営)等の英語表記を追加
+- ブランド適用範囲にパンフレット・デモ画面を追加
+- UI原則に「余白を優先しつつEnterprise SaaSらしい力強さと両立させる」を追記
+
+### 更新したファイル
+
+- [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)(v4.1→v4.2) — ブランドコピー階層、キーワード拡張、適用範囲拡張
+- [20_UI_UX_Rules.md](20_UI_UX_Rules.md)(v4.0→v4.1) — 余白と力強さの両立原則を追記
+- [PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md)(v2.0→v2.1) — ブランドコピー階層を追加
+- [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md)(v2.0→v2.1) — 「主要機能」セクションでのサービスコピー/説明コピー使用指示を追加
+
+**変更者:** Claude Code(Project Bible編集長)/ 指示: CEO
+
+---
+
 ## 2026-07-03 — v2.1: CEO本人によるBrand Philosophyの記入と原則の正式制定
 
 CEO本人が [99_CEO_MEMORY/04_Brand_Philosophy.md](99_CEO_MEMORY/04_Brand_Philosophy.md) に、v2.0で確定したEnterprise AI Platform方針への転換経緯と、ブランドの原則を自らの言葉で記入した。これはCEO_MEMORY配下のファイルとして初めて本人による実質的な記入が行われたケースであり、durable(長期的に判断基準となる)な原則については `00_Foundation` 側にも反映した。

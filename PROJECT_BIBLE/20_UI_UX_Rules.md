@@ -32,6 +32,7 @@ Apple級の完成度・Stripe級の美しさ・Microsoft級の信頼感・OpenAI
 ### 1. 余白を十分に使い、情報を整理する
 - 情報を詰め込みすぎない。余白そのものがデザインの一部であると考える。
 - 1画面・1セクションで伝えるメッセージは絞る。
+- ただし余白を優先するあまり弱々しくならないこと。Enterprise SaaSらしい力強さ(太めの見出し、はっきりしたコントラスト、堂々としたレイアウト)と両立させる。
 
 ### 2. 配色はNavy / White / Smart Blue / Light Gray
 - Navy(信頼・先進性)とWhite(明るさ・余白)を基調とし、**アクセントカラーはSmart Blueのみ**。Light Grayはセクション区切り等の補助に使う。
@@ -107,5 +108,6 @@ Apple級の完成度・Stripe級の美しさ・Microsoft級の信頼感・OpenAI
 | v2.0 | 2026-07-03 | Smart Labo | PROJECT_BIBLE再構成に伴い旧07_UI_UX_Rules.mdから改番。キーワードを「シンプル・高級感・余白」から「シンプル・余白・高級感・信頼感・ミニマル」に拡張し、「毎日使いたくなる体験」の原則を追加 |
 | v3.0 | 2026-07-03 | Claude Code(CEO指示による) | Quiet Intelligenceブランドコンセプトに基づき全面拡充。参照企業にPorscheを追加(5社)、配色をSmart Blueのみのアクセントに限定、ボタン・モーション・禁止ビジュアルの原則を追加し、原則を6→9項目に拡張 |
 | **v4.0** | 2026-07-03 | Claude Code(CEO指示による全面ピボット) | **Enterprise AI Platform方針へ全面改訂。** 参照企業をMicrosoft/OpenAI/AWS/Palantir/Stripe/Datadog/Snowflake/Vercelの8社に刷新。配色にNavy/Light Grayを追加し上品なグラデーションを許容。ボタンを「大きめ・ホバーアニメーション」に変更、「機能ではなく価値を伝える」原則を追加、禁止基準を「安っぽさ・過度さ」に緩和 |
+| v4.1 | 2026-07-03 | Claude Code(CEO指示による) | 原則1に「余白を優先しつつEnterprise SaaSらしい力強さと両立させる」旨を追記(v4.0方針の再確認・補強) |
 
 *最終更新: 2026-07-03*

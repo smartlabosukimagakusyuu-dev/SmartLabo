@@ -14,11 +14,17 @@
 
 ---
 
-## キャッチコピー
+## ブランドコピー階層
 
-> **「会社を動かすAI。」**
+Smart Laboの言葉は、3つの階層で使い分けます。用途に応じて正しい階層のコピーを選んでください。
 
-このキャッチコピーは、Smart Labo Works が単なる業務ツールではなく、会社そのものを動かす存在であるという世界観を、一言で表現するものです。サイトのファーストビュー、名刺、資料の表紙など、ブランドを象徴する場所で優先的に使用してください。
+| 階層 | コピー | 用途 |
+|---|---|---|
+| **ブランドコピー** | **「会社を動かすAI。」** | サイトのファーストビュー、名刺、資料の表紙など、ブランドを象徴する場所 |
+| **サービスコピー** | **「経営を、ひとつにつなぐ。」** | Smart Labo Works というサービス・プロダクトを紹介する見出し |
+| **説明コピー** | **「社長の右腕になるAI経営プラットフォーム。」** | ブランドコピー/サービスコピーに補足が必要な場面(メタディスクリプション、資料の説明文など) |
+
+ブランドコピー「会社を動かすAI。」は、Smart Labo Works が単なる業務ツールではなく、会社そのものを動かす存在であるという世界観を、一言で表現するものです。3つのコピーは矛盾なく重ね合わせて使用できるよう設計されています(例: 「会社を動かすAI。経営を、ひとつにつなぐ。」)。
 
 ---
 
@@ -28,7 +34,7 @@
 
 Smart Labo Worksは、中小企業の社長の右腕になるAI経営プラットフォームです。私たちが提供するのは「AI」そのものではなく、AIによって会社が進化していく体験です。
 
-ブランドキーワード: **信頼・未来・成長・経営・AI・DX・プロフェッショナル・革新・安心感**
+ブランドキーワード: **信頼(Trust)・未来(Future)・成長(Growth)・経営(AI Platform)・AI・DX・プロフェッショナル(Professional)・革新(Innovation)・安心感・エンタープライズ(Enterprise)・エグゼクティブ(Executive)・プレミアム(Premium)**
 
 > Smart LaboはAIを売る会社ではない。社長が本来の仕事に集中できる時間をつくる会社である。デザインも、システムも、営業も、すべてこの考え方を軸に判断する。
 > —— CEO Message([99_CEO_MEMORY/04_Brand_Philosophy.md](../99_CEO_MEMORY/04_Brand_Philosophy.md)より)
@@ -140,10 +146,13 @@ Smart Laboのデザインが目指すのは、世界トップクラスのBtoB Sa
 
 このブランド思想は、以下すべてに一貫して適用されます。
 
-- コーポレートサイト([WEBSITE/](../../WEBSITE/README.md))
-- プロダクトUI([SmartLaboWorks/](../../SmartLaboWorks/README.md))
-- 名刺・資料・提案書([BRAND/](../../BRAND/README.md)、[DOCUMENT/SALES/](../../DOCUMENT/SALES/README.md))
+- コーポレートサイト・ホームページ([WEBSITE/](../../WEBSITE/README.md))
+- プロダクトUI・管理画面([SmartLaboWorks/](../../SmartLaboWorks/README.md))
+- 名刺・営業資料・提案書・パンフレット([BRAND/](../../BRAND/README.md)、[DOCUMENT/SALES/](../../DOCUMENT/SALES/README.md))
+- デモ画面
 - SNS・広報物
+
+この適用範囲は、CEOが明示的に判断基準として指定した対象領域です(2026-07-03)。新しい成果物の種類が生まれた場合も、このブランド思想の例外とはしません。
 
 ---
 
@@ -165,5 +174,6 @@ Smart Laboのデザインが目指すのは、世界トップクラスのBtoB Sa
 | v3.0 | 2026-07-03 | Claude Code(CEO指示による) | ポジショニング「AI会社ではなく社長の右腕」、ブランドコンセプト「Quiet Intelligence」を正式制定。参照企業をPorsche追加の5社に拡張。使用カラー(White/Black/Smart Blue)と禁止ビジュアルの概要を追加 |
 | **v4.0** | 2026-07-03 | Claude Code(CEO指示による全面ピボット) | **ブランド方針をQuiet IntelligenceからEnterprise AI Platformへ全面ピボット。** ポジショニングを「会社を進化させる会社」に更新。参照企業をMicrosoft/OpenAI/AWS/Palantir/Stripe/Datadog/Snowflake/Vercelの8社に刷新。カラーにNavy・Light Grayを追加し上品なグラデーションを許容。禁止事項を「安っぽさ・過度さ」基準に緩和し、未来都市・AIネットワークを推奨ビジュアルへ変更。詳細な変更理由は [CHANGELOG.md](../CHANGELOG.md) を参照 |
 | v4.1 | 2026-07-03 | Claude Code(CEO本人執筆の反映) | CEO Messageを追加。「ブランドの原則」6項目(特に「高級感より品格を重視する」)を正式制定し、デザインキーワードの優先順位を明記。出典は [99_CEO_MEMORY/04_Brand_Philosophy.md](../99_CEO_MEMORY/04_Brand_Philosophy.md) |
+| v4.2 | 2026-07-03 | Claude Code(CEO指示による) | **ブランドコピー階層**(ブランドコピー/サービスコピー/説明コピー)を新設し「経営を、ひとつにつなぐ。」「社長の右腕になるAI経営プラットフォーム。」を正式制定。ブランドキーワードにGrowth/Future/AI Platform等を追加。ブランド適用範囲にパンフレット・デモ画面を追加。本改訂は、既にv4.0/v4.1で確定済みのEnterprise AI Platform方針を再確認しつつ、新規要素(コピー階層)を追加するもの |
 
 *最終更新: 2026-07-03*
