@@ -12,8 +12,31 @@
 ## [Unreleased]
 
 - (次回の変更予定があればここに記載)
-- Homepage(`WEBSITE/`)のカラートークンを、正式パレット(`#0A1B3D` / `#2563EB` 等)へ更新する
-- ロゴ・アイコンの実データ(SVG/PNG)を [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に格納する(CEOより正式データを別途用意予定と連絡あり)
+- 正式ロゴデータ(SVG/PNG)到着後、Homepageの暫定「S」シンボルを差し替える
+- アイコンの実データ(SVG)を [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する
+
+---
+
+## 2026-07-03 — Homepage v0.2: 正式カラー・ロゴへの反映漏れを修正
+
+CEOより「ロゴもデザインも全く違う」との指摘を受けた。原因は、直前のブランドキット確定作業(PROJECT_BIBLE v2.4/v2.5)で仕様は更新したものの、**実装済みのHomepage(`WEBSITE/`)への反映が漏れていた**ことだった。CURRENT_STATUS.mdには「カラー更新待ち」と記録していたが、実際の色更新作業を後回しにしたまま次のタスクに進んでしまっていたため、指摘を受けて直ちに反映した。
+
+### 修正内容
+
+- **カラートークン:** `WEBSITE/css/style.css` の全カラー変数・ハードコードされたhexコードを、正式パレット(Primary Navy `#0A1B3D`、Smart Blue `#2563EB`、Light Blue `#60A5FA`)に置換。Hero・各セクションのグラデーション、アイコン、チェックマークもすべて対象。
+- **ロゴ:** 暫定の角丸バッジ+抽象ストロークのマークを廃止し、[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) 記載の「途切れた2画のストローク(左上から右下へ流れる筆致)」仕様に沿った、より明確に「S」と読み取れるシンボルへ再デザイン。Navy背景(ヘッダー・フッター)のため白抜き版を使用。
+- **注記:** 現在のSシンボルは、CEOから共有された参考画像をもとにClaude Codeが解釈して作成した**暫定デザイン**です。正式なロゴデータ(SVG/PNG)が用意され次第、[DESIGN_ASSETS/Logo/](../DESIGN_ASSETS/Logo/README.md) に格納し差し替えます。
+
+### 教訓(60_Editorial_Workflowへの反映を検討)
+
+PROJECT_BIBLE側の仕様更新と、実装(`WEBSITE/`等)への反映は別作業であり、片方だけ完了した状態を「完了」と報告しないよう注意する。CURRENT_STATUS.mdに「反映待ち」と記載した項目は、次の関連作業に着手する前に必ず解消する。
+
+### 更新したファイル
+
+- `WEBSITE/css/style.css`、`WEBSITE/index.html`
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v1.4→v1.5) — Homepage Versionを0.1→0.2に更新
+
+**変更者:** Claude Code(Lead Software Engineer)/ 指摘: CEO
 
 ---
 

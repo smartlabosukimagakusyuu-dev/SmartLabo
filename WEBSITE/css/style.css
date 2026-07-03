@@ -1,22 +1,30 @@
 /* ==========================================================================
    Smart Labo Works — Homepage
    Brand: Enterprise AI Platform (PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md)
-   Colors: Navy / White / Smart Blue / Light Gray (Smart Blue = only accent)
+   正式カラーパレット(BRAND/colors/palette.md 準拠)
+   Brand Color: Smart Blue #2563EB のみ。Light Blue/Accent BlueはSmart Blue Family(階調)
    ========================================================================== */
 
 :root {
-  --navy-900: #0A1A3C;
-  --navy-800: #0F2450;
-  --navy-700: #16386F;
-  --navy-600: #1B4488;
-  --smart-blue: #2F6BFF;
-  --smart-blue-light: #5B8CFF;
-  --smart-blue-dark: #1450C7;
+  /* Primary Navy #0A1B3D の階調(セクション背景用) */
+  --navy-900: #0A1B3D;
+  --navy-800: #0F2A56;
+  --navy-700: #163B72;
+  --navy-600: #1D4E93;
+
+  /* Smart Blue Family(唯一のブランドカラー Smart Blue #2563EB とその階調) */
+  --smart-blue: #2563EB;
+  --smart-blue-light: #60A5FA;
+  --smart-blue-accent: #00D4FF;
+  --smart-blue-dark: #1D4ED8;
+
   --white: #FFFFFF;
-  --light-gray: #F5F7FA;
+  --light-gray: #F3F6FA;
+  --gray: #64748B;
+  --dark-gray: #1E293B;
   --border-light: #E4E8F0;
-  --text-primary: #101828;
-  --text-secondary: #5B6472;
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
   --text-on-navy: #FFFFFF;
   --text-on-navy-secondary: #C3D2F0;
 
@@ -166,7 +174,7 @@ h1, h2, h3, h4 {
 .hero {
   position: relative;
   padding: 84px 0 152px;
-  background: linear-gradient(160deg, #0A1A3C 0%, #0F2A5C 55%, #123A7D 100%);
+  background: linear-gradient(160deg, var(--navy-900) 0%, var(--navy-800) 55%, var(--navy-700) 100%);
   overflow: hidden;
 }
 
@@ -269,11 +277,11 @@ h1, h2, h3, h4 {
 .section--gray { background: var(--light-gray); }
 .section--navy { background: var(--navy-900); }
 .section--navy-deep {
-  background: linear-gradient(180deg, #081531 0%, #0C1F45 100%);
+  background: linear-gradient(180deg, #071630 0%, var(--navy-900) 100%);
   padding: 88px 0;
 }
 .section--cta {
-  background: linear-gradient(135deg, #0F2A5C 0%, #1B4488 100%);
+  background: linear-gradient(135deg, var(--navy-800) 0%, var(--navy-600) 100%);
   padding: 88px 0;
 }
 
@@ -394,7 +402,7 @@ h1, h2, h3, h4 {
 .industry-card__icon {
   height: 96px;
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #16386F, #0F2A5C);
+  background: linear-gradient(135deg, var(--navy-700), var(--navy-800));
 }
 .industry-card h3 { font-size: 15px; margin: 20px 20px 8px; }
 .industry-card p { font-size: 13px; color: var(--text-secondary); margin: 0 20px 20px; line-height: 1.7; }
@@ -420,7 +428,7 @@ h1, h2, h3, h4 {
 
 /* ---------------------------------- Footer ---------------------------------- */
 
-.footer { background: #071227; padding: 72px 0 0; }
+.footer { background: #071630; padding: 72px 0 0; }
 .footer__inner {
   display: grid;
   grid-template-columns: 1.6fr repeat(4, 1fr);
