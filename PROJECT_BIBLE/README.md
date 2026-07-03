@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 2.4**
+> **PROJECT_BIBLE Version: 2.5**
 
 ---
 
@@ -122,7 +122,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 2.4**
+- 現在: **Version 2.5**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -182,5 +182,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | v2.2 | 2026-07-03 | Claude Code(CEO指示による) | CEOより改めてEnterprise AI Platform方針の確立指示を受領(内容はv2.0で確定済みのものと大部分が一致)。新規要素として**ブランドコピー階層**(ブランドコピー/サービスコピー/説明コピー)を正式制定し「経営を、ひとつにつなぐ。」「社長の右腕になるAI経営プラットフォーム。」を追加。ブランドキーワードと適用範囲(パンフレット・デモ画面)を拡張。詳細は [CHANGELOG.md](CHANGELOG.md) を参照 |
 | **v2.3** | 2026-07-03 | Claude Code(CEO指示による) | **[CURRENT_STATUS.md](CURRENT_STATUS.md) を新設。** Claude Codeの役割を「Project Bible編集長 / Lead Software Engineer 兼 Knowledge Manager」に拡張し、GitHub運用フロー(10ステップ)・コミットメッセージ規約(feat/docs/design/fix/refactor/style/chore)・作業完了時の報告フォーマット・推測で判断しないエスカレーションルールを [60_Editorial_Workflow.md](60_Editorial_Workflow.md) に制定。ChatGPTとの新セッション開始時に共有する「5行サマリー」の仕組みを整備 |
 | v2.4 | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | CEOから提供されたブランドキット参照資料に基づき、**ロゴ仕様**(カラー/白抜き/アイコンの3バリエーション)・**正式カラーパレット**(8色、hexコード)・**タイポグラフィ階層**・**UIコンポーネントの型**(ボタン/入力欄/カード/ステータスバッジ)・**アイコンセット**(8種)を正式制定。「Smart Blueのみ」の原則を「Smart Blueファミリー(4階調)」に精緻化。[BRAND/colors/palette.md](../BRAND/colors/palette.md)、[DESIGN/system/design-tokens.md](../DESIGN/system/design-tokens.md) を新設し、[PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md) に具体的なダッシュボード標準レイアウトを追加 |
+| **v2.5** | 2026-07-03 | Claude Code(CEO確認・指示による) | **Smart Blue Familyの解釈をCEOが正式確認。** ブランドカラーはSmart Blueのみとし、Light Blue/Accent Blueは階調として運用することを確定。**[DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) を新設**し、デザイン資産の実データ管理場所として位置づけ(Logo/Background/Icons/Dashboard/Buttons/Cards/Graphics/Images/Colors/Fontsの10サブフォルダ)。BRAND/DESIGNフォルダは「仕様・定義」、DESIGN_ASSETSは「実データ」という役割分担に整理し、関連ドキュメントの格納先参照をすべて更新 |
 
 *最終更新: 2026-07-03*

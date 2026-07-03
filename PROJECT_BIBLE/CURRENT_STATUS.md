@@ -9,8 +9,8 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：2.4
-Brand Version：4.3
+Project Bible Version：2.5
+Brand Version：4.4
 Design Bible Version：2.2
 Homepage Version：0.1(初回実装・カラー更新待ち)
 Current Task：Dashboard UI設計
@@ -22,8 +22,8 @@ Current Task：Dashboard UI設計
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 2.4 |
-| Brand Version | 4.3 |
+| Project Bible Version | 2.5 |
+| Brand Version | 4.4 |
 | Design Bible Version | 2.2 |
 | Homepage Version | 0.1(実装済み。ただし配色が旧承認色 `#0A1A3C`/`#2F6BFF` 系のままで、正式カラーパレット `#0A1B3D`/`#2563EB` への更新が未反映) |
 | Dashboard Version | 0.0(設計プロンプト・標準レイアウト確定・実装未着手) |
@@ -86,5 +86,6 @@ Current Task：Dashboard UI設計
 | v1.1 | 2026-07-03 | Claude Code(CEO指示による) | Homepage初回実装完了に伴いHomepage Versionを0.0→0.1に更新。Current TaskをDashboard UI設計に更新 |
 | v1.2 | 2026-07-03 | Claude Code(CEO指示による) | Hero/CTA/機能バー/レスポンシブをレビューし、Hero背景(都市シルエット・AIネットワーク)がコンテンツに隠れて視認できない不具合を修正 |
 | v1.3 | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | Brand Version 4.2→4.3、Design Bible Version 2.1→2.2に更新。正式カラーパレット確定に伴い、Homepage実装が旧配色のままである旨をNext Taskに追記 |
+| v1.4 | 2026-07-03 | Claude Code(CEO指示による) | Project Bible Version 2.4→2.5、Brand Version 4.3→4.4に更新。[DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) 新設(デザイン資産の実データ管理場所)とSmart Blue Family確定を反映 |
 
 *最終更新: 2026-07-03*

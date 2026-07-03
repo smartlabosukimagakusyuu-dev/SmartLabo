@@ -34,14 +34,26 @@ SmartLabo/
 │   ├── BUSINESS/       ← 事業計画・提携資料
 │   ├── FINANCE/        ← 融資・補助金・資金計画
 │   └── SALES/          ← 営業資料・提案書
-├── DESIGN/             ← デザインシステム・素材・Figma等の設計データ
+├── DESIGN/             ← デザインシステムのトークン・仕様(文書)
+├── DESIGN_ASSETS/      ← デザイン資産の実データ(ロゴ・画像・アイコン等)
+│   ├── Logo/           ← ロゴファイル
+│   ├── Background/     ← 背景画像・グラフィック
+│   ├── Icons/          ← UIアイコン
+│   ├── Dashboard/      ← ダッシュボードUIモックアップ
+│   ├── Buttons/        ← ボタン素材
+│   ├── Cards/          ← カード素材
+│   ├── Graphics/       ← 装飾グラフィック
+│   ├── Images/         ← 写真素材
+│   ├── Colors/         ← カラースウォッチ
+│   └── Fonts/          ← フォント実データ
 ├── WEBSITE/            ← コーポレートサイト関連
 ├── SmartLaboWorks/     ← 主力プロダクト「Smart Labo Works」の開発
 ├── PROMPTS/            ← AI用プロンプト集
 │   ├── CLAUDE/         ← Claude Code / Claude向けプロンプト・設定
 │   ├── CODEX/          ← Codex向けプロンプト・設定
-│   └── CHATGPT/        ← ChatGPT向けプロンプト・設定
-├── BRAND/              ← ロゴ・名刺・カラー・デザインガイドライン
+│   ├── CHATGPT/        ← ChatGPT向けプロンプト・設定
+│   └── DESIGN/         ← Smart Laboブランド・デザイン用プロンプト
+├── BRAND/              ← ブランド仕様(カラー定義・ガイドライン文書)
 ├── LEGAL/              ← 定款・契約書・利用規約・プライバシーポリシー
 ├── MEETING/            ← 打ち合わせ議事録
 └── ARCHIVE/            ← 過去データ・廃止済み資料

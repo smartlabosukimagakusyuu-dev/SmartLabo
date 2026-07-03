@@ -8,8 +8,8 @@
 
 - [ ] 会社の正式な設立日・登記情報を [00_Foundation/01_Company_Story.md](00_Foundation/01_Company_Story.md) に反映する
 - [ ] 組織図の正式版を [40_Organization.md](40_Organization.md) に反映する
-- [ ] ロゴの実データ(SVG/PNG、カラー版・白抜き版・アイコン版)を [BRAND/logo/](../BRAND/README.md) に格納する(仕様は[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)に定義済み)
-- [ ] アイコンセットの実SVGファイルを `DESIGN/assets/icons/` に格納する(一覧は[DESIGN/system/design-tokens.md](../DESIGN/system/design-tokens.md)に定義済み)
+- [ ] ロゴの実データ(SVG/PNG、カラー版・白抜き版・アイコン版)を [DESIGN_ASSETS/Logo/](../DESIGN_ASSETS/Logo/README.md) に格納する(仕様は[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)に定義済み。CEOより正式データは別途用意予定と連絡あり)
+- [ ] アイコンセットの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(一覧は[DESIGN/system/design-tokens.md](../DESIGN/system/design-tokens.md)に定義済み)
 - [ ] Homepage(`WEBSITE/`)のカラートークンを正式パレット(`#0A1B3D` / `#2563EB` 等)へ更新する
 - [ ] PROMPTS配下にClaude / Codex / ChatGPT向けの実プロンプトテンプレートを追加する
 - [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) の本文(冒頭のCEO Message以外)を代表本人の言葉で確定させる
@@ -34,5 +34,6 @@
 | v2.0 | 2026-07-03 | Smart Labo | PROJECT_BIBLE再構成に伴い旧12_TODO.mdから改番。00_Foundation・99_CEO_MEMORY関連の未記入項目を追加 |
 | v2.1 | 2026-07-03 | Claude Code | 04_Brand_Philosophy.mdの記入完了を反映し、残タスクを更新 |
 | v2.2 | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | ロゴ・アイコンの実データ格納、Homepageのカラートークン更新タスクを追加 |
+| v2.3 | 2026-07-03 | Claude Code(CEO指示による) | ロゴ・アイコンの格納先を [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に更新 |
 
 *最終更新: 2026-07-03*

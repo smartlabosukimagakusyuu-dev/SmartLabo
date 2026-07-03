@@ -42,7 +42,7 @@
 - 設定
 - セキュリティ
 
-実際のSVGアイコンファイルは `DESIGN/assets/icons/` に格納する想定です(現時点では仕様のみ。実ファイルは [PROJECT_BIBLE/50_TODO.md](../../PROJECT_BIBLE/50_TODO.md) の未対応タスクを参照)。
+実際のSVGアイコンファイルは [DESIGN_ASSETS/Icons/](../../DESIGN_ASSETS/Icons/README.md) に格納します(現時点では仕様のみ。実ファイルは [PROJECT_BIBLE/50_TODO.md](../../PROJECT_BIBLE/50_TODO.md) の未対応タスクを参照)。
 
 ## ダッシュボードUIの構成要素
 

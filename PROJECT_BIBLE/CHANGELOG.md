@@ -13,7 +13,51 @@
 
 - (次回の変更予定があればここに記載)
 - Homepage(`WEBSITE/`)のカラートークンを、正式パレット(`#0A1B3D` / `#2563EB` 等)へ更新する
+- ロゴ・アイコンの実データ(SVG/PNG)を [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に格納する(CEOより正式データを別途用意予定と連絡あり)
 
+---
+
+## 2026-07-03 — v2.5: Smart Blue Family確定とDESIGN_ASSETSの新設
+
+CEOより、前回報告した2点の判断について確認・指示を受けた。
+
+### ① Smart Blue Familyの確定
+
+Claude Codeの解釈(Light Blue・Accent Blueを独立したブランドカラーではなくSmart Blue Familyの階調として扱う)がCEOにより確認・確定した。**ブランドカラーはSmart Blue(`#2563EB`)ただ一つ**であり、Light Blue・Accent Blueはその階調である、という位置づけをPROJECT_BIBLE・Design Bible全体で統一した。
+
+### ② DESIGN_ASSETSフォルダの新設
+
+現在のロゴ参考画像は仕様検討用の参考資料であり、正式なロゴデータ(SVG/PNG等)は今後別途用意されることが判明した。それまでの間、実データの置き場所を先行して整備するため、`DESIGN_ASSETS/` フォルダを新設した。
+
+```
+DESIGN_ASSETS/
+├── Logo/ Background/ Icons/ Dashboard/
+├── Buttons/ Cards/ Graphics/ Images/
+└── Colors/ Fonts/
+```
+
+**役割分担の整理:**
+
+| フォルダ | 役割 |
+|---|---|
+| PROJECT_BIBLE | 思想・原則("なぜ") |
+| BRAND/、DESIGN/ | 仕様・トークンの文書化("何を") |
+| **DESIGN_ASSETS/(新設)** | **実データそのもの("実物")** |
+
+`BRAND/` と `DESIGN/` から、ロゴ・アイコン等の実ファイルに関する記述を [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) への参照に更新し、両フォルダは仕様・トークンの文書化に専念する役割へ整理した。
+
+### 更新・新設したファイル
+
+- 新規: `DESIGN_ASSETS/README.md`、および10サブフォルダそれぞれの `README.md`(Logo/Background/Icons/Dashboard/Buttons/Cards/Graphics/Images/Colors/Fonts)
+- [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)(v4.3→v4.4) — Smart Blue Family確定を明記、実データ格納先をDESIGN_ASSETSへ変更
+- [20_UI_UX_Rules.md](20_UI_UX_Rules.md)(v4.2→v4.3) — 「Design Assets運用ルール」セクションを新設
+- [BRAND/README.md](../BRAND/README.md)(v1.1→v1.2)、[DESIGN/README.md](../DESIGN/README.md)(v1.1→v1.2) — 実データ格納先をDESIGN_ASSETSへ変更、役割を仕様・トークンの文書化に整理
+- [DESIGN/system/design-tokens.md](../DESIGN/system/design-tokens.md)、[50_TODO.md](50_TODO.md)(v2.2→v2.3) — 格納先パスの参照を更新
+- ルート [README.md](../README.md) — フォルダ構成図にDESIGN_ASSETSを追加
+
+**変更者:** Claude Code(Project Bible編集長 / Lead Software Engineer 兼 Knowledge Manager)/ 指示: CEO
+
+---
 ---
 
 ## 2026-07-03 — v2.4: ブランドキット(ロゴ・カラー・アイコン・UIコンポーネント)の正式反映

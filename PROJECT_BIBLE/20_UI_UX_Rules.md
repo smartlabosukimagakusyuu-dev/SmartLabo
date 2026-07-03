@@ -87,6 +87,17 @@ Apple級の完成度・Stripe級の美しさ・Microsoft級の信頼感・OpenAI
 
 ---
 
+## Design Assets運用ルール
+
+ロゴ・背景画像・アイコン・ダッシュボードのモックアップ・ボタン/カードの素材・グラフィック・写真・カラースウォッチ・フォントなど、**デザイン資産の実データは [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に一元管理します**(CEO指示、2026-07-03)。
+
+- `DESIGN_ASSETS/` は Logo / Background / Icons / Dashboard / Buttons / Cards / Graphics / Images / Colors / Fonts の10サブフォルダで構成されます。
+- このドキュメント(思想・原則)と `DESIGN_ASSETS/`(実データ)の役割を混同しないこと。新しいUI原則やカラールールを追加する場合は、まずこのドキュメント([00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) と本ファイル)を更新し、そのうえで `DESIGN_ASSETS/` に対応する実データを追加してください。
+- 実データを使用する前に、必ず本ドキュメントの禁止ビジュアル・カラールールに沿っているか確認してください。
+- 詳細な運用ルール(命名規則・バージョニング・Git運用)は [DESIGN_ASSETS/README.md](../DESIGN_ASSETS/README.md) を参照してください。
+
+---
+
 ## レビュー時のチェックリスト
 
 新しい画面・資料をリリースする前に、以下を確認してください。
@@ -109,6 +120,7 @@ Apple級の完成度・Stripe級の美しさ・Microsoft級の信頼感・OpenAI
 - [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)
 - [00_Foundation/06_Philosophy.md](00_Foundation/06_Philosophy.md)
 - [PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md) — 実制作時に使う詳細版デザインプロンプト
+- [DESIGN_ASSETS/README.md](../DESIGN_ASSETS/README.md) — デザイン資産の実データ管理場所
 - [DESIGN/README.md](../DESIGN/README.md)
 - [BRAND/README.md](../BRAND/README.md)
 
@@ -124,5 +136,6 @@ Apple級の完成度・Stripe級の美しさ・Microsoft級の信頼感・OpenAI
 | **v4.0** | 2026-07-03 | Claude Code(CEO指示による全面ピボット) | **Enterprise AI Platform方針へ全面改訂。** 参照企業をMicrosoft/OpenAI/AWS/Palantir/Stripe/Datadog/Snowflake/Vercelの8社に刷新。配色にNavy/Light Grayを追加し上品なグラデーションを許容。ボタンを「大きめ・ホバーアニメーション」に変更、「機能ではなく価値を伝える」原則を追加、禁止基準を「安っぽさ・過度さ」に緩和 |
 | v4.1 | 2026-07-03 | Claude Code(CEO指示による) | 原則1に「余白を優先しつつEnterprise SaaSらしい力強さと両立させる」旨を追記(v4.0方針の再確認・補強) |
 | v4.2 | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | 配色を正式なhexコード付き「Smart Blueファミリー」(Smart Blue/Light Blue/Accent Blue)へ精緻化。ステータスバッジ・写真背景の暖色を例外として明記。UIコンポーネントの型(ボタン/入力欄/カード/ステータスバッジ)とアイコンセットの方針を原則8に追加 |
+| v4.3 | 2026-07-03 | Claude Code(CEO指示による) | 「Design Assets運用ルール」セクションを新設し、[DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) を実データの一元管理場所として位置づけ |
 
 *最終更新: 2026-07-03*

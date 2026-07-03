@@ -6,7 +6,9 @@
 
 ## このフォルダの目的
 
-Smart Labo が手がけるプロダクト・サイトに共通して使われるデザインシステム(コンポーネント、カラー、タイポグラフィ、Figma等の設計データ)を保管します。デザインの思想的な原則は [PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) を参照してください。
+Smart Labo が手がけるプロダクト・サイトに共通して使われるデザインシステムの**トークン定義・仕様**(コンポーネントの型、カラートークン、タイポグラフィ、Figma等外部ツールへのリンク)を保管します。デザインの思想的な原則は [PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) を参照してください。
+
+> **アイコン・コンポーネントの実データ(SVG/PNG等)は、このフォルダではなく [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に格納します**(CEO指示、2026-07-03)。`DESIGN/` は「トークン・仕様」を、`DESIGN_ASSETS/` は「実データ」を管理する役割分担です。
 
 ---
 
@@ -16,12 +18,11 @@ Smart Labo が手がけるプロダクト・サイトに共通して使われる
 DESIGN/
 ├── system/        ← カラー・タイポグラフィ・スペーシングなどのトークン定義
 │   └── design-tokens.md  ← カラートークン・UIコンポーネントの型・アイコンセット一覧
-├── components/    ← 再利用可能なUIコンポーネントの仕様
-├── figma/          ← Figma等外部ツールへのリンク・エクスポート素材
-└── assets/         ← アイコン・画像素材(実SVGファイルは未格納)
+├── components/    ← 再利用可能なUIコンポーネントの仕様(文書)
+└── figma/          ← Figma等外部ツールへのリンク
 ```
 
-上記は推奨構成であり、プロダクトの成長に応じて調整してください。デザイントークンとUIコンポーネントの型は [system/design-tokens.md](system/design-tokens.md) に定義済みです。
+上記は推奨構成であり、プロダクトの成長に応じて調整してください。デザイントークンとUIコンポーネントの型は [system/design-tokens.md](system/design-tokens.md) に定義済みです。実際のアイコン・画像ファイルは [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) 等を参照してください。
 
 ---
 
@@ -58,5 +59,6 @@ DESIGN/
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v1.1 | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | [system/design-tokens.md](system/design-tokens.md) を新設。カラートークン、UIコンポーネントの型、アイコンセット、ダッシュボードUI構成要素を追加 |
+| v1.2 | 2026-07-03 | Claude Code(CEO指示による) | 実データ(アイコン・画像等)の格納先を [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に変更。`DESIGN/` はトークン・仕様のみを扱う役割に整理し、`assets/` サブフォルダの記載を削除 |
 
 *最終更新: 2026-07-03*

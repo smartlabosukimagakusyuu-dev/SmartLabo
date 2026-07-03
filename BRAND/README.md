@@ -6,7 +6,9 @@
 
 ## このフォルダの目的
 
-株式会社スマートラボのブランド資産(ロゴファイル、カラーコード、名刺デザイン、その他ブランド関連の実素材)を保管します。ブランドの思想的な背景は [PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) を参照してください。
+株式会社スマートラボのブランド**仕様・定義**(カラーパレット、ガイドライン文書)を保管します。ブランドの思想的な背景は [PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) を参照してください。
+
+> **ロゴファイル・アイコン等の実データは、このフォルダではなく [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に格納します**(CEO指示、2026-07-03)。`BRAND/` は「定義・仕様」を、`DESIGN_ASSETS/` は「実データ」を管理する役割分担です。
 
 ---
 
@@ -14,7 +16,6 @@
 
 ```
 BRAND/
-├── logo/           ← ロゴファイル(SVG, PNG等、各種サイズ・カラーバリエーション)※実ファイル未格納
 ├── colors/         ← カラーパレット定義(カラーコード一覧)
 │   └── palette.md  ← 正式カラーパレット(8色、Hexコード)
 ├── typography/     ← 使用フォントの定義・ライセンス情報
@@ -23,7 +24,7 @@ BRAND/
 ```
 
 - カラーパレットは [colors/palette.md](colors/palette.md) に定義済みです。
-- ロゴの構成(カラー/白抜き/アイコンの3バリエーション)は [PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) の「ロゴ」セクションに定義済みですが、**実データ(SVG/PNGファイル)はまだ格納されていません**([PROJECT_BIBLE/50_TODO.md](../PROJECT_BIBLE/50_TODO.md) 参照)。
+- ロゴの構成(カラー/白抜き/アイコンの3バリエーション)は [PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) の「ロゴ」セクションに定義済みですが、**実データ(SVG/PNGファイル)は [DESIGN_ASSETS/Logo/](../DESIGN_ASSETS/Logo/README.md) にまだ格納されていません**([PROJECT_BIBLE/50_TODO.md](../PROJECT_BIBLE/50_TODO.md) 参照)。
 
 ---
 
@@ -62,5 +63,6 @@ BRAND/
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v1.1 | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | [colors/palette.md](colors/palette.md) を新設し正式カラーパレットを追加。ロゴ構成の定義先を明記(実ファイルは未格納) |
+| v1.2 | 2026-07-03 | Claude Code(CEO指示による) | 実データ(ロゴ等)の格納先を [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に変更。`BRAND/` は仕様・定義のみを扱う役割に整理し、`logo/` サブフォルダの記載を削除 |
 
 *最終更新: 2026-07-03*
