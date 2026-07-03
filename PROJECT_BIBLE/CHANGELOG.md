@@ -14,6 +14,43 @@
 - (次回の変更予定があればここに記載)
 - 正式ロゴデータ(SVG/PNG)到着後、Homepageの暫定「S」シンボルを差し替える
 - アイコンの実データ(SVG)を [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する
+- Hero背景画像5点の実データ(`.webp`)を [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に格納し、採用画像をHomepageに実装する(CEOよりファイルパス提供待ち)
+
+---
+
+## 2026-07-03 — v2.6: Hero背景画像5点をDesign Assetsとして正式管理
+
+CEOより、Homepage Hero背景の候補として提示された5点の画像を「単なる参考画像」ではなく**正式なブランド資産**として管理するよう指示を受けた。同じ世界観を将来再現できるよう、画像ファイルごとにプロンプト・用途・バージョンをセットで保存する運用を制定した。
+
+### 新設した「番号付きユースケースフォルダ」体系
+
+生成AI画像のように複数候補から選定するプロセスを伴う素材は、型別フォルダ(Logo/Icons等)とは別に、用途ごとに番号を振ったフォルダ(`01_HERO/` など)で管理し、画像ファイルと同名の `.md` メタデータをペアで保存する方式を [DESIGN_ASSETS/README.md](../DESIGN_ASSETS/README.md) に正式制定した。
+
+### Hero背景候補5点の管理状況
+
+[DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に、各候補のメタデータ(`.md`)を作成した。
+
+| ファイル | ステータス |
+|---|---|
+| `hero_background_01_sunrise_city.webp` | **採用中**(Homepage Hero、CEO選定) |
+| `hero_background_02_city_network.webp` | 候補(アーカイブ) |
+| `hero_background_03_cloud_city.webp` | 候補(アーカイブ) |
+| `hero_background_04_night_network.webp` | 候補(アーカイブ) |
+| `hero_background_05_waterfront_city.webp` | **使用不可**(禁止ビジュアル「六角形」に該当) |
+
+### 未解決事項
+
+チャット上で共有された画像をファイルとして保存・格納する手段が現状ないため、**5点とも実画像データ(`.webp`)はまだリポジトリに格納されていません。** メタデータのみ先行整備した状態です。CEOよりファイルパスの提供、または別の受け渡し方法の指示を受け次第、実データを格納しHomepageへ実装します。
+
+### 更新したファイル
+
+- 新規: [DESIGN_ASSETS/01_HERO/README.md](../DESIGN_ASSETS/01_HERO/README.md)、`Backgrounds/hero_background_01〜05_*.md`(5ファイル)
+- [DESIGN_ASSETS/README.md](../DESIGN_ASSETS/README.md)(v1.0→v2.0) — 番号付きユースケースフォルダ体系とDesign Assets一覧を追加
+- [50_TODO.md](50_TODO.md)(v2.3→v2.4) — Hero背景画像の格納・実装タスクを追加
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v1.5→v1.6)
+- [README.md](README.md) — PROJECT_BIBLE Version 2.5→2.6
+
+**変更者:** Claude Code(Project Bible編集長)/ 指示: CEO
 
 ---
 
