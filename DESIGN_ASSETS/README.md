@@ -65,7 +65,7 @@ Hero・Dashboard・LP等、**複数の生成候補から選定するプロセス
 
 | ユースケース/種別 | フォルダ | ステータス |
 |---|---|---|
-| Homepage Hero背景 | [01_HERO/Backgrounds/](01_HERO/README.md) | 候補5点をメタデータ整備済み(1点採用決定、実ファイルは提供待ち) |
+| Homepage Hero背景 | [01_HERO/](01_HERO/README.md) | 完成イメージのモックアップ5点は格納済み([Mockups/](01_HERO/Mockups/README.md))。実装用の背景単体データ(Backgrounds/、詳細は[01_HERO/README.md](01_HERO/README.md)参照)は1点採用決定・提供待ち |
 | ロゴ | [Logo/](Logo/README.md) | 仕様のみ([00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md))、実ファイル未着手 |
 | アイコン | [Icons/](Icons/README.md) | 仕様のみ([DESIGN/system/design-tokens.md](../DESIGN/system/design-tokens.md))、実ファイル未着手 |
 | その他(Background/Dashboard/Buttons/Cards/Graphics/Images/Colors/Fonts) | 各フォルダ参照 | 未着手 |
@@ -113,5 +113,6 @@ Hero・Dashboard・LP等、**複数の生成候補から選定するプロセス
 | v1.0 | 2026-07-03 | Claude Code(CEO指示による) | 初版作成。10サブフォルダ(Logo/Background/Icons/Dashboard/Buttons/Cards/Graphics/Images/Colors/Fonts)の構成とDesign Assets運用ルールを整備 |
 | v2.0 | 2026-07-03 | Claude Code(CEO指示による) | **番号付きユースケースフォルダ**(`01_HERO/` 等)の体系を追加。生成AI画像を「プロンプト・用途・バージョン・世界観」付きの正式ブランド資産として管理するルールを制定。Design Assets一覧セクションを新設 |
 | v2.1 | 2026-07-03 | Claude Code(CEO指示による) | [AI_WORKSPACE/](../AI_WORKSPACE/README.md) 新設に伴い、**ChatGPT発の素材をこのフォルダへ直接保存することを禁止**し、AI_WORKSPACE経由での受け取りを運用ルールの第一項目として制定 |
+| v2.2 | 2026-07-03 | Claude Code(CEO指示による) | AI_WORKSPACE経由でHero候補5点の完成イメージモックアップを受領し、[01_HERO/Mockups/](01_HERO/Mockups/README.md) へ格納。Design Assets一覧を更新 |
 
 *最終更新: 2026-07-03*

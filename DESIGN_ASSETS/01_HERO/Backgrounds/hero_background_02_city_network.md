@@ -40,12 +40,14 @@ Enterprise AI Platform
 
 ## ファイル
 
-- 画像実データ: `hero_background_02_city_network.webp`(**未格納**)
+- 画像実データ(背景単体・実装用): `hero_background_02_city_network.webp`(**未格納**)
+- 完成イメージのモックアップ(参考資料): [../Mockups/hero_mockup_02_city_network.png](../Mockups/hero_mockup_02_city_network.png)(2026-07-03格納。実装にはそのまま使用不可。詳細は [../Mockups/README.md](../Mockups/README.md) 参照)
 
 ## 更新履歴
 
 | バージョン | 日付 | 内容 |
 |---|---|---|
 | v1.0 | 2026-07-03 | 初版。候補として記録(不採用) |
+| v1.1 | 2026-07-03 | 完成イメージのモックアップ画像を [../Mockups/](../Mockups/README.md) へ格納 |
 
 *最終更新: 2026-07-03*

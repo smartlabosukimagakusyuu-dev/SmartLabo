@@ -14,7 +14,43 @@
 - (次回の変更予定があればここに記載)
 - 正式ロゴデータ(SVG/PNG)到着後、Homepageの暫定「S」シンボルを差し替える
 - アイコンの実データ(SVG)を [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する
-- Hero背景画像5点の実データ(`.webp`)を [AI_WORKSPACE/INBOX/HERO/](../AI_WORKSPACE/INBOX/README.md) 経由で受け取り、[DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に格納・Homepageに実装する(CEOよりファイルパス提供待ち)
+- Hero背景**単体**の実データ(`.webp`、テキスト・ロゴ焼き込みなし)を [AI_WORKSPACE/INBOX/HERO/](../AI_WORKSPACE/INBOX/README.md) 経由で受け取り、[DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に格納・Homepageに実装する(CEOより背景単体版の提供待ち)
+
+---
+
+## 2026-07-03 — v2.8: AI_WORKSPACE初運用、Hero候補モックアップを受領
+
+CEOが [AI_WORKSPACE/INBOX/HERO/](../AI_WORKSPACE/INBOX/README.md) に、Hero候補5点をまとめた比較用画像(`ChatGPT Image 2026年7月3日 17_03_07.png`)を格納した。AI_WORKSPACE新設(v2.7)後、初めての実運用となった。
+
+### 確認内容と発見した問題
+
+Claude Codeが画像を確認したところ、以前レビュー済みの5候補(朝日・都市ネットワーク・雲海都市・夜景・水辺都市)と同一の世界観だったが、**Smart Laboロゴ・見出し「会社を動かすAI。」・3つのCTAボタン・β版バッジが焼き込まれた「完成イメージのモックアップ」**であることが判明した。このままCSSの背景画像として実装すると、実際のHTML(本物のロゴ・見出し・ボタン)がこの焼き込み済みテキストの上に重なり、文字が二重に表示されてしまう。
+
+CEOに確認を仰ぎ、「参考画像として保管し、背景単体版を別途依頼する」方針で進めることを決定した。
+
+### 実施内容
+
+1. 比較用合成画像を、境界を検出したうえで5枚に精密分割
+2. [DESIGN_ASSETS/01_HERO/Mockups/](../DESIGN_ASSETS/01_HERO/Mockups/README.md) を新設し、参考資料として5点を格納(実装からは直接参照しないことを明記)
+3. 元の合成画像は履歴として [AI_WORKSPACE/COMPLETED/HERO/](../AI_WORKSPACE/COMPLETED/README.md) へ保管
+4. [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) 配下の5つのメタデータファイルすべてに、モックアップへの相互参照と「実装用の背景単体データは引き続き未格納」である旨を追記
+5. [50_TODO.md](50_TODO.md) のタスクを更新(モックアップ格納は完了、背景単体データの格納・実装は引き続き未対応)
+
+### 更新したファイル
+
+- 新規: [DESIGN_ASSETS/01_HERO/Mockups/](../DESIGN_ASSETS/01_HERO/Mockups/README.md) と画像5点
+- `DESIGN_ASSETS/01_HERO/Backgrounds/hero_background_01〜05_*.md`(各v1.0→v1.1)
+- [DESIGN_ASSETS/01_HERO/README.md](../DESIGN_ASSETS/01_HERO/README.md)(v1.0→v1.1)
+- [DESIGN_ASSETS/README.md](../DESIGN_ASSETS/README.md)(v2.1→v2.2)
+- [50_TODO.md](50_TODO.md)(v2.4→v2.5)
+- [README.md](README.md)(PROJECT_BIBLE) — Version 2.7→2.8
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v1.7→v1.8)
+
+**利用した素材:** `AI_WORKSPACE/INBOX/HERO/ChatGPT Image 2026年7月3日 17_03_07.png`(Hero候補5点の比較用合成画像)
+**正式保存した場所:** [DESIGN_ASSETS/01_HERO/Mockups/](../DESIGN_ASSETS/01_HERO/Mockups/README.md)(参考資料として。実装用の背景単体データは別途必要)
+**不要になった素材:** なし(元データは [AI_WORKSPACE/COMPLETED/HERO/](../AI_WORKSPACE/COMPLETED/README.md) に履歴保管)
+
+**変更者:** Claude Code(Project Bible編集長)/ 提供: CEO
 
 ---
 

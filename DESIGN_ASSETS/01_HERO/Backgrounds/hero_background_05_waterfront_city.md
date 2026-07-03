@@ -37,11 +37,13 @@ Enterprise AI Platform
 ## ファイル
 
 - 画像実データ: `hero_background_05_waterfront_city.webp`(**未格納**。仮に提供された場合も実制作には使用しないこと)
+- 完成イメージのモックアップ(参考資料): [../Mockups/hero_mockup_05_waterfront_city.png](../Mockups/hero_mockup_05_waterfront_city.png)(2026-07-03格納。六角形の混入を確認済み。実制作には使用しないこと)
 
 ## 更新履歴
 
 | バージョン | 日付 | 内容 |
 |---|---|---|
 | v1.0 | 2026-07-03 | 初版。禁止ビジュアル(六角形)該当のため使用不可として記録 |
+| v1.1 | 2026-07-03 | モックアップ画像を [../Mockups/](../Mockups/README.md) へ格納。実物でも六角形の混入を再確認 |
 
 *最終更新: 2026-07-03*

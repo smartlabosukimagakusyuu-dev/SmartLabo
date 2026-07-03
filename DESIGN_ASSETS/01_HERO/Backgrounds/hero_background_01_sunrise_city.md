@@ -41,12 +41,14 @@ Enterprise AI Platform
 
 ## ファイル
 
-- 画像実データ: `hero_background_01_sunrise_city.webp`(**未格納** — CEOよりファイル提供待ち。[PROJECT_BIBLE/50_TODO.md](../../../PROJECT_BIBLE/50_TODO.md) 参照)
+- 画像実データ(背景単体・実装用): `hero_background_01_sunrise_city.webp`(**未格納** — テキスト・ロゴが焼き込まれていない背景単体版をCEOより提供待ち。[PROJECT_BIBLE/50_TODO.md](../../../PROJECT_BIBLE/50_TODO.md) 参照)
+- 完成イメージのモックアップ(参考資料): [../Mockups/hero_mockup_01_sunrise_city.png](../Mockups/hero_mockup_01_sunrise_city.png)(2026-07-03格納。Smart Laboロゴ・見出し・CTAボタンが焼き込まれているため、実装にはそのまま使用不可。詳細は [../Mockups/README.md](../Mockups/README.md) 参照)
 
 ## 更新履歴
 
 | バージョン | 日付 | 内容 |
 |---|---|---|
 | v1.0 | 2026-07-03 | 初版。5候補中からHomepage Hero用として採用 |
+| v1.1 | 2026-07-03 | 完成イメージのモックアップ画像を [../Mockups/](../Mockups/README.md) へ格納。実装用の背景単体画像は引き続き未格納であることを明記 |
 
 *最終更新: 2026-07-03*
