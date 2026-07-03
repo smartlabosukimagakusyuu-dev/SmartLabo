@@ -12,8 +12,10 @@
 - [ ] アイコンセットの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(一覧は[DESIGN/system/design-tokens.md](../DESIGN/system/design-tokens.md)に定義済み)
 - [x] ~~Homepage(`WEBSITE/`)のカラートークンを正式パレット(`#0A1B3D` / `#2563EB` 等)へ更新する~~(2026-07-03完了)
 - [x] ~~Hero候補5点の完成イメージモックアップを [DESIGN_ASSETS/01_HERO/Mockups/](../DESIGN_ASSETS/01_HERO/Mockups/README.md) に格納する~~(2026-07-03完了。AI_WORKSPACE経由で受領)
-- [ ] Hero背景**単体**の実データ(`.webp`、テキスト・ロゴが焼き込まれていないもの)を [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に格納する(受領済みのモックアップはロゴ・見出し・CTAが焼き込まれておりそのまま使用不可。CEOより背景単体版の別途提供待ち)
-- [ ] 採用済みのHero背景(`hero_background_01_sunrise_city.webp`、背景単体版)をHomepage([WEBSITE/index.html](../WEBSITE/index.html))に実装する
+- [x] ~~Hero背景**単体**の実データ(`.webp`、テキスト・ロゴが焼き込まれていないもの)5点を [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に格納する~~(2026-07-03完了。AI_WORKSPACE経由で受領)
+- [x] ~~採用済みのHero背景(`hero_background_02_city_network.webp`)をHomepage([WEBSITE/index.html](../WEBSITE/index.html))に実装する~~(2026-07-03完了)
+- [ ] アイコンの実SVGファイル化(現状は既存の線画SVGアイコンをバッジ風スタイルに変更する形で対応。専用アイコンセットを新規デザインする場合は別途検討)
+- [ ] Homepageの別ロゴ案(角丸正方形+「+」マーク、[DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/) 参照)を正式採用するかCEOに確認する(採用する場合は[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)のロゴ仕様を先に更新すること)
 - [ ] PROMPTS配下にClaude / Codex / ChatGPT向けの実プロンプトテンプレートを追加する
 - [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) の本文(冒頭のCEO Message以外)を代表本人の言葉で確定させる
 - [ ] [99_CEO_MEMORY/01_Founding_Story.md](99_CEO_MEMORY/01_Founding_Story.md)(創業経緯)・[03_Future_Vision.md](99_CEO_MEMORY/03_Future_Vision.md)(将来構想)・[05_Important_Conversations.md](99_CEO_MEMORY/05_Important_Conversations.md)(重要な会話)を代表が記入する(04_Brand_Philosophy.mdは記入済み)
@@ -40,5 +42,6 @@
 | v2.3 | 2026-07-03 | Claude Code(CEO指示による) | ロゴ・アイコンの格納先を [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) に更新 |
 | v2.4 | 2026-07-03 | Claude Code(CEO指示による) | Homepageカラートークン更新タスクを完了として消し込み。Hero背景画像5点の格納・実装タスクを追加 |
 | v2.5 | 2026-07-03 | Claude Code(CEO指示による) | Hero候補5点のモックアップ格納タスクを完了として消し込み。実装には背景単体データが別途必要であることを明記し、タスクを更新 |
+| v2.6 | 2026-07-03 | Claude Code(CEO提供による) | Hero背景単体データの格納・Homepage実装タスクを完了として消し込み。アイコンSVG化・別ロゴ案の確認タスクを追加 |
 
 *最終更新: 2026-07-03*

@@ -24,25 +24,23 @@ Enterprise AI Platform
 
 ## 画像の内容(視覚的な説明)
 
-水平線に近い高さから見た都市のスカイライン。中央からやや右寄りに朝日が昇り、空はネイビーからゴールドへのグラデーション。画面下部〜右下にかけて、Smart Blueの光る点と線で構成されたAIネットワークが控えめに重なる。5候補の中で最もネットワークが抑制されており、[PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../../../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) の「AIネットワークは控えめに」という原則に最も忠実。
+低い視点から見た都市のスカイライン。中央に朝日が沈む(または昇る)強い逆光があり、空はネイビーからオレンジ・ゴールドへのグラデーション。ビル群はシルエットに近い状態で、AIネットワークの光る点線は写っていない。5候補の中で最も感情的・情緒的な「朝焼け」を強調した1枚。
 
 > 注記: 生成時の具体的なプロンプト文字列は記録されていません。上記は画像から再構成した説明です。プロンプトの原文をお持ちの場合は、CEOよりご提供いただければこのセクションを更新します。
 
 ## ステータス
 
-**採用中** — Homepage Hero([WEBSITE/index.html](../../../WEBSITE/index.html))の背景として採用(CEO選定、2026-07-03)。
+**候補(アーカイブ)** — 2026-07-03、CEOよりAI_WORKSPACE経由で本物の背景単体データ(5点)が提供されたことに伴い、Homepage Heroの実装には[hero_background_02_city_network.webp](hero_background_02_city_network.md)(都市+AIネットワークが1枚に収まっている構図)を採用した。本画像はAIネットワークが写っておらず「未来都市+控えめなAIネットワーク」の仕様を単独では満たさないため、今回は不採用。「朝焼け」の情緒的な訴求をしたい他用途(資料・プレゼン等)での活用を推奨する。
 
 ## 推奨用途
 
-- トップページ
-- LP
-- 営業資料
-- プレゼン
+- 営業資料・プレゼン(情緒的な訴求をしたい場面)
+- LP(採用ページ等、AIネットワーク要素が不要な場面)
 
 ## ファイル
 
-- 画像実データ(背景単体・実装用): `hero_background_01_sunrise_city.webp`(**未格納** — テキスト・ロゴが焼き込まれていない背景単体版をCEOより提供待ち。[PROJECT_BIBLE/50_TODO.md](../../../PROJECT_BIBLE/50_TODO.md) 参照)
-- 完成イメージのモックアップ(参考資料): [../Mockups/hero_mockup_01_sunrise_city.png](../Mockups/hero_mockup_01_sunrise_city.png)(2026-07-03格納。Smart Laboロゴ・見出し・CTAボタンが焼き込まれているため、実装にはそのまま使用不可。詳細は [../Mockups/README.md](../Mockups/README.md) 参照)
+- 画像実データ(背景単体・実装用): [hero_background_01_sunrise_city.webp](hero_background_01_sunrise_city.webp)(**格納完了**、2026-07-03。AI_WORKSPACE経由でCEOより提供された「HERO背景素材(バリエーション)」シートの候補02「朝焼け・ビジネス都市」を、テキスト等が焼き込まれていない状態で切り出し格納)
+- 完成イメージのモックアップ(参考資料・旧世代): [../Mockups/hero_mockup_01_sunrise_city.png](../Mockups/hero_mockup_01_sunrise_city.png)(2026-07-03格納。こちらは別カットのため本画像とは構図が異なる。参考資料としてのみ保管)
 
 ## 更新履歴
 
@@ -50,5 +48,6 @@ Enterprise AI Platform
 |---|---|---|
 | v1.0 | 2026-07-03 | 初版。5候補中からHomepage Hero用として採用 |
 | v1.1 | 2026-07-03 | 完成イメージのモックアップ画像を [../Mockups/](../Mockups/README.md) へ格納。実装用の背景単体画像は引き続き未格納であることを明記 |
+| v1.2 | 2026-07-03 | AI_WORKSPACE経由で背景単体データ(実データ)を受領・格納。ただしAIネットワークが写っていないため、Homepage Hero実装には[02_city_network](hero_background_02_city_network.md)を採用し、本画像は候補(アーカイブ)に変更 |
 
 *最終更新: 2026-07-03*

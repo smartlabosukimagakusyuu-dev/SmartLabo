@@ -29,7 +29,7 @@ Enterprise AI Platform
 
 ## ステータス
 
-**候補(アーカイブ)** — Homepage Heroとしては不採用(01が採用)。「AIネットワーク」というより「スピード感」を訴求する表現に近いため、機能訴求やパフォーマンスを強調したいセクション(例: 主要機能セクションの補助ビジュアル)での活用を検討可能。
+**候補(アーカイブ)** — Homepage Heroとしては不採用(02_city_networkが採用)。夜景でありオレンジ〜赤系の街の灯りも混じるため、Navy/Smart Blueで統一したいトップページよりも、機能訴求やパフォーマンスを強調したいセクション(例: 主要機能セクションの補助ビジュアル)での活用を検討可能。
 
 ## 推奨用途
 
@@ -38,8 +38,8 @@ Enterprise AI Platform
 
 ## ファイル
 
-- 画像実データ(背景単体・実装用): `hero_background_04_night_network.webp`(**未格納**)
-- 完成イメージのモックアップ(参考資料): [../Mockups/hero_mockup_04_night_network.png](../Mockups/hero_mockup_04_night_network.png)(2026-07-03格納。実装にはそのまま使用不可。詳細は [../Mockups/README.md](../Mockups/README.md) 参照)
+- 画像実データ(背景単体・実装用): [hero_background_04_night_network.webp](hero_background_04_night_network.webp)(**格納完了**、2026-07-03。AI_WORKSPACE経由でCEOより提供された「HERO背景素材(バリエーション)」シートの候補04「夜景・テクノロジー」を切り出し格納)
+- 完成イメージのモックアップ(参考資料・旧世代): [../Mockups/hero_mockup_04_night_network.png](../Mockups/hero_mockup_04_night_network.png)(2026-07-03格納。こちらは別カットのため本画像とは構図が異なる。参考資料としてのみ保管)
 
 ## 更新履歴
 
@@ -47,5 +47,6 @@ Enterprise AI Platform
 |---|---|---|
 | v1.0 | 2026-07-03 | 初版。候補として記録(不採用) |
 | v1.1 | 2026-07-03 | 完成イメージのモックアップ画像を [../Mockups/](../Mockups/README.md) へ格納 |
+| v1.2 | 2026-07-03 | AI_WORKSPACE経由で背景単体データ(実データ)を受領・格納。Homepage Heroへの採用は見送り(02_city_networkを採用) |
 
 *最終更新: 2026-07-03*

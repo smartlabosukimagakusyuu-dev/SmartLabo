@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 2.8**
+> **PROJECT_BIBLE Version: 2.9**
 
 ---
 
@@ -122,7 +122,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 2.8**
+- 現在: **Version 2.9**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -186,5 +186,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | v2.6 | 2026-07-03 | Claude Code(CEO指示による) | **DESIGN_ASSETSに「番号付きユースケースフォルダ」体系を追加**し、[DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) を新設。CEOより提示されたHomepage Hero背景候補5点を、画像ファイルごとにプロンプト・用途・テーマ・世界観・ステータスを記録した`.md`メタデータとペア管理する方式を正式制定(候補5点のうち1点採用・3点アーカイブ・1点は禁止ビジュアル該当で使用不可)。実画像ファイル(`.webp`)は未格納で、CEOからのファイル提供待ち |
 | **v2.7** | 2026-07-03 | Claude Code(CEO指示による) | **[AI_WORKSPACE/](../AI_WORKSPACE/README.md) を新設。** ChatGPT発の素材(画像・資料・プロンプト)をClaude Codeが受け取るための正式な受け渡し経路として、INBOX/PROCESSING/COMPLETED/ARCHIVEの4段階構成を制定。DESIGN_ASSETSへの直接保存を禁止し、[60_Editorial_Workflow.md](60_Editorial_Workflow.md) に「AI_WORKSPACE運用フロー」(6ステップ)を正式追加。作業完了報告フォーマットに利用素材・保存先・不要素材の報告項目を追加 |
 | v2.8 | 2026-07-03 | Claude Code(CEO提供による) | **AI_WORKSPACE運用フローの初運用。** CEOが `AI_WORKSPACE/INBOX/HERO/` にHero候補5点の完成イメージ画像(1枚の比較用合成画像)を格納。Claude Codeが確認したところ、Smart Laboロゴ・見出し・CTAボタンが焼き込まれた「完成イメージのモックアップ」であり、実装用のCSS背景画像としてそのまま使うと本物のHTMLテキストと二重表示になる問題を発見。CEOに確認のうえ、[DESIGN_ASSETS/01_HERO/Mockups/](../DESIGN_ASSETS/01_HERO/Mockups/README.md) を新設し「参考資料」として格納。実装用の背景単体データは引き続き別途依頼が必要であることを明記 |
+| **v2.9** | 2026-07-03 | Claude Code(CEO提供による) | **Hero背景単体データ5点をAI_WORKSPACE経由で受領し、Homepageへ実装完了。** [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) にテキスト焼き込みのない背景単体データを格納し、都市とAIネットワークが1枚に収まる`hero_background_02_city_network.webp`をHomepage Heroに採用。同時に、CEOより提供されたHomepageアイコン参考資料([DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/))から「バッジスタイル」のみをSmart Blue Family単色で採用し、多色配色・別ロゴ案は明示的に不採用として記録(ブランドルールとの不整合、CEO未承認のため) |
 
 *最終更新: 2026-07-03*

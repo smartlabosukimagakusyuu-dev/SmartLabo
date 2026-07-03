@@ -65,9 +65,9 @@ Hero・Dashboard・LP等、**複数の生成候補から選定するプロセス
 
 | ユースケース/種別 | フォルダ | ステータス |
 |---|---|---|
-| Homepage Hero背景 | [01_HERO/](01_HERO/README.md) | 完成イメージのモックアップ5点は格納済み([Mockups/](01_HERO/Mockups/README.md))。実装用の背景単体データ(Backgrounds/、詳細は[01_HERO/README.md](01_HERO/README.md)参照)は1点採用決定・提供待ち |
+| Homepage Hero背景 | [01_HERO/](01_HERO/README.md) | **実装用の背景単体データ5点、格納完了**([Backgrounds/](01_HERO/README.md))。`hero_background_02_city_network.webp` をHomepageに実装済み |
 | ロゴ | [Logo/](Logo/README.md) | 仕様のみ([00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md))、実ファイル未着手 |
-| アイコン | [Icons/](Icons/README.md) | 仕様のみ([DESIGN/system/design-tokens.md](../DESIGN/system/design-tokens.md))、実ファイル未着手 |
+| アイコン | [Icons/](Icons/README.md) | 実SVGは未着手。参考資料([Reference/](Icons/Reference/))をもとにバッジスタイルをHomepageへ反映済み |
 | その他(Background/Dashboard/Buttons/Cards/Graphics/Images/Colors/Fonts) | 各フォルダ参照 | 未着手 |
 
 新しいアセットを追加・整理したら、この一覧を更新してください。
@@ -114,5 +114,6 @@ Hero・Dashboard・LP等、**複数の生成候補から選定するプロセス
 | v2.0 | 2026-07-03 | Claude Code(CEO指示による) | **番号付きユースケースフォルダ**(`01_HERO/` 等)の体系を追加。生成AI画像を「プロンプト・用途・バージョン・世界観」付きの正式ブランド資産として管理するルールを制定。Design Assets一覧セクションを新設 |
 | v2.1 | 2026-07-03 | Claude Code(CEO指示による) | [AI_WORKSPACE/](../AI_WORKSPACE/README.md) 新設に伴い、**ChatGPT発の素材をこのフォルダへ直接保存することを禁止**し、AI_WORKSPACE経由での受け取りを運用ルールの第一項目として制定 |
 | v2.2 | 2026-07-03 | Claude Code(CEO指示による) | AI_WORKSPACE経由でHero候補5点の完成イメージモックアップを受領し、[01_HERO/Mockups/](01_HERO/Mockups/README.md) へ格納。Design Assets一覧を更新 |
+| v2.3 | 2026-07-03 | Claude Code(CEO提供による) | AI_WORKSPACE経由でHero背景**単体データ5点(格納完了)**と、Homepageアイコン参考資料を受領。[01_HERO/Backgrounds/](01_HERO/README.md) の実データを完成させ、Homepage Heroへ実装。[01_HERO/Overlays/](01_HERO/Overlays/README.md) を新設。[Icons/Reference/](Icons/Reference/) を新設し、アイコンのバッジスタイルをHomepageへ反映(多色配色・別ロゴ案は不採用) |
 
 *最終更新: 2026-07-03*

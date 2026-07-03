@@ -13,8 +13,55 @@
 
 - (次回の変更予定があればここに記載)
 - 正式ロゴデータ(SVG/PNG)到着後、Homepageの暫定「S」シンボルを差し替える
-- アイコンの実データ(SVG)を [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する
-- Hero背景**単体**の実データ(`.webp`、テキスト・ロゴ焼き込みなし)を [AI_WORKSPACE/INBOX/HERO/](../AI_WORKSPACE/INBOX/README.md) 経由で受け取り、[DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に格納・Homepageに実装する(CEOより背景単体版の提供待ち)
+- アイコンの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(現状は既存の線画SVGをバッジ風スタイルに変更する形で対応)
+- Homepage別ロゴ案([DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/))を正式採用するかCEOに確認する
+
+---
+
+## 2026-07-03 — Homepage v0.4: Hero背景に実写真を実装、アイコンをバッジスタイルへ刷新
+
+CEOより「HIROとICONの素材をファイルに入れたので、ホームページ改修して」との指示を受け、AI_WORKSPACE経由で提供された2件の素材を確認・実装した。
+
+### Hero背景(AI_WORKSPACE/INBOX/HERO/)
+
+CEOが提供した「HERO背景素材(バリエーション)」シート(1枚の比較用画像、5つの背景候補+オーバーレイ・グラデーション素材を収録)を確認したところ、前回のモックアップとは異なり、**テキスト・ロゴが焼き込まれていない背景単体データ**だった。境界を検出して5点+補助素材6点に分割し、番号ラベルを除去したうえで格納した。
+
+- [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に5点すべての実データ(`.webp`)を格納(**格納完了**)
+- [DESIGN_ASSETS/01_HERO/Overlays/](../DESIGN_ASSETS/01_HERO/Overlays/README.md) を新設し、補助素材6点(オーバーレイ3点・グラデーション3点)を格納
+- `hero_background_02_city_network.webp`(都市とAIネットワークが1枚に同居する構図)をHomepage Hero([WEBSITE/index.html](../WEBSITE/index.html))に実装。手描きのSVG都市シルエット・ネットワークは実写真に置き換え、下部260px(モバイル150〜170px)の帯状レイアウトで配置し、Navyグラデーションでテキストとの可読性を確保した
+- 以前CEOが選定していた「朝焼け」候補(`01_sunrise_city`)はAIネットワークが写っていなかったため、今回は不採用としアーカイブへ変更。旧モックアップ版`05_waterfront_city`にあった禁止ビジュアル(六角形)は、新しい背景単体データには含まれていないことも確認した
+- 元データ(比較用シート)は [AI_WORKSPACE/COMPLETED/HERO/](../AI_WORKSPACE/COMPLETED/README.md) に履歴保管
+
+### Homepageアイコン(AI_WORKSPACE/INBOX/ICONS/)
+
+CEOが提供した画像は、単体のアイコンではなく**Homepageの別デザイン案の全体モックアップ**だった。3つの要素(アイコンのバッジスタイル/多色配色/別ロゴ案)を切り分けて判断した。
+
+- **採用:** アイコンの「バッジスタイル」(角丸正方形の塗りバッジ+白抜きアイコン)。「主要機能」「社長の1日」セクションの計10アイコンに、Smart Blue Family単色のグラデーションバッジとして反映
+- **不採用:** 多色配色(青・水色・紫)。ブランドルール「Smart Blueのみ」に反するため
+- **不採用・要確認:** 別ロゴ案(角丸正方形+「+」マーク)。公式ロゴ仕様と異なり、過去の「仕様と実装の食い違い」の教訓からCEO未承認では変更しない方針とした
+- 参考資料は [DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/) に格納。元データは [AI_WORKSPACE/COMPLETED/ICONS/](../AI_WORKSPACE/COMPLETED/README.md) に履歴保管
+
+### 確認事項
+
+デスクトップ(1440px)・モバイル(375px)双方でプレビュー確認。モバイルでHero写真とCTAボタンが重なり可読性が落ちる問題を発見し、ブレークポイントごとに写真の高さとHero下部余白を調整して解消した。コンソールエラーなし。
+
+### 更新したファイル
+
+- `WEBSITE/index.html`、`WEBSITE/css/style.css`、新規: `WEBSITE/img/hero/hero_background_02_city_network.webp`
+- [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) 配下5ファイル(各`.md`をv1.1→v1.2、`.webp`を新規格納)
+- 新規: [DESIGN_ASSETS/01_HERO/Overlays/](../DESIGN_ASSETS/01_HERO/Overlays/README.md)
+- [DESIGN_ASSETS/01_HERO/README.md](../DESIGN_ASSETS/01_HERO/README.md)(v1.1→v1.2)
+- 新規: [DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/)、[DESIGN_ASSETS/Icons/README.md](../DESIGN_ASSETS/Icons/README.md)(v1.0→v1.1)
+- [DESIGN_ASSETS/README.md](../DESIGN_ASSETS/README.md)(v2.2→v2.3)
+- [50_TODO.md](50_TODO.md)(v2.5→v2.6)
+- [README.md](README.md)(PROJECT_BIBLE) — Version 2.8→2.9
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v1.9→v2.0)
+
+**利用した素材:** `AI_WORKSPACE/INBOX/HERO/ChatGPT Image 2026年7月3日 21_59_28.png`、`AI_WORKSPACE/INBOX/ICONS/ChatGPT Image 2026年7月3日 11_17_55.png`
+**正式保存した場所:** [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md)・[Overlays/](../DESIGN_ASSETS/01_HERO/Overlays/README.md)・[DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/)
+**不要になった素材:** なし(元データはAI_WORKSPACE/COMPLETED/へ履歴保管)
+
+**変更者:** Claude Code(Lead Software Engineer)/ 提供: CEO
 
 ---
 
