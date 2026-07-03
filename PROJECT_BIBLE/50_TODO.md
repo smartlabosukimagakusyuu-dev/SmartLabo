@@ -11,8 +11,8 @@
 - [ ] ブランドガイドライン(ロゴ・カラーコード等)を [BRAND/](../BRAND/README.md) に格納する
 - [ ] デザインシステムの初版を [DESIGN/](../DESIGN/README.md) に構築する
 - [ ] PROMPTS配下にClaude / Codex / ChatGPT向けの実プロンプトテンプレートを追加する
-- [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) を代表本人の言葉で確定させる
-- [ ] [99_CEO_MEMORY/](99_CEO_MEMORY/README.md) 配下の各ファイル(創業経緯・将来構想・ブランド思想)を代表が記入する
+- [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) の本文(冒頭のCEO Message以外)を代表本人の言葉で確定させる
+- [ ] [99_CEO_MEMORY/01_Founding_Story.md](99_CEO_MEMORY/01_Founding_Story.md)(創業経緯)・[03_Future_Vision.md](99_CEO_MEMORY/03_Future_Vision.md)(将来構想)・[05_Important_Conversations.md](99_CEO_MEMORY/05_Important_Conversations.md)(重要な会話)を代表が記入する(04_Brand_Philosophy.mdは記入済み)
 - [ ] [00_Foundation/09_Product_History.md](00_Foundation/09_Product_History.md) にリリース済みプロダクト・機能を記録する
 
 ---
@@ -31,5 +31,6 @@
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v2.0 | 2026-07-03 | Smart Labo | PROJECT_BIBLE再構成に伴い旧12_TODO.mdから改番。00_Foundation・99_CEO_MEMORY関連の未記入項目を追加 |
+| v2.1 | 2026-07-03 | Claude Code | 04_Brand_Philosophy.mdの記入完了を反映し、残タスクを更新 |
 
 *最終更新: 2026-07-03*

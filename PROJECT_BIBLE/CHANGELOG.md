@@ -15,6 +15,27 @@
 
 ---
 
+## 2026-07-03 — v2.1: CEO本人によるBrand Philosophyの記入と原則の正式制定
+
+CEO本人が [99_CEO_MEMORY/04_Brand_Philosophy.md](99_CEO_MEMORY/04_Brand_Philosophy.md) に、v2.0で確定したEnterprise AI Platform方針への転換経緯と、ブランドの原則を自らの言葉で記入した。これはCEO_MEMORY配下のファイルとして初めて本人による実質的な記入が行われたケースであり、durable(長期的に判断基準となる)な原則については `00_Foundation` 側にも反映した。
+
+### 記録された内容
+
+- ブランド戦略転換の経緯(Quiet Intelligence → Enterprise AI Platform)を、CEO自身の思考プロセスとして記録
+- **Missionは不変であることの明言:** 「AIで、社長が本来の仕事に集中できる世界をつくる。」は見せ方の変更を経ても変わらない
+- **ブランドの原則(6項目):** 信頼最優先/高級感より品格/機能ではなく価値/経営者が安心できるデザイン/ホームページではなくブランドを作る/デザインだけでなく体験を設計する
+- **CEO Message:** 「Smart LaboはAIを売る会社ではない。社長が本来の仕事に集中できる時間をつくる会社である。」
+
+### 00_Foundation側への反映
+
+- [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)(v4.0→v4.1) — 「ブランドの原則」6項目を正式制定。デザインキーワードのうちLuxury(高級感)より品格(Dignity)を優先する旨を明記。冒頭にCEO Messageを引用
+- [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md)(v1.0→v2.0) — 冒頭にCEO本人の実際の言葉(CEO Message)を反映。参照ブランドの記述をEnterprise AI Platform方針に合わせて更新。本文の残りは引き続き代表確認待ち
+- [50_TODO.md](50_TODO.md) — 04_Brand_Philosophy.mdの記入完了を反映し、残タスク(01_Founding_Story / 03_Future_Vision / 05_Important_Conversations)を明確化
+
+**変更者:** Claude Code(Project Bible編集長)/ 執筆: CEO本人
+
+---
+
 ## 2026-07-03 — v2.0: ブランド方針の全面ピボット — Quiet Intelligence → Enterprise AI Platform
 
 CEO(Chief Design Officer方針)より、v1.2で確定したばかりの「Quiet Intelligence」方針とは大きく異なる新しいブランドブリーフが示されました。Claude Code(Project Bible編集長)は、両方針の矛盾点(ポジショニング、参照ブランド、禁止/推奨ビジュアル、カラー、ボタンサイズ、CTA数、ページ構成)を洗い出してCEOに提示し、**「最新指示を優先し、Enterprise AI Platformへ全面ピボットする」**という明示的な承認を得て本改訂を実施しました。

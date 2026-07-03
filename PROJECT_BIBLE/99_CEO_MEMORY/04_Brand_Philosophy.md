@@ -1,37 +1,63 @@
 # 04. Brand Philosophy — ブランドに込めた思想
 
-> *記入ガイド: [00_Foundation/07_Brand_Identity.md](../00_Foundation/07_Brand_Identity.md) で定義したブランド(Microsoft / OpenAI / AWS / Palantir / Stripe / Datadog / Snowflake / Vercelを参照点とする、Enterprise AI Platform)は、代表自身のどんな経験・美意識・信条から来ているか。個人的な言葉で記録してください。*
-
-このファイルは代表本人が、自分の言葉で書き・更新していくものです。以下は記入のための構成案です。
+このファイルは代表本人の言葉によるブランド哲学の記録です。会社設立準備を進める中でブランド方針を検討した過程と、その結論が記されています。
 
 ---
 
-## なぜこの8社を参照点に選んだか
+## 2026-07-03 — ブランド戦略の転換
 
-[Microsoft / OpenAI / AWS / Palantir / Stripe / Datadog / Snowflake / Vercel をなぜ選んだか、個人的な原体験があれば記入してください。]
+会社設立準備を進める中で、Smart Laboのブランドについて大きな方向転換を行った。
 
-## なぜ「Enterprise AI Platform」なのか
+当初はAppleやNotionのような、「静かな知性(Quiet Intelligence)」を軸としたミニマルなブランドを目指していた。
 
-[「AIを売る会社」ではなく「会社を進化させる会社」というポジショニングに至った個人的な思いを記入してください。なお、当初は「Quiet Intelligence(静かな知性)」という真逆に近い方針を検討していた経緯があります([CHANGELOG.md](../CHANGELOG.md) 参照)。方針転換の理由も記録しておくと、将来の判断の助けになります。]
+しかしホームページデザインを何度も検討した結果、一つの結論に至った。
 
-## 「かっこいい」ではなく「信頼できる」を選んだ理由
+Smart Labo Worksが提供する価値は、AIツールではない。中小企業の経営全体を支える**「AI経営プラットフォーム」**である。
 
-[派手さ・先進性を見せながらも、最終目標を「信頼」「導入したくなる」に置いた理由を記入してください。]
+そのためブランドも、「洗練されたデザイン」だけではなく、「企業が安心して導入できる信頼感」「事業を任せられるプロフェッショナル感」を強く伝える必要があると判断した。
 
-## キャッチコピー「会社を動かすAI。」に込めた思い
+今後は **Enterprise AI Platform** という思想をブランドの中心に置く。
 
-[このキャッチコピーに込めた個人的な思いを記入してください。]
+参考とするブランドは、Microsoft / OpenAI / AWS / Stripe / Palantir など、世界トップクラスのBtoB SaaS企業である。ただし、それらを模倣するのではなく、Smart Labo独自のブランドへ昇華する。
 
-## ブランドとして絶対にやりたくないこと
+> この判断の背景と、旧方針(Quiet Intelligence)からの具体的な変更点は [CHANGELOG.md](../CHANGELOG.md) の「v2.0: ブランド方針の全面ピボット」に記録されている。
 
-[Smart Laboというブランドが、絶対にやってはいけない・なりたくない姿があれば記入してください。]
+---
+
+## この判断で変わらないもの
+
+**Mission**
+
+> 「AIで、社長が本来の仕事に集中できる世界をつくる。」
+
+このMissionは今後も変わらない。変わったのは"見せ方"であり、会社の存在意義ではない。
+
+---
+
+## ブランドの原則
+
+1. 信頼されることを最優先する
+2. 高級感より品格を重視する
+3. 機能ではなく価値を伝える
+4. 経営者が安心できるデザインを目指す
+5. ホームページではなくブランドを作る
+6. デザインだけでなく体験を設計する
+
+---
+
+## CEO Message
+
+Smart LaboはAIを売る会社ではない。社長が本来の仕事に集中できる時間をつくる会社である。
+
+デザインも、システムも、営業も、すべてこの考え方を軸に判断する。
 
 ---
 
 ## 関連ドキュメント
 
-- [../00_Foundation/07_Brand_Identity.md](../00_Foundation/07_Brand_Identity.md)
-- [../BRAND/README.md](../../BRAND/README.md)
+- [../00_Foundation/02_Founder_Message.md](../00_Foundation/02_Founder_Message.md) — このCEO Messageを反映した公式版
+- [../00_Foundation/07_Brand_Identity.md](../00_Foundation/07_Brand_Identity.md) — ブランドの原則を反映した公式版
+- [../CHANGELOG.md](../CHANGELOG.md) — Quiet IntelligenceからEnterprise AI Platformへの転換の記録
 
 ---
 
@@ -42,5 +68,6 @@
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成(構成とガイドを整備。本文は代表による記入待ち) |
 | v1.1 | 2026-07-03 | Claude Code | Quiet Intelligenceコンセプト・Porsche追加(5社)に合わせて記入ガイドを更新 |
 | v2.0 | 2026-07-03 | Claude Code(CEO指示による全面ピボット) | Enterprise AI Platform方針(参照8社)に合わせて記入ガイドを全面更新。方針転換の経緯を記録する項目を追加 |
+| **v3.0** | 2026-07-03 | Smart Labo(CEO本人執筆) | **CEO本人の言葉による初の実質記入。** ブランド戦略転換の経緯、Missionが不変であること、ブランドの6原則(特に「高級感より品格」)、CEO Messageを記録 |
 
 *最終更新: 2026-07-03*
