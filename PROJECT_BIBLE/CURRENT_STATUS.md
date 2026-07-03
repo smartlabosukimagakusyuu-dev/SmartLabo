@@ -9,7 +9,7 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：2.6
+Project Bible Version：2.7
 Brand Version：4.4
 Design Bible Version：2.2
 Homepage Version：0.2(正式カラー・ロゴを反映)
@@ -22,7 +22,7 @@ Current Task：Dashboard UI設計
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 2.6 |
+| Project Bible Version | 2.7 |
 | Brand Version | 4.4 |
 | Design Bible Version | 2.2 |
 | Homepage Version | 0.2(正式カラーパレット `#0A1B3D`/`#2563EB` 系に更新済み。ロゴを暫定マークから「S」シンボル〈Brand Identity仕様準拠〉へ再デザイン) |
@@ -30,7 +30,7 @@ Current Task：Dashboard UI設計
 | Smart Labo Works Version | 0.0(未着手) |
 | Current Project | Company Setup |
 | Current Task | Dashboard UI設計 |
-| Next Task | Hero背景画像(5点)の実ファイル提供待ち→採用画像の実装 / Dashboard UI実装 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴデータ到着後の差し替え |
+| Next Task | Hero背景画像(5点)を [AI_WORKSPACE/INBOX/HERO/](../AI_WORKSPACE/INBOX/README.md) 経由で受け取り次第、DESIGN_ASSETSへ正式登録→Homepage実装 / Dashboard UI実装 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴデータ到着後の差し替え |
 | Last Update | 2026-07-03 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -63,6 +63,8 @@ Current Task：Dashboard UI設計
 
 **Hero背景画像について:** CEOより5点のHero背景候補が提示され、[DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) にメタデータ(プロンプト・用途・世界観・ステータス)を整備しました。うち1点(`hero_background_01_sunrise_city.webp`)がHomepage Hero用として採用決定していますが、**画像の実データはまだ提供されていません**(チャット上の画像をファイル化する手段がないため)。CEOよりファイルパスの提供を受け次第、格納・実装します。
 
+**AI_WORKSPACEについて:** ChatGPT発の画像・資料・プロンプトをClaude Codeが受け取るための専用フォルダとして [AI_WORKSPACE/](../AI_WORKSPACE/README.md)(INBOX/PROCESSING/COMPLETED/ARCHIVEの4段階構成)を新設しました。今後、ChatGPT発の素材はDESIGN_ASSETSへ直接保存せず、必ずこのフォルダを経由します。Hero背景画像5点についても、今後のファイル提供は `AI_WORKSPACE/INBOX/HERO/` を正規の受け取り口とします。
+
 ---
 
 ## ChatGPTとの同期ルール
@@ -92,5 +94,6 @@ Current Task：Dashboard UI設計
 | v1.4 | 2026-07-03 | Claude Code(CEO指示による) | Project Bible Version 2.4→2.5、Brand Version 4.3→4.4に更新。[DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) 新設(デザイン資産の実データ管理場所)とSmart Blue Family確定を反映 |
 | v1.5 | 2026-07-03 | Claude Code(CEO指摘による) | 「ロゴもデザインも全く違う」との指摘を受け、Homepage Versionを0.1→0.2に更新。正式カラーパレットへの置換とロゴ再デザインが完了した旨を反映 |
 | v1.6 | 2026-07-03 | Claude Code(CEO指示による) | [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) 新設を反映。Hero背景候補5点のメタデータ整備状況とファイル提供待ちである旨をNext Task・注記に追加 |
+| v1.7 | 2026-07-03 | Claude Code(CEO指示による) | Project Bible Version 2.6→2.7に更新。[AI_WORKSPACE/](../AI_WORKSPACE/README.md) 新設(ChatGPT発素材の正式な受け渡し経路)を反映し、Next TaskのHero背景画像受け取り口を`AI_WORKSPACE/INBOX/HERO/`に更新 |
 
 *最終更新: 2026-07-03*

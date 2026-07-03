@@ -27,6 +27,12 @@
 
 ---
 
+## ChatGPT発の素材の受け渡し(AI_WORKSPACE)
+
+ChatGPTとの対話で作成された画像・資料・参考デザイン・プロンプトは、[DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) へ直接保存せず、必ず [AI_WORKSPACE/](../AI_WORKSPACE/README.md) を経由してください。Claude Codeは新しい素材を利用する前に `AI_WORKSPACE/INBOX` を必ず確認し、正式登録後は利用素材・保存先・不要素材を報告します。詳細な運用フローは [60_Editorial_Workflow.md](60_Editorial_Workflow.md) の「AI_WORKSPACE運用フロー」を参照してください。
+
+---
+
 ## プロンプト設計の原則
 
 - プロンプトは [PROMPTS/](../PROMPTS/README.md) 配下にテンプレートとして保存し、再利用できるようにする
@@ -75,6 +81,7 @@ PROJECT_BIBLEは将来、Smart Labo Works 自体にAIの前提知識として組
 - [10_Development_Rules.md](10_Development_Rules.md)
 - [00_Foundation/06_Philosophy.md](00_Foundation/06_Philosophy.md)
 - [60_Editorial_Workflow.md](60_Editorial_Workflow.md) — PROJECT_BIBLE編集体制・更新フローの詳細
+- [AI_WORKSPACE/README.md](../AI_WORKSPACE/README.md) — ChatGPT発の素材受け渡しフロー
 
 ---
 
@@ -85,5 +92,6 @@ PROJECT_BIBLEは将来、Smart Labo Works 自体にAIの前提知識として組
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v2.0 | 2026-07-03 | Smart Labo | PROJECT_BIBLE再構成に伴い旧08_AI_Rules.mdから改番。「Smart Labo Worksへの将来的な組み込み」を見据えた記述ルールを追加 |
 | v2.1 | 2026-07-03 | Claude Code | ChatGPT/CEO/Claude Codeの三者役割体制を明記。「コードより先にBibleを読む」原則と60_Editorial_Workflow.mdへの参照を追加 |
+| v2.2 | 2026-07-03 | Claude Code(CEO指示による) | [AI_WORKSPACE/](../AI_WORKSPACE/README.md) 新設に伴い、ChatGPT発素材の受け渡しはAI_WORKSPACE経由とするルールを追加 |
 
 *最終更新: 2026-07-03*

@@ -14,7 +14,43 @@
 - (次回の変更予定があればここに記載)
 - 正式ロゴデータ(SVG/PNG)到着後、Homepageの暫定「S」シンボルを差し替える
 - アイコンの実データ(SVG)を [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する
-- Hero背景画像5点の実データ(`.webp`)を [DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に格納し、採用画像をHomepageに実装する(CEOよりファイルパス提供待ち)
+- Hero背景画像5点の実データ(`.webp`)を [AI_WORKSPACE/INBOX/HERO/](../AI_WORKSPACE/INBOX/README.md) 経由で受け取り、[DESIGN_ASSETS/01_HERO/Backgrounds/](../DESIGN_ASSETS/01_HERO/README.md) に格納・Homepageに実装する(CEOよりファイルパス提供待ち)
+
+---
+
+## 2026-07-03 — v2.7: AI_WORKSPACE新設(ChatGPT発素材の正式な受け渡し経路)
+
+CEOより、ChatGPTから提供される画像・資料・参考デザイン・プロンプトを、Claude Codeが安全かつ確実に受け取るための専用フォルダとして `AI_WORKSPACE/` を新設する指示を受けた。背景として、Hero背景候補5点の実データ格納作業において「チャット上の画像をファイル化する手段がない」という受け渡し経路の不備が繰り返し発生していたことがある。
+
+### 新設した構成
+
+```
+AI_WORKSPACE/
+├── INBOX/          ← ChatGPTが作成した素材の受け取り口(未確認・未処理)
+│   ├── HERO/ BACKGROUND/ DASHBOARD/ LOGO/
+│   └── ICONS/ INDUSTRY/ REFERENCE/ PROMPTS/
+├── PROCESSING/      ← Claude Codeが確認・作業中の素材
+├── COMPLETED/       ← 作業完了・DESIGN_ASSETSへ正式登録済みの履歴
+└── ARCHIVE/         ← 不採用・不要になった素材の保管(理由付き)
+```
+
+### 運用ルール(6ステップ)
+
+① ChatGPTが素材を作成 → ② INBOXへ保存 → ③ Claude Codeが確認 → ④ PROCESSINGへ移動 → ⑤ 作業完了後DESIGN_ASSETSへ正式登録 → ⑥ COMPLETEDへ履歴保存。
+
+**今後、ChatGPT発の素材を [DESIGN_ASSETS/](../DESIGN_ASSETS/README.md) へ直接保存することは禁止。** Claude Codeは新しい素材を利用する前に必ず `AI_WORKSPACE/INBOX` を確認し、作業完了後は「どの素材を使用したか」「正式保存した場所」「不要になった素材」を報告する。
+
+### 更新したファイル
+
+- 新規: `AI_WORKSPACE/README.md`、`INBOX/README.md`(8サブフォルダ分含む)、`PROCESSING/README.md`、`COMPLETED/README.md`、`ARCHIVE/README.md`
+- [60_Editorial_Workflow.md](60_Editorial_Workflow.md)(v2.1→v2.2) — 「AI_WORKSPACE運用フロー」新設、作業完了報告フォーマットに項目追加
+- [DESIGN_ASSETS/README.md](../DESIGN_ASSETS/README.md)(v2.0→v2.1) — AI_WORKSPACE経由ルールを運用ルール第一項目として追加
+- [30_AI_Rules.md](30_AI_Rules.md)(v2.1→v2.2)
+- [README.md](README.md)(ルート) — フォルダ構成にAI_WORKSPACEを追加
+- [README.md](README.md)(PROJECT_BIBLE) — Version 2.6→2.7
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v1.6→v1.7)
+
+**変更者:** Claude Code(Project Bible編集長)/ 指示: CEO
 
 ---
 
