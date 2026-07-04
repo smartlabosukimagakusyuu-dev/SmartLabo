@@ -9,10 +9,10 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：2.9
-Brand Version：4.4
+Project Bible Version：3.0
+Brand Version：5.0
 Design Bible Version：2.2
-Homepage Version：0.4(Hero背景に実写真・アイコンにバッジスタイルを反映)
+Homepage Version：0.5(正式ロゴを実装)
 Current Task：Dashboard UI設計
 ```
 
@@ -22,15 +22,15 @@ Current Task：Dashboard UI設計
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 2.9 |
-| Brand Version | 4.4 |
+| Project Bible Version | 3.0 |
+| Brand Version | 5.0 |
 | Design Bible Version | 2.2 |
-| Homepage Version | 0.4(正式カラーパレット `#0A1B3D`/`#2563EB` 系に更新済み。ロゴを「S」シンボルへ再デザイン。Hero背景に実写真〔都市+AIネットワーク〕を実装。主要機能・社長の1日アイコンをバッジスタイルへ刷新) |
+| Homepage Version | 0.5(正式カラーパレット `#0A1B3D`/`#2563EB` 系に更新済み。**正式ロゴ(六角形サーキットS字シンボル)をヘッダー・フッター・faviconに実装**。Hero背景に実写真〔都市+AIネットワーク〕を実装。主要機能・社長の1日アイコンをバッジスタイルへ刷新) |
 | Dashboard Version | 0.0(設計プロンプト・標準レイアウト確定・実装未着手) |
 | Smart Labo Works Version | 0.0(未着手) |
 | Current Project | Company Setup |
 | Current Task | Dashboard UI設計 |
-| Next Task | Dashboard UI実装 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴデータ到着後の差し替え / 別ロゴ案([DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/))を採用するかCEOに確認 |
+| Next Task | Dashboard UI実装 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴを他制作物(Dashboard・営業資料・名刺・パンフレット)へ展開 / 真のベクター(SVG)ロゴデータの取得 |
 | Last Update | 2026-07-03 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -56,8 +56,9 @@ Current Task：Dashboard UI設計
 この3項目は、**設計プロンプトのドキュメントバージョンではなく、実際のコード実装の進捗**を表す別軸です。
 
 - 2026-07-03、`WEBSITE/` に Homepage の初回実装(`index.html` / `css/style.css` / `js/main.js`)が完了しました。8セクション構成(Hero/社長の1日/主要機能/導入メリット/対応業種/Mission/CTA/Footer)、3CTA、レスポンシブ対応、ホバー・スクロールアニメーションを実装済みです。
-- 同日、配色を正式カラーパレット(`#0A1B3D` / `#2563EB` 等)へ更新し、ロゴを暫定マークから「S」シンボル(白抜き、[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)仕様準拠)へ再デザインしました。
-  - **未実装:** フォーム送信の実処理(現状はCTAのため実際の送信機能なし)、プライバシーポリシー・利用規約の実ページ(`LEGAL/`未整備のためリンクはプレースホルダー)、実写真素材(現状は色ブロック+アイコンで代用)、正式ロゴデータ(現在のSシンボルはCEO提供画像を参考にした暫定デザイン。正式データ到着後に差し替え予定)
+- 同日、配色を正式カラーパレット(`#0A1B3D` / `#2563EB` 等)へ更新しました。
+- 2026-07-04、CEOが正式ロゴ(六角形フレーム+サーキットパターンの「S」字シンボル)を確定。ヘッダー・フッターの暫定ロゴマーク、およびfaviconを正式ロゴに差し替えました。
+  - **未実装:** フォーム送信の実処理(現状はCTAのため実際の送信機能なし)、プライバシーポリシー・利用規約の実ページ(`LEGAL/`未整備のためリンクはプレースホルダー)、実写真素材(現状は色ブロック+アイコンで代用。Heroのみ実写真済み)、真のベクター(SVG)ロゴデータ(現状はPNG/WebPのみ)
 - `SmartLaboWorks/`・`DESIGN/` 配下は `README.md` 以外の実装ファイルが存在しないため、引き続き **0.0(未着手)** です。
 - 実装が進んだら、この3項目を `0.1`、`α0.1` のように更新してください。**達成していない進捗を先取りして記載しないこと。**
 
@@ -66,6 +67,8 @@ Current Task：Dashboard UI設計
 **Homepageアイコンについて(2026-07-03):** CEOがAI_WORKSPACE経由で、Homepageの別デザイン案(アイコンのバッジスタイル・別ロゴ案・多色配色を含むモックアップ)を提供しました。このうち**アイコンのバッジスタイル**(角丸正方形の塗りバッジ+白抜きアイコン)のみをSmart Blue Family単色で採用し、「主要機能」「社長の1日」セクションのアイコンに反映しました。**多色配色**(青・水色・紫)と**別ロゴ案**(角丸正方形+「+」マーク)は、ブランドルール([00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md))との不整合、および過去の「仕様と実装の食い違い」の教訓から、CEOの明示的な承認を得るまで採用していません。参考資料は [DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/) に保管しています。
 
 **AI_WORKSPACEについて:** ChatGPT発の画像・資料・プロンプトをClaude Codeが受け取るための専用フォルダとして [AI_WORKSPACE/](../AI_WORKSPACE/README.md)(INBOX/PROCESSING/COMPLETED/ARCHIVEの4段階構成)を新設しました。今回のHero背景・アイコン参考資料の受領・実装が、実際に機能した最初の完全なサイクルです(INBOX受領→PROCESSING加工→DESIGN_ASSETS正式登録→COMPLETED履歴保存→Homepage実装)。
+
+**正式ロゴの確定について(2026-07-04):** CEOより「今回添付したロゴを株式会社スマートラボの正式ロゴとします。今後このロゴ以外は使用しません。」との明示的な決定があり、六角形フレーム+サーキットパターンの「S」字シンボルを唯一の正式ロゴとして確定しました。以前の「途切れた2画のストローク」の暫定仕様、および[DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/)の別ロゴ案(角丸+「+」マーク)は、両方とも本ロゴに置き換えられ廃止されています。[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md)にPrimary/White/Dark/Icon/Favicon/PNG/WebPの8フォルダ構成で格納し、[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)に「ロゴ使用ルール」(余白規定・最小サイズ・背景色・使用禁止例・用途別推奨サイズ)を正式制定。Homepageのヘッダー・フッター・faviconに実装済みです。**真のベクター(SVG)データは未提供**のため、大判印刷等の用途では別途デザイナーへの依頼を検討してください。
 
 ---
 
@@ -100,5 +103,6 @@ Current Task：Dashboard UI設計
 | v1.8 | 2026-07-03 | Claude Code(CEO提供による) | Project Bible Version 2.7→2.8に更新。AI_WORKSPACE経由でHero候補5点のモックアップを受領・[DESIGN_ASSETS/01_HERO/Mockups/](../DESIGN_ASSETS/01_HERO/Mockups/README.md) へ格納したことを反映。実装用の背景単体データが引き続き必要である旨をNext Taskに明記 |
 | v1.9 | 2026-07-03 | Claude Code(CEO指示による) | Homepage Versionを0.2→0.3に更新。Hero背景をCSS/SVGのみで強化(フルワイド都市シルエット・AIネットワークのグロー・ドットグリッド)した旨を反映。新規バイナリ資産の追加なし |
 | v2.0 | 2026-07-03 | Claude Code(CEO提供による) | Project Bible Version 2.8→2.9、Homepage Version 0.3→0.4に更新。AI_WORKSPACE経由で受領したHero背景単体データ5点をDESIGN_ASSETSへ格納しHomepageへ実装。アイコンのバッジスタイルをHomepageへ反映。多色配色・別ロゴ案は不採用である旨と、CEOへの確認事項をNext Taskに明記 |
+| v2.1 | 2026-07-04 | Claude Code(CEO指示による) | **正式ロゴ確定を反映。** Project Bible Version 2.9→3.0、Brand Version 4.4→5.0、Homepage Version 0.4→0.5に更新。[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md) 新設とHomepage実装完了、以前の暫定ロゴ仕様・別ロゴ案の廃止を反映 |
 
-*最終更新: 2026-07-03*
+*最終更新: 2026-07-04*

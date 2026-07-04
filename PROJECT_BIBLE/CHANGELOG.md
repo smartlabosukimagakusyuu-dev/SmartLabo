@@ -12,9 +12,49 @@
 ## [Unreleased]
 
 - (次回の変更予定があればここに記載)
-- 正式ロゴデータ(SVG/PNG)到着後、Homepageの暫定「S」シンボルを差し替える
+- 真のベクター(SVG)ロゴデータを取得し [DESIGN_ASSETS/01_LOGO/SVG/](../DESIGN_ASSETS/01_LOGO/README.md) へ格納する
+- 正式ロゴをDashboard・営業資料・名刺・パンフレット等、他の制作物にも展開する(現状はHomepageのみ実装)
 - アイコンの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(現状は既存の線画SVGをバッジ風スタイルに変更する形で対応)
-- Homepage別ロゴ案([DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/))を正式採用するかCEOに確認する
+
+---
+
+## 2026-07-04 — v3.0: 正式ロゴ確定・Brand Identity v5.0・Homepage v0.5
+
+CEOより「正式ロゴを決定します。今回添付したロゴを株式会社スマートラボの正式ロゴとします。今後このロゴ以外は使用しません。」との明示的な決定があった。AI_WORKSPACE経由で2件のロゴ関連画像(2026-06-29提供の高解像度マスターデータ、2026-07-04提供のブランドシート)を確認し、正式ロゴとして確定・実装した。
+
+### ロゴの内容
+
+六角形フレームの中に、途切れた回路(サーキット)パターンで構成された「S」字のシンボル。ノード(円)と接続線が基板のような質感を加え、右上に四芒星(スパークル)が添えられている。カラーはSmart Blueのグラデーション。ロゴタイプは「Smart Labo」+「Works」+タグライン「会社を動かすAI。」の3階層構成。
+
+これにより、以前 [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) に記載していた「途切れた2画のストローク」の暫定ロゴ仕様、および [DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/) の別ロゴ案(角丸正方形+「+」マーク)は、**両方とも本ロゴに置き換えられ廃止**された。
+
+### 実施内容
+
+1. **[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md) を新設**し、Primary/White/Dark/Icon/Favicon/SVG/PNG/WebPの8フォルダ構成でロゴ実データ(PNG/WebP)を格納。高解像度マスターデータからアイコンマーク・App Icon(1024×1024)・Favicon(512×512)を、ブランドシートからPrimary/White/Dark各バリエーションを切り出した
+2. **[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) の「ロゴ」セクションを全面改訂**(v5.0)。「ロゴ使用ルール」を新設し、余白規定・最小サイズ・背景色・使用禁止例・用途別推奨サイズ(ヘッダー/フッター/Dashboard/App Icon等)を正式制定
+3. **Homepageへ実装**(v0.5): ヘッダー・フッターの暫定ロゴマークSVGを正式ロゴ画像に差し替え、faviconも正式ロゴに更新
+4. 旧 [DESIGN_ASSETS/Logo/](../DESIGN_ASSETS/Logo/README.md) は廃止し [01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md) へ移行
+
+### 既知の制約
+
+真のベクター(SVG)データは提供されておらず、格納しているPNG/WebPは提供画像からのラスター書き出しである。Web表示には十分だが、大判印刷等で使用する場合は別途ベクターデータの取得を検討する必要がある(詳細は [01_LOGO/README.md](../DESIGN_ASSETS/01_LOGO/README.md) の「既知の制約」参照)。
+
+### 更新したファイル
+
+- 新規: [DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md) 配下(Primary/White/Dark/Icon/Favicon/SVG/PNG/WebPの各フォルダ、PNG・WebP計18ファイル)
+- [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)(v4.4→v5.0)
+- [DESIGN_ASSETS/Logo/README.md](../DESIGN_ASSETS/Logo/README.md) — 廃止・リダイレクト化
+- [DESIGN_ASSETS/README.md](../DESIGN_ASSETS/README.md)(v2.3→v2.4)
+- [50_TODO.md](50_TODO.md)(v2.6→v2.7)
+- [README.md](README.md) — Version 2.9→3.0
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v2.0→v2.1)
+- `WEBSITE/index.html`、新規: `WEBSITE/img/logo/`
+
+**利用した素材:** `AI_WORKSPACE/INBOX/LOGO/ChatGPT Image 2026年6月29日 10_09_13.png`(高解像度マスター)、`AI_WORKSPACE/INBOX/LOGO/ChatGPT Image 2026年7月4日 22_30_48.png`(ブランドシート)
+**正式保存した場所:** [DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md)
+**不要になった素材:** なし(元データは [AI_WORKSPACE/COMPLETED/LOGO/](../AI_WORKSPACE/COMPLETED/README.md) に履歴保管)
+
+**変更者:** Claude Code(Project Bible編集長)/ 指示: CEO
 
 ---
 
