@@ -1,4 +1,5 @@
 # Homepage(WEBSITE/)をGitHub Pagesへ自動デプロイする。詳細: PROJECT_BIBLE/CHANGELOG.md 2026-07-04参照
+# Workflow permissionsを「読み取りおよび書き込み」に変更後の再デプロイ(2026-07-05)
 name: Deploy Homepage to GitHub Pages
 
 on:
