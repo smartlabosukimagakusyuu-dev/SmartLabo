@@ -13,7 +13,8 @@ Project Bible Version：3.2
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：1.0 Release Candidate(Company Brain拡張済み。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
-Current Task：Dashboard UI設計(Company Brain画面を含む)
+Dashboard Version：0.5(Company OS実装済み。GitHub Pages公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/app.html)
+Current Task：Dashboard v0.5完成・GitHub Pages公開済み
 ```
 
 ---
@@ -26,11 +27,11 @@ Current Task：Dashboard UI設計(Company Brain画面を含む)
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版。**さらにCompany BrainをSmart Labo Works最大の差別化要素として全面拡張済み**(キャッチコピー・9項目の知識ソース・3利用シナリオ・ガラスUI・専用アイコン) |
-| Dashboard Version | 0.0(設計プロンプト・標準レイアウト確定・実装未着手。サイドバーへのCompany Brain追加、Company Brain専用画面は仕様のみ確定済み) |
-| Smart Labo Works Version | 0.0(未着手) |
+| Dashboard Version | **0.5(Company OS実装済み。app.html としてGitHub Pages公開中。Company Brain画面・AIモーニングブリーフィング・KPI拡張・アクティビティカラーコーディング・クイックアクション7項目・公式デザイントークン適用)** |
+| Smart Labo Works Version | 0.5(Dashboard v0.5と同一) |
 | Current Project | Company Setup |
-| Current Task | Dashboard UI設計(Company Brain画面を含む) |
-| Next Task | Dashboard UI実装(Company Brain画面含む) / 実際のお問い合わせ窓口(メール等)確定後、CTAを接続 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴを他制作物(Dashboard・営業資料・名刺・パンフレット)へ展開 / Company Brainを営業資料・パンフレット・デモ画面へ展開 / 真のベクター(SVG)ロゴデータの取得 / Xserverサーバー契約完了後に正式ドメインへ切り替え / 1.0公開後のフィードバック反映 |
+| Current Task | Dashboard v0.5完成・GitHub Pages公開済み |
+| Next Task | Dashboard v0.6(実データ接続・顧客管理強化) / Company Brain実データ連携 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴ展開 / Xserverサーバー契約完了後に正式ドメインへ切り替え |
 | Last Update | 2026-07-05 |
 | Maintainer | Masatoshi Ogawa |
 

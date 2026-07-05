@@ -6,19 +6,21 @@
 <title>Smart Labo Works</title>
 <style>
 :root{
-  --bg:#f0f4f8;
+  --bg:#F3F6FA;
   --surface:#ffffff;
   --border:#e2e8f0;
-  --accent:#2563eb;
+  --accent:#2563EB;
   --accent2:#1d4ed8;
-  --text:#0f172a;
-  --text2:#64748b;
+  --light-blue:#60A5FA;
+  --accent-blue:#00D4FF;
+  --text:#1E293B;
+  --text2:#64748B;
   --success:#10b981;
   --danger:#ef4444;
   --warning:#f59e0b;
-  --navy:#071029;
-  --navy2:#0d1b3e;
-  --sidebar-w:220px;
+  --navy:#0A1B3D;
+  --navy2:#0d1f45;
+  --sidebar-w:228px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
@@ -209,6 +211,173 @@ button,input,select,textarea{font-family:inherit}
   color:var(--text);text-align:left;transition:all 0.15s;display:flex;align-items:center;gap:8px;
 }
 .quick-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ═══════════════════════════════
+   AI BRIEFING
+═══════════════════════════════ */
+.ai-briefing{
+  display:flex;align-items:flex-start;gap:16px;
+  background:linear-gradient(135deg,var(--navy) 0%,#102040 100%);
+  border-radius:14px;padding:20px 24px;margin-bottom:20px;
+  border:1px solid rgba(37,99,235,0.3);
+  box-shadow:0 4px 24px rgba(10,27,61,0.15);
+}
+.aib-icon{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),var(--light-blue));
+  display:flex;align-items:center;justify-content:center;
+}
+.aib-icon svg{width:22px;height:22px}
+.aib-body{flex:1}
+.aib-head{font-size:13px;font-weight:800;color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.aib-badge{background:var(--danger);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.aib-items{display:flex;flex-direction:column;gap:6px}
+.aib-item{font-size:12.5px;line-height:1.6;padding:7px 12px;border-radius:8px;}
+.aib-item.urgent{background:rgba(239,68,68,0.15);color:#fca5a5;border-left:3px solid #ef4444;}
+.aib-item.warning{background:rgba(245,158,11,0.15);color:#fcd34d;border-left:3px solid #f59e0b;}
+.aib-item.info{background:rgba(37,99,235,0.2);color:#93c5fd;border-left:3px solid #2563eb;}
+.aib-brain-btn{
+  flex-shrink:0;align-self:center;padding:9px 16px;
+  background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.35);
+  border-radius:9px;color:var(--light-blue);font-size:12px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  transition:all .15s;
+}
+.aib-brain-btn:hover{background:rgba(96,165,250,0.25);border-color:var(--light-blue);}
+
+/* KPI enhancements */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.kpi-sales{
+  border:2px solid rgba(37,99,235,0.25)!important;
+  background:linear-gradient(135deg,#eff6ff,#dbeafe)!important;
+}
+.kpi-sales .kpi-val{color:var(--accent);}
+.kpi-bar{height:4px;background:#e2e8f0;border-radius:4px;margin-top:8px;}
+.kpi-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--light-blue));border-radius:4px;}
+.kpi-bar-label{font-size:10px;color:var(--text2);margin-top:4px;}
+.nav-brain{margin-top:4px;border:1px solid rgba(96,165,250,0.2);background:rgba(37,99,235,0.08);}
+.nav-brain:hover{background:rgba(37,99,235,0.18)!important;}
+.qb-brain{border-color:rgba(37,99,235,0.3);color:var(--accent);background:#eff6ff;}
+.qb-brain:hover{background:#dbeafe!important;}
+.qb-ai{border-color:rgba(16,185,129,0.3);color:#059669;background:#f0fdf4;}
+.qb-ai:hover{background:#dcfce7!important;}
+
+/* ═══════════════════════════════
+   COMPANY BRAIN
+═══════════════════════════════ */
+.brain-search-wrap{
+  background:linear-gradient(135deg,var(--navy) 0%,#0d2050 100%);
+  border-radius:16px;padding:28px 32px;margin-bottom:20px;
+  border:1px solid rgba(37,99,235,0.25);
+}
+.brain-search-box{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(96,165,250,0.35);
+  border-radius:12px;padding:12px 16px;
+  backdrop-filter:blur(8px);transition:border-color .2s;
+}
+.brain-search-box:focus-within{border-color:var(--light-blue);}
+.brain-search-inp{
+  flex:1;background:none;border:none;outline:none;
+  font-size:14px;color:#fff;font-family:inherit;
+}
+.brain-search-inp::placeholder{color:rgba(255,255,255,.35);}
+.brain-search-btn{
+  padding:8px 18px;background:linear-gradient(135deg,var(--accent),#1d4ed8);
+  border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.brain-search-btn:hover{opacity:.9;transform:translateY(-1px);}
+.brain-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.btag{
+  padding:5px 14px;background:rgba(37,99,235,0.2);
+  border:1px solid rgba(96,165,250,0.25);border-radius:20px;
+  font-size:12px;color:var(--light-blue);cursor:pointer;transition:all .15s;
+}
+.btag:hover{background:rgba(37,99,235,0.4);border-color:var(--light-blue);}
+
+/* AI Answer Panel */
+.brain-answer-panel{
+  background:rgba(255,255,255,0.6);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(37,99,235,0.2);
+  border-radius:14px;padding:24px;margin-bottom:20px;
+  box-shadow:0 4px 24px rgba(37,99,235,0.08);
+}
+.bap-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.bap-ai-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),var(--light-blue));
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:#fff;
+}
+.bap-question{font-size:14px;font-weight:700;color:var(--text);}
+.bap-answer{font-size:13.5px;color:var(--text);line-height:1.8;margin-bottom:16px;padding:14px;background:#f8faff;border-radius:10px;}
+.bap-next-title,.bap-related-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;letter-spacing:.04em;}
+.bap-next-items,.bap-related-items{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.bap-next-item{font-size:13px;color:var(--text);padding:8px 12px;background:#f0fdf4;border-radius:8px;border-left:3px solid #10b981;}
+.bap-related-item{font-size:13px;color:var(--accent);padding:8px 12px;background:#eff6ff;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;}
+.bap-related-item:hover{background:#dbeafe;}
+
+/* Brain Chat */
+.brain-chat-wrap{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;margin-bottom:20px;overflow:hidden;
+  display:flex;flex-direction:column;max-height:320px;
+}
+.brain-chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.bchat-msg{display:flex;gap:10px;align-items:flex-start;}
+.bchat-msg.user{flex-direction:row-reverse;}
+.bchat-avatar{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),var(--light-blue));
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;color:#fff;
+}
+.bchat-msg.user .bchat-avatar{background:linear-gradient(135deg,#1e293b,#334155);}
+.bchat-bubble{
+  max-width:75%;padding:10px 14px;border-radius:12px;
+  font-size:13px;line-height:1.6;background:#f1f5f9;color:var(--text);
+}
+.bchat-msg.user .bchat-bubble{background:var(--accent);color:#fff;}
+.brain-chat-input{
+  display:flex;gap:10px;padding:12px 16px;
+  border-top:1px solid var(--border);background:var(--surface);
+}
+.brain-chat-inp{
+  flex:1;padding:9px 14px;border:1.5px solid var(--border);border-radius:9px;
+  font-size:13px;outline:none;font-family:inherit;
+}
+.brain-chat-inp:focus{border-color:var(--accent);}
+.brain-chat-send{
+  padding:9px 18px;background:var(--accent);border:none;border-radius:9px;
+  color:#fff;font-size:14px;font-weight:800;cursor:pointer;transition:all .15s;
+}
+.brain-chat-send:hover{background:var(--accent2);}
+
+/* Brain Library */
+.brain-library{margin-bottom:20px;}
+.brain-lib-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:14px;}
+.brain-lib-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+.blib-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:16px 12px;text-align:center;cursor:pointer;transition:all .15s;
+}
+.blib-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);transform:translateY(-2px);border-color:var(--accent);}
+.blib-icon{font-size:24px;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+.blib-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.blib-count{font-size:11px;color:var(--text2);}
+
+/* Brain Bottom Row */
+.brain-bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.brain-recent h4,.brain-fav h4{font-size:14px;font-weight:800;color:var(--text);margin-bottom:14px;}
+.brecent-list{display:flex;flex-direction:column;gap:10px;}
+.brecent-item{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.brecent-item:last-child{border-bottom:none;padding-bottom:0;}
+.brecent-icon{font-size:18px;flex-shrink:0;}
+.brecent-name{font-size:13px;font-weight:600;color:var(--text);}
+.brecent-time{font-size:11px;color:var(--text2);margin-top:2px;}
 
 /* ═══════════════════════════════
    PROPERTY MANAGEMENT
@@ -455,6 +624,10 @@ button,input,select,textarea{font-family:inherit}
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
         AIアシスタント
       </div>
+      <div class="nav-item nav-brain" onclick="navTo('brain',this)">
+        <svg viewBox="0 0 24 24" style="stroke:#60A5FA"><path d="M9.5 2a4.5 4.5 0 014.5 4.5c0 .5-.07 1-.2 1.5"/><path d="M14.5 2a4.5 4.5 0 00-4.5 4.5"/><path d="M4 14a4 4 0 004 4h.5"/><path d="M20 14a4 4 0 01-4 4h-.5"/><path d="M12 18v4"/><path d="M8.5 6.5C6 7.5 4 10 4 13c0 .5.04 1 .12 1.5"/><path d="M15.5 6.5C18 7.5 20 10 20 13c0 .5-.04 1-.12 1.5"/><circle cx="12" cy="13" r="2"/><path d="M10 13H4.5M14 13h5.5"/></svg>
+        <span style="background:linear-gradient(90deg,#60A5FA,#00D4FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700">Company Brain</span>
+      </div>
       <div class="nav-item" onclick="navTo('properties',this)">
         <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         物件管理
@@ -506,29 +679,63 @@ button,input,select,textarea{font-family:inherit}
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="page-hd"><h2>ダッシュボード</h2><p>おかえりなさい、山田さん。本日もSmart Labo Worksがサポートします。</p></div>
+
+      <!-- AI Morning Briefing -->
+      <div class="ai-briefing">
+        <div class="aib-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        </div>
+        <div class="aib-body">
+          <div class="aib-head">AIからのお知らせ <span class="aib-badge">3件</span></div>
+          <div class="aib-items">
+            <div class="aib-item urgent">⚠️ <strong>返信漏れ</strong> — 佐藤様からのメール（昨日 17:32）が未返信です</div>
+            <div class="aib-item warning">🔄 <strong>契約更新</strong> — 豊平区マンション 田中様の契約が14日後に満了します</div>
+            <div class="aib-item info">📈 <strong>売上目標</strong> — 今月目標¥5,000万に対し¥4,250万（達成率85%）。残り¥750万</div>
+          </div>
+        </div>
+        <button class="aib-brain-btn" onclick="navTo('brain',document.querySelector('[onclick*=brain]'))">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M12 2C8 2 5 5 5 9c0 2.4 1.1 4.5 2.8 5.9L8 18h8l.2-3.1C17.9 13.5 19 11.4 19 9c0-4-3-7-7-7z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+          Company Brainで調べる
+        </button>
+      </div>
+
+      <!-- KPI Grid -->
       <div class="kpi-grid">
+        <div class="kpi kpi-sales">
+          <div class="kpi-label">今月の売上</div>
+          <div class="kpi-val">¥4,250<span style="font-size:16px;font-weight:600">万</span></div>
+          <div class="kpi-ch up">↑ 前月比 +18%</div>
+          <div class="kpi-bar"><div class="kpi-bar-fill" style="width:85%"></div></div>
+          <div class="kpi-bar-label">目標達成率 85%</div>
+        </div>
         <div class="kpi"><div class="kpi-label">今月の問い合わせ</div><div class="kpi-val">88件</div><div class="kpi-ch up">↑ 前月比 +12%</div></div>
         <div class="kpi"><div class="kpi-label">今月の契約数</div><div class="kpi-val">18件</div><div class="kpi-ch up">↑ 前月比 +20%</div></div>
         <div class="kpi"><div class="kpi-label">成約率</div><div class="kpi-val">20.5%</div><div class="kpi-ch up">↑ +2.1pt</div></div>
-        <div class="kpi"><div class="kpi-label">今月の売上</div><div class="kpi-val" style="font-size:18px;">¥4,250万</div><div class="kpi-ch up">↑ +18%</div></div>
+        <div class="kpi"><div class="kpi-label">AI対応件数</div><div class="kpi-val">142件</div><div class="kpi-ch up">↑ 前月比 +34%</div></div>
+        <div class="kpi"><div class="kpi-label">Company Brain利用</div><div class="kpi-val">67回</div><div class="kpi-ch up">社員利用率 <strong>92%</strong></div></div>
       </div>
+
       <div class="dash-grid">
         <div class="card dash-act">
           <h3>最近のアクティビティ</h3>
           <div class="act-list">
-            <div class="act-item"><div class="act-dot" style="background:var(--success)"></div><div class="act-body"><div class="act-title">札幌市中央区 3LDKマンション 成約完了</div><div class="act-time">10分前 · 担当：山田</div></div></div>
-            <div class="act-item"><div class="act-dot" style="background:var(--accent)"></div><div class="act-body"><div class="act-title">新規物件「北区戸建て」登録</div><div class="act-time">1時間前 · 担当：佐藤</div></div></div>
-            <div class="act-item"><div class="act-dot" style="background:var(--warning)"></div><div class="act-body"><div class="act-title">契約書「豊平区マンション」承認待ち</div><div class="act-time">2時間前</div></div></div>
-            <div class="act-item"><div class="act-dot" style="background:var(--accent)"></div><div class="act-body"><div class="act-title">AIコンシェルジュ：新規問い合わせ 5件</div><div class="act-time">本日 9:00</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:#10b981"></div><div class="act-body"><div class="act-title">🟢 札幌市中央区 3LDKマンション <strong>成約完了</strong></div><div class="act-time">10分前 · 担当：山田</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:#f59e0b"></div><div class="act-body"><div class="act-title">🟡 豊平区マンション 田中様 <strong>契約更新予定</strong></div><div class="act-time">30分前</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:#ef4444"></div><div class="act-body"><div class="act-title">🔴 佐藤様メール <strong>要返信</strong> — 昨日 17:32 未読</div><div class="act-time">1時間前 · 要対応</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:#2563EB"></div><div class="act-body"><div class="act-title">🔵 AIコンシェルジュ：新規問い合わせ 5件対応</div><div class="act-time">本日 9:00 · AI</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:#10b981"></div><div class="act-body"><div class="act-title">🟢 新規顧客「北区戸建て」山本様 <strong>成約</strong></div><div class="act-time">昨日 16:45 · 担当：佐藤</div></div></div>
           </div>
         </div>
         <div class="card dash-quick">
           <h3>クイックアクション</h3>
           <div class="quick-list">
-            <button class="quick-btn" onclick="navTo('properties',document.querySelector('[onclick*=properties]'))">🏠 物件を追加する</button>
+            <button class="quick-btn qb-brain" onclick="navTo('brain',document.querySelector('[onclick*=brain]'))">🧠 Company Brainで検索</button>
+            <button class="quick-btn qb-ai" onclick="navTo('ai',document.querySelector('[onclick*=ai]'))">💬 AIへ質問する</button>
             <button class="quick-btn" onclick="navTo('contract',document.querySelector('[onclick*=contract]'))">📄 契約書を作成する</button>
-            <button class="quick-btn" onclick="navTo('kukaku',document.querySelector('[onclick*=kukaku]'))">🗺️ 区割り図を作る</button>
-            <button class="quick-btn" onclick="navTo('ai',document.querySelector('[onclick*=ai]'))">💬 AIに相談する</button>
+            <button class="quick-btn" onclick="navTo('properties',document.querySelector('[onclick*=properties]'))">🏠 顧客・物件を登録</button>
+            <button class="quick-btn" onclick="navTo('ad',document.querySelector('[onclick*=ad]'))">📣 広告を作成する</button>
+            <button class="quick-btn" onclick="navTo('brain',document.querySelector('[onclick*=brain]'))">❓ FAQを追加する</button>
+            <button class="quick-btn" onclick="navTo('brain',document.querySelector('[onclick*=brain]'))">📋 社内規程を編集</button>
           </div>
         </div>
       </div>
@@ -608,6 +815,116 @@ button,input,select,textarea{font-family:inherit}
         <div class="kk-hint" id="kk-hint">クリックで土地の頂点を追加 ／ 最初の点をクリックで閉じる</div>
       </div>
       <div class="kukaku-legend" id="kk-legend"></div>
+    </div>
+
+    <!-- COMPANY BRAIN -->
+    <div class="page" id="page-brain">
+      <div class="page-hd"><h2>🧠 Company Brain</h2><p>会社の知識を、AIへ。— 探す時間を、考える時間へ。</p></div>
+
+      <!-- Search Bar -->
+      <div class="brain-search-wrap">
+        <div class="brain-search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="brain-search-inp" id="brain-search-inp" type="text" placeholder="質問する・検索する — 例：契約更新の手順は？ / 有給申請の方法は？" onkeydown="if(event.key==='Enter')brainSearch()">
+          <button class="brain-search-btn" onclick="brainSearch()">AIに聞く</button>
+        </div>
+        <div class="brain-tags">
+          <span class="btag" onclick="brainAsk('契約更新の手順は？')">契約更新</span>
+          <span class="btag" onclick="brainAsk('有給申請の方法は？')">有給申請</span>
+          <span class="btag" onclick="brainAsk('資格手当の条件は？')">資格手当</span>
+          <span class="btag" onclick="brainAsk('営業マニュアルを見たい')">営業マニュアル</span>
+          <span class="btag" onclick="brainAsk('社内規程を検索')">社内規程</span>
+        </div>
+      </div>
+
+      <!-- AI Answer Panel (hidden until search) -->
+      <div class="brain-answer-panel" id="brain-answer" style="display:none">
+        <div class="bap-header">
+          <div class="bap-ai-icon">AI</div>
+          <div class="bap-question" id="bap-question"></div>
+        </div>
+        <div class="bap-answer" id="bap-answer"></div>
+        <div class="bap-next">
+          <div class="bap-next-title">次にやること</div>
+          <div class="bap-next-items" id="bap-next-items"></div>
+        </div>
+        <div class="bap-related">
+          <div class="bap-related-title">関連資料</div>
+          <div class="bap-related-items" id="bap-related-items"></div>
+        </div>
+      </div>
+
+      <!-- AI Chat -->
+      <div class="brain-chat-wrap">
+        <div class="brain-chat-msgs" id="brain-msgs">
+          <div class="bchat-msg bot">
+            <div class="bchat-avatar">AI</div>
+            <div class="bchat-bubble">社内規程・業務マニュアル・営業マニュアル・FAQ・教育資料・テンプレートなど、会社の知識すべてが検索できます。<br>何でもお気軽にどうぞ。</div>
+          </div>
+        </div>
+        <div class="brain-chat-input">
+          <input class="brain-chat-inp" id="brain-chat-inp" type="text" placeholder="質問を入力..." onkeydown="if(event.key==='Enter')brainChatSend()">
+          <button class="brain-chat-send" onclick="brainChatSend()">↑</button>
+        </div>
+      </div>
+
+      <!-- Library Grid -->
+      <div class="brain-library">
+        <h3 class="brain-lib-title">人気の社内マニュアル</h3>
+        <div class="brain-lib-grid">
+          <div class="blib-card" onclick="brainAsk('社内規程を検索したい')">
+            <div class="blib-icon" style="background:linear-gradient(135deg,#2563EB,#1d4ed8)">📋</div>
+            <div class="blib-name">社内規程</div>
+            <div class="blib-count">12件</div>
+          </div>
+          <div class="blib-card" onclick="brainAsk('営業マニュアルを見たい')">
+            <div class="blib-icon" style="background:linear-gradient(135deg,#10b981,#059669)">📈</div>
+            <div class="blib-name">営業マニュアル</div>
+            <div class="blib-count">8件</div>
+          </div>
+          <div class="blib-card" onclick="brainAsk('教育コンテンツを見たい')">
+            <div class="blib-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)">🎓</div>
+            <div class="blib-name">教育コンテンツ</div>
+            <div class="blib-count">15件</div>
+          </div>
+          <div class="blib-card" onclick="brainAsk('動画マニュアルを見たい')">
+            <div class="blib-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">🎬</div>
+            <div class="blib-name">動画マニュアル</div>
+            <div class="blib-count">6件</div>
+          </div>
+          <div class="blib-card" onclick="brainAsk('テンプレートを探したい')">
+            <div class="blib-icon" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">📄</div>
+            <div class="blib-name">テンプレート</div>
+            <div class="blib-count">24件</div>
+          </div>
+          <div class="blib-card" onclick="brainAsk('よくある質問を検索')">
+            <div class="blib-icon" style="background:linear-gradient(135deg,#ec4899,#db2777)">❓</div>
+            <div class="blib-name">FAQ</div>
+            <div class="blib-count">31件</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent + Favorites -->
+      <div class="brain-bottom-row">
+        <div class="card brain-recent">
+          <h4>最近閲覧した資料</h4>
+          <div class="brecent-list">
+            <div class="brecent-item"><span class="brecent-icon">📋</span><div><div class="brecent-name">就業規則 第3章 有給休暇</div><div class="brecent-time">30分前</div></div></div>
+            <div class="brecent-item"><span class="brecent-icon">📈</span><div><div class="brecent-name">不動産売買 契約フロー</div><div class="brecent-time">2時間前</div></div></div>
+            <div class="brecent-item"><span class="brecent-icon">📄</span><div><div class="brecent-name">重要事項説明書 テンプレート</div><div class="brecent-time">昨日</div></div></div>
+            <div class="brecent-item"><span class="brecent-icon">❓</span><div><div class="brecent-name">FAQ：資格手当の申請方法</div><div class="brecent-time">2日前</div></div></div>
+          </div>
+        </div>
+        <div class="card brain-fav">
+          <h4>お気に入り</h4>
+          <div class="brecent-list">
+            <div class="brecent-item"><span class="brecent-icon">⭐</span><div><div class="brecent-name">営業トークスクリプト v2.0</div><div class="brecent-time">社内規程</div></div></div>
+            <div class="brecent-item"><span class="brecent-icon">⭐</span><div><div class="brecent-name">売買契約書 標準テンプレート</div><div class="brecent-time">テンプレート</div></div></div>
+            <div class="brecent-item"><span class="brecent-icon">⭐</span><div><div class="brecent-name">新入社員 オンボーディングガイド</div><div class="brecent-time">教育コンテンツ</div></div></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- REPORT -->
@@ -814,7 +1131,7 @@ function doLogout(){
 })();
 
 // ═══════════════ NAV ═══════════════
-const PAGE_TITLES={dashboard:'ダッシュボード',ai:'AIアシスタント',properties:'物件管理',contract:'契約・書類作成',ad:'広告・集客サポート',kukaku:'土地区割りツール',report:'レポート・分析'};
+const PAGE_TITLES={dashboard:'ダッシュボード',ai:'AIアシスタント',properties:'物件管理',contract:'契約・書類作成',ad:'広告・集客サポート',kukaku:'土地区割りツール',report:'レポート・分析',brain:'Company Brain'};
 function navTo(name, el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -823,6 +1140,64 @@ function navTo(name, el){
   document.getElementById('topbar-title').textContent=PAGE_TITLES[name]||name;
   if(name==='kukaku') requestAnimationFrame(()=>requestAnimationFrame(initKk));
   if(name==='report') setTimeout(drawCharts,100);
+}
+
+// ═══════════════ COMPANY BRAIN ═══════════════
+const BRAIN_KB={
+  '契約更新':{
+    answer:'契約更新は満了日の3ヶ月前から手続きを開始します。入居者への更新案内を郵送し、条件交渉後に新契約書を作成します。',
+    next:['① 更新案内書を入居者へ郵送（満了3ヶ月前）','② 条件交渉・合意の確認','③ 更新契約書を作成','④ 双方署名・捺印'],
+    related:['📄 契約更新マニュアル','📋 更新通知書テンプレート','❓ FAQ：更新拒否の場合']
+  },
+  '有給申請':{
+    answer:'有給申請は就業規則第8条に基づき、取得希望日の3日前までに申請フォームで提出します。上長の承認後に確定します。',
+    next:['① 申請フォームで取得希望日を入力','② 上長へ申請を送付','③ 承認通知を確認'],
+    related:['📋 就業規則 第8章 有給休暇','📄 有給申請フォーム','❓ FAQ：有給の繰越について']
+  },
+  '資格手当':{
+    answer:'資格手当は社内規程「第12条 資格・スキル手当」に基づき支給されます。ITパスポートは月額3,000円、宅建は月額10,000円が支給されます。',
+    next:['① 資格証明書のコピーを取得','② 人事部へ申請書を提出','③ 翌月給与から支給開始'],
+    related:['📋 資格手当一覧表','📄 資格手当申請書','❓ FAQ：資格手当の対象資格']
+  },
+  '営業マニュアル':{
+    answer:'営業マニュアルは「初回接客フロー」「物件案内のポイント」「クロージングトーク」「契約手続きフロー」の4章構成です。',
+    next:['① 初回接客チェックリストを確認','② 物件案内ルートを設計','③ 営業トークスクリプトを参照'],
+    related:['📈 営業トークスクリプト v2.0','📋 初回接客チェックリスト','🎬 動画：物件案内のポイント']
+  }
+};
+function brainSearch(){
+  const q=document.getElementById('brain-search-inp').value.trim();
+  if(!q) return;
+  brainAsk(q);
+}
+function brainAsk(q){
+  document.getElementById('brain-search-inp').value=q;
+  const panel=document.getElementById('brain-answer');
+  document.getElementById('bap-question').textContent=q;
+  const key=Object.keys(BRAIN_KB).find(k=>q.includes(k));
+  const kb=key?BRAIN_KB[key]:{
+    answer:'該当する情報を社内データベースから検索中です。しばらくお待ちください。',
+    next:['AIアシスタントへ詳細を相談する','関連資料を確認する'],
+    related:['📋 社内規程一覧','❓ FAQ検索']
+  };
+  document.getElementById('bap-answer').textContent=kb.answer;
+  document.getElementById('bap-next-items').innerHTML=kb.next.map(t=>`<div class="bap-next-item">${t}</div>`).join('');
+  document.getElementById('bap-related-items').innerHTML=kb.related.map(t=>`<div class="bap-related-item">📎 ${t}</div>`).join('');
+  panel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function brainChatSend(){
+  const inp=document.getElementById('brain-chat-inp');
+  const msg=inp.value.trim(); if(!msg) return;
+  const msgs=document.getElementById('brain-msgs');
+  msgs.innerHTML+=`<div class="bchat-msg user"><div class="bchat-avatar">私</div><div class="bchat-bubble">${msg}</div></div>`;
+  inp.value='';
+  const key=Object.keys(BRAIN_KB).find(k=>msg.includes(k));
+  const ans=key?BRAIN_KB[key].answer:'社内データベースを検索しています。関連する資料やマニュアルが見つかりましたらご案内します。上の検索バーでキーワード検索も試してみてください。';
+  setTimeout(()=>{
+    msgs.innerHTML+=`<div class="bchat-msg bot"><div class="bchat-avatar">AI</div><div class="bchat-bubble">${ans}</div></div>`;
+    msgs.scrollTop=msgs.scrollHeight;
+  },500);
 }
 
 // ═══════════════ PROPERTY DATA ═══════════════
