@@ -1,3 +1,4 @@
+# Homepage(WEBSITE/)をGitHub Pagesへ自動デプロイする。詳細: PROJECT_BIBLE/CHANGELOG.md 2026-07-04参照
 name: Deploy Homepage to GitHub Pages
 
 on:
