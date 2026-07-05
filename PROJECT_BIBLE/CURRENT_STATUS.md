@@ -81,6 +81,8 @@ Current Task：Dashboard UI設計
 
 **Xserverへの実デプロイは、CEOよりFTP/SFTP接続情報(ホスト名・ユーザー名・パスワード・公開ディレクトリ)を確認中のため、まだ完了していません。** 接続情報を受け取り次第、公開URLを確定し本ファイルへ追記します。
 
+**デプロイ先の経緯(2026-07-04):** Xserverはドメイン(`smartlaboworks.com`)取得のみでサーバー契約が未完了と判明。CEOより代替案としてGitHubでの運用可否を確認された。「共有しながら改善する」というβ版公開の目的に合致するため、**GitHub Pages**(GitHubが提供する無料の静的サイトホスティング)を暫定的な公開先として採用することにした。[.github/workflows/pages.yml](../.github/workflows/pages.yml) を新設し、`WEBSITE/` 配下を自動デプロイするGitHub Actionsワークフローを構築した。**リポジトリのSettings→Pages→SourceでGitHub Actionsを選択する設定は、Claude Codeのツールでは実行できないため、CEOご本人による一度きりの手動設定が必要。** 設定完了後の公開URLは `https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/` の想定。Xserverのサーバー契約が完了し次第、正式ドメインへ切り替える。
+
 ---
 
 ## ChatGPTとの同期ルール
@@ -116,5 +118,6 @@ Current Task：Dashboard UI設計
 | v2.0 | 2026-07-03 | Claude Code(CEO提供による) | Project Bible Version 2.8→2.9、Homepage Version 0.3→0.4に更新。AI_WORKSPACE経由で受領したHero背景単体データ5点をDESIGN_ASSETSへ格納しHomepageへ実装。アイコンのバッジスタイルをHomepageへ反映。多色配色・別ロゴ案は不採用である旨と、CEOへの確認事項をNext Taskに明記 |
 | v2.1 | 2026-07-04 | Claude Code(CEO指示による) | **正式ロゴ確定を反映。** Project Bible Version 2.9→3.0、Brand Version 4.4→5.0、Homepage Version 0.4→0.5に更新。[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md) 新設とHomepage実装完了、以前の暫定ロゴ仕様・別ロゴ案の廃止を反映 |
 | v2.2 | 2026-07-04 | Claude Code(CEO指示による) | **Homepageをβ版として公開。** Homepage Versionを0.5→0.9 betaに更新。公開前チェック(スマホ表示/リンク切れ/CTA動作/表示崩れ/画像読み込み)の実施結果を記録。Xserverへの実デプロイはFTP/SFTP接続情報確認中のため保留であることを明記 |
+| v2.3 | 2026-07-04 | Claude Code(CEO指示による) | Xserverがサーバー契約未完了(ドメインのみ取得)と判明したことを受け、暫定デプロイ先として**GitHub Pages**を採用。[.github/workflows/pages.yml](../.github/workflows/pages.yml) を新設。CEOによるリポジトリSettings→Pages設定の手動対応が必要である旨を明記 |
 
 *最終更新: 2026-07-04*

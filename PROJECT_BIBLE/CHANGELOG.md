@@ -15,7 +15,32 @@
 - 真のベクター(SVG)ロゴデータを取得し [DESIGN_ASSETS/01_LOGO/SVG/](../DESIGN_ASSETS/01_LOGO/README.md) へ格納する
 - 正式ロゴをDashboard・営業資料・名刺・パンフレット等、他の制作物にも展開する(現状はHomepageのみ実装)
 - アイコンの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(現状は既存の線画SVGをバッジ風スタイルに変更する形で対応)
-- Xserverへの実デプロイ(FTP/SFTP接続情報の確認待ち)
+- Xserverのサーバープラン契約・DNS設定、契約完了後の正式ドメインへのデプロイ切り替え
+- リポジトリのSettings→Pages→SourceでGitHub Actionsを選択する(CEOによる手動設定待ち)
+
+---
+
+## 2026-07-04 — 暫定デプロイ先をGitHub Pagesに決定
+
+CEOに確認したところ、Xserverはドメイン(`smartlaboworks.com`)取得のみで、サーバープランの契約がまだであることが判明した。「共有しながら改善する」というβ版公開の目的を踏まえ、CEOより「GitHubでは運用できないか」との提案があり、無料の静的サイトホスティングである**GitHub Pages**を暫定デプロイ先として採用した。
+
+### 実施内容
+
+[.github/workflows/pages.yml](../.github/workflows/pages.yml) を新設。`WEBSITE/` 配下への変更をトリガーに、GitHub Actions(`actions/upload-pages-artifact` + `actions/deploy-pages`)で自動デプロイするワークフローを構築した。`WEBSITE/` を直接デプロイ元とすることで、`/docs` 等への複製を避け、単一ソースを維持している。
+
+### 残作業(CEO対応が必要)
+
+Claude Codeが保有するツールにはGitHub REST API・`gh` CLIへのアクセス権がなく、リポジトリの Settings → Pages → Source を「GitHub Actions」に切り替える一度きりの操作は、**CEOご本人によるGitHub Web UIでの手動設定が必要。** 設定完了後、`master` ブランチへのpushをトリガーに自動デプロイが実行され、`https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/` で公開される見込み。
+
+Xserverのサーバー契約が完了しDNS設定が済み次第、正式ドメイン(`smartlaboworks.com`)への切り替えを行う。
+
+### 更新したファイル
+
+- 新規: `.github/workflows/pages.yml`
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v2.2→v2.3)
+- [50_TODO.md](50_TODO.md)(v2.8→v2.9)
+
+**変更者:** Claude Code(Lead Software Engineer)/ 指示: CEO
 
 ---
 
