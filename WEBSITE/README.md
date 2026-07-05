@@ -10,9 +10,13 @@
 
 ---
 
-## 公開状況(2026-07-04時点)
+## 公開状況(2026-07-05時点)
 
 **Homepage Version: 0.9 beta** — CEO指示により、正式完成としてではなく「共有しながら改善するための公開」を目的としたβ版として公開します。
+
+**公開URL(暫定・GitHub Pages): https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/**
+
+Xserverはドメイン(`smartlaboworks.com`)取得のみでサーバー契約が未完了のため、契約完了までの暫定公開先としてGitHub Pagesを利用しています([.github/workflows/pages.yml](../.github/workflows/pages.yml) により `master` へのpushで自動デプロイ)。Xserverの契約・DNS設定が完了次第、正式ドメインへ切り替えます。
 
 公開前チェック(実施済み):
 
