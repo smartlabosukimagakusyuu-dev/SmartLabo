@@ -31,8 +31,27 @@ Smart Labo Works は単一の巨大なシステムではなく、業務領域ご
 現在具体化している領域の例:
 - 不動産関連業務支援(査定・契約書作成など)
 - コンシェルジュ型AI対応(MIRAIEコンシェルジュ 等)
+- **Company Brain**(会社の知識を理解するAI基盤。詳細は次章)
 
 具体的な開発状況・技術構成は [SmartLaboWorks/README.md](../../SmartLaboWorks/README.md) を参照してください。プロダクトのリリース履歴は [09_Product_History.md](09_Product_History.md) を参照してください。
+
+---
+
+## Company Brain — Smart Labo Works 最大の差別化要素
+
+> Smart Labo Works は単なるAIチャットではありません。会社の知識をAIが理解し、社員が必要な情報へ**「聞くだけ」**でたどり着ける **Company Brain** を実現します。
+
+Company Brain は、他の業務モジュール(不動産関連業務支援、MIRAIEコンシェルジュ 等)と並列の一機能ではなく、Smart Labo Works というプラットフォーム全体を支える**中核基盤**です。一般的な「マニュアル検索」「社内Wiki」「FAQボット」とは、以下の点で明確に異なります。
+
+| | 一般的なマニュアル検索・チャットボット | Company Brain |
+|---|---|---|
+| 対象 | 特定のFAQ・限定された文書のみ | 社内規程・業務マニュアル・営業マニュアル・FAQ・教育資料・テンプレート・契約フロー・社内ルール・ベテラン社員のノウハウまで、会社に存在するあらゆる知識 |
+| 応答 | キーワードに一致した文書を提示するだけ | 必要な情報・次にやるべきこと・関連資料まで案内する |
+| 位置づけ | 補助的なヘルプ機能 | 会社の頭脳そのもの(コアプラットフォーム) |
+
+**キャッチコピー:** 「探す時間を、考える時間へ。」— 社員がマニュアルを「探す」時間をなくし、本来の「考える」「判断する」業務に集中できる状態をつくることが目的です。これは [03_Mission.md](03_Mission.md) の「社長が本来の仕事に集中できる世界をつくる」という思想を、社員全体に広げたものでもあります。
+
+具体的なコピー・UI仕様・利用イメージ・画面設計は [PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md) を正とし、ホームページ・Dashboard・営業資料・パンフレット・デモ画面のすべてでこのコンセプトを統一してください。
 
 ---
 
@@ -54,6 +73,7 @@ Smart Labo Works は単一の巨大なシステムではなく、業務領域ご
 - [09_Product_History.md](09_Product_History.md)
 - [10_Future_Roadmap.md](10_Future_Roadmap.md)
 - [10_Development_Rules.md](../10_Development_Rules.md)
+- [PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md) — Company Brainのコピー・UI・画面設計の詳細
 
 ---
 
@@ -63,5 +83,6 @@ Smart Labo Works は単一の巨大なシステムではなく、業務領域ご
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v2.0 | 2026-07-03 | Smart Labo | 00_Foundation構成への移行に伴い旧05_Product.mdから移動・改題。新Mission/Visionに合わせて全面改訂 |
+| **v3.0** | 2026-07-05 | Claude Code(CEO指示による) | **「Company Brain」をSmart Labo Works最大の差別化要素・中核基盤として正式に追加。** 一般的なマニュアル検索・チャットボットとの違いを比較表で明記し、キャッチコピー「探す時間を、考える時間へ。」を制定。詳細仕様は新設の[PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md)を参照する構成にした |
 
-*最終更新: 2026-07-03*
+*最終更新: 2026-07-05*

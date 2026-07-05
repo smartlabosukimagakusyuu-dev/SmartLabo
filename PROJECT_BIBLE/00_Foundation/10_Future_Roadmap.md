@@ -26,6 +26,20 @@
 - [ ] ブランドガイドラインの拡充
 - [ ] 「日本で最も信頼される」を裏付ける導入実績・第三者評価の蓄積
 
+### Company Brain 拡張ロードマップ
+
+Company Brain(会社の知識を理解するAI基盤、詳細は [08_SmartLaboWorks_Concept.md](08_SmartLaboWorks_Concept.md) / [PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md))は、Smart Labo Works最大の差別化要素として継続的に検索対象・機能を拡張していきます。
+
+- [ ] 動画検索(社内動画マニュアルの中身をAIが検索)
+- [ ] PDF検索
+- [ ] Word / Excel / PowerPoint 検索
+- [ ] 画像OCR(スキャン文書・画像内の文字を検索対象に)
+- [ ] 社内Wiki連携
+- [ ] 議事録検索
+- [ ] 音声検索
+- [ ] AI要約(長い文書・マニュアルの要点をAIが要約)
+- [ ] 多言語対応
+
 ### Phase 3: AI経営プラットフォームへのスケール
 - [ ] 開発体制の拡大(100名規模の開発組織を見据えた体制整備)
 - [ ] 業種横断プラットフォームとしての展開
@@ -55,5 +69,6 @@
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v2.0 | 2026-07-03 | Smart Labo | 00_Foundation構成への移行に伴い旧09_Roadmap.mdから移動・改題。新Mission/Visionに合わせて内容を改訂し、09_Product_History.mdとの役割分担を明記 |
+| **v3.0** | 2026-07-05 | Claude Code(CEO指示による) | **「Company Brain 拡張ロードマップ」を新設。** 動画検索/PDF検索/Word・Excel・PowerPoint検索/画像OCR/社内Wiki/議事録検索/音声検索/AI要約/多言語対応の将来追加予定機能を記録 |
 
-*最終更新: 2026-07-03*
+*最終更新: 2026-07-05*

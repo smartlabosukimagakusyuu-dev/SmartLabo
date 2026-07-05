@@ -26,6 +26,8 @@ Smart Laboの言葉は、3つの階層で使い分けます。用途に応じて
 
 ブランドコピー「会社を動かすAI。」は、Smart Labo Works が単なる業務ツールではなく、会社そのものを動かす存在であるという世界観を、一言で表現するものです。3つのコピーは矛盾なく重ね合わせて使用できるよう設計されています(例: 「会社を動かすAI。経営を、ひとつにつなぐ。」)。
 
+**機能コピー(Company Brain専用):** 「探す時間を、考える時間へ。」— Smart Labo Works最大の差別化要素であるCompany Brain(会社の知識を理解するAI基盤)を紹介する場面でのみ使用します。詳細は [08_SmartLaboWorks_Concept.md](08_SmartLaboWorks_Concept.md) および [PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md) を参照してください。
+
 ---
 
 ## ロゴ(正式確定: 2026-07-04)
@@ -246,6 +248,8 @@ Smart Laboのデザインが目指すのは、世界トップクラスのBtoB Sa
 
 この適用範囲は、CEOが明示的に判断基準として指定した対象領域です(2026-07-03)。新しい成果物の種類が生まれた場合も、このブランド思想の例外とはしません。
 
+**Company Brainのブランド統一(2026-07-05):** Company Brainは一般的な「マニュアル検索」ではなく、Smart Labo Worksが提供する「会社の頭脳」そのものです。ホームページ・Dashboard・営業資料・パンフレット・デモ画面のすべてで、この位置づけ・コピー・UI([PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md))を統一してください。
+
 ---
 
 ## 関連ドキュメント
@@ -270,5 +274,6 @@ Smart Laboのデザインが目指すのは、世界トップクラスのBtoB Sa
 | **v4.3** | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | **ロゴ仕様**(カラー/白抜き/アイコンの3バリエーション)、**正式カラーパレット**(Primary Navy #0A1B3D / Smart Blue #2563EB / Light Blue #60A5FA / Accent Blue #00D4FF / White / Light Gray #F3F6FA / Gray #64748B / Dark Gray #1E293B の8色、hexコード付き)、**タイポグラフィ階層**を追加。「アクセントカラーはSmart Blueのみ」の原則を「Smart Blueファミリー(4階調)のみ」として精緻化し、ステータスバッジの意味色と写真背景の自然な暖色を例外として明記 |
 | v4.4 | 2026-07-03 | Claude Code(CEO確認による) | **Smart Blue Familyの解釈をCEOが確認・確定。** ブランドカラーはSmart Blueのみとし、Light Blue/Accent Blueは独立したブランドカラーではなくSmart Blue Family(階調)として運用することを明記。ロゴ・アイコン等の実データ格納先を [BRAND/](../../BRAND/README.md) から新設の [DESIGN_ASSETS/](../../DESIGN_ASSETS/README.md) へ変更 |
 | **v5.0** | 2026-07-04 | Claude Code(CEO指示による) | **正式ロゴを確定。** これまでの「途切れた2画のストローク」の暫定ロゴ仕様を廃止し、六角形フレーム+回路パターンの「S」字シンボル(サーキットデザイン)を株式会社スマートラボの唯一の正式ロゴとして制定。デザイン・比率・形状の変更を禁止。**「ロゴ使用ルール」セクションを新設**し、余白規定・最小サイズ・背景色・使用禁止例・用途別推奨サイズ(ヘッダー/フッター/Dashboard/App Icon等)を正式制定。実データは [DESIGN_ASSETS/01_LOGO/](../../DESIGN_ASSETS/01_LOGO/README.md) に格納 |
+| v5.1 | 2026-07-05 | Claude Code(CEO指示による) | **Company Brain専用の機能コピー「探す時間を、考える時間へ。」を制定。** ブランド適用範囲に、Company Brainをホームページ・Dashboard・営業資料・パンフレット・デモ画面すべてで統一してブランド化する旨を追記 |
 
-*最終更新: 2026-07-04*
+*最終更新: 2026-07-05*

@@ -414,17 +414,44 @@ h1, h2, h3, h4 {
 
 /* ---------------------------------- Company Brain ---------------------------------- */
 
+.brain-section { position: relative; overflow: hidden; }
+.brain-glow {
+  position: absolute;
+  top: -10%;
+  right: -10%;
+  width: 640px;
+  height: 640px;
+  background: radial-gradient(circle, rgba(37,99,235,0.28) 0%, rgba(37,99,235,0) 70%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
 .brain {
+  position: relative;
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   gap: 64px;
   align-items: center;
 }
+.brain__icon-badge {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--smart-blue), var(--smart-blue-dark));
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
 .brain__subtitle {
   font-size: clamp(20px, 2.2vw, 26px);
   font-weight: 700;
   color: var(--white);
-  margin: -8px 0 20px;
+  margin: -8px 0 8px;
+}
+.brain__catch {
+  font-size: clamp(16px, 1.6vw, 19px);
+  font-weight: 600;
+  color: var(--smart-blue-light);
+  margin: 0 0 22px;
 }
 .brain__desc {
   font-size: 15.5px;
@@ -447,11 +474,14 @@ h1, h2, h3, h4 {
 }
 
 .brain__chat {
-  background: #0B1730;
-  border: 1px solid rgba(124,166,255,0.28);
-  border-radius: 16px;
+  position: relative;
+  background: rgba(255,255,255,0.045);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 18px;
   padding: 22px;
-  box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 .brain__chat-top { display: flex; align-items: center; gap: 6px; margin-bottom: 18px; }
 .brain__chat-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.18); }
@@ -472,6 +502,61 @@ h1, h2, h3, h4 {
   box-shadow: 0 10px 24px rgba(37,99,235,0.3);
 }
 .brain__ai-label { display: block; font-size: 11px; font-weight: 700; opacity: 0.75; margin-bottom: 4px; letter-spacing: 0.02em; }
+.brain__msg-next {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+.brain__msg-next span {
+  background: rgba(255,255,255,0.14);
+  border-radius: 100px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.brain-scenarios { margin-top: 56px; }
+.brain-scenarios__label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--smart-blue-light);
+  margin: 0 0 20px;
+}
+.brain-scenarios__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.brain-scenario {
+  background: rgba(255,255,255,0.045);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 16px;
+  padding: 22px;
+}
+.brain-scenario__q {
+  color: var(--white);
+  font-size: 14.5px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+.brain-scenario__flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.brain-scenario__flow span:not(.brain-scenario__arrow) {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: var(--text-on-navy-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 100px;
+}
+.brain-scenario__arrow { color: var(--smart-blue-light); font-size: 13px; }
 
 /* ---------------------------------- Stats (導入メリット) ---------------------------------- */
 
@@ -614,6 +699,7 @@ h1, h2, h3, h4 {
   .value-grid { grid-template-columns: 1fr; }
   .brain { grid-template-columns: 1fr; gap: 40px; }
   .brain__desc { max-width: none; }
+  .brain-scenarios__grid { grid-template-columns: 1fr; }
   .stat-grid { grid-template-columns: 1fr; }
   .industry-grid { grid-template-columns: 1fr 1fr; }
   .footer__inner { grid-template-columns: 1fr 1fr; }

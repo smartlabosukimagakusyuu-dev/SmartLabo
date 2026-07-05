@@ -9,11 +9,11 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：3.1
-Brand Version：5.0
-Design Bible Version：2.2
-Homepage Version：1.0 Release Candidate(GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
-Current Task：Dashboard UI設計
+Project Bible Version：3.2
+Brand Version：5.1
+Design Bible Version：2.3
+Homepage Version：1.0 Release Candidate(Company Brain拡張済み。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
+Current Task：Dashboard UI設計(Company Brain画面を含む)
 ```
 
 ---
@@ -22,15 +22,15 @@ Current Task：Dashboard UI設計
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 3.1 |
-| Brand Version | 5.0 |
-| Design Bible Version | 2.2 |
-| Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版 |
-| Dashboard Version | 0.0(設計プロンプト・標準レイアウト確定・実装未着手) |
+| Project Bible Version | 3.2 |
+| Brand Version | 5.1 |
+| Design Bible Version | 2.3 |
+| Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版。**さらにCompany BrainをSmart Labo Works最大の差別化要素として全面拡張済み**(キャッチコピー・9項目の知識ソース・3利用シナリオ・ガラスUI・専用アイコン) |
+| Dashboard Version | 0.0(設計プロンプト・標準レイアウト確定・実装未着手。サイドバーへのCompany Brain追加、Company Brain専用画面は仕様のみ確定済み) |
 | Smart Labo Works Version | 0.0(未着手) |
 | Current Project | Company Setup |
-| Current Task | Dashboard UI設計 |
-| Next Task | Dashboard UI実装 / 実際のお問い合わせ窓口(メール等)確定後、CTAを接続 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴを他制作物(Dashboard・営業資料・名刺・パンフレット)へ展開 / 真のベクター(SVG)ロゴデータの取得 / Xserverサーバー契約完了後に正式ドメインへ切り替え / 1.0公開後のフィードバック反映 |
+| Current Task | Dashboard UI設計(Company Brain画面を含む) |
+| Next Task | Dashboard UI実装(Company Brain画面含む) / 実際のお問い合わせ窓口(メール等)確定後、CTAを接続 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴを他制作物(Dashboard・営業資料・名刺・パンフレット)へ展開 / Company Brainを営業資料・パンフレット・デモ画面へ展開 / 真のベクター(SVG)ロゴデータの取得 / Xserverサーバー契約完了後に正式ドメインへ切り替え / 1.0公開後のフィードバック反映 |
 | Last Update | 2026-07-05 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -97,6 +97,15 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 4. **ブランド品質の再確認**(Priority 4): Company Brain追加でナビゲーション項目が5つに増えたことに伴うヘッダーの折り返し崩れ(1024px前後)を発見・修正(ハンバーガーメニューへの切り替え幅を860px→1100pxに拡大)。その他、余白・タイポグラフィ・カラー・レスポンシブを再確認
 5. **公開品質を確認**(Priority 5): ブランドに沿ったカスタム404ページを新設。OGP(og:title/description/image/url等)・Twitter Card・canonicalタグを追加。faviconを512×512(120KB)から64×64(3.5KB)に最適化し表示速度を改善。全リンク・全画像の読み込みを再確認(問題なし)
 
+**Company BrainをSmart Labo Works最大の差別化要素として正式に formalize(2026-07-05):** CEOより「Company Brainは単なるマニュアル検索ではなく、Smart Labo Worksが提供する『会社の頭脳』である」との明確な指示があり、以下を実施した。
+
+1. **PROJECT_BIBLEへの正式追加:** [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md) にCompany Brainを中核基盤として追加し、一般的なマニュアル検索・チャットボットとの違いを比較表で明記。[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) にCompany Brain専用の機能コピー「探す時間を、考える時間へ。」を制定し、ブランド適用範囲に統一ブランド化の方針を追記
+2. **マスター設計プロンプトの新設:** [PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md) を新設。コピー・3つの利用シナリオ(契約更新/資格手当/有給申請)・UI方針(ガラスUI・Smart Blue)・アイコン方針(Brain/Network/Knowledge/AI)・Company Brain専用画面の構成(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り)を集約し、ホームページ・Dashboard・営業資料・パンフレット・デモ画面すべてで参照する正本とした
+3. **Homepage.md/Dashboard.mdの更新:** [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) のCompany Brainセクション仕様をCompanyBrain.mdへの参照込みで更新。[PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md) のサイドバーナビ標準レイアウトに「Company Brain」を追加(専用アイコン付き、他項目に埋没させない扱い)
+4. **Roadmapの更新:** [00_Foundation/10_Future_Roadmap.md](00_Foundation/10_Future_Roadmap.md) に「Company Brain 拡張ロードマップ」を新設し、将来追加予定機能(動画検索/PDF検索/Word・Excel・PowerPoint検索/画像OCR/社内Wiki/議事録検索/音声検索/AI要約/多言語対応)を記録
+5. **Homepage実装:** [WEBSITE/index.html](../WEBSITE/index.html) / [WEBSITE/css/style.css](../WEBSITE/css/style.css) のCompany Brainセクションを全面拡張。専用のBrain/Networkアイコンバッジ、キャッチコピー「探す時間を、考える時間へ。」、9項目に拡充した知識ソースのチップ表示、AIの回答に「関連資料」「次のアクション」チップを追加(AIが答えるだけでなく案内する存在であることを視覚化)、3つの利用シナリオを複数ステップの案内フローとして見せる新セクション、ガラスUI(glassmorphism: backdrop-filter blur + 半透明パネル)を採用。デスクトップ(1440px/1024px)・モバイル(375px)でプレビュー確認済み、レイアウト崩れ・コンソールエラーなし
+6. **Dashboard・営業資料・パンフレット・デモ画面への展開:** これらの成果物はまだ実体が存在しない(Dashboard Version 0.0)ため、今回は仕様レベル(PROMPTS/DESIGN配下)への反映にとどめている。実体が作られる際は必ず[CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)を参照し、コンセプト・コピー・UIを統一すること
+
 ---
 
 ## ChatGPTとの同期ルール
@@ -135,5 +144,6 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 | v2.3 | 2026-07-04 | Claude Code(CEO指示による) | Xserverがサーバー契約未完了(ドメインのみ取得)と判明したことを受け、暫定デプロイ先として**GitHub Pages**を採用。[.github/workflows/pages.yml](../.github/workflows/pages.yml) を新設。CEOによるリポジトリSettings→Pages設定の手動対応が必要である旨を明記 |
 | v2.4 | 2026-07-05 | Claude Code(CEO対応による) | **Homepageの公開完了を反映。** 公開URL(`https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/`)を記録。Workflow permissions設定の不備によるデプロイ失敗とその解決経緯を記録。Last Updateを2026-07-05に更新 |
 | v2.5 | 2026-07-05 | Claude Code(CEO指示による) | **Homepage Versionを0.9 beta→1.0 Release Candidateに更新。** Project Bible Version 3.0→3.1に更新。Company Brainセクション新設・ダッシュボードのデモ表記・CTA導線整理・ヘッダー折り返し崩れの修正・404ページ/OGP/favicon最適化を反映。Next Taskに「実際のお問い合わせ窓口確定後のCTA接続」を追加 |
+| **v2.6** | 2026-07-05 | Claude Code(CEO指示による) | **Company BrainをSmart Labo Works最大の差別化要素として正式にformalize。** Project Bible Version 3.1→3.2、Brand Version 5.0→5.1、Design Bible Version 2.2→2.3に更新。新設の[PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)をマスター設計プロンプトとして、コピー・3利用シナリオ・UI方針・アイコン方針・専用画面構成を集約。Homepage実装を全面拡張(キャッチコピー・9項目知識ソース・次アクション案内・3シナリオ・ガラスUI)。Dashboard.mdサイドバーへの追加、Roadmapへの拡張機能追加を反映 |
 
 *最終更新: 2026-07-05*

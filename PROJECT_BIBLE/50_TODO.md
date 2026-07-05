@@ -27,6 +27,8 @@
 - [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) の本文(冒頭のCEO Message以外)を代表本人の言葉で確定させる
 - [ ] [99_CEO_MEMORY/01_Founding_Story.md](99_CEO_MEMORY/01_Founding_Story.md)(創業経緯)・[03_Future_Vision.md](99_CEO_MEMORY/03_Future_Vision.md)(将来構想)・[05_Important_Conversations.md](99_CEO_MEMORY/05_Important_Conversations.md)(重要な会話)を代表が記入する(04_Brand_Philosophy.mdは記入済み)
 - [ ] [00_Foundation/09_Product_History.md](00_Foundation/09_Product_History.md) にリリース済みプロダクト・機能を記録する
+- [ ] Company Brain([PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md))をDashboard・営業資料・パンフレット・デモ画面へ展開する(2026-07-05時点、Homepageのみ実装。他はまだ実体が存在しない)
+- [ ] Dashboard UI実装時に、Company Brain専用画面(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り)を作り込む
 
 ---
 
@@ -55,5 +57,6 @@
 | v2.9 | 2026-07-04 | Claude Code(CEO指示による) | Xserverがサーバー契約未完了と判明したため、デプロイタスクをXserver契約・DNS設定タスクに更新。暫定デプロイ先としてGitHub Pagesを採用し、CEOによる手動設定(Settings→Pages)タスクを追加 |
 | v3.0 | 2026-07-05 | Claude Code(CEO対応による) | **Homepage(β版)のGitHub Pages公開が完了。** Pages設定・Workflow permissions設定タスクを完了として消し込み、公開URLを記録 |
 | v3.1 | 2026-07-05 | Claude Code(CEO指示による) | Homepage 1.0公開に向けた最終ブラッシュアップに伴い、フィードバック収集タスクを「1.0公開後」に更新。実際のお問い合わせ窓口確定・CTA接続タスクを追加 |
+| v3.2 | 2026-07-05 | Claude Code(CEO指示による) | Company BrainをSmart Labo Works最大の差別化要素として正式formalizeしたことに伴い、Dashboard・営業資料・パンフレット・デモ画面への展開タスク、Dashboard UI実装時のCompany Brain専用画面作り込みタスクを追加 |
 
 *最終更新: 2026-07-05*

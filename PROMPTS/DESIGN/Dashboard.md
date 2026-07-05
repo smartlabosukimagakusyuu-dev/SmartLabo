@@ -35,15 +35,16 @@ Homepage(サイト)が「初めて訪れた社長にEnterprise AI Platformとし
 │ ・タスク管理  │  例: 売上総額 / 稼働プロジェクト数 /   │
 │ ・顧客管理    │      タスク完了率                   │
 │ ・売上管理    ├──────────────────────────────────┤
-│ ・AI分析     │ データ可視化(2カラム)                │
-│ ・レポート    │  左: 売上推移(折れ線グラフ)           │
-│ ・設定       │  右: タスク内訳(ドーナツチャート)      │
-│             ├──────────────────────────────────┤
+│ ・Company Brain│ データ可視化(2カラム)              │
+│ ・AI分析     │  左: 売上推移(折れ線グラフ)           │
+│ ・レポート    │  右: タスク内訳(ドーナツチャート)      │
+│ ・設定       ├──────────────────────────────────┤
 │             │ 「AIからの提案」パネル / 「最近のアクティビティ」パネル │
 └─────────────┴──────────────────────────────────┘
 ```
 
-- **サイドバー:** 左側に固定。ロゴ+ナビゲーション(ダッシュボード/タスク管理/顧客管理/売上管理/AI分析/レポート/設定)。現在地はSmart Blueでハイライトする。
+- **サイドバー:** 左側に固定。ロゴ+ナビゲーション(ダッシュボード/タスク管理/顧客管理/売上管理/**Company Brain**/AI分析/レポート/設定)。現在地はSmart Blueでハイライトする。
+- **Company Brain:** Smart Labo Works最大の差別化要素。サイドバーではBrain/Network/Knowledge/AIを連想する専用アイコン([CompanyBrain.md](CompanyBrain.md) 参照)を用い、他のメニュー項目と同列に埋没させない。選択すると専用のCompany Brain画面(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り、詳細は[CompanyBrain.md](CompanyBrain.md))へ遷移する。
 - **統計カード:** 数値+前月比(例: 「+12.5% 前月比」)を添える。数値強調にSmart Blueを使用してよい。
 - **データ可視化:** 折れ線グラフ(売上推移)とドーナツチャート(タスク内訳: 完了/進行中/未着手など)を標準構成とする。色はSmart Blueファミリー+ステータス意味色(完了=緑等)の範囲内で使う。
 - **AIからの提案パネル:** AIが検知した気づき・提案を箇条書きで表示する(例:「今月の売上は前月比12.5%増加しています」)。ここは[00_Foundation/06_Philosophy.md](../../PROJECT_BIBLE/00_Foundation/06_Philosophy.md)のAIファースト原則を最も体現する領域であり、Dashboardの中心的な差別化要素として扱う。
@@ -78,6 +79,7 @@ Homepage(サイト)が「初めて訪れた社長にEnterprise AI Platformとし
 - [ ] 開いた瞬間に「今日やるべきこと」がわかるか
 - [ ] 色数はPrimary Navy / White / Smart Blueファミリー / グレー階調(+ステータス意味色)に収まっているか
 - [ ] サイドバー・統計カード・データ可視化・AIからの提案・最近のアクティビティの標準構成に沿っているか
+- [ ] サイドバーに「Company Brain」が専用アイコン付きで、他項目と同列に埋没せず配置されているか
 - [ ] グラフ・数値は詰め込みすぎず、重厚さと理解しやすさを両立しているか
 - [ ] 通知・アラートが騒がしくなっていないか
 - [ ] ボタンはHomepageと一貫したスタイル(大きめ・角丸・ホバーアニメーション)か
@@ -90,6 +92,7 @@ Homepage(サイト)が「初めて訪れた社長にEnterprise AI Platformとし
 
 - [SmartLabo_Design_Bible.md](SmartLabo_Design_Bible.md)
 - [Homepage.md](Homepage.md)
+- [CompanyBrain.md](CompanyBrain.md) — Company Brainのコピー・UI・専用画面設計の正本
 - [DESIGN/system/design-tokens.md](../../DESIGN/system/design-tokens.md) — カラートークン・コンポーネント・アイコンセット
 - [PROJECT_BIBLE/00_Foundation/06_Philosophy.md](../../PROJECT_BIBLE/00_Foundation/06_Philosophy.md)
 - [PROJECT_BIBLE/20_UI_UX_Rules.md](../../PROJECT_BIBLE/20_UI_UX_Rules.md)
@@ -104,5 +107,6 @@ Homepage(サイト)が「初めて訪れた社長にEnterprise AI Platformとし
 | v1.0 | 2026-07-03 | Claude Code | 初版作成。Homepageとの役割の違いを明確化し、毎日使う業務画面としてのデザイン指示を制定 |
 | **v2.0** | 2026-07-03 | Claude Code(CEO指示による全面ピボット) | **Enterprise AI Platform方針へ全面改訂。** 配色をNavy/White/Smart Blue/Light Grayに変更、Palantir/Datadogを参考にしたデータ表現の重厚さを追加。HomepageのHeroビジュアルとして使われる前提を明記 |
 | v2.1 | 2026-07-03 | Claude Code(CEO提供のブランドキット参照資料による) | サイドバーナビ・統計カード・データ可視化(折れ線+ドーナツ)・AIからの提案・最近のアクティビティで構成する標準レイアウトを追加。配色を正式カラートークンに同期 |
+| **v3.0** | 2026-07-05 | Claude Code(CEO指示による) | **サイドバーナビに「Company Brain」を追加。** Smart Labo Works最大の差別化要素として、専用アイコン付きで他項目に埋没させない配置を指示。詳細な専用画面設計(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り)は新設の[CompanyBrain.md](CompanyBrain.md)に集約 |
 
-*最終更新: 2026-07-03*
+*最終更新: 2026-07-05*

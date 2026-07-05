@@ -222,20 +222,35 @@
 </section>
 
 <!-- 3.5 Company Brain -->
-<section class="section section--navy-deep" id="brain">
+<section class="section section--navy-deep brain-section" id="brain">
+  <div class="brain-glow" aria-hidden="true"></div>
   <div class="container brain">
     <div class="brain__content">
+      <div class="brain__icon-badge">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 4.5c-1.4 0-2.5 1.1-2.5 2.5 0 .3.05.6.15.9-1 .4-1.65 1.4-1.65 2.5 0 .8.35 1.5.9 2-.5.5-.8 1.15-.8 1.9 0 1.35 1.05 2.45 2.4 2.5.25 1.2 1.3 2.1 2.55 2.1 1.4 0 2.5-1.1 2.5-2.5v-9.4c0-1.4-1.1-2.5-2.5-2.5z"/>
+          <path d="M15 4.5c1.4 0 2.5 1.1 2.5 2.5 0 .3-.05.6-.15.9 1 .4 1.65 1.4 1.65 2.5 0 .8-.35 1.5-.9 2 .5.5.8 1.15.8 1.9 0 1.35-1.05 2.45-2.4 2.5-.25 1.2-1.3 2.1-2.55 2.1-1.4 0-2.5-1.1-2.5-2.5v-9.4c0-1.4 1.1-2.5 2.5-2.5z"/>
+          <circle cx="9.3" cy="9.2" r="0.9" fill="#FFFFFF" stroke="none"/>
+          <circle cx="14.7" cy="12.4" r="0.9" fill="#FFFFFF" stroke="none"/>
+          <circle cx="9.6" cy="15" r="0.9" fill="#FFFFFF" stroke="none"/>
+          <path d="M9.3 9.2l1.5 2M14.7 12.4l-1.5-1.4M9.6 15l3-2" stroke-width="1.1"/>
+        </svg>
+      </div>
       <p class="eyebrow eyebrow--light">COMPANY BRAIN</p>
       <h2 class="section__title section__title--light">Company Brain</h2>
       <p class="brain__subtitle">会社の知識を、AIへ。</p>
-      <p class="brain__desc">社内規程、業務マニュアル、営業マニュアル、FAQ、ノウハウ。会社に存在するあらゆる知識をAIが理解します。社員は情報を<strong>「探す」</strong>のではなく、<strong>「AIへ聞く」</strong>だけで、必要な答えにたどり着けます。</p>
+      <p class="brain__catch">探す時間を、考える時間へ。</p>
+      <p class="brain__desc">社内規程・業務マニュアル・営業マニュアル・FAQ・教育資料・テンプレート・契約フロー・社内ルール・ベテラン社員のノウハウ。会社に存在するあらゆる知識をAIが理解します。社員はマニュアルを<strong>「探す」</strong>必要はありません。<strong>AIへ質問するだけ</strong>で、必要な情報・次にやるべきこと・関連資料まで案内します。</p>
       <ul class="brain__examples">
-        <li>就業規則</li>
-        <li>資格制度</li>
-        <li>営業手順</li>
-        <li>契約更新方法</li>
-        <li>経費精算</li>
-        <li>AI利用ルール</li>
+        <li>社内規程</li>
+        <li>業務マニュアル</li>
+        <li>営業マニュアル</li>
+        <li>FAQ</li>
+        <li>教育資料</li>
+        <li>テンプレート</li>
+        <li>契約フロー</li>
+        <li>社内ルール</li>
+        <li>ベテラン社員のノウハウ</li>
       </ul>
     </div>
 
@@ -251,11 +266,57 @@
         <div class="brain__msg brain__msg--ai">
           <span class="brain__ai-label">Company Brain</span>
           経費精算は「経理システム→経費申請」からレシートを添付して申請してください。上長承認後、翌月25日に振込されます。
+          <div class="brain__msg-next">
+            <span>関連資料: 経費精算マニュアル</span>
+            <span>次のアクション: 申請画面を開く</span>
+          </div>
         </div>
         <div class="brain__msg brain__msg--user">契約更新の手順は？</div>
         <div class="brain__msg brain__msg--ai">
           <span class="brain__ai-label">Company Brain</span>
           契約満了の60日前までに、更新確認書を顧客へ送付します。詳細は「営業マニュアル 4章」を参照してください。
+          <div class="brain__msg-next">
+            <span>関連資料: 契約更新テンプレート</span>
+            <span>次のアクション: 必要書類を確認する</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container brain-scenarios">
+    <p class="brain-scenarios__label">利用イメージ</p>
+    <div class="brain-scenarios__grid">
+      <div class="brain-scenario">
+        <p class="brain-scenario__q">「契約更新ってどうする?」</p>
+        <div class="brain-scenario__flow">
+          <span>契約更新マニュアル</span>
+          <span class="brain-scenario__arrow">→</span>
+          <span>必要書類</span>
+          <span class="brain-scenario__arrow">→</span>
+          <span>次にやる作業</span>
+          <span class="brain-scenario__arrow">→</span>
+          <span>テンプレート</span>
+        </div>
+      </div>
+      <div class="brain-scenario">
+        <p class="brain-scenario__q">「ITパスポート合格したけど資格手当ある?」</p>
+        <div class="brain-scenario__flow">
+          <span>資格制度</span>
+          <span class="brain-scenario__arrow">→</span>
+          <span>対象条件</span>
+          <span class="brain-scenario__arrow">→</span>
+          <span>支給金額</span>
+          <span class="brain-scenario__arrow">→</span>
+          <span>申請方法</span>
+        </div>
+      </div>
+      <div class="brain-scenario">
+        <p class="brain-scenario__q">「有給申請の方法は?」</p>
+        <div class="brain-scenario__flow">
+          <span>就業規則</span>
+          <span class="brain-scenario__arrow">→</span>
+          <span>申請画面へ誘導</span>
         </div>
       </div>
     </div>

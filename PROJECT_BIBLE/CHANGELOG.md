@@ -17,6 +17,46 @@
 - アイコンの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(現状は既存の線画SVGをバッジ風スタイルに変更する形で対応)
 - Xserverのサーバープラン契約・DNS設定、契約完了後の正式ドメインへのデプロイ切り替え
 - 実際のお問い合わせ窓口(メールアドレス等)が確定次第、CTAボタンを接続する
+- Company Brainを営業資料・パンフレット・デモ画面へ展開する(現状はHomepageのみ実装、Dashboardは仕様のみ)
+- Dashboard UIを実装し、Company Brain専用画面(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り)を作り込む
+
+---
+
+## 2026-07-05 — Company BrainをSmart Labo Works最大の差別化要素として正式formalize
+
+CEOより「Company Brainは単なる『マニュアル検索』ではなく、Smart Labo Worksが提供する『会社の頭脳(Company Brain)』である」との明確な指示があり、ホームページの一セクションという扱いから、Smart Labo Works全体の中核基盤・最大の差別化要素として正式に位置づけを引き上げた。
+
+### PROJECT_BIBLEへの反映
+
+- [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v2.0→v3.0): Company Brainを中核基盤として追加。一般的なマニュアル検索・チャットボットとの違いを比較表で明記し、キャッチコピー「探す時間を、考える時間へ。」を制定
+- [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)(v5.0→v5.1): Company Brain専用の機能コピーを追加。ブランド適用範囲に、ホームページ・Dashboard・営業資料・パンフレット・デモ画面すべてで統一ブランド化する方針を追記
+- [00_Foundation/10_Future_Roadmap.md](00_Foundation/10_Future_Roadmap.md)(v2.0→v3.0): 「Company Brain 拡張ロードマップ」を新設し、動画検索/PDF検索/Word・Excel・PowerPoint検索/画像OCR/社内Wiki/議事録検索/音声検索/AI要約/多言語対応を記録
+
+### 設計プロンプトの新設・更新
+
+- **新設:** [PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)(v1.0) — Company Brainのコピー・3つの利用シナリオ(契約更新/資格手当/有給申請)・UI方針(ガラスUI・Smart Blue)・アイコン方針(Brain/Network/Knowledge/AI)・専用画面構成(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り)を集約するマスタープロンプト。ホームページ・Dashboard・営業資料・パンフレット・デモ画面すべてで参照する正本とした
+- [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md)(v3.0→v4.0): Company Brainセクション仕様をCompanyBrain.mdへの参照込みで全面更新
+- [PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md)(v2.1→v3.0): サイドバーナビ標準レイアウトに「Company Brain」を追加(専用アイコン付き、他項目に埋没させない扱い)
+- [PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md)(v2.2→v2.3): 関連ドキュメントに新設のCompanyBrain.mdを追加
+
+### Homepage実装
+
+- Company Brainセクションを全面拡張: Brain/Network/Knowledge/AIを連想する専用アイコンバッジを新設、キャッチコピー「探す時間を、考える時間へ。」を追加、知識ソースのチップ表示を6項目→9項目(社内規程/業務マニュアル/営業マニュアル/FAQ/教育資料/テンプレート/契約フロー/社内ルール/ベテラン社員のノウハウ)に拡充
+- AIの回答に「関連資料」「次のアクション」を示すチップを追加し、AIが単に答えるだけでなく案内する存在であることを視覚化
+- 3つの利用シナリオ(契約更新/資格手当/有給申請)を、質問→複数ステップの案内フローとして見せる新セクションを追加
+- ガラスUI(glassmorphism: backdrop-filter blur + 半透明パネル + 繊細なボーダー)を採用し、Enterprise SaaSらしい高級感を演出
+- デスクトップ(1440px/1024px)・モバイル(375px)でプレビュー確認済み。レイアウト崩れ・コンソールエラーなし
+
+### 更新したファイル
+
+- `WEBSITE/index.html`、`WEBSITE/css/style.css`
+- [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)、[07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)、[10_Future_Roadmap.md](00_Foundation/10_Future_Roadmap.md)
+- 新規: [PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)
+- [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md)、[Dashboard.md](../PROMPTS/DESIGN/Dashboard.md)、[SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md)、[README.md](../PROMPTS/DESIGN/README.md)
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v2.5→v2.6)
+- [README.md](README.md)(v3.1→v3.2)
+
+**変更者:** Claude Code(Lead Software Engineer / Chief Design Officer)/ 指示: CEO
 
 ---
 
