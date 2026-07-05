@@ -14,11 +14,25 @@
 - (次回の変更予定があればここに記載)
 - 真のベクター(SVG)ロゴデータを取得し [DESIGN_ASSETS/01_LOGO/SVG/](../DESIGN_ASSETS/01_LOGO/README.md) へ格納する
 - 正式ロゴをDashboard・営業資料・名刺・パンフレット等、他の制作物にも展開する(現状はHomepageのみ実装)
-- アイコンの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(現状は既存の線画SVGをバッジ風スタイルに変更する形で対応)
 - Xserverのサーバープラン契約・DNS設定、契約完了後の正式ドメインへのデプロイ切り替え
 - 実際のお問い合わせ窓口(メールアドレス等)が確定次第、CTAボタンを接続する
-- Company Brainを営業資料・パンフレット・デモ画面へ展開する(現状はHomepageのみ実装、Dashboardは仕様のみ)
-- Dashboard UIを実装し、Company Brain専用画面(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り)を作り込む
+- Company Brainを営業資料・パンフレットへ展開する
+- Dashboard v0.6：実データ連携・顧客管理強化
+
+---
+
+## 2026-07-05 — Dashboard v0.5: Company OS実装・GitHub Pages公開
+
+CEOより「DashboardをCRMではなくCompany OSへ進化させる」との指示に基づき、`app.html`をDashboard v0.5として全面アップグレードし、GitHub Pagesへ公開。
+
+### 主な変更内容
+- **Company Brain専用画面を新規実装** — サイドバーに専用アイコン付きで追加。大型検索バー・AIチャット・人気の社内マニュアル6カテゴリ・最近閲覧した資料・お気に入り・AI回答パネル(回答+次にやること+関連資料)をガラスUI(glassmorphism)で実装
+- **AIモーニングブリーフィング** — ダッシュボード最上部に「AIからのお知らせ」カード追加。返信漏れ・契約更新・売上目標達成率を社長が開いた瞬間に把握できる設計
+- **KPI拡張** — 4枚→6枚。AI対応件数・Company Brain利用数・社員利用率を追加。売上カードを特別デザインで強調
+- **アクティビティカラーコーディング** — 🟢成約 🟡予定 🔴要対応 🔵AIで視覚的に分類
+- **クイックアクション7項目** — Company Brain検索・AIへ質問・契約書作成・顧客登録・広告作成・FAQ追加・社内規程編集
+- **公式デザイントークン適用** — `--navy: #0A1B3D` / `--accent: #2563EB` / `--light-blue: #60A5FA` 等に統一
+- `CURRENT_STATUS.md` のDashboard Versionを0.0→0.5に更新
 
 ---
 
