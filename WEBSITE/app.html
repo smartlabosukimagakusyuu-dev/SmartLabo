@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Labo Works</title>
+<style>
+:root{
+  --bg:#f0f4f8;
+  --surface:#ffffff;
+  --border:#e2e8f0;
+  --accent:#2563eb;
+  --accent2:#1d4ed8;
+  --text:#0f172a;
+  --text2:#64748b;
+  --success:#10b981;
+  --danger:#ef4444;
+  --warning:#f59e0b;
+  --navy:#071029;
+  --navy2:#0d1b3e;
+  --sidebar-w:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+button,input,select,textarea{font-family:inherit}
+
+/* ═══════════════════════════════
+   LOGIN PAGE
+═══════════════════════════════ */
+#login-page{
+  display:flex;min-height:100vh;background:var(--navy);
+  position:fixed;inset:0;z-index:9999;transition:opacity 0.5s;
+}
+#login-page.hide{opacity:0;pointer-events:none}
+
+.login-left{
+  flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:60px 40px;position:relative;overflow:hidden;
+}
+.login-left::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--navy) 0%,#102040 50%,#0a1628 100%);
+}
+.login-net{position:absolute;inset:0;pointer-events:none;}
+.login-brand{position:relative;z-index:2;text-align:center;max-width:400px;}
+.lb-logo{
+  display:inline-flex;align-items:center;gap:12px;margin-bottom:40px;
+}
+.lb-hex{
+  width:52px;height:52px;border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),#60a5fa);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 32px rgba(37,99,235,0.5);
+}
+.lb-hex svg{width:28px;height:28px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.lb-name{font-size:22px;font-weight:900;color:#fff;letter-spacing:-.02em;}
+.lb-name span{color:#60a5fa}
+.lb-tagline{
+  font-size:38px;font-weight:900;color:#fff;line-height:1.25;letter-spacing:-.03em;
+  margin-bottom:20px;
+}
+.lb-tagline span{color:#60a5fa}
+.lb-sub{font-size:14px;color:rgba(255,255,255,.5);line-height:1.9;margin-bottom:40px;}
+.lb-feats{display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
+.lb-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.7);}
+.lb-feat-dot{width:6px;height:6px;border-radius:50%;background:#60a5fa;flex-shrink:0;}
+
+.login-right{
+  width:480px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);
+  border-left:1px solid rgba(255,255,255,0.08);padding:60px 48px;
+}
+.login-card{width:100%;max-width:360px;}
+.lc-title{font-size:24px;font-weight:900;color:#fff;margin-bottom:6px;}
+.lc-sub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:36px;}
+.lc-label{font-size:12px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:6px;display:block;}
+.lc-inp{
+  width:100%;padding:12px 16px;
+  background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(255,255,255,0.12);
+  border-radius:10px;font-size:14px;color:#fff;
+  outline:none;transition:all 0.2s;margin-bottom:16px;
+}
+.lc-inp::placeholder{color:rgba(255,255,255,.3)}
+.lc-inp:focus{border-color:var(--accent);background:rgba(255,255,255,0.1);}
+.lc-pw-wrap{position:relative;margin-bottom:8px;}
+.lc-pw-wrap .lc-inp{margin-bottom:0;padding-right:46px;}
+.lc-eye{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;padding:4px;
+}
+.lc-forgot{font-size:12px;color:rgba(96,165,250,.7);text-align:right;margin-bottom:24px;margin-top:6px;cursor:pointer;}
+.lc-btn{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,var(--accent),#1d4ed8);
+  border:none;border-radius:10px;
+  font-size:15px;font-weight:800;color:#fff;cursor:pointer;
+  transition:all 0.2s;letter-spacing:.02em;
+  box-shadow:0 4px 20px rgba(37,99,235,0.4);
+}
+.lc-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(37,99,235,0.55);}
+.lc-btn:active{transform:none;}
+.lc-demo{
+  margin-top:16px;padding:12px;
+  background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,.15);
+  border-radius:8px;font-size:11px;color:rgba(255,255,255,.4);text-align:center;line-height:1.8;
+}
+.lc-demo strong{color:rgba(255,255,255,.65);}
+.lc-footer{margin-top:36px;text-align:center;}
+.lc-ver{font-size:11px;color:rgba(255,255,255,.2);}
+
+/* ═══════════════════════════════
+   APP LAYOUT
+═══════════════════════════════ */
+#app{display:none;height:100vh;overflow:hidden;}
+#app.on{display:flex;}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.sb-logo{
+  padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:10px;
+}
+.sb-hex{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),#60a5fa);
+  display:flex;align-items:center;justify-content:center;
+}
+.sb-hex svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+.sb-brand{font-size:13px;font-weight:800;color:#fff;letter-spacing:-.01em;line-height:1.3;}
+.sb-brand span{color:#93c5fd;font-weight:600;}
+.sb-nav{flex:1;padding:12px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;
+  border-radius:8px;cursor:pointer;transition:all 0.15s;
+  font-size:13px;font-weight:500;color:rgba(255,255,255,.6);
+}
+.nav-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.nav-item:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9);}
+.nav-item.active{background:rgba(37,99,235,.35);color:#fff;font-weight:700;}
+.nav-sep{height:1px;background:rgba(255,255,255,.06);margin:8px 12px;}
+.sb-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,.07);}
+.sb-co{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:4px;}
+.sb-plan{font-size:10px;color:rgba(255,255,255,.35);line-height:1.7;}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{
+  height:56px;flex-shrink:0;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 24px;gap:16px;
+}
+.topbar-title{font-size:16px;font-weight:800;color:var(--text);flex:1;}
+.tb-notif{position:relative;cursor:pointer;}
+.tb-notif svg{width:20px;height:20px;stroke:var(--text2);fill:none;stroke-width:2;stroke-linecap:round;}
+.tb-badge{
+  position:absolute;top:-4px;right:-4px;width:16px;height:16px;
+  background:var(--danger);border-radius:50%;font-size:9px;font-weight:700;
+  color:#fff;display:flex;align-items:center;justify-content:center;
+}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.tb-av{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#60a5fa);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:#fff;
+}
+.tb-info{line-height:1.3;}
+.tb-name{font-size:12px;font-weight:700;color:var(--text);}
+.tb-co{font-size:10px;color:var(--text2);}
+
+/* PAGE */
+.page{display:none;flex:1;overflow-y:auto;padding:24px;}
+.page.active{display:block;}
+.page-hd{margin-bottom:20px;}
+.page-hd h2{font-size:20px;font-weight:800;color:var(--text);}
+.page-hd p{font-size:13px;color:var(--text2);margin-top:4px;}
+
+/* CARD */
+.card{background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:20px;}
+
+/* ═══════════════════════════════
+   DASHBOARD
+═══════════════════════════════ */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi{background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:18px 20px;}
+.kpi-label{font-size:11px;color:var(--text2);font-weight:600;margin-bottom:8px;letter-spacing:.04em;}
+.kpi-val{font-size:28px;font-weight:900;color:var(--text);letter-spacing:-.03em;}
+.kpi-ch{font-size:11px;margin-top:5px;font-weight:600;}
+.kpi-ch.up{color:var(--success)}.kpi-ch.dn{color:var(--danger)}
+.dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;}
+.dash-act h3{font-size:14px;font-weight:800;margin-bottom:14px;}
+.act-list{display:flex;flex-direction:column;gap:10px;}
+.act-item{display:flex;align-items:flex-start;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.act-item:last-child{border-bottom:none;padding-bottom:0;}
+.act-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.act-body{flex:1;}
+.act-title{font-size:13px;font-weight:600;color:var(--text);}
+.act-time{font-size:11px;color:var(--text2);margin-top:2px;}
+.dash-quick h3{font-size:14px;font-weight:800;margin-bottom:14px;}
+.quick-list{display:flex;flex-direction:column;gap:8px;}
+.quick-btn{
+  width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);
+  background:var(--surface);font-size:13px;font-weight:600;cursor:pointer;
+  color:var(--text);text-align:left;transition:all 0.15s;display:flex;align-items:center;gap:8px;
+}
+.quick-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ═══════════════════════════════
+   PROPERTY MANAGEMENT
+═══════════════════════════════ */
+.prop-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.prop-search{flex:1;min-width:200px;padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;}
+.prop-search:focus{border-color:var(--accent);}
+.prop-filters{display:flex;gap:6px;}
+.flt-btn{padding:7px 13px;border-radius:7px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text2);transition:all .15s;}
+.flt-btn:hover,.flt-btn.active{border-color:var(--accent);color:var(--accent);background:#eff6ff;}
+.btn-primary{padding:9px 18px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;}
+.btn-primary:hover{background:var(--accent2);}
+.prop-count{font-size:12px;color:var(--text2);font-weight:600;white-space:nowrap;}
+
+.prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.prop-card{background:var(--surface);border-radius:12px;border:1px solid var(--border);overflow:hidden;transition:all .15s;position:relative;}
+.prop-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.1);transform:translateY(-2px);}
+.prop-img{height:150px;background:linear-gradient(135deg,#e0f2fe,#bfdbfe);position:relative;overflow:hidden;}
+.prop-img img{width:100%;height:100%;object-fit:cover;}
+.prop-status-badge{
+  position:absolute;top:10px;left:10px;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:700;cursor:pointer;
+}
+.st-sale{background:#dcfce7;color:#166534;}
+.st-nego{background:#fef9c3;color:#854d0e;}
+.st-done{background:#e0e7ff;color:#3730a3;}
+.st-prep{background:#f1f5f9;color:#475569;}
+.prop-actions{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity .15s;}
+.prop-card:hover .prop-actions{opacity:1;}
+.prop-act-btn{width:28px;height:28px;border-radius:6px;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.prop-edit-btn{background:rgba(255,255,255,.9);}
+.prop-del-btn{background:rgba(254,226,226,.9);}
+.prop-body{padding:14px;}
+.prop-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.prop-addr{font-size:11px;color:var(--text2);margin-bottom:8px;}
+.prop-price{font-size:18px;font-weight:900;color:var(--accent);}
+.prop-meta{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
+.prop-tag{font-size:10px;padding:2px 8px;background:#f1f5f9;border-radius:4px;color:var(--text2);font-weight:600;}
+
+/* STATUS DROPDOWN */
+.status-dd{position:absolute;top:36px;left:8px;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;z-index:100;box-shadow:0 4px 16px rgba(0,0,0,.1);}
+.status-dd-item{padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;}
+.status-dd-item:hover{background:#f1f5f9;}
+
+/* PROP MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:16px;padding:28px;width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.modal-hd h3{font-size:18px;font-weight:900;}
+.modal-close{width:32px;height:32px;border-radius:8px;border:none;background:#f1f5f9;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px;display:block;}
+.form-inp{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none;transition:border .15s;}
+.form-inp:focus{border-color:var(--accent);}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;}
+.btn-cancel{padding:10px 20px;border:1.5px solid var(--border);background:white;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-save{padding:10px 24px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;}
+
+/* PHOTO UPLOAD */
+.photo-drop{
+  border:2px dashed var(--border);border-radius:10px;padding:24px;
+  text-align:center;cursor:pointer;transition:all .15s;position:relative;
+  background:#fafbfc;
+}
+.photo-drop:hover,.photo-drop.drag{border-color:var(--accent);background:#eff6ff;}
+.photo-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-drop-icon{font-size:28px;margin-bottom:6px;}
+.photo-drop-text{font-size:13px;color:var(--text2);}
+.photo-preview-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.photo-prev{position:relative;width:80px;height:80px;}
+.photo-prev img{width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid var(--border);}
+.photo-prev-rm{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--danger);color:white;border:none;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.photo-prev-edit{position:absolute;bottom:2px;right:2px;width:22px;height:22px;border-radius:6px;background:rgba(0,0,0,.6);color:white;border:none;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* PHOTO EDITOR MODAL */
+.editor-modal{background:white;border-radius:16px;width:860px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.25);}
+.editor-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
+.editor-hd h3{font-size:16px;font-weight:800;}
+.editor-body{display:flex;flex:1;overflow:hidden;}
+.editor-canvas-wrap{flex:1;background:#1e293b;display:flex;align-items:center;justify-content:center;position:relative;min-height:400px;}
+#edit-canvas{max-width:100%;max-height:100%;border-radius:4px;cursor:default;}
+.editor-tools{width:220px;flex-shrink:0;border-left:1px solid var(--border);overflow-y:auto;padding:16px;}
+.tool-section{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.05em;margin-bottom:6px;}
+.tool-slider{width:100%;accent-color:var(--accent);cursor:pointer;}
+.tool-val{font-size:11px;color:var(--text2);text-align:right;margin-bottom:12px;}
+.tool-row{display:flex;gap:6px;}
+.tool-btn{flex:1;padding:7px 6px;border:1.5px solid var(--border);background:white;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text2);transition:all .15s;}
+.tool-btn:hover{border-color:var(--accent);color:var(--accent);}
+.tool-btn.on{background:var(--accent);color:white;border-color:var(--accent);}
+.text-overlay-inp{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;outline:none;margin-bottom:6px;}
+.editor-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+/* Editor tabs */
+.editor-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:0;}
+.ed-tab{flex:1;padding:9px 6px;border:none;background:none;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.ed-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.ed-panel{display:none;padding-top:12px;display:flex;flex-direction:column;gap:12px;}
+.ed-panel.hidden{display:none;}
+/* BG editor */
+.bg-sample-tip{font-size:11px;color:var(--text2);line-height:1.6;background:#f8fafc;padding:8px 10px;border-radius:6px;}
+.bg-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:4px;}
+.bg-preset{width:100%;aspect-ratio:1;border-radius:6px;border:2px solid transparent;cursor:pointer;transition:all .15s;}
+.bg-preset:hover,.bg-preset.selected{border-color:var(--accent);transform:scale(1.08);}
+.bg-remove-btn{width:100%;padding:8px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;color:#dc2626;}
+.bg-remove-btn.active-mode{background:#dc2626;color:white;}
+.restore-btn{width:100%;padding:8px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;color:#16a34a;}
+
+/* ═══════════════════════════════
+   土地区割り
+═══════════════════════════════ */
+.page-kukaku{display:flex;flex-direction:column;height:calc(100vh - 56px);padding:0 !important;}
+.kukaku-toolbar{background:white;border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.kukaku-title{font-size:15px;font-weight:800;white-space:nowrap;}
+.kukaku-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1;}
+.kk-btn{display:flex;align-items:center;gap:4px;padding:6px 11px;border:1.5px solid var(--border);background:white;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text2);transition:all .15s;}
+.kk-btn:hover{border-color:var(--accent);color:var(--accent);}
+.kk-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
+.kk-btn.success{background:var(--success);color:white;border-color:var(--success);}
+.kk-sep{width:1px;height:22px;background:var(--border);}
+.kk-scale{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:4px;}
+.kk-scale input{width:50px;padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;}
+.kukaku-body{flex:1;position:relative;background:#f0f4f8;overflow:hidden;}
+#kk-canvas{display:block;width:100%;height:100%;cursor:crosshair;}
+.kk-hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.75);color:white;font-size:12px;padding:6px 16px;border-radius:20px;pointer-events:none;white-space:nowrap;}
+.kukaku-legend{background:white;border-top:1px solid var(--border);padding:10px 18px;min-height:42px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.kk-lot{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;}
+.kk-lot-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+
+/* ═══════════════════════════════
+   AI ASSISTANT
+═══════════════════════════════ */
+.ai-wrap{display:flex;gap:16px;height:calc(100vh - 104px);}
+.ai-chat{flex:1;display:flex;flex-direction:column;background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;}
+.ai-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;}
+.ai-msg{display:flex;gap:10px;max-width:85%;}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.ai-avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;}
+.ai-avatar.bot{background:linear-gradient(135deg,var(--accent),#60a5fa);color:white;}
+.ai-avatar.usr{background:var(--border);color:var(--text2);}
+.ai-bubble{padding:11px 14px;border-radius:12px;font-size:13px;line-height:1.75;}
+.ai-msg.bot .ai-bubble{background:#f8fafc;color:var(--text);}
+.ai-msg.user .ai-bubble{background:var(--accent);color:white;}
+.ai-input-row{padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:8px;}
+.ai-inp{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;outline:none;}
+.ai-inp:focus{border-color:var(--accent);}
+.ai-send{width:38px;height:38px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;color:white;font-size:16px;display:flex;align-items:center;justify-content:center;}
+
+/* ═══════════════════════════════
+   REPORTS
+═══════════════════════════════ */
+.rpt-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.rk{background:white;border-radius:12px;border:1px solid var(--border);padding:18px 20px;}
+.rk-label{font-size:11px;color:var(--text2);font-weight:600;margin-bottom:8px;}
+.rk-val{font-size:24px;font-weight:900;color:var(--text);}
+.rk-ch{font-size:11px;margin-top:4px;font-weight:600;}
+.rk-ch.up{color:var(--success)}.rk-ch.dn{color:var(--danger)}
+.chart-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;}
+.chart-card{background:white;border-radius:12px;border:1px solid var(--border);padding:18px;}
+.chart-card h4{font-size:13px;font-weight:800;margin-bottom:14px;}
+
+/* ═══════════════════════════════
+   CONTRACT
+═══════════════════════════════ */
+.contract-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.contract-type{background:white;border-radius:12px;border:1px solid var(--border);padding:20px;cursor:pointer;transition:all .15s;}
+.contract-type:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(37,99,235,.1);}
+.ct-icon{font-size:28px;margin-bottom:10px;}
+.ct-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.ct-desc{font-size:12px;color:var(--text2);line-height:1.7;}
+
+/* ═══════════════════════════════
+   MISC
+═══════════════════════════════ */
+.empty-state{text-align:center;padding:48px 20px;color:var(--text2);}
+.empty-state .es-icon{font-size:40px;margin-bottom:12px;}
+.empty-state p{font-size:13px;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN PAGE ═══════════════ -->
+<div id="login-page">
+  <div class="login-left">
+    <canvas class="login-net" id="login-net"></canvas>
+    <div class="login-brand">
+      <div class="lb-logo">
+        <div class="lb-hex">
+          <svg viewBox="0 0 24 24"><path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z"/><path d="M9 12L11 14L15 10"/></svg>
+        </div>
+        <div class="lb-name">Smart Labo <span>Works</span></div>
+      </div>
+      <div class="lb-tagline">会社を動かす<span>AI</span>。</div>
+      <div class="lb-sub">社長が本来の仕事に集中できる世界をつくる。<br>メール・顧客管理・契約書・広告まで、<br>AIが24時間あなたの業務を支えます。</div>
+      <div class="lb-feats">
+        <div class="lb-feat"><div class="lb-feat-dot"></div>物件管理・写真加工・広告作成</div>
+        <div class="lb-feat"><div class="lb-feat-dot"></div>契約書・重要事項説明書の自動生成</div>
+        <div class="lb-feat"><div class="lb-feat-dot"></div>土地区割りプランニングツール</div>
+        <div class="lb-feat"><div class="lb-feat-dot"></div>AIコンシェルジュで集客・成約率UP</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-card">
+      <div class="lc-title">ログイン</div>
+      <div class="lc-sub">アカウント情報を入力してください</div>
+      <label class="lc-label">メールアドレス</label>
+      <input class="lc-inp" type="email" id="lc-email" placeholder="example@company.co.jp" value="demo@smartlabo.jp">
+      <label class="lc-label">パスワード</label>
+      <div class="lc-pw-wrap">
+        <input class="lc-inp" type="password" id="lc-pw" placeholder="パスワードを入力" value="demo1234">
+        <button class="lc-eye" onclick="togglePw()" id="lc-eye">👁</button>
+      </div>
+      <div class="lc-forgot">パスワードをお忘れの方</div>
+      <button class="lc-btn" onclick="doLogin()" id="lc-btn">ログイン</button>
+      <div class="lc-demo">
+        <strong>デモアカウント</strong><br>
+        ID: demo@smartlabo.jp<br>
+        PW: demo1234
+      </div>
+      <div class="lc-footer">
+        <div class="lc-ver">Version 1.0 &nbsp;|&nbsp; Powered by Smart Labo</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="app">
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-hex">
+        <svg viewBox="0 0 24 24"><path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z"/><path d="M9 12L11 14L15 10"/></svg>
+      </div>
+      <div class="sb-brand">Smart Labo <span>Works</span></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-item active" onclick="navTo('dashboard',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        ダッシュボード
+      </div>
+      <div class="nav-item" onclick="navTo('ai',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        AIアシスタント
+      </div>
+      <div class="nav-item" onclick="navTo('properties',this)">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        物件管理
+      </div>
+      <div class="nav-item" onclick="navTo('contract',this)">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        契約・書類作成
+      </div>
+      <div class="nav-item" onclick="navTo('ad',this)">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        広告・集客サポート
+      </div>
+      <div class="nav-item" onclick="navTo('kukaku',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+        土地区割りツール
+      </div>
+      <div class="nav-sep"></div>
+      <div class="nav-item" onclick="navTo('report',this)">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        レポート・分析
+      </div>
+      <div class="nav-item" onclick="doLogout()">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        ログアウト
+      </div>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-co">サンプル不動産株式会社</div>
+      <div class="sb-plan">プラン：スタンダード<br>契約：2025/05/01〜2026/04/30</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">ダッシュボード</div>
+      <div class="tb-notif">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <div class="tb-badge">3</div>
+      </div>
+      <div class="tb-user">
+        <div class="tb-av">山</div>
+        <div class="tb-info">
+          <div class="tb-name">山田 太郎</div>
+          <div class="tb-co">サンプル不動産株式会社</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-hd"><h2>ダッシュボード</h2><p>おかえりなさい、山田さん。本日もSmart Labo Worksがサポートします。</p></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-label">今月の問い合わせ</div><div class="kpi-val">88件</div><div class="kpi-ch up">↑ 前月比 +12%</div></div>
+        <div class="kpi"><div class="kpi-label">今月の契約数</div><div class="kpi-val">18件</div><div class="kpi-ch up">↑ 前月比 +20%</div></div>
+        <div class="kpi"><div class="kpi-label">成約率</div><div class="kpi-val">20.5%</div><div class="kpi-ch up">↑ +2.1pt</div></div>
+        <div class="kpi"><div class="kpi-label">今月の売上</div><div class="kpi-val" style="font-size:18px;">¥4,250万</div><div class="kpi-ch up">↑ +18%</div></div>
+      </div>
+      <div class="dash-grid">
+        <div class="card dash-act">
+          <h3>最近のアクティビティ</h3>
+          <div class="act-list">
+            <div class="act-item"><div class="act-dot" style="background:var(--success)"></div><div class="act-body"><div class="act-title">札幌市中央区 3LDKマンション 成約完了</div><div class="act-time">10分前 · 担当：山田</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:var(--accent)"></div><div class="act-body"><div class="act-title">新規物件「北区戸建て」登録</div><div class="act-time">1時間前 · 担当：佐藤</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:var(--warning)"></div><div class="act-body"><div class="act-title">契約書「豊平区マンション」承認待ち</div><div class="act-time">2時間前</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:var(--accent)"></div><div class="act-body"><div class="act-title">AIコンシェルジュ：新規問い合わせ 5件</div><div class="act-time">本日 9:00</div></div></div>
+          </div>
+        </div>
+        <div class="card dash-quick">
+          <h3>クイックアクション</h3>
+          <div class="quick-list">
+            <button class="quick-btn" onclick="navTo('properties',document.querySelector('[onclick*=properties]'))">🏠 物件を追加する</button>
+            <button class="quick-btn" onclick="navTo('contract',document.querySelector('[onclick*=contract]'))">📄 契約書を作成する</button>
+            <button class="quick-btn" onclick="navTo('kukaku',document.querySelector('[onclick*=kukaku]'))">🗺️ 区割り図を作る</button>
+            <button class="quick-btn" onclick="navTo('ai',document.querySelector('[onclick*=ai]'))">💬 AIに相談する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI ASSISTANT -->
+    <div class="page" id="page-ai">
+      <div class="page-hd"><h2>AIアシスタント</h2><p>業務に関することなら何でもAIが答えます</p></div>
+      <div class="ai-wrap">
+        <div class="ai-chat">
+          <div class="ai-msgs" id="ai-msgs">
+            <div class="ai-msg bot">
+              <div class="ai-avatar bot">AI</div>
+              <div class="ai-bubble">こんにちは！Smart Labo Works AIアシスタントです😊<br>物件情報の整理・契約書の下書き・集客のアドバイスなど、何でもお気軽にどうぞ。</div>
+            </div>
+          </div>
+          <div class="ai-input-row">
+            <input class="ai-inp" id="ai-inp" type="text" placeholder="メッセージを入力..." onkeydown="if(event.key==='Enter')sendAI()">
+            <button class="ai-send" onclick="sendAI()">↑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPERTIES -->
+    <div class="page" id="page-properties">
+      <div class="page-hd"><h2>物件管理</h2><p>登録物件の管理・編集・広告連携</p></div>
+      <div class="prop-toolbar">
+        <input class="prop-search" id="prop-search" type="text" placeholder="🔍 物件名・住所・タグで検索..." oninput="buildProps(this.value)">
+        <div class="prop-filters">
+          <button class="flt-btn active" onclick="setStatusFilter('all',this)">すべて</button>
+          <button class="flt-btn" onclick="setStatusFilter('販売中',this)">販売中</button>
+          <button class="flt-btn" onclick="setStatusFilter('交渉中',this)">交渉中</button>
+          <button class="flt-btn" onclick="setStatusFilter('成約済',this)">成約済</button>
+        </div>
+        <span class="prop-count" id="prop-count"></span>
+        <button class="btn-primary" onclick="openPropModal()">＋ 物件を追加</button>
+      </div>
+      <div class="prop-grid" id="prop-grid"></div>
+    </div>
+
+    <!-- CONTRACT -->
+    <div class="page" id="page-contract">
+      <div class="page-hd"><h2>契約・書類作成</h2><p>AIが契約書・重要事項説明書を自動生成</p></div>
+      <div class="contract-grid">
+        <div class="contract-type"><div class="ct-icon">📋</div><div class="ct-name">売買契約書</div><div class="ct-desc">物件情報から売買契約書を自動生成。署名欄・条件・特約を含む正式書式で出力します。</div></div>
+        <div class="contract-type"><div class="ct-icon">📝</div><div class="ct-name">重要事項説明書</div><div class="ct-desc">宅建業法に準拠した重要事項説明書を自動作成。法定記載項目を網羅します。</div></div>
+        <div class="contract-type"><div class="ct-icon">🏠</div><div class="ct-name">賃貸借契約書</div><div class="ct-desc">賃貸物件の賃貸借契約書を自動生成。礼金・敷金・特約条項まで対応します。</div></div>
+        <div class="contract-type"><div class="ct-icon">🔑</div><div class="ct-name">媒介契約書</div><div class="ct-desc">専任・専属専任・一般の3種類の媒介契約書に対応。期間・手数料を自動計算。</div></div>
+      </div>
+    </div>
+
+    <!-- AD -->
+    <div class="page" id="page-ad">
+      <div class="page-hd"><h2>広告・集客サポート</h2><p>SUUMO・AtHome・Instagram用の広告文を自動生成</p></div>
+      <div class="card"><div class="empty-state"><div class="es-icon">📣</div><p>物件管理から物件を選択すると<br>各媒体用の広告文・画像を自動生成します</p></div></div>
+    </div>
+
+    <!-- 土地区割り -->
+    <div class="page page-kukaku" id="page-kukaku">
+      <div class="kukaku-toolbar">
+        <span class="kukaku-title">🗺️ 土地区割りツール</span>
+        <div class="kukaku-tools">
+          <button class="kk-btn active" id="kk-land" onclick="setKkMode('land')">▲ 土地外形を描く</button>
+          <button class="kk-btn" id="kk-div" onclick="setKkMode('div')">╱ 区割りライン</button>
+          <button class="kk-btn" id="kk-sel" onclick="setKkMode('sel')">▶ 選択</button>
+          <div class="kk-sep"></div>
+          <button class="kk-btn" onclick="kkUndo()">↩ 元に戻す</button>
+          <button class="kk-btn" onclick="kkClear()">🗑️ クリア</button>
+          <div class="kk-sep"></div>
+          <span class="kk-scale">縮尺 1cm = <input type="number" id="kk-scale" value="2" min="0.1" step="0.1"> m</span>
+          <button class="kk-btn success" onclick="kkDownload()">📥 PNG保存</button>
+        </div>
+      </div>
+      <div class="kukaku-body">
+        <canvas id="kk-canvas"></canvas>
+        <div class="kk-hint" id="kk-hint">クリックで土地の頂点を追加 ／ 最初の点をクリックで閉じる</div>
+      </div>
+      <div class="kukaku-legend" id="kk-legend"></div>
+    </div>
+
+    <!-- REPORT -->
+    <div class="page" id="page-report">
+      <div class="page-hd"><h2>レポート・分析</h2></div>
+      <div class="rpt-kpi">
+        <div class="rk"><div class="rk-label">今月の問い合わせ数</div><div class="rk-val">88件</div><div class="rk-ch up">↑ 前月比 +12%</div></div>
+        <div class="rk"><div class="rk-label">今月の契約数</div><div class="rk-val">18件</div><div class="rk-ch up">↑ 前月比 +20%</div></div>
+        <div class="rk"><div class="rk-label">成約率</div><div class="rk-val">20.5%</div><div class="rk-ch up">↑ +2.1pt</div></div>
+        <div class="rk"><div class="rk-label">今月の売上</div><div class="rk-val" style="font-size:18px">¥4,250万</div><div class="rk-ch up">↑ +18%</div></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-card"><h4>売上推移（過去12ヶ月）</h4><canvas id="rpt-sales" height="80"></canvas></div>
+        <div class="chart-card"><h4>問い合わせ経路</h4><canvas id="rpt-pie" height="80"></canvas></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- PROP MODAL -->
+<div class="modal-overlay" id="prop-modal">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="modal-title">物件を追加</h3>
+      <button class="modal-close" onclick="closePropModal()">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">物件名 *</label><input class="form-inp" id="fm-name" placeholder="例：札幌市中央区 3LDKマンション"></div>
+      <div class="form-group"><label class="form-label">価格 *</label><input class="form-inp" id="fm-price" placeholder="例：3,280万円"></div>
+    </div>
+    <div class="form-group"><label class="form-label">住所</label><input class="form-inp" id="fm-addr" placeholder="例：北海道札幌市中央区北1条西5丁目"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">間取り</label><input class="form-inp" id="fm-layout" placeholder="例：3LDK"></div>
+      <div class="form-group"><label class="form-label">面積</label><input class="form-inp" id="fm-area" placeholder="例：72.5㎡"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">ステータス</label>
+        <select class="form-inp" id="fm-status">
+          <option>販売中</option><option>交渉中</option><option>成約済</option><option>準備中</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">最寄り駅</label><input class="form-inp" id="fm-station" placeholder="例：大通駅 徒歩5分"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">写真</label>
+      <div class="photo-drop" id="photo-drop" onclick="document.getElementById('photo-file').click()">
+        <input type="file" id="photo-file" accept="image/*" multiple onchange="handlePhotoUpload(this)" style="display:none">
+        <div class="photo-drop-icon">📷</div>
+        <div class="photo-drop-text">クリックまたはドラッグ&amp;ドロップで写真を追加</div>
+      </div>
+      <div class="photo-preview-list" id="photo-preview-list"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-cancel" onclick="closePropModal()">キャンセル</button>
+      <button class="btn-save" onclick="submitProp()">保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO EDITOR MODAL -->
+<div class="modal-overlay" id="editor-modal">
+  <div class="editor-modal">
+    <div class="editor-hd">
+      <h3>📷 写真エディタ</h3>
+      <button class="modal-close" onclick="closePhotoEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <div class="editor-canvas-wrap">
+        <canvas id="edit-canvas"></canvas>
+      </div>
+      <div class="editor-tools">
+        <div class="editor-tabs">
+          <button class="ed-tab active" id="et-adjust" onclick="switchEdTab('adjust',this)">🎨 調整</button>
+          <button class="ed-tab" id="et-bg" onclick="switchEdTab('bg',this)">🖼️ 背景</button>
+        </div>
+        <!-- 調整パネル -->
+        <div id="ed-panel-adjust">
+          <div class="tool-section">明るさ</div>
+          <input class="tool-slider" type="range" id="sl-brightness" min="50" max="200" value="100" oninput="applyEdits()">
+          <div class="tool-val" id="val-brightness">100%</div>
+          <div class="tool-section">コントラスト</div>
+          <input class="tool-slider" type="range" id="sl-contrast" min="50" max="200" value="100" oninput="applyEdits()">
+          <div class="tool-val" id="val-contrast">100%</div>
+          <div class="tool-section">彩度</div>
+          <input class="tool-slider" type="range" id="sl-saturate" min="0" max="200" value="100" oninput="applyEdits()">
+          <div class="tool-val" id="val-saturate">100%</div>
+          <div class="tool-section">ぼかし</div>
+          <input class="tool-slider" type="range" id="sl-blur" min="0" max="5" value="0" step="0.1" oninput="applyEdits()">
+          <div class="tool-val" id="val-blur">0px</div>
+          <div class="tool-section" style="margin-top:4px">回転 / 反転</div>
+          <div class="tool-row">
+            <button class="tool-btn" onclick="rotateImg(-90)">↺ 左90°</button>
+            <button class="tool-btn" onclick="rotateImg(90)">↻ 右90°</button>
+          </div>
+          <div class="tool-row" style="margin-top:6px">
+            <button class="tool-btn" id="flip-h-btn" onclick="toggleFlip('h')">↔ 左右</button>
+            <button class="tool-btn" id="flip-v-btn" onclick="toggleFlip('v')">↕ 上下</button>
+          </div>
+          <div class="tool-section" style="margin-top:8px">テキスト透かし</div>
+          <input class="text-overlay-inp" id="overlay-text" type="text" placeholder="例：株式会社ミライエ" oninput="applyEdits()">
+          <div class="tool-row">
+            <button class="tool-btn" id="ov-bl" onclick="setOverlayPos('bl')">左下</button>
+            <button class="tool-btn" id="ov-br" onclick="setOverlayPos('br')">右下</button>
+            <button class="tool-btn" id="ov-c" onclick="setOverlayPos('c')">中央</button>
+          </div>
+          <div class="tool-section" style="margin-top:8px">プリセット</div>
+          <div class="tool-row">
+            <button class="tool-btn" onclick="applyPreset('vivid')">鮮やか</button>
+            <button class="tool-btn" onclick="applyPreset('warm')">暖かみ</button>
+            <button class="tool-btn" onclick="applyPreset('cool')">クール</button>
+          </div>
+          <div class="tool-row" style="margin-top:6px">
+            <button class="tool-btn" onclick="applyPreset('reset')">リセット</button>
+          </div>
+        </div>
+        <!-- 背景パネル -->
+        <div id="ed-panel-bg" class="hidden">
+          <div class="tool-section">背景を消す</div>
+          <div class="bg-sample-tip">① ボタンを押す<br>② 消したい背景色をクリック<br>③ 許容値で調整</div>
+          <button class="bg-remove-btn" id="bg-remove-btn" onclick="toggleBgRemoveMode()">🖱️ 背景色をクリックして除去</button>
+          <div class="tool-section">許容値</div>
+          <input class="tool-slider" type="range" id="sl-tolerance" min="5" max="120" value="40" oninput="document.getElementById('val-tolerance').textContent=this.value">
+          <div class="tool-val" id="val-tolerance">40</div>
+          <button class="restore-btn" onclick="restoreBg()">↩ 元に戻す</button>
+          <div class="tool-section" style="margin-top:4px">背景を追加</div>
+          <div class="bg-presets" id="bg-presets"></div>
+          <div class="tool-section" style="margin-top:4px">カスタムカラー</div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input type="color" id="bg-color" value="#ffffff" style="width:44px;height:32px;border:none;border-radius:6px;cursor:pointer">
+            <button class="tool-btn" style="flex:1" onclick="applyCustomBg()">適用</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="editor-footer">
+      <button class="btn-cancel" onclick="downloadPhoto()">📥 ダウンロード</button>
+      <button class="btn-save" onclick="saveEditedPhoto()">この写真を使う</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════ LOGIN ═══════════════
+function togglePw(){
+  const i=document.getElementById('lc-pw');
+  i.type=i.type==='password'?'text':'password';
+}
+function doLogin(){
+  const btn=document.getElementById('lc-btn');
+  btn.textContent='ログイン中...'; btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('login-page').classList.add('hide');
+    document.getElementById('app').classList.add('on');
+    setTimeout(()=>document.getElementById('login-page').style.display='none',500);
+  },800);
+}
+function doLogout(){
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('login-page').style.display='flex';
+  document.getElementById('login-page').classList.remove('hide');
+  document.getElementById('lc-btn').textContent='ログイン';
+  document.getElementById('lc-btn').disabled=false;
+}
+
+// Login page network animation
+(function(){
+  const canvas=document.getElementById('login-net');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  let pts=[];
+  function resize(){
+    canvas.width=canvas.parentElement.offsetWidth;
+    canvas.height=canvas.parentElement.offsetHeight;
+  }
+  function init(){
+    pts=[];
+    for(let i=0;i<60;i++) pts.push({
+      x:Math.random()*canvas.width, y:Math.random()*canvas.height,
+      vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>canvas.width) p.vx*=-1;
+      if(p.y<0||p.y>canvas.height) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,1.5,0,Math.PI*2);
+      ctx.fillStyle='rgba(96,165,250,0.4)'; ctx.fill();
+    });
+    pts.forEach((a,i)=>pts.forEach((b,j)=>{
+      if(j<=i) return;
+      const d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<120){
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(96,165,250,${0.15*(1-d/120)})`; ctx.lineWidth=.8; ctx.stroke();
+      }
+    }));
+    requestAnimationFrame(draw);
+  }
+  resize(); init(); draw();
+  window.addEventListener('resize',()=>{resize();init();});
+})();
+
+// ═══════════════ NAV ═══════════════
+const PAGE_TITLES={dashboard:'ダッシュボード',ai:'AIアシスタント',properties:'物件管理',contract:'契約・書類作成',ad:'広告・集客サポート',kukaku:'土地区割りツール',report:'レポート・分析'};
+function navTo(name, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('topbar-title').textContent=PAGE_TITLES[name]||name;
+  if(name==='kukaku') requestAnimationFrame(()=>requestAnimationFrame(initKk));
+  if(name==='report') setTimeout(drawCharts,100);
+}
+
+// ═══════════════ PROPERTY DATA ═══════════════
+const STORAGE_KEY='slw_v2';
+const PDATA_DEFAULT=[
+  {id:1,name:'札幌市中央区 3LDKマンション',price:'3,280万円',addr:'北海道札幌市中央区北1条西5丁目',layout:'3LDK',area:'72.5㎡',station:'大通駅 徒歩5分',status:'販売中',photo:null,tags:['新築','駐車場付']},
+  {id:2,name:'豊平区 戸建て住宅',price:'4,850万円',addr:'北海道札幌市豊平区月寒東1条',layout:'4LDK',area:'120㎡',station:'月寒中央駅 徒歩8分',status:'交渉中',photo:null,tags:['築3年','庭付き']},
+  {id:3,name:'白石区 2LDKマンション',price:'2,180万円',addr:'北海道札幌市白石区菊水元町',layout:'2LDK',area:'55㎡',station:'菊水駅 徒歩3分',status:'販売中',photo:null,tags:['角部屋','南向き']},
+  {id:4,name:'渋谷区 1LDKマンション',price:'6,500万円',addr:'東京都渋谷区恵比寿1丁目',layout:'1LDK',area:'42㎡',station:'恵比寿駅 徒歩3分',status:'成約済',photo:null,tags:['都心','新築']},
+  {id:5,name:'渋谷区 3LDKマンション',price:'12,800万円',addr:'東京都渋谷区広尾2丁目',layout:'3LDK',area:'95㎡',station:'広尾駅 徒歩5分',status:'販売中',photo:null,tags:['高級','眺望良好']},
+  {id:6,name:'北区 平屋住宅',price:'2,950万円',addr:'北海道札幌市北区新琴似3条',layout:'3LDK',area:'98㎡',station:'新琴似駅 徒歩10分',status:'準備中',photo:null,tags:['平屋','リフォーム済']},
+];
+const _saved=(()=>{try{const s=localStorage.getItem(STORAGE_KEY);return s?JSON.parse(s):null;}catch(e){return null;}})();
+const pdata=(_saved&&_saved.length)?_saved:[...PDATA_DEFAULT];
+let nextId=pdata.reduce((m,p)=>Math.max(m,p.id),0)+1;
+function savePdata(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(pdata));}catch(e){}}
+
+let currentStatusFilter='all';
+const STATUS_CLASS={販売中:'st-sale',交渉中:'st-nego',成約済:'st-done',準備中:'st-prep'};
+const STATUS_LABELS=['販売中','交渉中','成約済','準備中'];
+
+function setStatusFilter(f, btn){
+  currentStatusFilter=f;
+  document.querySelectorAll('.flt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildProps(document.getElementById('prop-search').value);
+}
+
+function buildProps(query=''){
+  const grid=document.getElementById('prop-grid');
+  const filtered=pdata.filter(p=>{
+    const matchSt=currentStatusFilter==='all'||p.status===currentStatusFilter;
+    const q=query.toLowerCase();
+    const matchQ=!q||(p.name+p.addr+(p.tags||[]).join('')+p.price).toLowerCase().includes(q);
+    return matchSt&&matchQ;
+  });
+  document.getElementById('prop-count').textContent=`${filtered.length} / ${pdata.length}件`;
+  if(!filtered.length){
+    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">🔍</div><p>該当する物件が見つかりませんでした</p></div>';
+    return;
+  }
+  grid.innerHTML=filtered.map(p=>{
+    const sc=STATUS_CLASS[p.status]||'st-prep';
+    const imgEl=p.photo?`<img src="${p.photo}" alt="">`:``;
+    const bg=p.photo?'':`background:linear-gradient(135deg,${['#e0f2fe,#bfdbfe','#dcfce7,#bbf7d0','#fef9c3,#fde68a','#fce7f3,#fbcfe8'][p.id%4]})`;
+    return `<div class="prop-card">
+      <div class="prop-img" style="${bg}">${imgEl}
+        <div class="prop-status-badge ${sc}" onclick="openStatusDD(event,${p.id})">${p.status}</div>
+        <div class="prop-actions">
+          <button class="prop-act-btn prop-edit-btn" onclick="openPropModal(${p.id})">✏️</button>
+          <button class="prop-act-btn prop-del-btn" onclick="deleteProp(${p.id})">✕</button>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-name">${p.name}</div>
+        <div class="prop-addr">${p.addr}</div>
+        <div class="prop-price">${p.price}</div>
+        <div class="prop-meta">
+          ${p.layout?`<span class="prop-tag">${p.layout}</span>`:''}
+          ${p.area?`<span class="prop-tag">${p.area}</span>`:''}
+          ${p.station?`<span class="prop-tag">${p.station}</span>`:''}
+          ${(p.tags||[]).map(t=>`<span class="prop-tag">${t}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openStatusDD(e, id){
+  e.stopPropagation();
+  document.querySelectorAll('.status-dd').forEach(d=>d.remove());
+  const dd=document.createElement('div'); dd.className='status-dd';
+  dd.innerHTML=STATUS_LABELS.map(s=>`<div class="status-dd-item" onclick="setStatus(${id},'${s}')">${s}</div>`).join('');
+  e.target.parentElement.style.position='relative';
+  e.target.parentElement.appendChild(dd);
+  setTimeout(()=>document.addEventListener('click',()=>dd.remove(),{once:true}),10);
+}
+function setStatus(id, s){
+  const p=pdata.find(x=>x.id===id); if(p){p.status=s;savePdata();buildProps(document.getElementById('prop-search').value);}
+}
+function deleteProp(id){
+  if(!confirm('この物件を削除しますか？')) return;
+  const i=pdata.findIndex(p=>p.id===id); if(i>=0){pdata.splice(i,1);savePdata();buildProps(document.getElementById('prop-search').value);}
+}
+
+let editingPropId=null;
+let currentPhotoDataURL=null;
+let editingPhotoIdx=null;
+let propPhotos=[];
+
+function openPropModal(id=null){
+  editingPropId=id;
+  propPhotos=[];
+  document.getElementById('photo-preview-list').innerHTML='';
+  document.getElementById('modal-title').textContent=id?'物件を編集':'物件を追加';
+  const fields=['name','price','addr','layout','area','station','status'];
+  if(id){
+    const p=pdata.find(x=>x.id===id)||{};
+    fields.forEach(f=>{ const el=document.getElementById('fm-'+f); if(el)el.value=p[f]||''; });
+    if(p.photo){propPhotos=[p.photo];renderPhotoPreview();}
+  } else {
+    fields.forEach(f=>{ const el=document.getElementById('fm-'+f); if(el)el.value=''; });
+  }
+  document.getElementById('prop-modal').classList.add('open');
+}
+function closePropModal(){ document.getElementById('prop-modal').classList.remove('open'); }
+
+function handlePhotoUpload(input){
+  Array.from(input.files).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=e=>{propPhotos.push(e.target.result);renderPhotoPreview();};
+    reader.readAsDataURL(file);
+  });
+}
+function renderPhotoPreview(){
+  const list=document.getElementById('photo-preview-list');
+  list.innerHTML=propPhotos.map((src,i)=>`<div class="photo-prev">
+    <img src="${src}">
+    <button class="photo-prev-rm" onclick="removePhoto(${i})">✕</button>
+    <button class="photo-prev-edit" onclick="openPhotoEditor(${i})">✏️</button>
+  </div>`).join('');
+}
+function removePhoto(i){ propPhotos.splice(i,1); renderPhotoPreview(); }
+
+function submitProp(){
+  const name=document.getElementById('fm-name').value.trim();
+  if(!name){alert('物件名を入力してください');return;}
+  const data={
+    id:editingPropId||nextId++,
+    name,price:document.getElementById('fm-price').value,
+    addr:document.getElementById('fm-addr').value,
+    layout:document.getElementById('fm-layout').value,
+    area:document.getElementById('fm-area').value,
+    station:document.getElementById('fm-station').value,
+    status:document.getElementById('fm-status').value,
+    photo:propPhotos[0]||null,tags:[]
+  };
+  if(editingPropId){
+    const i=pdata.findIndex(p=>p.id===editingPropId);
+    if(i>=0) pdata[i]=data;
+  } else { pdata.unshift(data); }
+  savePdata(); closePropModal(); buildProps();
+}
+
+// ═══════════════ PHOTO EDITOR ═══════════════
+let editImg=new Image(), editRotation=0, flipH=false, flipV=false, overlayPos='br';
+let bgRemovedPixels=null, currentBg=null, bgRemoveMode=false;
+
+const BG_PRESETS=[
+  {label:'白',bg:'#ffffff'},{label:'グレー',bg:'#f1f5f9'},{label:'黒',bg:'#0f172a'},
+  {label:'空ブルー',bg:'linear-gradient(180deg,#bfdbfe,#93c5fd)'},
+  {label:'夕焼け',bg:'linear-gradient(180deg,#fde68a,#fb923c,#dc2626)'},
+  {label:'グリーン',bg:'linear-gradient(135deg,#d1fae5,#6ee7b7)'},
+  {label:'ネイビー',bg:'linear-gradient(135deg,#1e3a5f,#2563eb)'},
+  {label:'ゴールド',bg:'linear-gradient(135deg,#fef3c7,#d97706)'},
+];
+
+function initBgPresets(){
+  const wrap=document.getElementById('bg-presets');
+  if(!wrap) return;
+  wrap.innerHTML=BG_PRESETS.map((p,i)=>{
+    const s=p.bg.startsWith('#')?`background:${p.bg};border:1px solid #e2e8f0`:`background:${p.bg}`;
+    return `<div class="bg-preset" style="${s}" title="${p.label}" onclick="applyBgPreset(${i})"></div>`;
+  }).join('');
+}
+initBgPresets();
+
+function openPhotoEditor(idx){
+  editingPhotoIdx=idx;
+  currentPhotoDataURL=propPhotos[idx];
+  bgRemovedPixels=null; currentBg=null; bgRemoveMode=false;
+  editRotation=0; flipH=false; flipV=false;
+  ['sl-brightness','sl-contrast','sl-saturate'].forEach(id=>document.getElementById(id).value=100);
+  document.getElementById('sl-blur').value=0;
+  document.getElementById('overlay-text').value='';
+  document.getElementById('editor-modal').classList.add('open');
+  editImg=new Image();
+  editImg.onload=()=>{
+    const c=document.getElementById('edit-canvas');
+    c.width=editImg.naturalWidth; c.height=editImg.naturalHeight;
+    applyEdits();
+  };
+  editImg.src=currentPhotoDataURL;
+}
+function closePhotoEditor(){ document.getElementById('editor-modal').classList.remove('open'); }
+
+function switchEdTab(name, btn){
+  document.querySelectorAll('.ed-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ed-panel-adjust').classList.toggle('hidden', name!=='adjust');
+  document.getElementById('ed-panel-bg').classList.toggle('hidden', name!=='bg');
+}
+
+function applyEdits(){
+  const c=document.getElementById('edit-canvas'), ctx=c.getContext('2d');
+  const b=document.getElementById('sl-brightness').value;
+  const co=document.getElementById('sl-contrast').value;
+  const s=document.getElementById('sl-saturate').value;
+  const bl=document.getElementById('sl-blur').value;
+  document.getElementById('val-brightness').textContent=b+'%';
+  document.getElementById('val-contrast').textContent=co+'%';
+  document.getElementById('val-saturate').textContent=s+'%';
+  document.getElementById('val-blur').textContent=bl+'px';
+  ctx.save();
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.filter=`brightness(${b}%) contrast(${co}%) saturate(${s}%) blur(${bl}px)`;
+  ctx.translate(c.width/2,c.height/2);
+  ctx.rotate(editRotation*Math.PI/180);
+  ctx.scale(flipH?-1:1,flipV?-1:1);
+  ctx.drawImage(editImg,-editImg.naturalWidth/2,-editImg.naturalHeight/2);
+  ctx.restore();
+  ctx.filter='none';
+  const ovt=document.getElementById('overlay-text').value;
+  if(ovt){
+    const fs=Math.max(16,c.width/28);
+    ctx.font=`bold ${fs}px sans-serif`;
+    ctx.fillStyle='rgba(255,255,255,0.75)';
+    ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=2;
+    const x=overlayPos.includes('r')?c.width-16:overlayPos==='c'?c.width/2:16;
+    const y=overlayPos.includes('b')?c.height-20:overlayPos==='c'?c.height/2:30;
+    ctx.textAlign=overlayPos.includes('r')?'right':overlayPos==='c'?'center':'left';
+    ctx.strokeText(ovt,x,y); ctx.fillText(ovt,x,y);
+  }
+  if(bgRemovedPixels&&currentBg) applyBgComposite();
+}
+function rotateImg(deg){ editRotation=(editRotation+deg+360)%360; applyEdits(); }
+function toggleFlip(axis){
+  if(axis==='h'){flipH=!flipH;document.getElementById('flip-h-btn').classList.toggle('on',flipH);}
+  else{flipV=!flipV;document.getElementById('flip-v-btn').classList.toggle('on',flipV);}
+  applyEdits();
+}
+function setOverlayPos(pos){
+  overlayPos=pos;
+  ['bl','br','c'].forEach(p=>document.getElementById('ov-'+p).classList.toggle('on',p===pos));
+  applyEdits();
+}
+function applyPreset(p){
+  const vals={vivid:{b:110,c:120,s:150,bl:0},warm:{b:105,c:105,s:90,bl:0},cool:{b:100,c:110,s:80,bl:0},reset:{b:100,c:100,s:100,bl:0}};
+  const v=vals[p]||vals.reset;
+  document.getElementById('sl-brightness').value=v.b;
+  document.getElementById('sl-contrast').value=v.c;
+  document.getElementById('sl-saturate').value=v.s;
+  document.getElementById('sl-blur').value=v.bl;
+  applyEdits();
+}
+function toggleBgRemoveMode(){
+  bgRemoveMode=!bgRemoveMode;
+  const btn=document.getElementById('bg-remove-btn');
+  btn.classList.toggle('active-mode',bgRemoveMode);
+  btn.textContent=bgRemoveMode?'✅ 背景をクリック':'🖱️ 背景色をクリックして除去';
+  document.getElementById('edit-canvas').style.cursor=bgRemoveMode?'crosshair':'default';
+}
+document.getElementById('edit-canvas').addEventListener('click',function(e){
+  if(!bgRemoveMode) return;
+  const r=this.getBoundingClientRect();
+  const x=Math.floor((e.clientX-r.left)*(this.width/r.width));
+  const y=Math.floor((e.clientY-r.top)*(this.height/r.height));
+  removeBgByColor(x,y);
+  toggleBgRemoveMode();
+});
+function removeBgByColor(sx,sy){
+  const c=document.getElementById('edit-canvas'), ctx=c.getContext('2d');
+  const tol=parseInt(document.getElementById('sl-tolerance').value);
+  const img=ctx.getImageData(0,0,c.width,c.height), d=img.data;
+  const idx=(sy*c.width+sx)*4;
+  const tr=d[idx],tg=d[idx+1],tb=d[idx+2];
+  const vis=new Uint8Array(c.width*c.height);
+  const stack=[[sx,sy]];
+  while(stack.length){
+    const [x,y]=stack.pop();
+    if(x<0||x>=c.width||y<0||y>=c.height) continue;
+    const i=y*c.width+x; if(vis[i]) continue; vis[i]=1;
+    const pi=i*4;
+    const dist=Math.sqrt((d[pi]-tr)**2+(d[pi+1]-tg)**2+(d[pi+2]-tb)**2);
+    if(dist>tol) continue;
+    d[pi+3]=0;
+    stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
+  }
+  ctx.putImageData(img,0,0);
+  bgRemovedPixels=ctx.getImageData(0,0,c.width,c.height);
+  if(!currentBg){currentBg='#ffffff';} applyBgComposite();
+}
+function applyBgComposite(){
+  const c=document.getElementById('edit-canvas'),ctx=c.getContext('2d');
+  const off=document.createElement('canvas'); off.width=c.width; off.height=c.height;
+  const oc=off.getContext('2d');
+  if(currentBg&&!currentBg.includes('gradient')){
+    oc.fillStyle=currentBg; oc.fillRect(0,0,c.width,c.height);
+  } else if(currentBg) {
+    const stops=currentBg.match(/#[0-9a-fA-F]{3,6}/g)||['#ffffff'];
+    const g=oc.createLinearGradient(0,0,0,c.height);
+    stops.forEach((s,i)=>g.addColorStop(i/(stops.length-1),s));
+    oc.fillStyle=g; oc.fillRect(0,0,c.width,c.height);
+  }
+  oc.putImageData(bgRemovedPixels,0,0);
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.drawImage(off,0,0);
+}
+function restoreBg(){ bgRemovedPixels=null; currentBg=null; document.querySelectorAll('.bg-preset').forEach(e=>e.classList.remove('selected')); applyEdits(); }
+function applyBgPreset(i){ document.querySelectorAll('.bg-preset').forEach((e,j)=>e.classList.toggle('selected',i===j)); currentBg=BG_PRESETS[i].bg; applyEdits(); }
+function applyCustomBg(){ currentBg=document.getElementById('bg-color').value; document.querySelectorAll('.bg-preset').forEach(e=>e.classList.remove('selected')); applyEdits(); }
+
+function saveEditedPhoto(){
+  const dataURL=document.getElementById('edit-canvas').toDataURL('image/jpeg',0.95);
+  propPhotos[editingPhotoIdx]=dataURL;
+  renderPhotoPreview(); closePhotoEditor();
+}
+function downloadPhoto(){
+  const a=document.createElement('a'); a.download='photo.jpg';
+  a.href=document.getElementById('edit-canvas').toDataURL('image/jpeg',0.95); a.click();
+}
+
+// ═══════════════ 土地区割りツール ═══════════════
+const KK_COLORS=['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#84cc16'];
+let kkCanvas,kkCtx,kkMode='land',landPts=[],landClosed=false,divLines=[],activeLine=null,kkHistory=[],lots=[],kkHover=null;
+
+function initKk(){
+  kkCanvas=document.getElementById('kk-canvas');
+  if(!kkCanvas) return;
+  const b=kkCanvas.parentElement.getBoundingClientRect();
+  kkCanvas.width=b.width||800; kkCanvas.height=b.height||500;
+  kkCtx=kkCanvas.getContext('2d');
+  kkCanvas.onclick=kkClick; kkCanvas.onmousemove=kkMove; kkCanvas.ondblclick=()=>{if(activeLine){activeLine=null;kkDraw();}};
+  kkDraw();
+}
+function kkPos(e){ const r=kkCanvas.getBoundingClientRect(); return{x:e.clientX-r.left,y:e.clientY-r.top}; }
+function kkDist(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
+function kkClick(e){
+  const p=kkPos(e);
+  if(kkMode==='land'){
+    if(landClosed) return;
+    if(landPts.length>2&&kkDist(p,landPts[0])<12){landClosed=true;kkSave();kkCalcLots();kkUpdateHint();kkDraw();return;}
+    landPts.push(p); kkSave(); kkDraw();
+  } else if(kkMode==='div'){
+    if(!landClosed){kkUpdateHint('先に土地外形を閉じてください');return;}
+    if(!activeLine){activeLine={pts:[p]};}
+    else{activeLine.pts.push(p);divLines.push({...activeLine});activeLine=null;kkSave();kkCalcLots();kkDraw();}
+  }
+}
+function kkMove(e){ kkHover=kkPos(e); kkDraw(); }
+function kkSave(){ kkHistory.push({landPts:JSON.parse(JSON.stringify(landPts)),landClosed,divLines:JSON.parse(JSON.stringify(divLines))}); if(kkHistory.length>50)kkHistory.shift(); }
+function kkUndo(){
+  if(kkHistory.length<2){kkHistory=[];landPts=[];landClosed=false;divLines=[];activeLine=null;lots=[];kkDraw();kkRenderLegend();return;}
+  kkHistory.pop(); const s=kkHistory[kkHistory.length-1];
+  landPts=JSON.parse(JSON.stringify(s.landPts)); landClosed=s.landClosed; divLines=JSON.parse(JSON.stringify(s.divLines)); activeLine=null;
+  kkCalcLots(); kkDraw();
+}
+function kkClear(){ if(!confirm('クリアしますか？'))return; landPts=[];landClosed=false;divLines=[];activeLine=null;lots=[];kkHistory=[];kkDraw();kkRenderLegend();kkUpdateHint(); }
+function setKkMode(m){
+  kkMode=m; activeLine=null;
+  ['land','div','sel'].forEach(n=>document.getElementById('kk-'+n)?.classList.toggle('active',n===m));
+  kkUpdateHint(); kkDraw();
+}
+function kkUpdateHint(msg){
+  const el=document.getElementById('kk-hint'); if(!el) return;
+  if(msg){el.textContent=msg;return;}
+  if(kkMode==='land') el.textContent=landClosed?'土地外形：確定済み ✅ → 区割りラインを引くモードへ':landPts.length===0?'クリックで土地の頂点を追加 ／ 最初の点をクリックで閉じる':`${landPts.length}点 追加済み ／ 最初の点をクリックで閉じる`;
+  else if(kkMode==='div') el.textContent=activeLine?'2点目をクリックでライン確定':'クリックで区割りラインの始点を置く';
+  else el.textContent='選択・移動モード';
+}
+function kkPolyArea(pts){ let a=0,n=pts.length; for(let i=0,j=n-1;i<n;j=i++) a+=(pts[j].x+pts[i].x)*(pts[j].y-pts[i].y); return Math.abs(a/2); }
+function kkPxToM2(px){ const s=parseFloat(document.getElementById('kk-scale')?.value||2); return px/(37.8/s)**2; }
+function kkCalcLots(){
+  lots=[]; if(!landClosed||landPts.length<3){kkRenderLegend();return;}
+  if(divLines.length===0){ lots=[{pts:landPts,area:kkPxToM2(kkPolyArea(landPts)),color:KK_COLORS[0],label:'区画①'}]; kkRenderLegend(); return; }
+  let polys=[landPts.map(p=>({...p}))];
+  divLines.forEach(line=>{
+    const a=line.pts[0],b=line.pts[1];
+    const newP=[];
+    polys.forEach(poly=>{ const s=kkSplitPoly(poly,a,b); newP.push(...s); });
+    polys=newP;
+  });
+  lots=polys.map((pts,i)=>({pts,area:kkPxToM2(kkPolyArea(pts)),color:KK_COLORS[i%KK_COLORS.length],label:'区画'+'①②③④⑤⑥⑦⑧'[i]}));
+  kkRenderLegend();
+}
+function kkLineIntersect(p1,p2,p3,p4){
+  const d1x=p2.x-p1.x,d1y=p2.y-p1.y,d2x=p4.x-p3.x,d2y=p4.y-p3.y;
+  const dn=d1x*d2y-d1y*d2x; if(Math.abs(dn)<1e-10) return null;
+  const t=((p3.x-p1.x)*d2y-(p3.y-p1.y)*d2x)/dn;
+  const u=((p3.x-p1.x)*d1y-(p3.y-p1.y)*d1x)/dn;
+  if(t<0||t>1||u<0||u>1) return null;
+  return{x:p1.x+t*d1x,y:p1.y+t*d1y,edge:0,t};
+}
+function kkSplitPoly(poly,a,b){
+  const cuts=[];
+  for(let i=0;i<poly.length;i++){
+    const ip=kkLineIntersect(a,b,poly[i],poly[(i+1)%poly.length]);
+    if(ip) cuts.push({...ip,edge:i});
+  }
+  if(cuts.length<2) return [poly];
+  const [c1,c2]=cuts.sort((a,b)=>a.edge-b.edge);
+  const p1=[],p2=[];
+  for(let i=0;i<=c1.edge;i++) p1.push(poly[i]);
+  p1.push(c1); p1.push(c2);
+  for(let i=c2.edge+1;i<poly.length;i++) p1.push(poly[i]);
+  p2.push(c1);
+  for(let i=c1.edge+1;i<=c2.edge;i++) p2.push(poly[i]);
+  p2.push(c2);
+  return [p1,p2].filter(p=>p.length>=3);
+}
+function kkRenderLegend(){
+  const el=document.getElementById('kk-legend'); if(!el) return;
+  el.innerHTML=lots.length?lots.map(l=>`<div class="kk-lot"><div class="kk-lot-dot" style="background:${l.color}"></div>${l.label}：${l.area.toFixed(1)}㎡（${(l.area/3.306).toFixed(1)}坪）</div>`).join(''):'';
+}
+function kkDraw(){
+  if(!kkCtx||!kkCanvas) return;
+  const W=kkCanvas.width,H=kkCanvas.height;
+  kkCtx.clearRect(0,0,W,H);
+  kkCtx.strokeStyle='rgba(148,163,184,0.25)'; kkCtx.lineWidth=1;
+  for(let x=0;x<W;x+=40){kkCtx.beginPath();kkCtx.moveTo(x,0);kkCtx.lineTo(x,H);kkCtx.stroke();}
+  for(let y=0;y<H;y+=40){kkCtx.beginPath();kkCtx.moveTo(0,y);kkCtx.lineTo(W,y);kkCtx.stroke();}
+  lots.forEach(l=>{
+    kkCtx.beginPath(); l.pts.forEach((p,i)=>i?kkCtx.lineTo(p.x,p.y):kkCtx.moveTo(p.x,p.y)); kkCtx.closePath();
+    kkCtx.fillStyle=l.color+'33'; kkCtx.fill();
+  });
+  if(landPts.length){
+    kkCtx.beginPath(); landPts.forEach((p,i)=>i?kkCtx.lineTo(p.x,p.y):kkCtx.moveTo(p.x,p.y));
+    if(landClosed) kkCtx.closePath();
+    kkCtx.strokeStyle='#1e3a5f'; kkCtx.lineWidth=2.5; kkCtx.stroke();
+    if(landClosed){kkCtx.fillStyle='rgba(37,99,235,0.07)';kkCtx.fill();}
+    landPts.forEach((p,i)=>{
+      kkCtx.beginPath(); kkCtx.arc(p.x,p.y,5,0,Math.PI*2);
+      kkCtx.fillStyle=i===0&&!landClosed?'#ef4444':'#2563eb'; kkCtx.fill();
+    });
+    if(!landClosed&&kkMode==='land'&&kkHover&&landPts.length>0){
+      const last=landPts[landPts.length-1];
+      kkCtx.beginPath(); kkCtx.moveTo(last.x,last.y); kkCtx.lineTo(kkHover.x,kkHover.y);
+      kkCtx.strokeStyle='rgba(37,99,235,0.35)'; kkCtx.lineWidth=1.5; kkCtx.setLineDash([5,5]); kkCtx.stroke(); kkCtx.setLineDash([]);
+    }
+    if(!landClosed&&kkMode==='land'&&kkHover&&landPts.length>2&&kkDist(kkHover,landPts[0])<12){
+      kkCtx.beginPath(); kkCtx.arc(landPts[0].x,landPts[0].y,10,0,Math.PI*2);
+      kkCtx.strokeStyle='#ef4444'; kkCtx.lineWidth=2; kkCtx.stroke();
+    }
+  }
+  divLines.forEach(l=>{
+    kkCtx.beginPath(); kkCtx.moveTo(l.pts[0].x,l.pts[0].y); kkCtx.lineTo(l.pts[1].x,l.pts[1].y);
+    kkCtx.strokeStyle='#dc2626'; kkCtx.lineWidth=2; kkCtx.setLineDash([6,3]); kkCtx.stroke(); kkCtx.setLineDash([]);
+  });
+  if(activeLine&&kkHover){
+    kkCtx.beginPath(); kkCtx.moveTo(activeLine.pts[0].x,activeLine.pts[0].y); kkCtx.lineTo(kkHover.x,kkHover.y);
+    kkCtx.strokeStyle='rgba(220,38,38,0.5)'; kkCtx.lineWidth=1.5; kkCtx.setLineDash([5,5]); kkCtx.stroke(); kkCtx.setLineDash([]);
+  }
+  lots.forEach(l=>{
+    const cx=l.pts.reduce((s,p)=>s+p.x,0)/l.pts.length;
+    const cy=l.pts.reduce((s,p)=>s+p.y,0)/l.pts.length;
+    kkCtx.font='bold 13px sans-serif'; kkCtx.textAlign='center'; kkCtx.textBaseline='middle';
+    kkCtx.fillStyle='rgba(255,255,255,0.9)'; kkCtx.fillRect(cx-44,cy-22,88,42);
+    kkCtx.fillStyle=l.color; kkCtx.fillText(l.label,cx,cy-8);
+    kkCtx.font='11px sans-serif'; kkCtx.fillStyle='#334155'; kkCtx.fillText(`${l.area.toFixed(1)}㎡`,cx,cy+8);
+  });
+}
+function kkDownload(){ const a=document.createElement('a');a.download='kukaku.png';a.href=kkCanvas.toDataURL();a.click(); }
+
+// ═══════════════ AI ASSISTANT ═══════════════
+const AI_RESPONSES=[
+  '不動産業界では、AIを活用した物件管理の効率化が急速に進んでいます。',
+  '御社の物件データを分析すると、価格帯3,000〜5,000万円の物件が最も問い合わせが多い傾向にあります。',
+  'SUUMO・AtHomeへの掲載最適化には、写真の枚数（8枚以上）と間取り図が特に重要です。',
+  '契約書の自動生成機能では、物件情報を入力するだけで法定書式に準拠した書類を作成できます。',
+  'AIコンシェルジュの設置で、営業時間外の問い合わせにも対応できます。',
+];
+let aiIdx=0;
+function sendAI(){
+  const inp=document.getElementById('ai-inp');
+  const msgs=document.getElementById('ai-msgs');
+  const text=inp.value.trim(); if(!text) return;
+  inp.value='';
+  msgs.innerHTML+=`<div class="ai-msg user"><div class="ai-avatar usr">私</div><div class="ai-bubble">${text}</div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  setTimeout(()=>{
+    msgs.innerHTML+=`<div class="ai-msg bot"><div class="ai-avatar bot">AI</div><div class="ai-bubble">${AI_RESPONSES[aiIdx%AI_RESPONSES.length]}</div></div>`;
+    aiIdx++; msgs.scrollTop=msgs.scrollHeight;
+  },800);
+}
+
+// ═══════════════ REPORTS ═══════════════
+function drawCharts(){
+  const sc=document.getElementById('rpt-sales');
+  if(!sc||sc.dataset.drawn) return; sc.dataset.drawn=1;
+  const ctx=sc.getContext('2d');
+  const data=[310,280,350,420,390,460,510,480,550,620,580,680];
+  const W=sc.parentElement.offsetWidth-40||400; sc.width=W; sc.height=120;
+  const max=Math.max(...data), step=W/11;
+  ctx.strokeStyle='#2563eb'; ctx.lineWidth=2; ctx.beginPath();
+  data.forEach((v,i)=>{ const x=i*step,y=sc.height-10-(v/max*(sc.height-20)); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+  ctx.stroke();
+  ctx.fillStyle='rgba(37,99,235,0.1)'; ctx.lineTo((data.length-1)*step,sc.height); ctx.lineTo(0,sc.height); ctx.closePath(); ctx.fill();
+}
+
+// ═══════════════ INIT ═══════════════
+buildProps();
+</script>
+</body>
+</html>
