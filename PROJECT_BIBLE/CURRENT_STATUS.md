@@ -9,7 +9,7 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：3.3
+Project Bible Version：3.4
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：1.0 Release Candidate(Company Brain拡張済み。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
@@ -23,7 +23,7 @@ Current Task：Dashboard v0.5完成・GitHub Pages公開済み
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 3.3 |
+| Project Bible Version | 3.4 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版。**さらにCompany BrainをSmart Labo Works最大の差別化要素として全面拡張済み**(キャッチコピー・9項目の知識ソース・3利用シナリオ・ガラスUI・専用アイコン) |
@@ -120,6 +120,8 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 
 **「Company OS」という新しい用語について:** 本章で初めて登場した表現であり、既存の「会社を動かすAI。」(ブランドコピー)や「AI経営プラットフォーム」と矛盾するものではなく、Dashboard・Smart Labo Worksの性格を一言で表す補完的な位置づけとして扱う。[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) の正式なコピー階層(ブランドコピー/サービスコピー/説明コピー)自体は今回変更していない。CEOより将来的に正式なブランドコピー階層への統合指示があれば、その時点でBrand Identityを更新する。
 
+**「CEOレビュー原則」の追加(2026-07-05):** CEOより、大きな仕様変更・ブランド変更・UI変更は実装前にレビューを受けてから開発を進めること、独自判断でブランドコンセプト・UI方針を変更しないこと、という指示があり、[11_Development_Principles.md](11_Development_Principles.md)(v1.0→v1.1)に「CEOレビュー原則」を新設した。既存の[60_Editorial_Workflow.md](60_Editorial_Workflow.md)「推測で判断しない(エスカレーションルール)」を強化する位置づけであり、両ファイルに相互参照を追加した。Smart Laboが長期的なブランド構築を重視する姿勢を明文化したもの。
+
 ---
 
 ## ChatGPTとの同期ルール
@@ -161,5 +163,6 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 | **v2.6** | 2026-07-05 | Claude Code(CEO指示による) | **Company BrainをSmart Labo Works最大の差別化要素として正式にformalize。** Project Bible Version 3.1→3.2、Brand Version 5.0→5.1、Design Bible Version 2.2→2.3に更新。新設の[PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)をマスター設計プロンプトとして、コピー・3利用シナリオ・UI方針・アイコン方針・専用画面構成を集約。Homepage実装を全面拡張(キャッチコピー・9項目知識ソース・次アクション案内・3シナリオ・ガラスUI)。Dashboard.mdサイドバーへの追加、Roadmapへの拡張機能追加を反映 |
 | **v2.7** | 2026-07-05 | Claude Code(CEO指示による) | **新章[11_Development_Principles.md](11_Development_Principles.md)を新設。** Project Bible Version 3.2→3.3に更新。開発前ルール(5点確認必須)、Smart Labo Design Principle(5項目チェックリスト)、デモ画面作成ルール、Company Brain優先方針、Dashboard設計原則(Company OS)、最重要原則を制定。今後のDashboard UI実装・営業資料・パンフレット等、すべての新規開発はこの章を判断基準とすること |
 | **v2.8** | 2026-07-05 | Claude Code(別セッションでのCEO作業をマージ) | **Dashboard Version 0.0→0.5を反映。** 別セッションで`WEBSITE/app.html`が実装され、GitHub Pagesで公開された(Company Brain専用画面・AIモーニングブリーフィング・KPI拡張・アクティビティカラーコーディング・クイックアクション7項目・公式デザイントークン適用)。Smart Labo Works Versionも0.0→0.5に更新。詳細は[CHANGELOG.md](CHANGELOG.md)「Dashboard v0.5」エントリを参照。マージ時点の確認により、`app.html`のログイン画面ロゴが正式ロゴ([00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)の六角形+サーキット「S」)ではなく暫定的な六角形+チェックマークのSVGになっていることを検出。ブランド統一の観点で今後の確認・修正が必要(50_TODO.mdに追記) |
+| v2.9 | 2026-07-05 | Claude Code(CEO指示による) | **「CEOレビュー原則」を追加。** Project Bible Version 3.3→3.4に更新。[11_Development_Principles.md](11_Development_Principles.md)(v1.0→v1.1)に、大きな仕様変更・ブランド変更・UI変更は実装前にレビューを受けること、独自判断でブランドコンセプト・UI方針を変更しないことを明文化。[60_Editorial_Workflow.md](60_Editorial_Workflow.md)(v2.2→v2.3)と相互参照を追加 |
 
 *最終更新: 2026-07-05*

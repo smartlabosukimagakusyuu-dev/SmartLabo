@@ -18,6 +18,31 @@
 - 実際のお問い合わせ窓口(メールアドレス等)が確定次第、CTAボタンを接続する
 - Company Brainを営業資料・パンフレットへ展開する
 - Dashboard v0.6：実データ連携・顧客管理強化
+- `WEBSITE/app.html`のログイン画面ロゴを正式ロゴ(六角形+サーキット「S」)へ差し替える
+
+---
+
+## 2026-07-05 — 「CEOレビュー原則」を追加
+
+CEOより「大きな仕様変更・ブランド変更・UI変更を行う場合は、実装前に変更内容を整理し、レビューを受けてから開発を進めてください。独自判断でブランドコンセプトやUI方針を変更しないこと。Smart Laboは長期的なブランド構築を重視します。」との指示があった。
+
+### 主な変更内容
+
+- [11_Development_Principles.md](11_Development_Principles.md)(v1.0→v1.1)に「CEOレビュー原則」を新設。「開発前ルール(必須)」の直後に配置し、以下を明文化した。
+  - 大きな仕様変更・ブランド変更・UI変更は、実装前に変更内容(何を・なぜ・どう変えるか)を整理し、レビューを受けてから開発を進めること
+  - 独自判断でブランドコンセプトやUI方針を変更しないこと
+  - 誤字修正や軽微なスタイル調整はこの原則の対象外とすること
+  - Smart Laboは長期的なブランド構築を重視し、目先のスピードよりも一貫性を優先すること
+- [60_Editorial_Workflow.md](60_Editorial_Workflow.md)(v2.2→v2.3)の「推測で判断しない(エスカレーションルール)」に、新設の「CEOレビュー原則」への相互参照を追加。既存のエスカレーションルール(PROJECT_BIBLEに記載のない重要判断はCEOへ確認する)を、より広い「大きな仕様・ブランド・UI変更」全般に対して明確化・強化する位置づけ
+
+### 更新したファイル
+
+- [11_Development_Principles.md](11_Development_Principles.md)(v1.0→v1.1)
+- [60_Editorial_Workflow.md](60_Editorial_Workflow.md)(v2.2→v2.3)
+- [README.md](README.md)(v3.3→v3.4)
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v2.8→v2.9)
+
+**変更者:** Claude Code(Project Bible編集長)/ 指示: CEO
 
 ---
 

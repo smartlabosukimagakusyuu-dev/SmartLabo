@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 3.3**
+> **PROJECT_BIBLE Version: 3.4**
 
 ---
 
@@ -124,7 +124,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 3.3**
+- 現在: **Version 3.4**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -193,5 +193,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | v3.1 | 2026-07-05 | Claude Code(CEO指示による) | **Homepage Version 1.0 Release Candidateへ向けた最終ブラッシュアップを反映。** [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md)(v2.1→v3.0)にCompany Brainセクション(最大の差別化要素)を正式なページ構成へ追加。ダッシュボードのデモデータ表記、CTA導線の整理(資料ダウンロードの「準備中」明示、リンク切れ修正)、ヘッダーのレスポンシブ崩れ修正、404ページ・OGP・favicon最適化をチェックリストへ反映 |
 | v3.2 | 2026-07-05 | Claude Code(CEO指示による) | **Company BrainをSmart Labo Works最大の差別化要素として正式formalize。** [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v2.0→v3.0)に中核基盤として追加、[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)(v5.0→v5.1)に専用機能コピーとブランド適用範囲を追記、[00_Foundation/10_Future_Roadmap.md](00_Foundation/10_Future_Roadmap.md)(v2.0→v3.0)に拡張ロードマップを追加。新設の[PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)をホームページ・Dashboard・営業資料・パンフレット・デモ画面共通のマスタープロンプトとして制定 |
 | v3.3 | 2026-07-05 | Claude Code(CEO指示による) | **新章[11_Development_Principles.md](11_Development_Principles.md)を新設。** 開発前ルール(PROJECT_BIBLE/Brand Bible/Design Bible/CURRENT_STATUS/CHANGELOGの確認必須化)、Smart Labo Design Principle(5項目チェックリスト)、デモ画面作成ルール、Company Brain優先方針、Dashboard設計原則(「CRMではなくCompany OS」)、ブランド維持、Version管理徹底、最重要原則(「Smart Labo Worksは会社を進化させるCompany OS」)を制定。`00_Foundation`の01〜10がすべて埋まっているため、開発関連ドキュメント(`10`〜`19`)の枠に`11`として新設 |
+| v3.4 | 2026-07-05 | Claude Code(CEO指示による) | [11_Development_Principles.md](11_Development_Principles.md)(v1.0→v1.1)に「CEOレビュー原則」を追加。大きな仕様変更・ブランド変更・UI変更は実装前に変更内容を整理しレビューを受けてから開発を進めること、独自判断でブランドコンセプト・UI方針を変更しないことを明文化。[60_Editorial_Workflow.md](60_Editorial_Workflow.md)(v2.2→v2.3)の既存エスカレーションルールとの相互参照を追加 |
 
 *最終更新: 2026-07-05*
