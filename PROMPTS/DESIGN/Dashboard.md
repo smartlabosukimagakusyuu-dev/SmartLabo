@@ -93,6 +93,7 @@ Homepage(サイト)が「初めて訪れた社長にEnterprise AI Platformとし
 - [SmartLabo_Design_Bible.md](SmartLabo_Design_Bible.md)
 - [Homepage.md](Homepage.md)
 - [CompanyBrain.md](CompanyBrain.md) — Company Brainのコピー・UI・専用画面設計の正本
+- [PROJECT_BIBLE/11_Development_Principles.md](../../PROJECT_BIBLE/11_Development_Principles.md) — 「DashboardはCRMではなくCompany OS」という設計原則の出典
 - [DESIGN/system/design-tokens.md](../../DESIGN/system/design-tokens.md) — カラートークン・コンポーネント・アイコンセット
 - [PROJECT_BIBLE/00_Foundation/06_Philosophy.md](../../PROJECT_BIBLE/00_Foundation/06_Philosophy.md)
 - [PROJECT_BIBLE/20_UI_UX_Rules.md](../../PROJECT_BIBLE/20_UI_UX_Rules.md)

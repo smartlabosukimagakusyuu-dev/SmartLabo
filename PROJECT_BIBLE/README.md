@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 3.2**
+> **PROJECT_BIBLE Version: 3.3**
 
 ---
 
@@ -38,6 +38,7 @@ AIが変わっても、社員が増えても、会社の思想が変わらない
 | AIルール | [30_AI_Rules.md](30_AI_Rules.md) |
 | UIルール | [20_UI_UX_Rules.md](20_UI_UX_Rules.md) |
 | 会社の歴史 | [00_Foundation/01_Company_Story.md](00_Foundation/01_Company_Story.md)、[00_Foundation/09_Product_History.md](00_Foundation/09_Product_History.md) |
+| 開発原則(何を作る前に何を確認するか) | [11_Development_Principles.md](11_Development_Principles.md) |
 
 人間の社員だけでなく、ChatGPT・Claude Code・Codex などのAIエージェントも、作業前に必ずこのフォルダを参照することを前提としています。
 
@@ -67,6 +68,7 @@ PROJECT_BIBLE/
 │   └── 10_Future_Roadmap.md         将来のロードマップ
 │
 ├── 10_Development_Rules.md   ← 開発ルール
+├── 11_Development_Principles.md ← 開発原則(開発前に何を確認・判断するか)
 ├── 20_UI_UX_Rules.md         ← デザイン思想・UI/UXルール
 ├── 30_AI_Rules.md            ← AI利用ルール(Claude / Codex / ChatGPT共通)
 ├── 40_Organization.md        ← 組織図・役割分担
@@ -122,7 +124,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 3.2**
+- 現在: **Version 3.3**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -190,5 +192,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v3.0** | 2026-07-04 | Claude Code(CEO指示による) | **正式ロゴが確定。** これまでの暫定ロゴ仕様(途切れた2画のストローク)・別ロゴ案(角丸+「+」マーク)を廃止し、六角形フレーム+サーキットパターンの「S」字シンボルを株式会社スマートラボの唯一の正式ロゴとして制定([00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) v5.0)。[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md) を新設しPrimary/White/Dark/Icon/Favicon/SVG/PNG/WebPの8フォルダで実データを格納。「ロゴ使用ルール」(余白規定・最小サイズ・背景色・使用禁止例・用途別推奨サイズ)を正式制定し、Homepageのヘッダー・フッター・faviconに実装。00_Foundationの根幹改訂のためVersionを+1.0 |
 | v3.1 | 2026-07-05 | Claude Code(CEO指示による) | **Homepage Version 1.0 Release Candidateへ向けた最終ブラッシュアップを反映。** [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md)(v2.1→v3.0)にCompany Brainセクション(最大の差別化要素)を正式なページ構成へ追加。ダッシュボードのデモデータ表記、CTA導線の整理(資料ダウンロードの「準備中」明示、リンク切れ修正)、ヘッダーのレスポンシブ崩れ修正、404ページ・OGP・favicon最適化をチェックリストへ反映 |
 | v3.2 | 2026-07-05 | Claude Code(CEO指示による) | **Company BrainをSmart Labo Works最大の差別化要素として正式formalize。** [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v2.0→v3.0)に中核基盤として追加、[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)(v5.0→v5.1)に専用機能コピーとブランド適用範囲を追記、[00_Foundation/10_Future_Roadmap.md](00_Foundation/10_Future_Roadmap.md)(v2.0→v3.0)に拡張ロードマップを追加。新設の[PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)をホームページ・Dashboard・営業資料・パンフレット・デモ画面共通のマスタープロンプトとして制定 |
+| v3.3 | 2026-07-05 | Claude Code(CEO指示による) | **新章[11_Development_Principles.md](11_Development_Principles.md)を新設。** 開発前ルール(PROJECT_BIBLE/Brand Bible/Design Bible/CURRENT_STATUS/CHANGELOGの確認必須化)、Smart Labo Design Principle(5項目チェックリスト)、デモ画面作成ルール、Company Brain優先方針、Dashboard設計原則(「CRMではなくCompany OS」)、ブランド維持、Version管理徹底、最重要原則(「Smart Labo Worksは会社を進化させるCompany OS」)を制定。`00_Foundation`の01〜10がすべて埋まっているため、開発関連ドキュメント(`10`〜`19`)の枠に`11`として新設 |
 
 *最終更新: 2026-07-05*

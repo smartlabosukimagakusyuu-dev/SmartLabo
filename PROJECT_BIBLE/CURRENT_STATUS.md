@@ -9,7 +9,7 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：3.2
+Project Bible Version：3.3
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：1.0 Release Candidate(Company Brain拡張済み。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
@@ -22,7 +22,7 @@ Current Task：Dashboard UI設計(Company Brain画面を含む)
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 3.2 |
+| Project Bible Version | 3.3 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版。**さらにCompany BrainをSmart Labo Works最大の差別化要素として全面拡張済み**(キャッチコピー・9項目の知識ソース・3利用シナリオ・ガラスUI・専用アイコン) |
@@ -106,6 +106,19 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 5. **Homepage実装:** [WEBSITE/index.html](../WEBSITE/index.html) / [WEBSITE/css/style.css](../WEBSITE/css/style.css) のCompany Brainセクションを全面拡張。専用のBrain/Networkアイコンバッジ、キャッチコピー「探す時間を、考える時間へ。」、9項目に拡充した知識ソースのチップ表示、AIの回答に「関連資料」「次のアクション」チップを追加(AIが答えるだけでなく案内する存在であることを視覚化)、3つの利用シナリオを複数ステップの案内フローとして見せる新セクション、ガラスUI(glassmorphism: backdrop-filter blur + 半透明パネル)を採用。デスクトップ(1440px/1024px)・モバイル(375px)でプレビュー確認済み、レイアウト崩れ・コンソールエラーなし
 6. **Dashboard・営業資料・パンフレット・デモ画面への展開:** これらの成果物はまだ実体が存在しない(Dashboard Version 0.0)ため、今回は仕様レベル(PROMPTS/DESIGN配下)への反映にとどめている。実体が作られる際は必ず[CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)を参照し、コンセプト・コピー・UIを統一すること
 
+**新章「Development Principles」の新設(2026-07-05):** CEOより、今後のSmart Labo Works開発における基本原則を定めた新章の追加指示があり、[11_Development_Principles.md](11_Development_Principles.md) を新設した。`00_Foundation` の01〜10がすべて埋まっているため、開発関連ドキュメント(`10`〜`19`)の枠に `11` として挿入した(既存ファイルの番号は変更していない)。
+
+主な内容:
+
+- **開発前ルール(必須):** 新しい画面・機能・デモ・UIを作成する前に、PROJECT_BIBLE / Brand Bible([00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)) / Design Bible([PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md)) / CURRENT_STATUS / CHANGELOGの最新版を必ず確認すること
+- **Smart Labo Design Principle:** 「社長の時間を増やせるか」「Company OSの思想に沿っているか」等、5項目のYES/NOチェックリスト。YESにならない機能は実装しない
+- **デモ画面作成ルール:** デモ画面は単なるUIサンプルではなく、営業で見せる「製品デモ」として設計する
+- **Company Brain優先:** 今後作成する画面ではCompany Brainとの連携を常に検討する
+- **Dashboard設計原則:** DashboardはCRMではなく**Company OS**であり、社長が毎朝最初に開く画面として設計する
+- **最重要原則:** Smart Labo Worksは「AIチャット」ではなく「会社を進化させるCompany OS」である
+
+**「Company OS」という新しい用語について:** 本章で初めて登場した表現であり、既存の「会社を動かすAI。」(ブランドコピー)や「AI経営プラットフォーム」と矛盾するものではなく、Dashboard・Smart Labo Worksの性格を一言で表す補完的な位置づけとして扱う。[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) の正式なコピー階層(ブランドコピー/サービスコピー/説明コピー)自体は今回変更していない。CEOより将来的に正式なブランドコピー階層への統合指示があれば、その時点でBrand Identityを更新する。
+
 ---
 
 ## ChatGPTとの同期ルール
@@ -145,5 +158,6 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 | v2.4 | 2026-07-05 | Claude Code(CEO対応による) | **Homepageの公開完了を反映。** 公開URL(`https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/`)を記録。Workflow permissions設定の不備によるデプロイ失敗とその解決経緯を記録。Last Updateを2026-07-05に更新 |
 | v2.5 | 2026-07-05 | Claude Code(CEO指示による) | **Homepage Versionを0.9 beta→1.0 Release Candidateに更新。** Project Bible Version 3.0→3.1に更新。Company Brainセクション新設・ダッシュボードのデモ表記・CTA導線整理・ヘッダー折り返し崩れの修正・404ページ/OGP/favicon最適化を反映。Next Taskに「実際のお問い合わせ窓口確定後のCTA接続」を追加 |
 | **v2.6** | 2026-07-05 | Claude Code(CEO指示による) | **Company BrainをSmart Labo Works最大の差別化要素として正式にformalize。** Project Bible Version 3.1→3.2、Brand Version 5.0→5.1、Design Bible Version 2.2→2.3に更新。新設の[PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md)をマスター設計プロンプトとして、コピー・3利用シナリオ・UI方針・アイコン方針・専用画面構成を集約。Homepage実装を全面拡張(キャッチコピー・9項目知識ソース・次アクション案内・3シナリオ・ガラスUI)。Dashboard.mdサイドバーへの追加、Roadmapへの拡張機能追加を反映 |
+| **v2.7** | 2026-07-05 | Claude Code(CEO指示による) | **新章[11_Development_Principles.md](11_Development_Principles.md)を新設。** Project Bible Version 3.2→3.3に更新。開発前ルール(5点確認必須)、Smart Labo Design Principle(5項目チェックリスト)、デモ画面作成ルール、Company Brain優先方針、Dashboard設計原則(Company OS)、最重要原則を制定。今後のDashboard UI実装・営業資料・パンフレット等、すべての新規開発はこの章を判断基準とすること |
 
 *最終更新: 2026-07-05*

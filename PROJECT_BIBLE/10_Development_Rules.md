@@ -71,6 +71,7 @@
 ## 関連ドキュメント
 
 - [00_Foundation/06_Philosophy.md](00_Foundation/06_Philosophy.md)
+- [11_Development_Principles.md](11_Development_Principles.md) — 開発**前**に何を確認し、何を判断基準にするか(本ファイルは「どう開発するか」を定める)
 - [20_UI_UX_Rules.md](20_UI_UX_Rules.md)
 - [30_AI_Rules.md](30_AI_Rules.md)
 - [60_Editorial_Workflow.md](60_Editorial_Workflow.md) — GitHub運用フロー・報告フォーマット
@@ -85,5 +86,6 @@
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v2.0 | 2026-07-03 | Smart Labo | PROJECT_BIBLE再構成に伴い旧06_Development_Rules.mdから改番。00_Foundation/06_Philosophy.mdの8原則(AIファースト等)を反映 |
 | v2.1 | 2026-07-03 | Claude Code(CEO指示による) | コミットメッセージ規約(feat/docs/design/fix/refactor/style/chore)を追加。60_Editorial_Workflow.mdのGitHub運用フローへの参照を追加 |
+| v2.2 | 2026-07-05 | Claude Code(CEO指示による) | 新設の[11_Development_Principles.md](11_Development_Principles.md)への参照を追加(開発着手前の確認ルール・判断基準) |
 
-*最終更新: 2026-07-03*
+*最終更新: 2026-07-05*

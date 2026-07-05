@@ -256,6 +256,7 @@ Smart Laboのデザインが目指すのは、世界トップクラスのBtoB Sa
 
 - [BRAND/README.md](../../BRAND/README.md) — ロゴ・カラー・素材の実体
 - [20_UI_UX_Rules.md](../20_UI_UX_Rules.md) — UI/UXへの具体的な適用ルール
+- [11_Development_Principles.md](../11_Development_Principles.md) — 新機能着手前にBrand Bibleを確認する開発原則
 - [PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../../PROMPTS/DESIGN/SmartLabo_Design_Bible.md) — 実制作時に使う詳細版デザインプロンプト(参照企業分析・禁止事項・推奨ビジュアル)
 - [../../99_CEO_MEMORY/04_Brand_Philosophy.md](../99_CEO_MEMORY/04_Brand_Philosophy.md) — 代表個人が語るブランドへの思い
 

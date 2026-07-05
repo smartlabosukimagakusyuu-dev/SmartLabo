@@ -73,6 +73,7 @@ Company Brain は、他の業務モジュール(不動産関連業務支援、MI
 - [09_Product_History.md](09_Product_History.md)
 - [10_Future_Roadmap.md](10_Future_Roadmap.md)
 - [10_Development_Rules.md](../10_Development_Rules.md)
+- [11_Development_Principles.md](../11_Development_Principles.md) — 新機能を作る前の判断基準(「社長の時間を増やせるか」等)、Company OSとしての開発原則
 - [PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md) — Company Brainのコピー・UI・画面設計の詳細
 
 ---

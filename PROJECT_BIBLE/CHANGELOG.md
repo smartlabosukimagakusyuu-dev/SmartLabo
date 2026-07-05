@@ -22,6 +22,42 @@
 
 ---
 
+## 2026-07-05 — 新章「11_Development_Principles.md」を新設
+
+CEOより、今後のSmart Labo Works開発における基本原則を定めた新章の追加指示があった。PROJECT_BIBLEに散在していた「開発前に何を確認すべきか」「新機能をやるかどうかの判断基準」「デモ画面の位置づけ」といった暗黙のルールを、単一の章として明文化した。
+
+### 新設ファイル
+
+[11_Development_Principles.md](11_Development_Principles.md) — 主な内容は以下の通り。
+
+- **開発前ルール(必須):** 新しい画面・機能・デモ・UIを作成する前に、PROJECT_BIBLE / Brand Bible / Design Bible / CURRENT_STATUS / CHANGELOGの最新版を必ず確認する。古い仕様・過去のブランドイメージを使用しない
+- **Smart Labo Design Principle:** 「社長の時間を増やせるか」「Company OSの思想に沿っているか」「『会社を動かすAI。』というブランドコンセプトに一致しているか」「Smart Laboらしい高級感・シンプルさ・統一感があるか」「他社との差別化につながるか」の5項目チェックリスト。YESにならない機能は実装しない
+- **デモ画面作成ルール:** デモ画面は単なるUIサンプルではなく、営業でお客様へ見せる「製品デモ」として設計する
+- **Company Brain優先:** 今後作成する画面ではCompany Brainとの連携(検索/AIチャット/社内規程/業務マニュアル等)を常に検討する
+- **Dashboard設計原則:** DashboardはCRMではなく**Company OS**。社長が毎朝最初に開く画面として設計する(表示すべきもの: AI提案/重要タスク/売上/契約状況/スケジュール/Company Brain/最新通知/経営状況)
+- **ブランド維持:** ホームページ・Dashboard・Company Brain・営業資料・パンフレット・名刺・アプリすべてをBrand Bible・Design Bible・PROJECT_BIBLEの最新版に統一する
+- **Version管理:** 仕様変更・ブランド変更・画面追加時は、CURRENT_STATUS・CHANGELOG・PROJECT_BIBLE・Roadmapを必ず更新する
+- **最重要原則:** Smart Labo Worksは「AIチャット」ではなく「会社を進化させるCompany OS」である
+
+### ファイル番号について
+
+`00_Foundation` の01〜10がすべて既存ファイルで埋まっているため、「開発関連ドキュメント」の枠として設計されている `10`〜`19` の番号帯([README.md](README.md)「なぜこの番号体系なのか」参照)に `11` として新設した。既存ファイルの番号は変更していない。
+
+### 「Company OS」という用語について
+
+本章で初めて登場した表現。既存のブランドコピー階層(ブランドコピー「会社を動かすAI。」/ サービスコピー「経営を、ひとつにつなぐ。」/ 説明コピー「社長の右腕になるAI経営プラットフォーム。」、[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md))自体は今回変更しておらず、Dashboard・Smart Labo Worksの性格を一言で表す補完的な位置づけとして扱う。正式にブランドコピー階層へ統合するかはCEOの今後の判断による。
+
+### 更新したファイル
+
+- 新規: [11_Development_Principles.md](11_Development_Principles.md)
+- [README.md](README.md)(v3.2→v3.3) — ファイル構成・参照表・番号体系の説明を更新
+- [10_Development_Rules.md](10_Development_Rules.md)(v2.1→v2.2)、[00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)、[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)、[PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md) — 関連ドキュメントへの相互参照を追加
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v2.6→v2.7)
+
+**変更者:** Claude Code(Project Bible編集長)/ 指示: CEO
+
+---
+
 ## 2026-07-05 — Company BrainをSmart Labo Works最大の差別化要素として正式formalize
 
 CEOより「Company Brainは単なる『マニュアル検索』ではなく、Smart Labo Worksが提供する『会社の頭脳(Company Brain)』である」との明確な指示があり、ホームページの一セクションという扱いから、Smart Labo Works全体の中核基盤・最大の差別化要素として正式に位置づけを引き上げた。
