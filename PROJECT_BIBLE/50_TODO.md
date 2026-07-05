@@ -17,7 +17,7 @@
 - [x] ~~採用済みのHero背景(`hero_background_02_city_network.webp`)をHomepage([WEBSITE/index.html](../WEBSITE/index.html))に実装する~~(2026-07-03完了)
 - [ ] アイコンの実SVGファイル化(現状は既存の線画SVGアイコンをバッジ風スタイルに変更する形で対応。専用アイコンセットを新規デザインする場合は別途検討)
 - [x] ~~Homepageの別ロゴ案(角丸正方形+「+」マーク)を正式採用するかCEOに確認する~~(2026-07-04解決。CEOが別の六角形サーキットデザインのロゴを正式確定したため、この別ロゴ案は不採用として確定。[DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/) には不採用の参考資料として残置)
-- [ ] Dashboard・営業資料・名刺・パンフレット等、他の制作物にも正式ロゴ([DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md))を展開する(現時点ではHomepageのみ実装済み)
+- [ ] 営業資料・名刺・パンフレット等、他の制作物にも正式ロゴ([DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md))を展開する(現時点ではHomepageのみ正式ロゴを実装済み。Dashboard(app.html)は暫定ロゴのため上記タスクで対応)
 - [ ] Xserverのサーバープラン契約・DNS設定を行う(現状はドメイン`smartlaboworks.com`取得のみ)。契約完了後、正式ドメインへのデプロイに切り替える
 - [x] ~~リポジトリのSettings→Pages→SourceでGitHub Actionsを選択する~~(2026-07-05完了。CEO対応。あわせてSettings→Actions→General→Workflow permissionsを「読み取りおよび書き込み権限」に変更し、デプロイ成功を確認)
 - [x] ~~Homepage(β版)をGitHub Pagesで公開する~~(2026-07-05完了。公開URL: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
@@ -27,8 +27,10 @@
 - [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) の本文(冒頭のCEO Message以外)を代表本人の言葉で確定させる
 - [ ] [99_CEO_MEMORY/01_Founding_Story.md](99_CEO_MEMORY/01_Founding_Story.md)(創業経緯)・[03_Future_Vision.md](99_CEO_MEMORY/03_Future_Vision.md)(将来構想)・[05_Important_Conversations.md](99_CEO_MEMORY/05_Important_Conversations.md)(重要な会話)を代表が記入する(04_Brand_Philosophy.mdは記入済み)
 - [ ] [00_Foundation/09_Product_History.md](00_Foundation/09_Product_History.md) にリリース済みプロダクト・機能を記録する
-- [ ] Company Brain([PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md))をDashboard・営業資料・パンフレット・デモ画面へ展開する(2026-07-05時点、Homepageのみ実装。他はまだ実体が存在しない)
-- [ ] Dashboard UI実装時に、Company Brain専用画面(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り)を作り込む
+- [ ] Company Brain([PROMPTS/DESIGN/CompanyBrain.md](../PROMPTS/DESIGN/CompanyBrain.md))を営業資料・パンフレットへ展開する(2026-07-05時点、Homepage・Dashboard(app.html)は実装済み)
+- [x] ~~Dashboard UI実装時に、Company Brain専用画面(検索バー/AIチャット/最近閲覧した資料/人気の社内マニュアル/お気に入り)を作り込む~~(2026-07-05完了。別セッションでDashboard v0.5として`WEBSITE/app.html`に実装・GitHub Pages公開)
+- [ ] `WEBSITE/app.html`のログイン画面ロゴを、正式ロゴ([00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)の六角形+サーキット「S」、[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md))へ差し替える(2026-07-05時点、暫定的な六角形+チェックマークのSVGアイコンが使用されている)
+- [ ] Dashboard v0.6(実データ接続・顧客管理強化)を実装する
 
 ---
 
@@ -58,5 +60,6 @@
 | v3.0 | 2026-07-05 | Claude Code(CEO対応による) | **Homepage(β版)のGitHub Pages公開が完了。** Pages設定・Workflow permissions設定タスクを完了として消し込み、公開URLを記録 |
 | v3.1 | 2026-07-05 | Claude Code(CEO指示による) | Homepage 1.0公開に向けた最終ブラッシュアップに伴い、フィードバック収集タスクを「1.0公開後」に更新。実際のお問い合わせ窓口確定・CTA接続タスクを追加 |
 | v3.2 | 2026-07-05 | Claude Code(CEO指示による) | Company BrainをSmart Labo Works最大の差別化要素として正式formalizeしたことに伴い、Dashboard・営業資料・パンフレット・デモ画面への展開タスク、Dashboard UI実装時のCompany Brain専用画面作り込みタスクを追加 |
+| v3.3 | 2026-07-05 | Claude Code(別セッションでのCEO作業をマージ) | 別セッションでDashboard v0.5(`WEBSITE/app.html`)が実装されたことを反映。Company Brain専用画面作り込みタスクを完了として消し込み。マージ時に検出したapp.htmlの暫定ロゴ(正式ロゴ未使用)の差し替えタスク、Dashboard v0.6タスクを追加 |
 
 *最終更新: 2026-07-05*
