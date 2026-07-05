@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ページが見つかりません — Smart Labo Works</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="img/logo/favicon.png" type="image/png">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .notfound {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(160deg, var(--navy-900) 0%, var(--navy-800) 55%, var(--navy-700) 100%);
+    padding: 32px;
+  }
+  .notfound__code { font-size: clamp(56px, 10vw, 96px); font-weight: 700; color: var(--smart-blue-light); margin: 0 0 12px; letter-spacing: -0.02em; }
+  .notfound__title { font-size: clamp(20px, 3vw, 26px); color: var(--white); margin: 0 0 16px; font-weight: 700; }
+  .notfound__desc { font-size: 15px; color: var(--text-on-navy-secondary); margin: 0 0 36px; max-width: 440px; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<div class="notfound">
+  <a href="index.html" class="logo" style="margin-bottom:40px;">
+    <span class="logo__mark" aria-hidden="true">
+      <img src="img/logo/smartlabo_icon_white.webp" width="36" height="36" alt="">
+    </span>
+    <span class="logo__text" style="font-size:20px;">Smart Labo <em>Works</em></span>
+  </a>
+  <p class="notfound__code">404</p>
+  <h1 class="notfound__title">お探しのページが見つかりません</h1>
+  <p class="notfound__desc">URLが変更・削除されたか、入力に誤りがある可能性があります。恐れ入りますが、トップページよりお探しください。</p>
+  <a href="index.html" class="btn btn--primary btn--lg">トップページへ戻る</a>
+</div>
+
+</body>
+</html>

@@ -21,7 +21,8 @@
 - [ ] Xserverのサーバープラン契約・DNS設定を行う(現状はドメイン`smartlaboworks.com`取得のみ)。契約完了後、正式ドメインへのデプロイに切り替える
 - [x] ~~リポジトリのSettings→Pages→SourceでGitHub Actionsを選択する~~(2026-07-05完了。CEO対応。あわせてSettings→Actions→General→Workflow permissionsを「読み取りおよび書き込み権限」に変更し、デプロイ成功を確認)
 - [x] ~~Homepage(β版)をGitHub Pagesで公開する~~(2026-07-05完了。公開URL: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
-- [ ] β版公開後にCEO・関係者から寄せられるフィードバックを収集し、改善タスクとしてこのファイルに反映する
+- [ ] Homepage 1.0公開後にCEO・関係者から寄せられるフィードバックを収集し、改善タスクとしてこのファイルに反映する
+- [ ] 実際のお問い合わせ窓口(メールアドレス等)を確定し、CTAボタン(無料デモ/導入相談/資料ダウンロード)を接続する(2026-07-05時点、CEO確認により実在しない連絡先は捏造せず保留中)
 - [ ] PROMPTS配下にClaude / Codex / ChatGPT向けの実プロンプトテンプレートを追加する
 - [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) の本文(冒頭のCEO Message以外)を代表本人の言葉で確定させる
 - [ ] [99_CEO_MEMORY/01_Founding_Story.md](99_CEO_MEMORY/01_Founding_Story.md)(創業経緯)・[03_Future_Vision.md](99_CEO_MEMORY/03_Future_Vision.md)(将来構想)・[05_Important_Conversations.md](99_CEO_MEMORY/05_Important_Conversations.md)(重要な会話)を代表が記入する(04_Brand_Philosophy.mdは記入済み)
@@ -53,5 +54,6 @@
 | v2.8 | 2026-07-04 | Claude Code(CEO指示による) | Homepageβ版公開に伴い、Xserverへの実デプロイタスク(FTP/SFTP接続情報待ち)とβ版フィードバック収集タスクを追加 |
 | v2.9 | 2026-07-04 | Claude Code(CEO指示による) | Xserverがサーバー契約未完了と判明したため、デプロイタスクをXserver契約・DNS設定タスクに更新。暫定デプロイ先としてGitHub Pagesを採用し、CEOによる手動設定(Settings→Pages)タスクを追加 |
 | v3.0 | 2026-07-05 | Claude Code(CEO対応による) | **Homepage(β版)のGitHub Pages公開が完了。** Pages設定・Workflow permissions設定タスクを完了として消し込み、公開URLを記録 |
+| v3.1 | 2026-07-05 | Claude Code(CEO指示による) | Homepage 1.0公開に向けた最終ブラッシュアップに伴い、フィードバック収集タスクを「1.0公開後」に更新。実際のお問い合わせ窓口確定・CTA接続タスクを追加 |
 
 *最終更新: 2026-07-05*

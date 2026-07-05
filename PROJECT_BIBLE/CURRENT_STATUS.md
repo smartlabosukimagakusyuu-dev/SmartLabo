@@ -9,10 +9,10 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：3.0
+Project Bible Version：3.1
 Brand Version：5.0
 Design Bible Version：2.2
-Homepage Version：0.9 beta(GitHub Pagesで一般公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
+Homepage Version：1.0 Release Candidate(GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
 Current Task：Dashboard UI設計
 ```
 
@@ -22,15 +22,15 @@ Current Task：Dashboard UI設計
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 3.0 |
+| Project Bible Version | 3.1 |
 | Brand Version | 5.0 |
 | Design Bible Version | 2.2 |
-| Homepage Version | **0.9 beta — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。正式カラーパレット・正式ロゴ・Hero実写真・アイコンバッジスタイルを反映済み。公開前チェック〈スマホ表示/リンク切れ/CTA動作/表示崩れ/画像読み込み〉はすべて確認済み |
+| Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版 |
 | Dashboard Version | 0.0(設計プロンプト・標準レイアウト確定・実装未着手) |
 | Smart Labo Works Version | 0.0(未着手) |
 | Current Project | Company Setup |
 | Current Task | Dashboard UI設計 |
-| Next Task | Dashboard UI実装 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴを他制作物(Dashboard・営業資料・名刺・パンフレット)へ展開 / 真のベクター(SVG)ロゴデータの取得 / Xserverサーバー契約完了後に正式ドメインへ切り替え / β版公開後のフィードバック反映 |
+| Next Task | Dashboard UI実装 / 実際のお問い合わせ窓口(メール等)確定後、CTAを接続 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴを他制作物(Dashboard・営業資料・名刺・パンフレット)へ展開 / 真のベクター(SVG)ロゴデータの取得 / Xserverサーバー契約完了後に正式ドメインへ切り替え / 1.0公開後のフィードバック反映 |
 | Last Update | 2026-07-05 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -89,6 +89,14 @@ Current Task：Dashboard UI設計
 
 Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(`smartlaboworks.com`)へ切り替える。
 
+**Homepage Version 1.0 Release Candidateへの最終ブラッシュアップ(2026-07-05):** CEOより「Version 0.9βは十分な完成度に達している。新しいデザインを作るのではなく、Version 1.0公開に向けた最終ブラッシュアップを行ってほしい」との指示があり、以下を実施した。
+
+1. **Company Brainセクションを新設**(Priority 1・最大の差別化要素): 「主要機能」の直後に配置。タイトル「Company Brain」、サブタイトル「会社の知識を、AIへ。」、社内規程・業務マニュアル等の具体例(チップ表示)、「探す→AIへ聞く」の体験を示すチャット形式のビジュアルモックアップで構成。ナビゲーションにも項目を追加
+2. **ダッシュボードのデモ表記を追加**(Priority 2): Hero内のダッシュボードモックアップに「DEMO」バッジを追加し、直下に「※ 画面はイメージです。表示データはすべてサンプルであり、実績値ではありません。」の注記を追加。実績値との誤認を防止
+3. **CTA導線を整理**(Priority 3): 「資料ダウンロード」全4箇所(ヘッダー/Hero/CTA/フッター)に「準備中」タグを追加し、無料デモ・導入相談と機能的に区別。CTAセクション内の壊れたリンク(`href="#"` によるページ先頭への意図しないジャンプ)を `#cta` に修正。実在しない連絡先(メールアドレス等)は捏造せず、CEOの判断により現時点ではセクション内スクロールのままとし、「正式なお問い合わせ窓口は現在準備中です」の注記を追加
+4. **ブランド品質の再確認**(Priority 4): Company Brain追加でナビゲーション項目が5つに増えたことに伴うヘッダーの折り返し崩れ(1024px前後)を発見・修正(ハンバーガーメニューへの切り替え幅を860px→1100pxに拡大)。その他、余白・タイポグラフィ・カラー・レスポンシブを再確認
+5. **公開品質を確認**(Priority 5): ブランドに沿ったカスタム404ページを新設。OGP(og:title/description/image/url等)・Twitter Card・canonicalタグを追加。faviconを512×512(120KB)から64×64(3.5KB)に最適化し表示速度を改善。全リンク・全画像の読み込みを再確認(問題なし)
+
 ---
 
 ## ChatGPTとの同期ルール
@@ -126,5 +134,6 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 | v2.2 | 2026-07-04 | Claude Code(CEO指示による) | **Homepageをβ版として公開。** Homepage Versionを0.5→0.9 betaに更新。公開前チェック(スマホ表示/リンク切れ/CTA動作/表示崩れ/画像読み込み)の実施結果を記録。Xserverへの実デプロイはFTP/SFTP接続情報確認中のため保留であることを明記 |
 | v2.3 | 2026-07-04 | Claude Code(CEO指示による) | Xserverがサーバー契約未完了(ドメインのみ取得)と判明したことを受け、暫定デプロイ先として**GitHub Pages**を採用。[.github/workflows/pages.yml](../.github/workflows/pages.yml) を新設。CEOによるリポジトリSettings→Pages設定の手動対応が必要である旨を明記 |
 | v2.4 | 2026-07-05 | Claude Code(CEO対応による) | **Homepageの公開完了を反映。** 公開URL(`https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/`)を記録。Workflow permissions設定の不備によるデプロイ失敗とその解決経緯を記録。Last Updateを2026-07-05に更新 |
+| v2.5 | 2026-07-05 | Claude Code(CEO指示による) | **Homepage Versionを0.9 beta→1.0 Release Candidateに更新。** Project Bible Version 3.0→3.1に更新。Company Brainセクション新設・ダッシュボードのデモ表記・CTA導線整理・ヘッダー折り返し崩れの修正・404ページ/OGP/favicon最適化を反映。Next Taskに「実際のお問い合わせ窓口確定後のCTA接続」を追加 |
 
 *最終更新: 2026-07-05*
