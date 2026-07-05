@@ -12,7 +12,7 @@
 Project Bible Version：3.0
 Brand Version：5.0
 Design Bible Version：2.2
-Homepage Version：0.9 beta(β版として一般公開中)
+Homepage Version：0.9 beta(GitHub Pagesで一般公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
 Current Task：Dashboard UI設計
 ```
 
@@ -25,13 +25,13 @@ Current Task：Dashboard UI設計
 | Project Bible Version | 3.0 |
 | Brand Version | 5.0 |
 | Design Bible Version | 2.2 |
-| Homepage Version | **0.9 beta**(CEO指示により「共有しながら改善するための公開」を目的にβ版として一般公開。正式カラーパレット・正式ロゴ・Hero実写真・アイコンバッジスタイルを反映済み。公開前チェック〈スマホ表示/リンク切れ/CTA動作/表示崩れ/画像読み込み〉はすべて確認済み) |
+| Homepage Version | **0.9 beta — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。正式カラーパレット・正式ロゴ・Hero実写真・アイコンバッジスタイルを反映済み。公開前チェック〈スマホ表示/リンク切れ/CTA動作/表示崩れ/画像読み込み〉はすべて確認済み |
 | Dashboard Version | 0.0(設計プロンプト・標準レイアウト確定・実装未着手) |
 | Smart Labo Works Version | 0.0(未着手) |
 | Current Project | Company Setup |
 | Current Task | Dashboard UI設計 |
-| Next Task | Dashboard UI実装 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴを他制作物(Dashboard・営業資料・名刺・パンフレット)へ展開 / 真のベクター(SVG)ロゴデータの取得 / β版公開後のフィードバック反映 |
-| Last Update | 2026-07-04 |
+| Next Task | Dashboard UI実装 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴを他制作物(Dashboard・営業資料・名刺・パンフレット)へ展開 / 真のベクター(SVG)ロゴデータの取得 / Xserverサーバー契約完了後に正式ドメインへ切り替え / β版公開後のフィードバック反映 |
+| Last Update | 2026-07-05 |
 | Maintainer | Masatoshi Ogawa |
 
 ---
@@ -79,9 +79,15 @@ Current Task：Dashboard UI設計
 - 画像読み込み(Hero背景・ロゴ・favicon、すべて200 OKを確認)
 - README([WEBSITE/README.md](../WEBSITE/README.md))・本ファイルの更新
 
-**Xserverへの実デプロイは、CEOよりFTP/SFTP接続情報(ホスト名・ユーザー名・パスワード・公開ディレクトリ)を確認中のため、まだ完了していません。** 接続情報を受け取り次第、公開URLを確定し本ファイルへ追記します。
+**Homepageは2026-07-05、GitHub Pagesで正式に公開されました。**
 
-**デプロイ先の経緯(2026-07-04):** Xserverはドメイン(`smartlaboworks.com`)取得のみでサーバー契約が未完了と判明。CEOより代替案としてGitHubでの運用可否を確認された。「共有しながら改善する」というβ版公開の目的に合致するため、**GitHub Pages**(GitHubが提供する無料の静的サイトホスティング)を暫定的な公開先として採用することにした。[.github/workflows/pages.yml](../.github/workflows/pages.yml) を新設し、`WEBSITE/` 配下を自動デプロイするGitHub Actionsワークフローを構築した。**リポジトリのSettings→Pages→SourceでGitHub Actionsを選択する設定は、Claude Codeのツールでは実行できないため、CEOご本人による一度きりの手動設定が必要。** 設定完了後の公開URLは `https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/` の想定。Xserverのサーバー契約が完了し次第、正式ドメインへ切り替える。
+**公開URL: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/**
+
+**デプロイ先の経緯:** Xserverはドメイン(`smartlaboworks.com`)取得のみでサーバー契約が未完了と判明(2026-07-04)。CEOより代替案としてGitHubでの運用可否を確認された。「共有しながら改善する」というβ版公開の目的に合致するため、**GitHub Pages**(GitHubが提供する無料の静的サイトホスティング)を暫定的な公開先として採用した。[.github/workflows/pages.yml](../.github/workflows/pages.yml) により `WEBSITE/` 配下を自動デプロイするGitHub Actionsワークフローを構築。
+
+**トラブルシューティング:** 初回デプロイはリポジトリのSettings→Actions→General→「Workflow permissions」が「読み取り専用」になっていたため失敗(`Deploy to GitHub Pages`ステップでエラー)。CEOに「読み取りおよび書き込み権限」への変更を依頼し、再デプロイを実施したところ成功。CSS・JS・Hero写真・ロゴ・faviconすべて200 OKで読み込まれることを確認済み。
+
+Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(`smartlaboworks.com`)へ切り替える。
 
 ---
 
@@ -119,5 +125,6 @@ Current Task：Dashboard UI設計
 | v2.1 | 2026-07-04 | Claude Code(CEO指示による) | **正式ロゴ確定を反映。** Project Bible Version 2.9→3.0、Brand Version 4.4→5.0、Homepage Version 0.4→0.5に更新。[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md) 新設とHomepage実装完了、以前の暫定ロゴ仕様・別ロゴ案の廃止を反映 |
 | v2.2 | 2026-07-04 | Claude Code(CEO指示による) | **Homepageをβ版として公開。** Homepage Versionを0.5→0.9 betaに更新。公開前チェック(スマホ表示/リンク切れ/CTA動作/表示崩れ/画像読み込み)の実施結果を記録。Xserverへの実デプロイはFTP/SFTP接続情報確認中のため保留であることを明記 |
 | v2.3 | 2026-07-04 | Claude Code(CEO指示による) | Xserverがサーバー契約未完了(ドメインのみ取得)と判明したことを受け、暫定デプロイ先として**GitHub Pages**を採用。[.github/workflows/pages.yml](../.github/workflows/pages.yml) を新設。CEOによるリポジトリSettings→Pages設定の手動対応が必要である旨を明記 |
+| v2.4 | 2026-07-05 | Claude Code(CEO対応による) | **Homepageの公開完了を反映。** 公開URL(`https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/`)を記録。Workflow permissions設定の不備によるデプロイ失敗とその解決経緯を記録。Last Updateを2026-07-05に更新 |
 
-*最終更新: 2026-07-04*
+*最終更新: 2026-07-05*

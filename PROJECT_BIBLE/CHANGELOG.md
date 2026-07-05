@@ -16,7 +16,33 @@
 - 正式ロゴをDashboard・営業資料・名刺・パンフレット等、他の制作物にも展開する(現状はHomepageのみ実装)
 - アイコンの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(現状は既存の線画SVGをバッジ風スタイルに変更する形で対応)
 - Xserverのサーバープラン契約・DNS設定、契約完了後の正式ドメインへのデプロイ切り替え
-- リポジトリのSettings→Pages→SourceでGitHub Actionsを選択する(CEOによる手動設定待ち)
+
+---
+
+## 2026-07-05 — Homepage(β版)公開完了
+
+CEOがリポジトリのSettings→Pages設定を完了し、GitHub Pagesでの公開作業を進めた。
+
+### 公開URL
+
+**https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/**
+
+### 発生した問題と解決
+
+初回・再試行を含む3回のデプロイが、いずれも「Deploy to GitHub Pages」ステップで失敗した。GitHub Actions APIでジョブのステップ単位のステータスを確認したところ、`Setup Pages`・`Upload artifact`までは成功するが、最終のデプロイ処理のみ失敗するパターンが一貫していた。ログ本文の閲覧には管理者権限のトークンが必要でClaude Codeからは参照できなかったため、症状から原因を推定した。
+
+原因は、リポジトリの **Settings → Actions → General → Workflow permissions** が「リポジトリの内容とパッケージの読み取り権限」(読み取り専用)になっていたこと。ワークフローYAML内で `permissions: pages: write` を明示していても、リポジトリ設定側の上限が読み取り専用だと、それを超える権限は付与されない。CEOに設定変更(「読み取りおよび書き込み権限」への変更)を依頼し、再デプロイしたところ成功した。
+
+### 公開前チェック(最終確認)
+
+CSS・JS・Hero背景写真・ロゴアイコン・faviconのすべてについて、公開URL上で200 OKのレスポンスを確認した。
+
+### 更新したファイル
+
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v2.3→v2.4) — 公開URL・トラブルシューティング経緯を記録
+- `.github/workflows/pages.yml` — 再デプロイトリガー用の軽微なコメント追加
+
+**変更者:** Claude Code(Lead Software Engineer)/ 対応: CEO
 
 ---
 

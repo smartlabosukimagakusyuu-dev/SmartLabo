@@ -19,7 +19,8 @@
 - [x] ~~Homepageの別ロゴ案(角丸正方形+「+」マーク)を正式採用するかCEOに確認する~~(2026-07-04解決。CEOが別の六角形サーキットデザインのロゴを正式確定したため、この別ロゴ案は不採用として確定。[DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/) には不採用の参考資料として残置)
 - [ ] Dashboard・営業資料・名刺・パンフレット等、他の制作物にも正式ロゴ([DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md))を展開する(現時点ではHomepageのみ実装済み)
 - [ ] Xserverのサーバープラン契約・DNS設定を行う(現状はドメイン`smartlaboworks.com`取得のみ)。契約完了後、正式ドメインへのデプロイに切り替える
-- [ ] リポジトリのSettings→Pages→SourceでGitHub Actionsを選択する(CEOご本人による手動設定が必要。設定後は[.github/workflows/pages.yml](../.github/workflows/pages.yml)により`WEBSITE/`が自動デプロイされる)
+- [x] ~~リポジトリのSettings→Pages→SourceでGitHub Actionsを選択する~~(2026-07-05完了。CEO対応。あわせてSettings→Actions→General→Workflow permissionsを「読み取りおよび書き込み権限」に変更し、デプロイ成功を確認)
+- [x] ~~Homepage(β版)をGitHub Pagesで公開する~~(2026-07-05完了。公開URL: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
 - [ ] β版公開後にCEO・関係者から寄せられるフィードバックを収集し、改善タスクとしてこのファイルに反映する
 - [ ] PROMPTS配下にClaude / Codex / ChatGPT向けの実プロンプトテンプレートを追加する
 - [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) の本文(冒頭のCEO Message以外)を代表本人の言葉で確定させる
@@ -51,5 +52,6 @@
 | v2.7 | 2026-07-04 | Claude Code(CEO指示による) | **正式ロゴ確定を反映。** ロゴ格納タスクを完了として消し込み、格納先を[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md)に更新。「別ロゴ案の確認」タスクを解決済みに変更(正式ロゴが別デザインに確定したため不採用)。真のSVGデータ取得・他制作物への展開タスクを追加 |
 | v2.8 | 2026-07-04 | Claude Code(CEO指示による) | Homepageβ版公開に伴い、Xserverへの実デプロイタスク(FTP/SFTP接続情報待ち)とβ版フィードバック収集タスクを追加 |
 | v2.9 | 2026-07-04 | Claude Code(CEO指示による) | Xserverがサーバー契約未完了と判明したため、デプロイタスクをXserver契約・DNS設定タスクに更新。暫定デプロイ先としてGitHub Pagesを採用し、CEOによる手動設定(Settings→Pages)タスクを追加 |
+| v3.0 | 2026-07-05 | Claude Code(CEO対応による) | **Homepage(β版)のGitHub Pages公開が完了。** Pages設定・Workflow permissions設定タスクを完了として消し込み、公開URLを記録 |
 
-*最終更新: 2026-07-04*
+*最終更新: 2026-07-05*
