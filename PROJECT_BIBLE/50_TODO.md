@@ -18,6 +18,8 @@
 - [ ] アイコンの実SVGファイル化(現状は既存の線画SVGアイコンをバッジ風スタイルに変更する形で対応。専用アイコンセットを新規デザインする場合は別途検討)
 - [x] ~~Homepageの別ロゴ案(角丸正方形+「+」マーク)を正式採用するかCEOに確認する~~(2026-07-04解決。CEOが別の六角形サーキットデザインのロゴを正式確定したため、この別ロゴ案は不採用として確定。[DESIGN_ASSETS/Icons/Reference/](../DESIGN_ASSETS/Icons/Reference/) には不採用の参考資料として残置)
 - [ ] Dashboard・営業資料・名刺・パンフレット等、他の制作物にも正式ロゴ([DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md))を展開する(現時点ではHomepageのみ実装済み)
+- [ ] Homepage(β版)をXserverへ実デプロイする(CEOよりFTP/SFTP接続情報〈ホスト名・ユーザー名・パスワード・公開ディレクトリ〉の提供待ち)
+- [ ] β版公開後にCEO・関係者から寄せられるフィードバックを収集し、改善タスクとしてこのファイルに反映する
 - [ ] PROMPTS配下にClaude / Codex / ChatGPT向けの実プロンプトテンプレートを追加する
 - [ ] [00_Foundation/02_Founder_Message.md](00_Foundation/02_Founder_Message.md) の本文(冒頭のCEO Message以外)を代表本人の言葉で確定させる
 - [ ] [99_CEO_MEMORY/01_Founding_Story.md](99_CEO_MEMORY/01_Founding_Story.md)(創業経緯)・[03_Future_Vision.md](99_CEO_MEMORY/03_Future_Vision.md)(将来構想)・[05_Important_Conversations.md](99_CEO_MEMORY/05_Important_Conversations.md)(重要な会話)を代表が記入する(04_Brand_Philosophy.mdは記入済み)
@@ -46,5 +48,6 @@
 | v2.5 | 2026-07-03 | Claude Code(CEO指示による) | Hero候補5点のモックアップ格納タスクを完了として消し込み。実装には背景単体データが別途必要であることを明記し、タスクを更新 |
 | v2.6 | 2026-07-03 | Claude Code(CEO提供による) | Hero背景単体データの格納・Homepage実装タスクを完了として消し込み。アイコンSVG化・別ロゴ案の確認タスクを追加 |
 | v2.7 | 2026-07-04 | Claude Code(CEO指示による) | **正式ロゴ確定を反映。** ロゴ格納タスクを完了として消し込み、格納先を[DESIGN_ASSETS/01_LOGO/](../DESIGN_ASSETS/01_LOGO/README.md)に更新。「別ロゴ案の確認」タスクを解決済みに変更(正式ロゴが別デザインに確定したため不採用)。真のSVGデータ取得・他制作物への展開タスクを追加 |
+| v2.8 | 2026-07-04 | Claude Code(CEO指示による) | Homepageβ版公開に伴い、Xserverへの実デプロイタスク(FTP/SFTP接続情報待ち)とβ版フィードバック収集タスクを追加 |
 
 *最終更新: 2026-07-04*

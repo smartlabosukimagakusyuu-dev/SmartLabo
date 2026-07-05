@@ -15,6 +15,39 @@
 - 真のベクター(SVG)ロゴデータを取得し [DESIGN_ASSETS/01_LOGO/SVG/](../DESIGN_ASSETS/01_LOGO/README.md) へ格納する
 - 正式ロゴをDashboard・営業資料・名刺・パンフレット等、他の制作物にも展開する(現状はHomepageのみ実装)
 - アイコンの実SVGファイルを [DESIGN_ASSETS/Icons/](../DESIGN_ASSETS/Icons/README.md) に格納する(現状は既存の線画SVGをバッジ風スタイルに変更する形で対応)
+- Xserverへの実デプロイ(FTP/SFTP接続情報の確認待ち)
+
+---
+
+## 2026-07-04 — Homepage v0.9 beta: β版として一般公開
+
+CEOより「ホームページをβ版として公開してください。目的は正式完成ではなく、共有しながら改善するための公開です。」との指示を受けた。Homepage Versionを **0.9 beta** として扱い、公開前チェックを実施した。
+
+### 公開前チェック結果
+
+| 項目 | 結果 |
+|---|---|
+| スマホ表示 | 375px幅で全セクションを確認。レイアウト崩れなし。モバイルナビ(ハンバーガーメニュー)の開閉も正常動作 |
+| リンク切れ | 内部アンカー4件(`#service`/`#industries`/`#mission`/`#cta`)すべて解決を確認。フッターの法務ページリンク・CTAセクション内の3ボタンは、既知の未実装機能(プレースホルダー`#`)であり、リンク切れではない |
+| CTAボタンの動作 | 「無料デモを見る」等のクリックで該当セクションへ正しくスクロールすることを確認 |
+| 表示崩れ | デスクトップ(1440px)・モバイル(375px)双方で全8セクションをスクロール確認。崩れなし |
+| 画像読み込み | Hero背景写真・ロゴアイコン・favicon、いずれも200 OKで読み込み成功を確認 |
+| README/CURRENT_STATUS | [WEBSITE/README.md](../WEBSITE/README.md) に「公開状況」セクションを新設。本ファイルのHomepage Versionを更新 |
+
+### 既知の未実装事項(β版として許容)
+
+フォーム送信の実処理、プライバシーポリシー・利用規約ページ、Hero以外の実写真素材、真のベクター(SVG)ロゴデータ。いずれも「β版=共有しながら改善する」という公開目的に沿って、今回は許容している。
+
+### Xserverへのデプロイについて
+
+CEOよりXserverでの公開希望があったが、**FTP/SFTP接続情報(ホスト名・ユーザー名・パスワード・公開ディレクトリ)がまだ確認できていないため、実際のデプロイは未完了。** 情報を受け取り次第、デプロイを実施し公開URLを本ファイル・[CURRENT_STATUS.md](CURRENT_STATUS.md) に追記する。
+
+### 更新したファイル
+
+- [WEBSITE/README.md](../WEBSITE/README.md)(v1.0→v1.1) — 「公開状況」セクション新設
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v2.1→v2.2) — Homepage Version 0.5→0.9 beta
+
+**変更者:** Claude Code(Lead Software Engineer)/ 指示: CEO
 
 ---
 
