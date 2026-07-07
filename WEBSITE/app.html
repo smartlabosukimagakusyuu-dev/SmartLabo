@@ -354,6 +354,52 @@ button,input,select,textarea{font-family:inherit}
 .ad-hist-meta{font-size:11px;color:var(--text2);margin-top:2px;}
 
 /* ═══════════════════════════════
+   TOOLS HUB
+═══════════════════════════════ */
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.tool-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:22px;display:flex;align-items:center;gap:18px;cursor:pointer;
+  transition:all .18s;
+}
+.tool-card:hover{box-shadow:0 6px 24px rgba(0,0,0,0.09);transform:translateY(-2px);border-color:var(--accent);}
+.tool-card-soon{opacity:.65;cursor:default;}
+.tool-card-soon:hover{transform:none;box-shadow:none;border-color:var(--border);}
+.tool-card-icon{width:60px;height:60px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.tool-card-body{flex:1;}
+.tool-card-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.tool-card-desc{font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:8px;}
+.tool-card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tool-tag{font-size:10px;font-weight:700;padding:2px 8px;background:#f1f5f9;border-radius:4px;color:var(--text2);}
+.tool-soon-badge{font-size:10px;font-weight:700;padding:2px 8px;background:#fef9c3;color:#854d0e;border-radius:4px;}
+.tool-card-arrow{font-size:18px;color:var(--text2);flex-shrink:0;}
+
+/* ═══════════════════════════════
+   LOAN CALCULATOR
+═══════════════════════════════ */
+.loan-back-btn{padding:6px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;font-weight:600;cursor:pointer;color:var(--text2);font-family:inherit;transition:all .15s;}
+.loan-back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.loan-layout{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start;}
+.loan-input-card{padding:22px;}
+.loan-inp-wrap{display:flex;align-items:center;gap:8px;}
+.loan-inp-wrap .form-inp{flex:1;}
+.loan-unit{font-size:13px;font-weight:600;color:var(--text2);white-space:nowrap;}
+.loan-slider{width:100%;margin-top:8px;accent-color:var(--accent);}
+.loan-result-card{background:linear-gradient(135deg,var(--navy),#0d2050);border-radius:14px;padding:24px;}
+.loan-result-main{text-align:center;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.1);}
+.loan-result-label{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:6px;}
+.loan-result-val{font-size:36px;font-weight:900;color:#fff;letter-spacing:-.03em;}
+.loan-result-sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.loan-sub{background:rgba(255,255,255,.07);border-radius:10px;padding:12px;}
+.loan-sub-label{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px;}
+.loan-sub-val{font-size:14px;font-weight:800;color:#fff;}
+.loan-bar-wrap{display:flex;height:16px;border-radius:8px;overflow:hidden;margin-bottom:10px;}
+.loan-bar-principal{background:var(--accent);transition:width .4s;}
+.loan-bar-interest{background:#fca5a5;transition:width .4s;}
+.loan-bar-legend{display:flex;align-items:center;font-size:12px;color:var(--text2);}
+.loan-leg-dot{display:inline-block;width:10px;height:10px;border-radius:50%;}
+
+/* ═══════════════════════════════
    SETTINGS
 ═══════════════════════════════ */
 .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -757,9 +803,9 @@ button,input,select,textarea{font-family:inherit}
         <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         レポート・分析
       </div>
-      <div class="nav-item" onclick="navTo('kukaku',this)">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-        土地区割り
+      <div class="nav-item" onclick="navTo('tools',this)">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        業務ツール
       </div>
       <div class="nav-item" onclick="navTo('settings',this)">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -1072,6 +1118,135 @@ button,input,select,textarea{font-family:inherit}
           <div class="settings-row"><span class="settings-label">最終更新</span><span class="settings-val">2026-07-07</span></div>
           <div class="settings-row" style="background:#fffbeb;border-radius:8px;padding:10px 14px;border:1px solid #fde68a">
             <span style="font-size:12px;color:#92400e">⚠️ これはデモ環境です。表示されているデータはすべてサンプルであり、実際の顧客・物件情報ではありません。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 業務ツール HUB -->
+    <div class="page" id="page-tools">
+      <div class="page-hd"><h2>業務ツール</h2><p>業務で使うツールをまとめて管理</p></div>
+      <div class="tools-grid">
+        <div class="tool-card" onclick="navTo('kukaku', document.querySelector('[onclick*=tools]'))">
+          <div class="tool-card-icon" style="background:linear-gradient(135deg,#2563EB,#60A5FA)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+          </div>
+          <div class="tool-card-body">
+            <div class="tool-card-name">土地区割りツール</div>
+            <div class="tool-card-desc">土地の外形を描いて区割り図を作成。面積・縮尺計算、PNG保存に対応。</div>
+            <div class="tool-card-tags"><span class="tool-tag">不動産</span><span class="tool-tag">図面</span><span class="tool-tag">計算</span></div>
+          </div>
+          <div class="tool-card-arrow">→</div>
+        </div>
+        <div class="tool-card" onclick="navTo('loan', document.querySelector('[onclick*=tools]'))">
+          <div class="tool-card-icon" style="background:linear-gradient(135deg,#10b981,#34d399)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="tool-card-body">
+            <div class="tool-card-name">ローン計算機</div>
+            <div class="tool-card-desc">借入額・金利・返済期間から月々の返済額・総返済額・返済スケジュールを計算。</div>
+            <div class="tool-card-tags"><span class="tool-tag">不動産</span><span class="tool-tag">ファイナンス</span><span class="tool-tag">提案</span></div>
+          </div>
+          <div class="tool-card-arrow">→</div>
+        </div>
+        <div class="tool-card tool-card-soon">
+          <div class="tool-card-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="tool-card-body">
+            <div class="tool-card-name">収益計算ツール <span class="tool-soon-badge">近日公開</span></div>
+            <div class="tool-card-desc">投資物件の表面利回り・実質利回り・キャッシュフローを自動計算。</div>
+            <div class="tool-card-tags"><span class="tool-tag">投資</span><span class="tool-tag">収益</span></div>
+          </div>
+          <div class="tool-card-arrow" style="opacity:.3">→</div>
+        </div>
+        <div class="tool-card tool-card-soon">
+          <div class="tool-card-icon" style="background:linear-gradient(135deg,#f59e0b,#fcd34d)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="tool-card-body">
+            <div class="tool-card-name">物件比較ツール <span class="tool-soon-badge">近日公開</span></div>
+            <div class="tool-card-desc">複数物件のスペック・価格・立地を並べて比較。提案資料の作成に活用。</div>
+            <div class="tool-card-tags"><span class="tool-tag">物件</span><span class="tool-tag">比較</span></div>
+          </div>
+          <div class="tool-card-arrow" style="opacity:.3">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ローン計算機 -->
+    <div class="page" id="page-loan">
+      <div class="page-hd">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="loan-back-btn" onclick="navTo('tools', document.querySelector('[onclick*=tools]'))">← 業務ツール</button>
+          <h2>ローン計算機</h2>
+        </div>
+        <p>借入条件を入力すると月々の返済額・総費用を自動計算</p>
+      </div>
+      <div class="loan-layout">
+        <!-- Input -->
+        <div class="card loan-input-card">
+          <h3 style="font-size:14px;font-weight:800;margin-bottom:18px">借入条件を入力</h3>
+          <div class="form-group">
+            <label class="form-label">借入金額</label>
+            <div class="loan-inp-wrap">
+              <input class="form-inp" type="number" id="loan-amount" value="3000" min="100" max="100000" oninput="calcLoan()">
+              <span class="loan-unit">万円</span>
+            </div>
+            <input type="range" class="loan-slider" id="loan-amount-sl" min="500" max="10000" step="100" value="3000" oninput="document.getElementById('loan-amount').value=this.value;calcLoan()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">金利（年率）</label>
+            <div class="loan-inp-wrap">
+              <input class="form-inp" type="number" id="loan-rate" value="1.8" min="0.1" max="10" step="0.1" oninput="calcLoan()">
+              <span class="loan-unit">%</span>
+            </div>
+            <input type="range" class="loan-slider" id="loan-rate-sl" min="0.1" max="5" step="0.1" value="1.8" oninput="document.getElementById('loan-rate').value=this.value;calcLoan()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">返済期間</label>
+            <div class="loan-inp-wrap">
+              <input class="form-inp" type="number" id="loan-years" value="35" min="1" max="50" oninput="calcLoan()">
+              <span class="loan-unit">年</span>
+            </div>
+            <input type="range" class="loan-slider" id="loan-years-sl" min="5" max="50" step="1" value="35" oninput="document.getElementById('loan-years').value=this.value;calcLoan()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">返済方式</label>
+            <select class="form-inp" id="loan-type" onchange="calcLoan()">
+              <option value="equal">元利均等返済（月々一定）</option>
+              <option value="principal">元金均等返済（利息逓減）</option>
+            </select>
+          </div>
+        </div>
+        <!-- Result -->
+        <div class="loan-result-col">
+          <div class="loan-result-card">
+            <div class="loan-result-main">
+              <div class="loan-result-label">月々の返済額</div>
+              <div class="loan-result-val" id="loan-monthly">¥0</div>
+            </div>
+            <div class="loan-result-sub-grid">
+              <div class="loan-sub"><div class="loan-sub-label">借入金額</div><div class="loan-sub-val" id="loan-r-amount">—</div></div>
+              <div class="loan-sub"><div class="loan-sub-label">総返済額</div><div class="loan-sub-val" id="loan-total">—</div></div>
+              <div class="loan-sub"><div class="loan-sub-label">総利息</div><div class="loan-sub-val" id="loan-interest" style="color:var(--danger)">—</div></div>
+              <div class="loan-sub"><div class="loan-sub-label">返済期間</div><div class="loan-sub-val" id="loan-r-years">—</div></div>
+            </div>
+          </div>
+          <!-- Chart bar -->
+          <div class="card" style="padding:20px;margin-top:14px">
+            <div style="font-size:13px;font-weight:700;margin-bottom:12px">元金 vs 利息の内訳</div>
+            <div class="loan-bar-wrap">
+              <div class="loan-bar-principal" id="loan-bar-p"></div>
+              <div class="loan-bar-interest" id="loan-bar-i"></div>
+            </div>
+            <div class="loan-bar-legend">
+              <span class="loan-leg-dot" style="background:var(--accent)"></span>元金
+              <span class="loan-leg-dot" style="background:#fca5a5;margin-left:14px"></span>利息
+            </div>
+            <div style="font-size:11px;color:var(--text2);margin-top:10px;padding:10px;background:#fffbeb;border-radius:8px;border:1px solid #fde68a">
+              ⚠️ この計算は参考値です。実際の借入条件・保証料・手数料は金融機関により異なります。
+            </div>
           </div>
         </div>
       </div>
@@ -1414,7 +1589,7 @@ function doLogout(){
 })();
 
 // ═══════════════ NAV ═══════════════
-const PAGE_TITLES={dashboard:'ダッシュボード',ai:'AIアシスタント',properties:'物件管理',contract:'契約管理',ad:'広告・集客',kukaku:'土地区割りツール',report:'レポート・分析',brain:'Company Brain',crm:'顧客管理',settings:'設定'};
+const PAGE_TITLES={dashboard:'ダッシュボード',ai:'AIアシスタント',properties:'物件管理',contract:'契約管理',ad:'広告・集客',kukaku:'土地区割りツール',loan:'ローン計算機',tools:'業務ツール',report:'レポート・分析',brain:'Company Brain',crm:'顧客管理',settings:'設定'};
 function navTo(name, el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -1423,6 +1598,7 @@ function navTo(name, el){
   document.getElementById('topbar-title').textContent=PAGE_TITLES[name]||name;
   if(name==='kukaku') requestAnimationFrame(()=>requestAnimationFrame(initKk));
   if(name==='report') setTimeout(drawCharts,100);
+  if(name==='loan') setTimeout(calcLoan,50);
 }
 
 // ═══════════════ COMPANY BRAIN ═══════════════
@@ -1481,6 +1657,36 @@ function brainChatSend(){
     msgs.innerHTML+=`<div class="bchat-msg bot"><div class="bchat-avatar">AI</div><div class="bchat-bubble">${ans}</div></div>`;
     msgs.scrollTop=msgs.scrollHeight;
   },500);
+}
+
+// ═══════════════ LOAN CALCULATOR ═══════════════
+function calcLoan(){
+  const P=parseFloat(document.getElementById('loan-amount').value)*10000||0;
+  const r=parseFloat(document.getElementById('loan-rate').value)/100/12||0;
+  const n=parseInt(document.getElementById('loan-years').value)*12||0;
+  const type=document.getElementById('loan-type').value;
+  document.getElementById('loan-amount-sl').value=document.getElementById('loan-amount').value;
+  document.getElementById('loan-rate-sl').value=document.getElementById('loan-rate').value;
+  document.getElementById('loan-years-sl').value=document.getElementById('loan-years').value;
+  let monthly=0,total=0;
+  if(type==='equal'){
+    monthly=r>0?P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):P/n;
+    total=monthly*n;
+  } else {
+    const firstMonth=P/n+(P*r);
+    monthly=firstMonth;
+    total=P+(P*r*(n+1)/2);
+  }
+  const interest=total-P;
+  const fmt=v=>v>=10000?'¥'+Math.round(v/10000)+'万':v>=1000?'¥'+Math.round(v/1000)+'千':'¥'+Math.round(v);
+  document.getElementById('loan-monthly').textContent=fmt(monthly)+'/月';
+  document.getElementById('loan-r-amount').textContent=fmt(P);
+  document.getElementById('loan-total').textContent=fmt(total);
+  document.getElementById('loan-interest').textContent=fmt(interest);
+  document.getElementById('loan-r-years').textContent=document.getElementById('loan-years').value+'年';
+  const pPct=Math.round(P/total*100);
+  document.getElementById('loan-bar-p').style.width=pPct+'%';
+  document.getElementById('loan-bar-i').style.width=(100-pPct)+'%';
 }
 
 // ═══════════════ CONTRACT MANAGEMENT ═══════════════
