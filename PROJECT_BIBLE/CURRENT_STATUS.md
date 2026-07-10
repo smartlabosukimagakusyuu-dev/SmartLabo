@@ -9,13 +9,15 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：3.4
+Project Bible Version：3.5
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：1.0 Release Candidate(Company Brain拡張済み。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
-Dashboard Version：0.5(Company OS実装済み。GitHub Pages公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/app.html)
-Current Task：Dashboard v0.5完成・GitHub Pages公開済み
+Dashboard Version：0.5(GitHub Pages公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/app.html)
+Current Task：Smart Labo Works(顧客向けSaaS)とCompany OS(社内専用システム、非売品)の製品境界を正式分離(2026-07-10 CEO決定)
 ```
+
+**用語の重要な変更(2026-07-10)：** 「Company OS」は株式会社スマートラボの**社内専用システム**の固有名詞として正式に確定した(非売品)。これまでDashboard/Smart Labo Worksの設計思想を説明する形容として使っていた「Company OS」という語は廃止し、以降Smart Labo Works側の説明には使用しない。詳細は [11_Development_Principles.md](11_Development_Principles.md)「製品境界の定義」を参照。
 
 ---
 
@@ -23,16 +25,16 @@ Current Task：Dashboard v0.5完成・GitHub Pages公開済み
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 3.4 |
+| Project Bible Version | 3.5 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版。**さらにCompany BrainをSmart Labo Works最大の差別化要素として全面拡張済み**(キャッチコピー・9項目の知識ソース・3利用シナリオ・ガラスUI・専用アイコン) |
 | Dashboard Version | **0.5(Company OS実装済み。app.html としてGitHub Pages公開中。Company Brain画面・AIモーニングブリーフィング・KPI拡張・アクティビティカラーコーディング・クイックアクション7項目・公式デザイントークン適用)** |
 | Smart Labo Works Version | 0.5(Dashboard v0.5と同一) |
 | Current Project | Company Setup |
-| Current Task | Dashboard v0.5完成・GitHub Pages公開済み |
-| Next Task | Dashboard v0.6(実データ接続・顧客管理強化) / Company Brain実データ連携 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴ展開 / Xserverサーバー契約完了後に正式ドメインへ切り替え |
-| Last Update | 2026-07-05 |
+| Current Task | Smart Labo Works(顧客向けSaaS)とCompany OS(社内専用システム、非売品)の製品境界を正式分離(2026-07-10 CEO決定)。`smartlabo-works/PRODUCT_BOUNDARY.md`・`PRODUCT_REQUIREMENTS.md`とPROJECT_BIBLEの用語を統一 |
+| Next Task | Dashboard v0.6(実データ接続・顧客管理強化) / Company Brain実データ連携 / Homepageのフォーム機能・法務ページ整備 / 正式ロゴ展開 / Xserverサーバー契約完了後に正式ドメインへ切り替え / `smartlabo-works`コード側でCompany OS機能(Smart Growth・人材育成等)とSmart Labo Works機能の実装分離に着手 |
+| Last Update | 2026-07-10 |
 | Maintainer | Masatoshi Ogawa |
 
 ---
@@ -164,5 +166,6 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 | **v2.7** | 2026-07-05 | Claude Code(CEO指示による) | **新章[11_Development_Principles.md](11_Development_Principles.md)を新設。** Project Bible Version 3.2→3.3に更新。開発前ルール(5点確認必須)、Smart Labo Design Principle(5項目チェックリスト)、デモ画面作成ルール、Company Brain優先方針、Dashboard設計原則(Company OS)、最重要原則を制定。今後のDashboard UI実装・営業資料・パンフレット等、すべての新規開発はこの章を判断基準とすること |
 | **v2.8** | 2026-07-05 | Claude Code(別セッションでのCEO作業をマージ) | **Dashboard Version 0.0→0.5を反映。** 別セッションで`WEBSITE/app.html`が実装され、GitHub Pagesで公開された(Company Brain専用画面・AIモーニングブリーフィング・KPI拡張・アクティビティカラーコーディング・クイックアクション7項目・公式デザイントークン適用)。Smart Labo Works Versionも0.0→0.5に更新。詳細は[CHANGELOG.md](CHANGELOG.md)「Dashboard v0.5」エントリを参照。マージ時点の確認により、`app.html`のログイン画面ロゴが正式ロゴ([00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md)の六角形+サーキット「S」)ではなく暫定的な六角形+チェックマークのSVGになっていることを検出。ブランド統一の観点で今後の確認・修正が必要(50_TODO.mdに追記) |
 | v2.9 | 2026-07-05 | Claude Code(CEO指示による) | **「CEOレビュー原則」を追加。** Project Bible Version 3.3→3.4に更新。[11_Development_Principles.md](11_Development_Principles.md)(v1.0→v1.1)に、大きな仕様変更・ブランド変更・UI変更は実装前にレビューを受けること、独自判断でブランドコンセプト・UI方針を変更しないことを明文化。[60_Editorial_Workflow.md](60_Editorial_Workflow.md)(v2.2→v2.3)と相互参照を追加 |
+| **v3.0** | 2026-07-10 | Claude Code(CEO指示による) | **Smart Labo Works(顧客向けSaaS)とCompany OS(社内専用システム、非売品)の製品境界を正式決定。** Project Bible Version 3.4→3.5に更新。[11_Development_Principles.md](11_Development_Principles.md)(v1.1→v1.2)・[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.0→v3.1)から、Company OSをSmart Labo Works自体の形容として使っていた箇所を削除・修正。「Smart Labo Group」は非公式な将来のブランド構想、「Smart Labo AI」「Smart Labo CRM」は将来の商品候補(正式製品ではない)と明記。詳細な機能境界は`smartlabo-works/PRODUCT_BOUNDARY.md`(別リポジトリ)を参照する構成にした |
 
-*最終更新: 2026-07-05*
+*最終更新: 2026-07-10*

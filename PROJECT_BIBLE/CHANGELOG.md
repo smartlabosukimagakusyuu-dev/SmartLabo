@@ -12,6 +12,7 @@
 ## [Unreleased]
 
 - (次回の変更予定があればここに記載)
+- `smartlabo-works`コード側でCompany OS機能(Smart Growth・人材育成・Innovation Hub等)とSmart Labo Works機能の実装分離に着手
 - 真のベクター(SVG)ロゴデータを取得し [DESIGN_ASSETS/01_LOGO/SVG/](../DESIGN_ASSETS/01_LOGO/README.md) へ格納する
 - 正式ロゴをDashboard・営業資料・名刺・パンフレット等、他の制作物にも展開する(現状はHomepageのみ実装)
 - Xserverのサーバープラン契約・DNS設定、契約完了後の正式ドメインへのデプロイ切り替え
@@ -19,6 +20,33 @@
 - Company Brainを営業資料・パンフレットへ展開する
 - Dashboard v0.6：実データ連携・顧客管理強化
 - `WEBSITE/app.html`のログイン画面ロゴを正式ロゴ(六角形+サーキット「S」)へ差し替える
+
+---
+
+## 2026-07-10 — Company OS と Smart Labo Works の製品呼称・境界を正式決定
+
+CEOより以下の方針決定があった。
+
+> 会社名：株式会社スマートラボ／販売する製品：Smart Labo Works／社内専用システム：Company OS。Company OSは顧客へ販売しない。Smart Labo Worksは顧客向けSaaSである。「Smart Labo Group」という表現は現時点では正式名称ではなく、将来のブランド構想としてのみ記載する。「Smart Labo AI」「Smart Labo CRM」も将来の商品候補として整理し、正式製品としては扱わない。
+
+### 背景
+
+`smartlabo-works`リポジトリの実装調査(`PRODUCT_REQUIREMENTS.md`・`PRODUCT_BOUNDARY.md`)により、現行コードには株式会社スマートラボ自身が使う社内専用機能(Smart Growth・人材育成・Innovation Hub等)と、顧客へ販売するSaaS機能(Company Brain・AI Assistant・CRM等)が単一アプリに混在していることが判明した。あわせて、PROJECT_BIBLE内でも「Company OS」という語が、①社内専用システムを指す用法と、②Smart Labo Works自体(顧客向け製品)の設計思想を形容する用法の2通りで混在して使われていたため、CEOが正式に呼称を統一した。
+
+### 主な変更内容
+
+- [11_Development_Principles.md](11_Development_Principles.md)(v1.1→v1.2)に「製品境界の定義」を新設。Smart Labo Works=顧客へ販売するSaaS製品、Company OS=株式会社スマートラボの社内専用システム(非売品)と明記。「Smart Labo Design Principle」「デモ画面作成ルール」「Dashboard設計原則」「最重要原則」の4箇所で、Company OSをSmart Labo Works自体の形容として使っていた記述を修正し、Smart Labo Worksの説明からCompany OSという語を除去した
+- [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.0→v3.1)に「製品境界」節を新設し、同様の区別を明記。関連ドキュメント欄の説明文も修正
+- 「Smart Labo Group」というプロダクトファミリー名、「Smart Labo AI」「Smart Labo CRM」という商品名は、いずれも**非公式・将来のブランド構想/商品候補**であり、正式名称・正式製品ではないことを明記
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)を更新。5行サマリー・ステータス表・Current Task/Next Taskに今回の決定を反映
+- 別リポジトリ`smartlabo-works`側の`PRODUCT_BOUNDARY.md`・`PRODUCT_REQUIREMENTS.md`も同じ前提へ統一(コミット: `docs: clarify product boundary and strategy`)
+
+### 更新したファイル
+
+- [11_Development_Principles.md](11_Development_Principles.md)(v1.1→v1.2)
+- [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.0→v3.1)
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)
+- [README.md](README.md)(PROJECT_BIBLE Version 3.4→3.5)
 
 ---
 

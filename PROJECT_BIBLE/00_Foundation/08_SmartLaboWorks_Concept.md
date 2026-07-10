@@ -37,6 +37,18 @@ Smart Labo Works は単一の巨大なシステムではなく、業務領域ご
 
 ---
 
+## 製品境界(2026-07-10 CEO決定)
+
+**Smart Labo Works は株式会社スマートラボが顧客へ販売するSaaS製品である。** これは、株式会社スマートラボ自身が経営・人事・製品開発のために使う社内専用システム「**Company OS**」(非売品)とは明確に別のシステムとして扱う。
+
+現行の`smartlabo-works`リポジトリのコードには、Company OS相当の社内専用機能(Smart Growth・人材育成・Innovation Hub等)とSmart Labo Works相当の顧客向け機能が単一のアプリに混在している状態であり、今後この境界に沿って分離していく。詳細な機能の棚卸し・分類は `smartlabo-works/PRODUCT_BOUNDARY.md`(Claude Code作成)を参照。
+
+なお「Smart Labo Group」という会社・プロダクトファミリー名、および「Smart Labo AI」「Smart Labo CRM」という商品名は、**現時点では正式名称・正式製品ではなく、将来のブランド構想・商品候補としてのみ**記録している。
+
+詳細は [11_Development_Principles.md](../11_Development_Principles.md)「製品境界の定義」を参照。
+
+---
+
 ## Company Brain — Smart Labo Works 最大の差別化要素
 
 > Smart Labo Works は単なるAIチャットではありません。会社の知識をAIが理解し、社員が必要な情報へ**「聞くだけ」**でたどり着ける **Company Brain** を実現します。
@@ -73,7 +85,7 @@ Company Brain は、他の業務モジュール(不動産関連業務支援、MI
 - [09_Product_History.md](09_Product_History.md)
 - [10_Future_Roadmap.md](10_Future_Roadmap.md)
 - [10_Development_Rules.md](../10_Development_Rules.md)
-- [11_Development_Principles.md](../11_Development_Principles.md) — 新機能を作る前の判断基準(「社長の時間を増やせるか」等)、Company OSとしての開発原則
+- [11_Development_Principles.md](../11_Development_Principles.md) — 新機能を作る前の判断基準(「社長の時間を増やせるか」等)、Smart Labo Worksの開発原則、製品境界の定義(Company OSとの区別)
 - [PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md) — Company Brainのコピー・UI・画面設計の詳細
 
 ---
@@ -85,5 +97,6 @@ Company Brain は、他の業務モジュール(不動産関連業務支援、MI
 | v1.0 | 2026-07-03 | Smart Labo | 初版作成 |
 | v2.0 | 2026-07-03 | Smart Labo | 00_Foundation構成への移行に伴い旧05_Product.mdから移動・改題。新Mission/Visionに合わせて全面改訂 |
 | **v3.0** | 2026-07-05 | Claude Code(CEO指示による) | **「Company Brain」をSmart Labo Works最大の差別化要素・中核基盤として正式に追加。** 一般的なマニュアル検索・チャットボットとの違いを比較表で明記し、キャッチコピー「探す時間を、考える時間へ。」を制定。詳細仕様は新設の[PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md)を参照する構成にした |
+| v3.1 | 2026-07-10 | Claude Code(CEO指示による) | **「製品境界」を新設し、Smart Labo Works(顧客へ販売するSaaS)とCompany OS(株式会社スマートラボの社内専用システム、非売品)を正式に区別。** 「Smart Labo Group」は非公式な将来のブランド構想、「Smart Labo AI」「Smart Labo CRM」は将来の商品候補(正式製品ではない)であることを明記。関連ドキュメント欄の[11_Development_Principles.md](../11_Development_Principles.md)の説明文も「Company OSとしての開発原則」から修正した。詳細な機能境界は`smartlabo-works/PRODUCT_BOUNDARY.md`を参照 |
 
-*最終更新: 2026-07-05*
+*最終更新: 2026-07-10*
