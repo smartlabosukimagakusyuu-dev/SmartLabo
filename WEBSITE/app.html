@@ -263,6 +263,159 @@ button,input,select,textarea{font-family:inherit}
 .qb-ai:hover{background:#dcfce7!important;}
 
 /* ═══════════════════════════════
+   CONTRACT MANAGEMENT
+═══════════════════════════════ */
+.ct-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+.ct-kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;text-align:center;}
+.ct-kpi.warn{border-color:#fde68a;background:#fffbeb;}
+.ct-kpi.danger{border-color:#fecaca;background:#fff5f5;}
+.ct-kpi-val{font-size:24px;font-weight:900;color:var(--text);}
+.ct-kpi.warn .ct-kpi-val{color:#d97706;}
+.ct-kpi.danger .ct-kpi-val{color:var(--danger);}
+.ct-kpi-label{font-size:11px;color:var(--text2);margin-top:4px;font-weight:600;}
+.ct-table{width:100%;border-collapse:collapse;font-size:13px;}
+.ct-table th{padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--text2);background:#f8faff;letter-spacing:.04em;border-bottom:1px solid var(--border);}
+.ct-table td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text);}
+.ct-table tr:last-child td{border-bottom:none;}
+.ct-table tr:hover td{background:#f8faff;}
+.ct-status{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;}
+.ct-status.active{background:#dcfce7;color:#166534;}
+.ct-status.renewal{background:#fef9c3;color:#854d0e;}
+.ct-status.expired{background:#fecaca;color:#991b1b;}
+.ct-status.done{background:#e0e7ff;color:#3730a3;}
+.ct-action-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);transition:all .15s;}
+.ct-action-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ═══════════════════════════════
+   CRM
+═══════════════════════════════ */
+.crm-layout{display:grid;grid-template-columns:340px 1fr;gap:16px;height:calc(100vh - 180px);}
+.crm-list-col{display:flex;flex-direction:column;gap:10px;min-height:0;}
+.crm-filter-tabs{display:flex;gap:6px;flex-shrink:0;}
+.crm-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
+.crm-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .15s;}
+.crm-card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.07);border-color:var(--accent);}
+.crm-card.selected{border-color:var(--accent);background:#eff6ff;}
+.crm-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.crm-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--light-blue));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+.crm-name{font-size:14px;font-weight:700;color:var(--text);}
+.crm-company{font-size:11px;color:var(--text2);}
+.crm-status-badge{margin-left:auto;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;}
+.crm-status-badge.検討中{background:#e0e7ff;color:#3730a3;}
+.crm-status-badge.商談中{background:#fef9c3;color:#854d0e;}
+.crm-status-badge.成約{background:#dcfce7;color:#166534;}
+.crm-status-badge.見込み{background:#f1f5f9;color:#475569;}
+.crm-card-meta{font-size:11px;color:var(--text2);display:flex;gap:12px;}
+.crm-detail-col{overflow-y:auto;padding:24px;}
+.crm-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;}
+.crm-detail-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.crm-detail-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--light-blue));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0;}
+.crm-detail-name{font-size:20px;font-weight:800;color:var(--text);}
+.crm-detail-company{font-size:13px;color:var(--text2);margin-top:2px;}
+.crm-detail-status{margin-left:auto;}
+.crm-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.crm-info-item{background:#f8faff;border-radius:10px;padding:12px 14px;}
+.crm-info-label{font-size:11px;color:var(--text2);font-weight:600;margin-bottom:4px;}
+.crm-info-val{font-size:13px;font-weight:600;color:var(--text);}
+.crm-ai-summary{background:linear-gradient(135deg,var(--navy),#102040);border-radius:12px;padding:16px;margin-bottom:20px;}
+.crm-ai-summary-title{font-size:12px;font-weight:700;color:#93c5fd;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.crm-ai-summary-text{font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;}
+.crm-history-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;}
+.crm-history-list{display:flex;flex-direction:column;gap:10px;}
+.crm-hist-item{padding:12px 14px;background:#f8faff;border-radius:10px;border-left:3px solid var(--accent);}
+.crm-hist-item.red{border-left-color:var(--danger);}
+.crm-hist-item.green{border-left-color:var(--success);}
+.crm-hist-date{font-size:11px;color:var(--text2);margin-bottom:4px;}
+.crm-hist-text{font-size:13px;color:var(--text);line-height:1.6;}
+
+/* ═══════════════════════════════
+   AD
+═══════════════════════════════ */
+.ad-layout{display:grid;grid-template-columns:360px 1fr;gap:16px;}
+.ad-form-card,.ad-preview-card{padding:20px;}
+.ad-platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.ad-plat{padding:9px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s;font-family:inherit;}
+.ad-plat.active{border-color:var(--accent);color:var(--accent);background:#eff6ff;}
+.ad-plat:hover{border-color:var(--accent);color:var(--accent);}
+.ad-tone-row{display:flex;gap:8px;}
+.ad-tone{padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s;font-family:inherit;}
+.ad-tone.active{border-color:var(--accent);color:var(--accent);background:#eff6ff;}
+.ad-preview-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.ad-platform-badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--accent);color:#fff;}
+.ad-generated-text{font-size:13.5px;line-height:1.9;color:var(--text);min-height:200px;white-space:pre-line;}
+.ad-preview-col{display:flex;flex-direction:column;gap:0;}
+.ad-history-list{display:flex;flex-direction:column;gap:10px;}
+.ad-hist-item{display:flex;align-items:center;gap:10px;}
+.ad-hist-plat{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;flex-shrink:0;}
+.ad-hist-plat.instagram{background:#fce7f3;color:#9d174d;}
+.ad-hist-plat.suumo{background:#dcfce7;color:#166534;}
+.ad-hist-plat.line{background:#dcfce7;color:#166534;}
+.ad-hist-title{font-size:13px;font-weight:600;color:var(--text);}
+.ad-hist-meta{font-size:11px;color:var(--text2);margin-top:2px;}
+
+/* ═══════════════════════════════
+   TOOLS HUB
+═══════════════════════════════ */
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.tool-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:22px;display:flex;align-items:center;gap:18px;cursor:pointer;
+  transition:all .18s;
+}
+.tool-card:hover{box-shadow:0 6px 24px rgba(0,0,0,0.09);transform:translateY(-2px);border-color:var(--accent);}
+.tool-card-soon{opacity:.65;cursor:default;}
+.tool-card-soon:hover{transform:none;box-shadow:none;border-color:var(--border);}
+.tool-card-icon{width:60px;height:60px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.tool-card-body{flex:1;}
+.tool-card-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.tool-card-desc{font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:8px;}
+.tool-card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tool-tag{font-size:10px;font-weight:700;padding:2px 8px;background:#f1f5f9;border-radius:4px;color:var(--text2);}
+.tool-soon-badge{font-size:10px;font-weight:700;padding:2px 8px;background:#fef9c3;color:#854d0e;border-radius:4px;}
+.tool-card-arrow{font-size:18px;color:var(--text2);flex-shrink:0;}
+
+/* ═══════════════════════════════
+   LOAN CALCULATOR
+═══════════════════════════════ */
+.loan-back-btn{padding:6px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;font-weight:600;cursor:pointer;color:var(--text2);font-family:inherit;transition:all .15s;}
+.loan-back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.loan-layout{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start;}
+.loan-input-card{padding:22px;}
+.loan-inp-wrap{display:flex;align-items:center;gap:8px;}
+.loan-inp-wrap .form-inp{flex:1;}
+.loan-unit{font-size:13px;font-weight:600;color:var(--text2);white-space:nowrap;}
+.loan-slider{width:100%;margin-top:8px;accent-color:var(--accent);}
+.loan-result-card{background:linear-gradient(135deg,var(--navy),#0d2050);border-radius:14px;padding:24px;}
+.loan-result-main{text-align:center;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.1);}
+.loan-result-label{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:6px;}
+.loan-result-val{font-size:36px;font-weight:900;color:#fff;letter-spacing:-.03em;}
+.loan-result-sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.loan-sub{background:rgba(255,255,255,.07);border-radius:10px;padding:12px;}
+.loan-sub-label{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px;}
+.loan-sub-val{font-size:14px;font-weight:800;color:#fff;}
+.loan-bar-wrap{display:flex;height:16px;border-radius:8px;overflow:hidden;margin-bottom:10px;}
+.loan-bar-principal{background:var(--accent);transition:width .4s;}
+.loan-bar-interest{background:#fca5a5;transition:width .4s;}
+.loan-bar-legend{display:flex;align-items:center;font-size:12px;color:var(--text2);}
+.loan-leg-dot{display:inline-block;width:10px;height:10px;border-radius:50%;}
+
+/* ═══════════════════════════════
+   SETTINGS
+═══════════════════════════════ */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.settings-section-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:16px;}
+.settings-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.settings-row:last-child{border-bottom:none;}
+.settings-label{font-size:12px;font-weight:600;color:var(--text2);width:100px;flex-shrink:0;}
+.settings-val{font-size:13px;color:var(--text);flex:1;}
+.settings-edit-btn{padding:5px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);font-family:inherit;transition:all .15s;}
+.settings-edit-btn:hover{border-color:var(--accent);color:var(--accent);}
+.settings-toggle{width:44px;height:24px;border-radius:12px;background:#e2e8f0;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
+.settings-toggle.on{background:var(--accent);}
+.toggle-knob{width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.settings-toggle.on .toggle-knob{left:22px;}
+
+/* ═══════════════════════════════
    COMPANY BRAIN
 ═══════════════════════════════ */
 .brain-search-wrap{
@@ -620,13 +773,18 @@ button,input,select,textarea{font-family:inherit}
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         ダッシュボード
       </div>
-      <div class="nav-item" onclick="navTo('ai',this)">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-        AIアシスタント
-      </div>
       <div class="nav-item nav-brain" onclick="navTo('brain',this)">
         <svg viewBox="0 0 24 24" style="stroke:#60A5FA"><path d="M9.5 2a4.5 4.5 0 014.5 4.5c0 .5-.07 1-.2 1.5"/><path d="M14.5 2a4.5 4.5 0 00-4.5 4.5"/><path d="M4 14a4 4 0 004 4h.5"/><path d="M20 14a4 4 0 01-4 4h-.5"/><path d="M12 18v4"/><path d="M8.5 6.5C6 7.5 4 10 4 13c0 .5.04 1 .12 1.5"/><path d="M15.5 6.5C18 7.5 20 10 20 13c0 .5-.04 1-.12 1.5"/><circle cx="12" cy="13" r="2"/><path d="M10 13H4.5M14 13h5.5"/></svg>
         <span style="background:linear-gradient(90deg,#60A5FA,#00D4FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700">Company Brain</span>
+      </div>
+      <div class="nav-item" onclick="navTo('ai',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        AIアシスタント
+      </div>
+      <div class="nav-sep"></div>
+      <div class="nav-item" onclick="navTo('crm',this)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        顧客管理
       </div>
       <div class="nav-item" onclick="navTo('properties',this)">
         <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -634,21 +792,26 @@ button,input,select,textarea{font-family:inherit}
       </div>
       <div class="nav-item" onclick="navTo('contract',this)">
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        契約・書類作成
+        契約管理
       </div>
       <div class="nav-item" onclick="navTo('ad',this)">
-        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        広告・集客サポート
-      </div>
-      <div class="nav-item" onclick="navTo('kukaku',this)">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-        土地区割りツール
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12 19.79 19.79 0 01.9 3.38 2 2 0 012.88 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        広告・集客
       </div>
       <div class="nav-sep"></div>
       <div class="nav-item" onclick="navTo('report',this)">
         <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         レポート・分析
       </div>
+      <div class="nav-item" onclick="navTo('tools',this)">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        業務ツール
+      </div>
+      <div class="nav-item" onclick="navTo('settings',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        設定
+      </div>
+      <div class="nav-sep"></div>
       <div class="nav-item" onclick="doLogout()">
         <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         ログアウト
@@ -779,19 +942,314 @@ button,input,select,textarea{font-family:inherit}
 
     <!-- CONTRACT -->
     <div class="page" id="page-contract">
-      <div class="page-hd"><h2>契約・書類作成</h2><p>AIが契約書・重要事項説明書を自動生成</p></div>
-      <div class="contract-grid">
-        <div class="contract-type"><div class="ct-icon">📋</div><div class="ct-name">売買契約書</div><div class="ct-desc">物件情報から売買契約書を自動生成。署名欄・条件・特約を含む正式書式で出力します。</div></div>
-        <div class="contract-type"><div class="ct-icon">📝</div><div class="ct-name">重要事項説明書</div><div class="ct-desc">宅建業法に準拠した重要事項説明書を自動作成。法定記載項目を網羅します。</div></div>
-        <div class="contract-type"><div class="ct-icon">🏠</div><div class="ct-name">賃貸借契約書</div><div class="ct-desc">賃貸物件の賃貸借契約書を自動生成。礼金・敷金・特約条項まで対応します。</div></div>
-        <div class="contract-type"><div class="ct-icon">🔑</div><div class="ct-name">媒介契約書</div><div class="ct-desc">専任・専属専任・一般の3種類の媒介契約書に対応。期間・手数料を自動計算。</div></div>
+      <div class="page-hd"><h2>契約管理</h2><p>契約一覧・更新管理・書類作成をまとめて管理</p></div>
+
+      <!-- KPI row -->
+      <div class="ct-kpi-row">
+        <div class="ct-kpi"><div class="ct-kpi-val">24</div><div class="ct-kpi-label">有効契約</div></div>
+        <div class="ct-kpi warn"><div class="ct-kpi-val">3</div><div class="ct-kpi-label">更新期限30日以内</div></div>
+        <div class="ct-kpi danger"><div class="ct-kpi-val">1</div><div class="ct-kpi-label">要対応</div></div>
+        <div class="ct-kpi"><div class="ct-kpi-val">¥8,420万</div><div class="ct-kpi-label">契約総額</div></div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="prop-toolbar" style="margin-bottom:14px">
+        <input class="prop-search" type="text" placeholder="🔍 顧客名・物件名・契約番号で検索..." oninput="filterContracts(this.value)">
+        <div class="prop-filters">
+          <button class="flt-btn active" onclick="filterContractStatus('all',this)">すべて</button>
+          <button class="flt-btn" onclick="filterContractStatus('有効',this)">有効</button>
+          <button class="flt-btn" onclick="filterContractStatus('更新期限',this)">更新期限</button>
+          <button class="flt-btn" onclick="filterContractStatus('完了',this)">完了</button>
+        </div>
+        <button class="btn-primary" onclick="openContractCreate()">＋ 契約書作成</button>
+      </div>
+
+      <!-- Contract Table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="ct-table" id="contract-table">
+          <thead>
+            <tr><th>契約番号</th><th>顧客名</th><th>物件</th><th>種別</th><th>契約金額</th><th>開始日</th><th>満了日</th><th>ステータス</th><th></th></tr>
+          </thead>
+          <tbody id="contract-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Contract Create Panel -->
+      <div class="ct-create-panel card" id="ct-create-panel" style="display:none;margin-top:20px">
+        <h3 style="margin-bottom:18px;font-size:15px;font-weight:800">📋 契約書を作成</h3>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">契約種別</label>
+            <select class="form-inp" id="ct-type">
+              <option>売買契約書</option><option>賃貸借契約書</option><option>重要事項説明書</option><option>媒介契約書</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">顧客名</label><input class="form-inp" id="ct-customer" placeholder="例：田中 一郎"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">物件名</label><input class="form-inp" id="ct-property" placeholder="例：豊平区 3LDKマンション"></div>
+          <div class="form-group"><label class="form-label">契約金額</label><input class="form-inp" id="ct-amount" placeholder="例：3,280万円"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-cancel" onclick="document.getElementById('ct-create-panel').style.display='none'">キャンセル</button>
+          <button class="btn-save" onclick="generateContract()">🤖 AIで契約書を生成</button>
+        </div>
+        <div id="ct-generated" style="display:none;margin-top:16px;padding:16px;background:#f8faff;border-radius:10px;font-size:13px;line-height:1.9;color:var(--text);border:1px solid var(--border)"></div>
       </div>
     </div>
 
     <!-- AD -->
     <div class="page" id="page-ad">
-      <div class="page-hd"><h2>広告・集客サポート</h2><p>SUUMO・AtHome・Instagram用の広告文を自動生成</p></div>
-      <div class="card"><div class="empty-state"><div class="es-icon">📣</div><p>物件管理から物件を選択すると<br>各媒体用の広告文・画像を自動生成します</p></div></div>
+      <div class="page-hd"><h2>広告・集客</h2><p>AIが各媒体用の広告文・SNS投稿を自動生成</p></div>
+      <div class="ad-layout">
+        <!-- Left: Create Form -->
+        <div class="card ad-form-card">
+          <h3 style="font-size:14px;font-weight:800;margin-bottom:16px">📝 広告を作成</h3>
+          <div class="form-group"><label class="form-label">媒体を選択</label>
+            <div class="ad-platform-grid">
+              <button class="ad-plat active" id="plat-suumo" onclick="selectPlat('suumo',this)">SUUMO</button>
+              <button class="ad-plat" id="plat-athome" onclick="selectPlat('athome',this)">AtHome</button>
+              <button class="ad-plat" id="plat-instagram" onclick="selectPlat('instagram',this)">Instagram</button>
+              <button class="ad-plat" id="plat-line" onclick="selectPlat('line',this)">LINEチラシ</button>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">物件名</label>
+            <input class="form-inp" id="ad-prop" placeholder="例：札幌市中央区 3LDKマンション" value="札幌市中央区 3LDKマンション">
+          </div>
+          <div class="form-group"><label class="form-label">価格</label>
+            <input class="form-inp" id="ad-price" placeholder="例：3,280万円" value="3,280万円">
+          </div>
+          <div class="form-group"><label class="form-label">特徴・アピールポイント</label>
+            <textarea class="form-inp" id="ad-features" rows="3" placeholder="例：駅徒歩5分、南向き角部屋、新築、駐車場付き">駅徒歩5分、南向き角部屋、築3年、駐車場付き、24時間オートロック</textarea>
+          </div>
+          <div class="form-group"><label class="form-label">トーン</label>
+            <div class="ad-tone-row">
+              <button class="ad-tone active" onclick="selectTone('professional',this)">プロフェッショナル</button>
+              <button class="ad-tone" onclick="selectTone('friendly',this)">親しみやすい</button>
+              <button class="ad-tone" onclick="selectTone('luxury',this)">高級感</button>
+            </div>
+          </div>
+          <button class="btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="generateAd()">🤖 AIで広告文を生成</button>
+        </div>
+        <!-- Right: Preview -->
+        <div class="ad-preview-col">
+          <div class="card ad-preview-card" id="ad-preview-card">
+            <div class="ad-preview-header">
+              <span id="ad-preview-platform-badge" class="ad-platform-badge">SUUMO</span>
+              <span style="font-size:12px;color:var(--text2)">プレビュー</span>
+            </div>
+            <div id="ad-generated-text" class="ad-generated-text">
+              ここに生成された広告文が表示されます。左のフォームを入力して「AIで広告文を生成」ボタンを押してください。
+            </div>
+            <div id="ad-copy-row" style="display:none;margin-top:12px;display:flex;gap:8px">
+              <button class="btn-primary" style="font-size:12px;padding:8px 14px" onclick="copyAd()">📋 コピー</button>
+              <button class="btn-primary" style="font-size:12px;padding:8px 14px;background:var(--success)" onclick="generateAd()">🔄 再生成</button>
+            </div>
+          </div>
+          <!-- SNS Post Examples -->
+          <div class="card" style="margin-top:14px">
+            <h4 style="font-size:13px;font-weight:800;margin-bottom:12px">📱 最近の投稿実績</h4>
+            <div class="ad-history-list">
+              <div class="ad-hist-item"><span class="ad-hist-plat instagram">Instagram</span><div class="ad-hist-body"><div class="ad-hist-title">白石区 2LDKマンション</div><div class="ad-hist-meta">3日前 · いいね 124 · 問い合わせ 8件</div></div></div>
+              <div class="ad-hist-item"><span class="ad-hist-plat suumo">SUUMO</span><div class="ad-hist-body"><div class="ad-hist-title">豊平区 戸建て住宅</div><div class="ad-hist-meta">5日前 · 閲覧 892回 · 問い合わせ 12件</div></div></div>
+              <div class="ad-hist-item"><span class="ad-hist-plat line">LINEチラシ</span><div class="ad-hist-body"><div class="ad-hist-title">中央区 1LDKマンション</div><div class="ad-hist-meta">1週間前 · 配信 2,400件 · クリック率 4.2%</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRM -->
+    <div class="page" id="page-crm">
+      <div class="page-hd"><h2>顧客管理</h2><p>顧客情報・対応履歴・AI要約を一元管理</p></div>
+      <div class="crm-layout">
+        <!-- List -->
+        <div class="crm-list-col">
+          <div class="prop-toolbar" style="margin-bottom:12px">
+            <input class="prop-search" id="crm-search" type="text" placeholder="🔍 顧客名・会社名・電話で検索..." oninput="filterCrm(this.value)" style="min-width:0;flex:1">
+            <button class="btn-primary" onclick="openCrmAdd()">＋ 顧客追加</button>
+          </div>
+          <div class="crm-filter-tabs">
+            <button class="flt-btn active" onclick="setCrmFilter('all',this)">すべて (12)</button>
+            <button class="flt-btn" onclick="setCrmFilter('検討中',this)">検討中</button>
+            <button class="flt-btn" onclick="setCrmFilter('商談中',this)">商談中</button>
+            <button class="flt-btn" onclick="setCrmFilter('成約',this)">成約</button>
+          </div>
+          <div class="crm-list" id="crm-list"></div>
+        </div>
+        <!-- Detail -->
+        <div class="crm-detail-col card" id="crm-detail">
+          <div class="crm-empty-state">
+            <div style="font-size:40px;margin-bottom:12px">👥</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text2)">顧客を選択してください</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:6px">左リストの顧客をクリックすると詳細が表示されます</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="page-hd"><h2>設定</h2><p>アカウント・会社情報・通知設定</p></div>
+      <div class="settings-grid">
+        <div class="card">
+          <h3 class="settings-section-title">👤 アカウント情報</h3>
+          <div class="settings-row"><span class="settings-label">名前</span><span class="settings-val">山田 太郎</span><button class="settings-edit-btn">編集</button></div>
+          <div class="settings-row"><span class="settings-label">メール</span><span class="settings-val">demo@smartlabo.jp</span><button class="settings-edit-btn">編集</button></div>
+          <div class="settings-row"><span class="settings-label">役職</span><span class="settings-val">代表取締役</span><button class="settings-edit-btn">編集</button></div>
+          <div class="settings-row"><span class="settings-label">パスワード</span><span class="settings-val">••••••••</span><button class="settings-edit-btn">変更</button></div>
+        </div>
+        <div class="card">
+          <h3 class="settings-section-title">🏢 会社情報</h3>
+          <div class="settings-row"><span class="settings-label">会社名</span><span class="settings-val">サンプル不動産株式会社</span><button class="settings-edit-btn">編集</button></div>
+          <div class="settings-row"><span class="settings-label">プラン</span><span class="settings-val" style="color:var(--accent);font-weight:700">スタンダード</span><button class="settings-edit-btn">変更</button></div>
+          <div class="settings-row"><span class="settings-label">契約期間</span><span class="settings-val">2025/05/01 〜 2026/04/30</span></div>
+          <div class="settings-row"><span class="settings-label">ユーザー数</span><span class="settings-val">5名 / 10名</span></div>
+        </div>
+        <div class="card">
+          <h3 class="settings-section-title">🔔 通知設定</h3>
+          <div class="settings-row"><span class="settings-label">契約更新アラート</span><div class="settings-toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="settings-row"><span class="settings-label">返信漏れ通知</span><div class="settings-toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="settings-row"><span class="settings-label">AIからの提案</span><div class="settings-toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="settings-row"><span class="settings-label">メール通知</span><div class="settings-toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        </div>
+        <div class="card">
+          <h3 class="settings-section-title">ℹ️ システム情報</h3>
+          <div class="settings-row"><span class="settings-label">バージョン</span><span class="settings-val">Smart Labo Works v1.0</span></div>
+          <div class="settings-row"><span class="settings-label">最終更新</span><span class="settings-val">2026-07-07</span></div>
+          <div class="settings-row" style="background:#fffbeb;border-radius:8px;padding:10px 14px;border:1px solid #fde68a">
+            <span style="font-size:12px;color:#92400e">⚠️ これはデモ環境です。表示されているデータはすべてサンプルであり、実際の顧客・物件情報ではありません。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 業務ツール HUB -->
+    <div class="page" id="page-tools">
+      <div class="page-hd"><h2>業務ツール</h2><p>業務で使うツールをまとめて管理</p></div>
+      <div class="tools-grid">
+        <div class="tool-card" onclick="navTo('kukaku', document.querySelector('[onclick*=tools]'))">
+          <div class="tool-card-icon" style="background:linear-gradient(135deg,#2563EB,#60A5FA)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+          </div>
+          <div class="tool-card-body">
+            <div class="tool-card-name">土地区割りツール</div>
+            <div class="tool-card-desc">土地の外形を描いて区割り図を作成。面積・縮尺計算、PNG保存に対応。</div>
+            <div class="tool-card-tags"><span class="tool-tag">不動産</span><span class="tool-tag">図面</span><span class="tool-tag">計算</span></div>
+          </div>
+          <div class="tool-card-arrow">→</div>
+        </div>
+        <div class="tool-card" onclick="navTo('loan', document.querySelector('[onclick*=tools]'))">
+          <div class="tool-card-icon" style="background:linear-gradient(135deg,#10b981,#34d399)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="tool-card-body">
+            <div class="tool-card-name">ローン計算機</div>
+            <div class="tool-card-desc">借入額・金利・返済期間から月々の返済額・総返済額・返済スケジュールを計算。</div>
+            <div class="tool-card-tags"><span class="tool-tag">不動産</span><span class="tool-tag">ファイナンス</span><span class="tool-tag">提案</span></div>
+          </div>
+          <div class="tool-card-arrow">→</div>
+        </div>
+        <div class="tool-card tool-card-soon">
+          <div class="tool-card-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="tool-card-body">
+            <div class="tool-card-name">収益計算ツール <span class="tool-soon-badge">近日公開</span></div>
+            <div class="tool-card-desc">投資物件の表面利回り・実質利回り・キャッシュフローを自動計算。</div>
+            <div class="tool-card-tags"><span class="tool-tag">投資</span><span class="tool-tag">収益</span></div>
+          </div>
+          <div class="tool-card-arrow" style="opacity:.3">→</div>
+        </div>
+        <div class="tool-card tool-card-soon">
+          <div class="tool-card-icon" style="background:linear-gradient(135deg,#f59e0b,#fcd34d)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="tool-card-body">
+            <div class="tool-card-name">物件比較ツール <span class="tool-soon-badge">近日公開</span></div>
+            <div class="tool-card-desc">複数物件のスペック・価格・立地を並べて比較。提案資料の作成に活用。</div>
+            <div class="tool-card-tags"><span class="tool-tag">物件</span><span class="tool-tag">比較</span></div>
+          </div>
+          <div class="tool-card-arrow" style="opacity:.3">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ローン計算機 -->
+    <div class="page" id="page-loan">
+      <div class="page-hd">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="loan-back-btn" onclick="navTo('tools', document.querySelector('[onclick*=tools]'))">← 業務ツール</button>
+          <h2>ローン計算機</h2>
+        </div>
+        <p>借入条件を入力すると月々の返済額・総費用を自動計算</p>
+      </div>
+      <div class="loan-layout">
+        <!-- Input -->
+        <div class="card loan-input-card">
+          <h3 style="font-size:14px;font-weight:800;margin-bottom:18px">借入条件を入力</h3>
+          <div class="form-group">
+            <label class="form-label">借入金額</label>
+            <div class="loan-inp-wrap">
+              <input class="form-inp" type="number" id="loan-amount" value="3000" min="100" max="100000" oninput="calcLoan()">
+              <span class="loan-unit">万円</span>
+            </div>
+            <input type="range" class="loan-slider" id="loan-amount-sl" min="500" max="10000" step="100" value="3000" oninput="document.getElementById('loan-amount').value=this.value;calcLoan()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">金利（年率）</label>
+            <div class="loan-inp-wrap">
+              <input class="form-inp" type="number" id="loan-rate" value="1.8" min="0.1" max="10" step="0.1" oninput="calcLoan()">
+              <span class="loan-unit">%</span>
+            </div>
+            <input type="range" class="loan-slider" id="loan-rate-sl" min="0.1" max="5" step="0.1" value="1.8" oninput="document.getElementById('loan-rate').value=this.value;calcLoan()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">返済期間</label>
+            <div class="loan-inp-wrap">
+              <input class="form-inp" type="number" id="loan-years" value="35" min="1" max="50" oninput="calcLoan()">
+              <span class="loan-unit">年</span>
+            </div>
+            <input type="range" class="loan-slider" id="loan-years-sl" min="5" max="50" step="1" value="35" oninput="document.getElementById('loan-years').value=this.value;calcLoan()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">返済方式</label>
+            <select class="form-inp" id="loan-type" onchange="calcLoan()">
+              <option value="equal">元利均等返済（月々一定）</option>
+              <option value="principal">元金均等返済（利息逓減）</option>
+            </select>
+          </div>
+        </div>
+        <!-- Result -->
+        <div class="loan-result-col">
+          <div class="loan-result-card">
+            <div class="loan-result-main">
+              <div class="loan-result-label">月々の返済額</div>
+              <div class="loan-result-val" id="loan-monthly">¥0</div>
+            </div>
+            <div class="loan-result-sub-grid">
+              <div class="loan-sub"><div class="loan-sub-label">借入金額</div><div class="loan-sub-val" id="loan-r-amount">—</div></div>
+              <div class="loan-sub"><div class="loan-sub-label">総返済額</div><div class="loan-sub-val" id="loan-total">—</div></div>
+              <div class="loan-sub"><div class="loan-sub-label">総利息</div><div class="loan-sub-val" id="loan-interest" style="color:var(--danger)">—</div></div>
+              <div class="loan-sub"><div class="loan-sub-label">返済期間</div><div class="loan-sub-val" id="loan-r-years">—</div></div>
+            </div>
+          </div>
+          <!-- Chart bar -->
+          <div class="card" style="padding:20px;margin-top:14px">
+            <div style="font-size:13px;font-weight:700;margin-bottom:12px">元金 vs 利息の内訳</div>
+            <div class="loan-bar-wrap">
+              <div class="loan-bar-principal" id="loan-bar-p"></div>
+              <div class="loan-bar-interest" id="loan-bar-i"></div>
+            </div>
+            <div class="loan-bar-legend">
+              <span class="loan-leg-dot" style="background:var(--accent)"></span>元金
+              <span class="loan-leg-dot" style="background:#fca5a5;margin-left:14px"></span>利息
+            </div>
+            <div style="font-size:11px;color:var(--text2);margin-top:10px;padding:10px;background:#fffbeb;border-radius:8px;border:1px solid #fde68a">
+              ⚠️ この計算は参考値です。実際の借入条件・保証料・手数料は金融機関により異なります。
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 土地区割り -->
@@ -1131,7 +1589,7 @@ function doLogout(){
 })();
 
 // ═══════════════ NAV ═══════════════
-const PAGE_TITLES={dashboard:'ダッシュボード',ai:'AIアシスタント',properties:'物件管理',contract:'契約・書類作成',ad:'広告・集客サポート',kukaku:'土地区割りツール',report:'レポート・分析',brain:'Company Brain'};
+const PAGE_TITLES={dashboard:'ダッシュボード',ai:'AIアシスタント',properties:'物件管理',contract:'契約管理',ad:'広告・集客',kukaku:'土地区割りツール',loan:'ローン計算機',tools:'業務ツール',report:'レポート・分析',brain:'Company Brain',crm:'顧客管理',settings:'設定'};
 function navTo(name, el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -1140,6 +1598,7 @@ function navTo(name, el){
   document.getElementById('topbar-title').textContent=PAGE_TITLES[name]||name;
   if(name==='kukaku') requestAnimationFrame(()=>requestAnimationFrame(initKk));
   if(name==='report') setTimeout(drawCharts,100);
+  if(name==='loan') setTimeout(calcLoan,50);
 }
 
 // ═══════════════ COMPANY BRAIN ═══════════════
@@ -1198,6 +1657,259 @@ function brainChatSend(){
     msgs.innerHTML+=`<div class="bchat-msg bot"><div class="bchat-avatar">AI</div><div class="bchat-bubble">${ans}</div></div>`;
     msgs.scrollTop=msgs.scrollHeight;
   },500);
+}
+
+// ═══════════════ LOAN CALCULATOR ═══════════════
+function calcLoan(){
+  const P=parseFloat(document.getElementById('loan-amount').value)*10000||0;
+  const r=parseFloat(document.getElementById('loan-rate').value)/100/12||0;
+  const n=parseInt(document.getElementById('loan-years').value)*12||0;
+  const type=document.getElementById('loan-type').value;
+  document.getElementById('loan-amount-sl').value=document.getElementById('loan-amount').value;
+  document.getElementById('loan-rate-sl').value=document.getElementById('loan-rate').value;
+  document.getElementById('loan-years-sl').value=document.getElementById('loan-years').value;
+  let monthly=0,total=0;
+  if(type==='equal'){
+    monthly=r>0?P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):P/n;
+    total=monthly*n;
+  } else {
+    const firstMonth=P/n+(P*r);
+    monthly=firstMonth;
+    total=P+(P*r*(n+1)/2);
+  }
+  const interest=total-P;
+  const fmt=v=>v>=10000?'¥'+Math.round(v/10000)+'万':v>=1000?'¥'+Math.round(v/1000)+'千':'¥'+Math.round(v);
+  document.getElementById('loan-monthly').textContent=fmt(monthly)+'/月';
+  document.getElementById('loan-r-amount').textContent=fmt(P);
+  document.getElementById('loan-total').textContent=fmt(total);
+  document.getElementById('loan-interest').textContent=fmt(interest);
+  document.getElementById('loan-r-years').textContent=document.getElementById('loan-years').value+'年';
+  const pPct=Math.round(P/total*100);
+  document.getElementById('loan-bar-p').style.width=pPct+'%';
+  document.getElementById('loan-bar-i').style.width=(100-pPct)+'%';
+}
+
+// ═══════════════ CONTRACT MANAGEMENT ═══════════════
+const CONTRACT_DATA=[
+  {id:'C-2026-024',customer:'田中 一郎',property:'豊平区 戸建て住宅',type:'売買契約',amount:'¥4,850万',start:'2026-04-01',end:'2026-10-01',status:'有効'},
+  {id:'C-2026-023',customer:'鈴木 花子',property:'白石区 2LDKマンション',type:'賃貸借契約',amount:'¥8.5万/月',start:'2025-08-01',end:'2026-07-31',status:'更新期限'},
+  {id:'C-2026-022',customer:'山本 健二',property:'中央区 3LDKマンション',type:'売買契約',amount:'¥3,280万',start:'2026-03-15',end:'2027-03-14',status:'有効'},
+  {id:'C-2026-021',customer:'佐藤 美咲',property:'北区 平屋住宅',type:'媒介契約',amount:'¥2,950万',start:'2026-06-01',end:'2026-08-01',status:'更新期限'},
+  {id:'C-2026-020',customer:'高橋 浩',property:'渋谷区 1LDKマンション',type:'売買契約',amount:'¥6,500万',start:'2026-01-10',end:'2027-01-09',status:'有効'},
+  {id:'C-2025-018',customer:'伊藤 裕子',property:'豊平区 2LDKマンション',type:'賃貸借契約',amount:'¥7.2万/月',start:'2025-05-01',end:'2026-04-30',status:'要対応'},
+  {id:'C-2025-015',customer:'渡辺 翔',property:'北区 3LDK戸建て',type:'売買契約',amount:'¥3,500万',start:'2025-09-01',end:'2025-12-01',status:'完了'},
+];
+function renderContracts(data){
+  const tbody=document.getElementById('contract-tbody');
+  if(!tbody) return;
+  tbody.innerHTML=data.map(c=>{
+    const sc={有効:'active',更新期限:'renewal',要対応:'expired',完了:'done'}[c.status]||'active';
+    return `<tr>
+      <td style="font-family:monospace;font-size:12px;color:var(--text2)">${c.id}</td>
+      <td style="font-weight:700">${c.customer}</td>
+      <td>${c.property}</td>
+      <td style="font-size:12px;color:var(--text2)">${c.type}</td>
+      <td style="font-weight:700;color:var(--accent)">${c.amount}</td>
+      <td style="font-size:12px">${c.start}</td>
+      <td style="font-size:12px">${c.end}</td>
+      <td><span class="ct-status ${sc}">${c.status}</span></td>
+      <td><button class="ct-action-btn">詳細</button></td>
+    </tr>`;
+  }).join('');
+}
+function filterContracts(q){
+  const r=CONTRACT_DATA.filter(c=>!q||c.customer.includes(q)||c.property.includes(q)||c.id.includes(q));
+  renderContracts(r);
+}
+function filterContractStatus(s,btn){
+  document.querySelectorAll('#page-contract .flt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderContracts(s==='all'?CONTRACT_DATA:CONTRACT_DATA.filter(c=>c.status===s));
+}
+function openContractCreate(){
+  const p=document.getElementById('ct-create-panel');
+  p.style.display=p.style.display==='none'?'block':'none';
+}
+function generateContract(){
+  const type=document.getElementById('ct-type').value;
+  const cust=document.getElementById('ct-customer').value||'顧客名';
+  const prop=document.getElementById('ct-property').value||'物件名';
+  const amt=document.getElementById('ct-amount').value||'金額';
+  const el=document.getElementById('ct-generated');
+  el.style.display='block';
+  el.innerHTML=`<strong>【${type}】</strong><br><br>売主：サンプル不動産株式会社<br>買主：${cust}<br>物件：${prop}<br>売買代金：${amt}<br><br>第1条（売買）　売主は買主に対し、表記物件を表記売買代金で売り渡し、買主はこれを買い受けます。<br>第2条（引渡し）　引渡日は本契約締結後30日以内とします。<br>第3条（所有権移転）　所有権は売買代金の全額受領と同時に移転します。<br><br><em style="color:var(--text2);font-size:11px">※ AIが生成したサンプルです。実際の契約には専門家の確認が必要です。</em>`;
+}
+
+// ═══════════════ CRM DATA ═══════════════
+const CRM_DATA=[
+  {id:1,name:'田中 一郎',company:'田中商事株式会社',phone:'090-1234-5678',email:'tanaka@tanakashoji.co.jp',status:'商談中',lastContact:'2日前',interest:'豊平区 戸建て希望 4LDK以上',budget:'4,000〜5,000万円',ai:'田中様は家族4人で広い庭付き戸建てをご希望。予算はやや上限に近い。先週の内覧後「妻と相談中」とのこと。今週中にフォローアップが必要。契約確度：70%',history:[
+    {date:'2026-07-05',text:'豊平区 戸建て内覧。妻も同行。「雰囲気は良い」とコメント。来週回答予定。',type:'green'},
+    {date:'2026-07-01',text:'電話フォロー。他社物件も検討中と判明。価格交渉の可能性あり。',type:''},
+    {date:'2026-06-25',text:'初回来店。家族構成・予算・希望エリアをヒアリング。3件の物件資料を送付。',type:''},
+  ]},
+  {id:2,name:'鈴木 花子',company:'個人',phone:'080-9876-5432',email:'suzuki@example.com',status:'検討中',lastContact:'1週間前',interest:'中央区 賃貸マンション 1〜2LDK',budget:'7〜9万円/月',ai:'鈴木様は転勤に伴う賃貸探し。3月末入居希望。勤務先が大通周辺のため、地下鉄沿線を優先。契約確度：50%。競合他社にも問い合わせ中の可能性あり。早めの物件提案が効果的。',history:[
+    {date:'2026-07-02',text:'メール問い合わせ。1LDK〜2LDKで大通駅周辺を希望。3件の物件資料を返信。',type:''},
+    {date:'2026-06-28',text:'内覧1件（白石区）。「少し駅が遠い」とのコメント。より駅近物件を再提案。',type:'red'},
+  ]},
+  {id:3,name:'山本 健二',company:'山本建設株式会社',phone:'011-234-5678',email:'yamamoto@yamamoto-const.co.jp',status:'成約',lastContact:'3週間前',interest:'中央区 3LDKマンション（購入）',budget:'3,000〜3,500万円',ai:'成約済み。2026-03-15に契約締結。引渡し完了。アフターフォローの連絡を3ヶ月後（6月）に実施済み。満足度高く、紹介客の可能性あり。',history:[
+    {date:'2026-03-15',text:'売買契約締結。¥3,280万で成約。引渡し完了。',type:'green'},
+    {date:'2026-03-10',text:'価格交渉。¥3,300万→¥3,280万で合意。',type:'green'},
+  ]},
+  {id:4,name:'佐藤 美咲',company:'個人',phone:'090-5555-6666',email:'sato.misaki@gmail.com',status:'検討中',lastContact:'4日前',interest:'北区 1〜2LDK 賃貸',budget:'5〜6.5万円/月',ai:'初回問い合わせから2週間。反応は良いが決断が遅い傾向。北区・新琴似エリアを強く希望。ペット可物件が条件。現在2件が候補に残っている状態。',history:[
+    {date:'2026-07-03',text:'物件2件の内覧。どちらも気に入っている様子。「週末に決める」とのこと。',type:''},
+    {date:'2026-06-28',text:'ペット可物件3件を送付。うち2件に興味あり。',type:''},
+  ]},
+  {id:5,name:'高橋 浩',company:'高橋ホールディングス',phone:'03-1234-5678',email:'takahashi@th-hd.co.jp',status:'成約',lastContact:'6ヶ月前',interest:'渋谷区 1LDKマンション（投資用）',budget:'6,000〜7,000万円',ai:'投資用購入で成約済み。都内物件で複数案件保有のVIP顧客。次の投資物件についても継続的な情報提供を要望している。半年に1度の定期連絡が効果的。',history:[
+    {date:'2026-01-10',text:'渋谷区 1LDK（¥6,500万）成約。投資利回り4.2%で合意。',type:'green'},
+  ]},
+];
+let selectedCrmId=null;
+let crmFilter='all';
+function renderCrmList(data){
+  const el=document.getElementById('crm-list'); if(!el) return;
+  el.innerHTML=data.map(c=>`
+    <div class="crm-card${selectedCrmId===c.id?' selected':''}" onclick="selectCrm(${c.id})">
+      <div class="crm-card-top">
+        <div class="crm-avatar">${c.name[0]}</div>
+        <div><div class="crm-name">${c.name}</div><div class="crm-company">${c.company}</div></div>
+        <span class="crm-status-badge ${c.status}">${c.status}</span>
+      </div>
+      <div class="crm-card-meta">
+        <span>📞 ${c.phone}</span>
+        <span>🕐 ${c.lastContact}</span>
+      </div>
+    </div>`).join('');
+}
+function selectCrm(id){
+  selectedCrmId=id;
+  const c=CRM_DATA.find(x=>x.id===id); if(!c) return;
+  const detail=document.getElementById('crm-detail');
+  detail.innerHTML=`
+    <div class="crm-detail-header">
+      <div class="crm-detail-avatar">${c.name[0]}</div>
+      <div><div class="crm-detail-name">${c.name}</div><div class="crm-detail-company">${c.company}</div></div>
+      <div class="crm-detail-status"><span class="crm-status-badge ${c.status}">${c.status}</span></div>
+    </div>
+    <div class="crm-info-grid">
+      <div class="crm-info-item"><div class="crm-info-label">電話番号</div><div class="crm-info-val">${c.phone}</div></div>
+      <div class="crm-info-item"><div class="crm-info-label">メール</div><div class="crm-info-val" style="font-size:12px">${c.email}</div></div>
+      <div class="crm-info-item"><div class="crm-info-label">ご希望</div><div class="crm-info-val">${c.interest}</div></div>
+      <div class="crm-info-item"><div class="crm-info-label">ご予算</div><div class="crm-info-val" style="color:var(--accent);font-weight:800">${c.budget}</div></div>
+    </div>
+    <div class="crm-ai-summary">
+      <div class="crm-ai-summary-title">🤖 AI要約</div>
+      <div class="crm-ai-summary-text">${c.ai}</div>
+    </div>
+    <div class="crm-history-title">対応履歴</div>
+    <div class="crm-history-list">${c.history.map(h=>`
+      <div class="crm-hist-item ${h.type}">
+        <div class="crm-hist-date">${h.date}</div>
+        <div class="crm-hist-text">${h.text}</div>
+      </div>`).join('')}
+    </div>`;
+  document.querySelectorAll('.crm-card').forEach(el=>el.classList.remove('selected'));
+  document.querySelectorAll('.crm-card').forEach(el=>{
+    if(el.onclick.toString().includes(`(${id})`)) el.classList.add('selected');
+  });
+}
+function filterCrm(q){
+  const base=crmFilter==='all'?CRM_DATA:CRM_DATA.filter(c=>c.status===crmFilter);
+  renderCrmList(q?base.filter(c=>c.name.includes(q)||c.company.includes(q)||c.phone.includes(q)):base);
+}
+function setCrmFilter(s,btn){
+  crmFilter=s;
+  document.querySelectorAll('.crm-filter-tabs .flt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCrmList(s==='all'?CRM_DATA:CRM_DATA.filter(c=>c.status===s));
+}
+function openCrmAdd(){ alert('顧客追加フォーム（v1.1で実装予定）'); }
+document.addEventListener('DOMContentLoaded',()=>{ renderCrmList(CRM_DATA); renderContracts(CONTRACT_DATA); });
+
+// ═══════════════ AD GENERATION ═══════════════
+let selectedPlat='suumo', selectedTone='professional';
+function selectPlat(p,btn){
+  selectedPlat=p;
+  document.querySelectorAll('.ad-plat').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ad-preview-platform-badge').textContent=p.toUpperCase();
+}
+function selectTone(t,btn){
+  selectedTone=t;
+  document.querySelectorAll('.ad-tone').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+const AD_TEMPLATES={
+  suumo:{professional:`【${'{prop}'}】${'{price}'}
+
+◆ 物件特徴
+${'{features}'}
+
+◆ 物件概要
+・価格：${'{price}'}
+・交通：地下鉄大通駅 徒歩5分
+・所在地：北海道札幌市中央区
+
+お問い合わせはお気軽に。担当者が丁寧にご案内いたします。`,
+    friendly:`こんな物件、探してました！🏠
+
+【${'{prop}'}】${'{price}'}
+
+${'{features}'}
+
+気になった方はぜひお問い合わせください！スタッフ一同お待ちしております😊`,
+    luxury:`特別な住まいをお探しの方へ。
+
+【${'{prop}'}】
+
+${'{features}'}
+
+洗練された空間で、上質な暮らしをご体験ください。
+価格：${'{price}'}`
+  },
+  instagram:{professional:`✨ 新着物件のご紹介
+
+【${'{prop}'}】
+価格：${'{price}'}
+
+${'{features}'}
+
+#不動産 #札幌 #マンション #新着物件 #スマートラボ`,
+    friendly:`新着！🏡✨
+${'{prop}'} ${'{price}'}
+${'{features}'}
+気になる方はDMまたはプロフィールのリンクへ📩
+#不動産 #札幌不動産 #マイホーム`,
+    luxury:`Premium Living.
+
+${'{prop}'}
+${'{price}'}
+
+${'{features}'}
+
+#LuxuryRealEstate #札幌 #プレミアム物件`
+  },
+  athome:{professional:`★新着★【${'{prop}'}】${'{price}'}
+${'{features}'}
+詳細はAtHomeでご確認ください。内覧随時受付中。`,
+    friendly:`お得な物件です！【${'{prop}'}】${'{price}'}　${'{features}'}　ぜひ内覧にお越しください！`,
+    luxury:`高品質物件【${'{prop}'}】${'{price}'}　${'{features}'}　ご内覧はご予約制にて承ります。`
+  },
+  line:{professional:`【新着物件のご案内】\n${'{prop}'}\n価格：${'{price}'}\n${'{features}'}\nお問い合わせはこちらから→`,
+    friendly:`新着物件🏠 ${'{prop}'} ${'{price}'}\n${'{features}'}\nお気軽にご連絡ください！`,
+    luxury:`プレミアム物件のご案内\n${'{prop}'} ${'{price}'}\n${'{features}'}`
+  }
+};
+function generateAd(){
+  const prop=document.getElementById('ad-prop').value||'物件名';
+  const price=document.getElementById('ad-price').value||'価格';
+  const features=document.getElementById('ad-features').value||'特徴';
+  const tmpl=(AD_TEMPLATES[selectedPlat]||AD_TEMPLATES.suumo)[selectedTone];
+  const text=tmpl.replace(/\{prop\}/g,prop).replace(/\{price\}/g,price).replace(/\{features\}/g,features);
+  document.getElementById('ad-generated-text').textContent=text;
+  document.getElementById('ad-copy-row').style.display='flex';
+}
+function copyAd(){
+  navigator.clipboard.writeText(document.getElementById('ad-generated-text').textContent).then(()=>alert('コピーしました！'));
 }
 
 // ═══════════════ PROPERTY DATA ═══════════════
