@@ -10,6 +10,16 @@
 
 ---
 
+## `app.html`の位置づけ(2026-07-10 CEO決定)
+
+**`app.html`はSmart Labo Worksの正式製品ではありません。** Smart Labo Worksの唯一の正式コードベースは、別リポジトリ`smartlabo-works`(Node.js版・実際のAI Provider連携あり)です。
+
+`app.html`は今後、**デモサイト／マーケティング用プレビュー**として位置づけます。営業・採用・投資家向けの見た目のイメージを伝えるための静的デモであり、GitHub Pagesで公開されているデータ・機能はすべてサンプル(実データ・実処理なし)です。今後の機能追加・仕様変更は`smartlabo-works`側でのみ行い、`app.html`側では原則として行いません(ブランド刷新等に伴う見た目の同期を除く)。
+
+詳細は [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](../PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md)「製品境界」節、および`smartlabo-works`リポジトリの`PRODUCT_BOUNDARY.md`を参照してください。
+
+---
+
 ## 公開状況(2026-07-05時点)
 
 **Homepage Version: 0.9 beta** — CEO指示により、正式完成としてではなく「共有しながら改善するための公開」を目的としたβ版として公開します。
@@ -72,5 +82,6 @@ Xserverはドメイン(`smartlaboworks.com`)取得のみでサーバー契約が
 |---|---|---|---|
 | v1.0 | 2026-07-03 | Claude Code | 初版作成 |
 | v1.1 | 2026-07-04 | Claude Code(CEO指示による) | Homepage Version 0.9 betaとして公開。「公開状況」セクションを新設し、公開前チェック結果と既知の未実装事項を記録 |
+| **v1.2** | 2026-07-10 | Claude Code(CEO指示による) | **`app.html`はSmart Labo Works正式製品ではなく、デモサイト／マーケティング用プレビューであることを明記。** 唯一の正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)であることを新設の節に記載。`app.html`内の「バージョン」表示・`<title>`から「Smart Labo Works v1.0」という誤解を招く表記を修正(デモである旨と正式コードベースへの案内を追記) |
 
-*最終更新: 2026-07-04*
+*最終更新: 2026-07-10*

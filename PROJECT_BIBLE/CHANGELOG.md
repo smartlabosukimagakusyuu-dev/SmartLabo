@@ -23,6 +23,36 @@
 
 ---
 
+## 2026-07-10 — Smart Labo Worksの正式コードベースを`smartlabo-works`に一本化、WEBSITE/app.htmlはデモへ
+
+CEOより以下の方針決定があった。
+
+> 正式版は smartlabo-works(Node.js版)とします。こちらを唯一のSmart Labo Works正式コードベースとしてください。WEBSITE/app.html(GitHub Pages版)は正式製品ではありません。今後はデモサイトまたはマーケティング用プレビューとして扱ってください。PROJECT_BIBLE / CURRENT_STATUS / PRODUCT_REQUIREMENTS / PRODUCT_BOUNDARY / BUSINESS_STRATEGYも、smartlabo-worksのみを正式版として管理してください。WEBSITE側に残っているCompany OS等の古い表記はデモサイトとして整理してください。今後、Smart Labo Worksの機能追加はsmartlabo-worksのみで行います。
+
+### 背景
+
+前回(同日)のpush作業中、`SmartLabo`リポジトリのリモート側に、2026-07-07付けで`WEBSITE/app.html`を「Smart Labo Works v1.0 — Company OS完成」とする未マージのコミットが3件存在することが判明した。マージした結果、`smartlabo-works`(Node.js版、実API連携あり)と`WEBSITE/app.html`(GitHub Pages版、静的デモ)という**2つの異なるコードベースが同時に「Smart Labo Works v1.0」を名乗る状態**になっていたため、CEOに確認を仰いだ。CEOは`smartlabo-works`を唯一の正式コードベースとし、`WEBSITE/app.html`をデモサイト／マーケティング用プレビューへ位置づけ変更する決定を下した。
+
+### 主な変更内容
+
+- [11_Development_Principles.md](11_Development_Principles.md)(v1.2→v1.3)・[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.1→v3.2)に「唯一の正式コードベースは`smartlabo-works`」「`WEBSITE/app.html`はデモサイト／マーケティング用プレビュー」を明記
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.0.1→v3.1)を全面改訂。「Dashboard Version」「Smart Labo Works Version」の2行を「デモサイト Version(`WEBSITE/app.html`)」と「Smart Labo Works Version(本ファイルでは追跡せず、別リポジトリ`smartlabo-works`を参照)」へ分離。マージ時に残っていた「2つのv1.0が並立している」という未決定の注記を解消した
+- [WEBSITE/README.md](../WEBSITE/README.md)(v1.1→v1.2)に「`app.html`の位置づけ」節を新設し、正式製品ではないことを明記
+- [WEBSITE/app.html](../WEBSITE/app.html)の`<title>`と「バージョン」表示から「Smart Labo Works v1.0」という誤解を招く表記を修正し、「デモ（マーケティング用プレビュー）」である旨と正式コードベースへの案内を追記(コード内に「Company OS」という文字列自体は元々存在しなかったため、削除ではなく位置づけの明記による整理)
+- 別リポジトリ`smartlabo-works`側の`PRODUCT_REQUIREMENTS.md`・`PRODUCT_BOUNDARY.md`にも同じ決定を反映。あわせて新規`BUSINESS_STRATEGY.md`(スタブ)を作成した
+- [README.md](README.md)：PROJECT_BIBLE Version 3.5→3.6
+
+### 更新したファイル
+
+- [11_Development_Principles.md](11_Development_Principles.md)(v1.2→v1.3)
+- [00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.1→v3.2)
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.0.1→v3.1)
+- [README.md](README.md)(PROJECT_BIBLE Version 3.5→3.6)
+- [../WEBSITE/README.md](../WEBSITE/README.md)(v1.1→v1.2)
+- [../WEBSITE/app.html](../WEBSITE/app.html)(表記修正、バージョン管理なし)
+
+---
+
 ## 2026-07-10 — Company OS と Smart Labo Works の製品呼称・境界を正式決定
 
 CEOより以下の方針決定があった。

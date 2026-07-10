@@ -45,6 +45,12 @@ Smart Labo Works は単一の巨大なシステムではなく、業務領域ご
 
 なお「Smart Labo Group」という会社・プロダクトファミリー名、および「Smart Labo AI」「Smart Labo CRM」という商品名は、**現時点では正式名称・正式製品ではなく、将来のブランド構想・商品候補としてのみ**記録している。
 
+### 唯一の正式コードベース(2026-07-10 CEO決定)
+
+Smart Labo Worksの**唯一の正式コードベースは`smartlabo-works`(Node.js版・別リポジトリ)**である。今後のSmart Labo Works機能追加・仕様変更は、すべて`smartlabo-works`側でのみ行う。
+
+このリポジトリ内の`WEBSITE/app.html`(GitHub Pages公開版)は、**Smart Labo Worksの正式製品ではない。** 位置づけを「デモサイト／マーケティング用プレビュー」に変更し、営業・採用・投資家向けに見た目のイメージを伝えるための静的デモとして扱う。実データ・実際のAI処理・顧客データの保存は行わない。詳細は [WEBSITE/README.md](../../WEBSITE/README.md) を参照。
+
 詳細は [11_Development_Principles.md](../11_Development_Principles.md)「製品境界の定義」を参照。
 
 ---
@@ -98,5 +104,6 @@ Company Brain は、他の業務モジュール(不動産関連業務支援、MI
 | v2.0 | 2026-07-03 | Smart Labo | 00_Foundation構成への移行に伴い旧05_Product.mdから移動・改題。新Mission/Visionに合わせて全面改訂 |
 | **v3.0** | 2026-07-05 | Claude Code(CEO指示による) | **「Company Brain」をSmart Labo Works最大の差別化要素・中核基盤として正式に追加。** 一般的なマニュアル検索・チャットボットとの違いを比較表で明記し、キャッチコピー「探す時間を、考える時間へ。」を制定。詳細仕様は新設の[PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md)を参照する構成にした |
 | v3.1 | 2026-07-10 | Claude Code(CEO指示による) | **「製品境界」を新設し、Smart Labo Works(顧客へ販売するSaaS)とCompany OS(株式会社スマートラボの社内専用システム、非売品)を正式に区別。** 「Smart Labo Group」は非公式な将来のブランド構想、「Smart Labo AI」「Smart Labo CRM」は将来の商品候補(正式製品ではない)であることを明記。関連ドキュメント欄の[11_Development_Principles.md](../11_Development_Principles.md)の説明文も「Company OSとしての開発原則」から修正した。詳細な機能境界は`smartlabo-works/PRODUCT_BOUNDARY.md`を参照 |
+| **v3.2** | 2026-07-10 | Claude Code(CEO指示による) | **「唯一の正式コードベース」を新設。** Smart Labo Worksの正式コードベースは`smartlabo-works`(Node.js版)のみであることを明記し、`WEBSITE/app.html`(GitHub Pages公開版)は正式製品ではなく「デモサイト／マーケティング用プレビュー」であると位置づけを変更した。背景：`WEBSITE/app.html`側で並行して「Smart Labo Works v1.0 — Company OS完成」と記述されたコミットが存在し、`smartlabo-works`と2つの異なる「v1.0」が並立していたため、CEOが正式コードベースを一本化する決定を下した |
 
 *最終更新: 2026-07-10*
