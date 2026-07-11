@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 4.3**
+> **PROJECT_BIBLE Version: 4.4**
 
 ---
 
@@ -124,7 +124,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 4.3**
+- 現在: **Version 4.4**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -203,5 +203,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v4.1** | 2026-07-10 | Claude Code(CEO承認による) | **Task5完了により「Version1.0リファクタリング」5Stepが全完了。** `app.html`・`manifest.json`から「Company OS」文言を全除去しSmart Labo Worksへ統一(コミット`b864dd4`)。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.5→v3.6)のStep進捗表を更新し、次スコープ(REFACTOR_PLAN.md Phase1残り)はCEOへ改めて提案する運用とした |
 | **v4.2** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint2開始、Task6完了(企業単位データ分離)。** AIログ・認証設定(CompanyID→User構造)・Company Brain/CRM/案件/契約のlocalStorageをCompanyIDで分離。Workspace機能は今回対象外。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.6→v3.7)に新設の「Sprint2進捗」表を追加 |
 | **v4.3** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint2 Task7完了(CRM・案件・契約のサーバー永続化)。** localStorageから`node:sqlite`(npm依存なし)ベースのSQLiteへ移行し、company_idで分離。REST API(GET/POST/PUT/DELETE)化。旧データの自動移行、Service Workerキャッシュ更新(v1→v2)も実施。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.7→v3.8)にStep進捗を追加 |
+| **v4.4** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint2 Task8完了(Company Brainのサーバー永続化)。** Task7と同一パターンでSQLite化・REST API化・旧データ自動移行を実装。AI問い合わせ(`/api/ai/brain`)自体のロジックは変更なし。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.8→v3.9)にStep進捗を追加 |
 
 *最終更新: 2026-07-11*
