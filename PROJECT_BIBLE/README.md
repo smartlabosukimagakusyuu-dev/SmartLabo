@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 3.7**
+> **PROJECT_BIBLE Version: 3.8**
 
 ---
 
@@ -124,7 +124,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 3.7**
+- 現在: **Version 3.8**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -197,5 +197,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v3.5** | 2026-07-10 | Claude Code(CEO指示による) | **Company OSとSmart Labo Worksの製品呼称・境界を正式決定。** Smart Labo Works=顧客へ販売するSaaS製品、Company OS=株式会社スマートラボの社内専用システム(非売品)と明確化。[11_Development_Principles.md](11_Development_Principles.md)(v1.1→v1.2)・[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.0→v3.1)から、Company OSをSmart Labo Works自体の形容として使っていた箇所を修正。「Smart Labo Group」は非公式な将来のブランド構想、「Smart Labo AI」「Smart Labo CRM」は将来の商品候補(正式製品ではない)と明記。詳細は`smartlabo-works/PRODUCT_BOUNDARY.md`(別リポジトリ)を参照 |
 | **v3.6** | 2026-07-10 | Claude Code(CEO指示による) | **Smart Labo Worksの唯一の正式コードベースを`smartlabo-works`(Node.js版)に確定。** `WEBSITE/app.html`はSmart Labo Works正式製品ではなく「デモサイト／マーケティング用プレビュー」へ位置づけ変更。背景：マージ作業中に`WEBSITE/app.html`側で並行して「Smart Labo Works v1.0」を名乗るコミットが発覚したため、CEOが正式コードベースを一本化する決定を下した。[11_Development_Principles.md](11_Development_Principles.md)(v1.2→v1.3)・[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.1→v3.2)・[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.0.1→v3.1)・[../WEBSITE/README.md](../WEBSITE/README.md)(v1.1→v1.2)を更新 |
 | **v3.7** | 2026-07-10 | Claude Code(CEO承認による) | **「Version1.0リファクタリング」5Step計画の開始を反映。** CEO承認により、新機能追加ではなくSmart Labo Worksを販売可能なSaaSへ仕上げることを目的とした5Step(Git初回コミット→REFACTOR_PLAN作成→サーバー認証→AI Router整理→Company OS表記修正)を開始。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.1→v3.2)にStepごとの進捗表を新設し、Task1(`smartlabo-works`ソースコードのGit初回コミット)完了を反映 |
+| **v3.8** | 2026-07-10 | Claude Code(CEO承認による) | Task2完了(`smartlabo-works/REFACTOR_PLAN.md`新規作成)を反映。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.2→v3.3)のStep進捗表とNext Taskを更新 |
 
 *最終更新: 2026-07-10*
