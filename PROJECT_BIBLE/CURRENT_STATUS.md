@@ -9,12 +9,12 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：4.2
+Project Bible Version：4.3
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：1.0 Release Candidate(Company Brain拡張済み。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
 Smart Labo Works：正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)。詳細Versionは同リポジトリの`PRODUCT_REQUIREMENTS.md`を参照
-Current Task：Sprint2 Task6完了(企業単位データ分離)。Task7の承認待ち
+Current Task：Sprint2 Task7完了(CRM・案件・契約のサーバー永続化)。Task8の承認待ち
 ```
 
 **用語・体制の重要な変更(2026-07-10)：**
@@ -29,15 +29,15 @@ Current Task：Sprint2 Task6完了(企業単位データ分離)。Task7の承認
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 4.2 |
+| Project Bible Version | 4.3 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版。**さらにCompany BrainをSmart Labo Works最大の差別化要素として全面拡張済み**(キャッチコピー・9項目の知識ソース・3利用シナリオ・ガラスUI・専用アイコン) |
 | デモサイト Version（`WEBSITE/app.html`） | **デモ v1.0（2026-07-07完成、2026-07-10にデモとして再位置づけ）。GitHub Pages公開中。全9ページ・デモデータ(顧客5件・契約7件・物件6件)。Smart Labo Works正式製品ではない** |
 | Smart Labo Works Version（正式コードベース） | 本ファイルでは追跡しない。**別リポジトリ`smartlabo-works`の`PRODUCT_REQUIREMENTS.md`／`PRODUCT_BOUNDARY.md`を参照** |
 | Current Project | Company Setup → **Version1.0リファクタリング（2026-07-10 CEO承認）** |
-| Current Task | **Sprint2 Task6完了。** 企業単位データ分離（AIログ・CompanyID→User構造・Company Brain/CRM/案件/契約のlocalStorageスコープ化）を実装。Workspace機能は今回対象外 |
-| Next Task | Task7はCEO承認後に着手（内容未確定）。REFACTOR_PLAN.md Phase1の残り(CRMサーバー保存化・app.html分割)が候補 |
+| Current Task | **Sprint2 Task7完了。** CRM・案件・契約をlocalStorageからSQLite（node:sqlite、CompanyIDで分離）へ永続化。REST API化（GET/POST/PUT/DELETE） |
+| Next Task | Task8（Company Brainサーバー永続化）はCEO承認後に着手 |
 | Last Update | 2026-07-11 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -66,8 +66,9 @@ CEOより「Sprint2を開始する。目的はSmart Labo Worksを複数企業で
 | Step | 内容 | ステータス | コミット |
 |---|---|---|---|
 | Task6 | 企業単位データ分離（localStorage単一データ→CompanyID単位へ。Workspace機能は今回実装不要） | ✅完了(2026-07-11) | `d7ea0cd`→`0b8fedf`→`707ef92`(TOEICアプリ repo、3コミット) |
+| Task7 | CRM・案件・契約のサーバー永続化（localStorage→SQLite。REST API化） | ✅完了(2026-07-11) | `5064513`→`afa1baf`→`41ac221`(TOEICアプリ repo、3コミット) |
 
-詳細なデータ構造・影響範囲はTask6完了報告を参照。次StepはCEO承認後にTask7として着手する。
+詳細なデータ構造・影響範囲はTask6・Task7完了報告を参照。次Task8（Company Brainサーバー永続化）はCEO承認後に着手する。
 
 詳細な機能境界・優先度は`smartlabo-works/PRODUCT_REQUIREMENTS.md`・`PRODUCT_BOUNDARY.md`・`BUSINESS_STRATEGY.md`を参照。
 
@@ -209,5 +210,6 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 | **v3.5** | 2026-07-10 | Claude Code(CEO承認による) | **Task4完了を反映。** Project Bible Version 3.9→4.0に更新。AI Routerを正式整理(`a76d66c`→`f81d64d`、2コミット)：①IProviderインターフェースへ`isAvailable()`を追加しopenai/claudeの両Providerへ実装、`router.js`の`isProviderAvailable()`をProvider自身への委譲に変更(Provider固有のconfig参照をRouterから排除)、②Gemini/Whisper/OCRの構造スタブを新設しPROVIDERSへ登録(実API呼び出しは実装せず、Phase3まで`isAvailable()`は常にfalse)。完了条件どおり、新Provider追加時にrouter.jsのロジック本体を書き換えずに済む構造になったことを確認。ブラウザでの動作確認済み(既存のOpenAI経由Company Brain呼び出しに影響なし、5Provider全ての登録・可用性判定が正しく動作)。Next TaskをTask5(Company OS表記修正)に更新 |
 | **v3.6** | 2026-07-10 | Claude Code(CEO承認による) | **Task5完了を反映し、「Version1.0リファクタリング」5Stepが全完了。** Project Bible Version 4.0→4.1に更新。`app.html`・`manifest.json`内の「Company OS」文言13箇所すべてをSmart Labo Worksへ統一(コミット`b864dd4`)。ログイン画面・Builderのhero文言/バッジ/生成ボタン/進捗ステップ/完了画面/一覧説明・削除確認ダイアログ・DashboardのWork Flow見出し・PWA description。`generateCompanyOS()`関数も`generateWorkspace()`へリネーム(既存の`WORKSPACE_*`命名規則と統一)。ブラウザで`document.body.innerText`に「Company OS」が一切含まれないことを確認し、Builder生成フローもエンドツーエンドで正常動作を確認。ステータス一覧・5行サマリーを「5Step完了、次スコープ提案の承認待ち」に更新 |
 | **v3.7** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint2 Task6完了を反映(企業単位データ分離)。** Project Bible Version 4.1→4.2に更新。新設の「Sprint2進捗」表を追加。3コミット(`d7ea0cd`→`0b8fedf`→`707ef92`)：①AIログを`aiLogsByCompany`(Map)へ変更しcompanyId分離、②認証設定を`config.auth`(単一アカウント)から`config.companies`(CompanyID→User[])構造へ再設計、③クライアント側のCompany Brain/CRM/案件/契約のlocalStorageキーを`companyScopedKey()`経由でCompanyID別に分離し、ログイン時のCompanyID切替でページを再読込する仕組みを追加。Innovation Hub等の社内専用データ(INNOVATION_KEY等)は対象外とし、`PRODUCT_BOUNDARY.md`の分類との整合を確認。ブラウザで実際に2社分のダミーデータを作り、互いに影響しないことを確認(defaultの5件のCRMデータが別CompanyIDのテストデータ追加後も無傷)。Next TaskをTask7(内容未確定、CEO承認待ち)に更新 |
+| **v3.8** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint2 Task7完了を反映(CRM・案件・契約のサーバー永続化)。** Project Bible Version 4.2→4.3に更新。3コミット(`5064513`→`afa1baf`→`41ac221`)：①`node:sqlite`(Node.js組み込み、npm依存なし)でCRM/deals/contractsテーブルを新設、company_idインデックス付き・レコードはJSON列で保存する汎用`recordStore`、②`GET/POST/PUT/DELETE`のREST APIをcrm/deals/contractsに追加し認証ガードを`/api/*`全体(auth系除く)へ拡張、③フロントエンドをlocalStorageからAPI呼び出しへ切替え、旧localStorageデータの一度きり自動移行処理を追加。保存方式はSQLite・JSON列・PostgreSQLを比較しSQLiteを採用(理由はTask7完了報告参照)。動作確認中、Service Worker(`sw.js`)がapp.htmlを古いバージョンでキャッシュしたままになる不具合を発見しCACHE_NAMEをv2へ更新。ブラウザで旧データの自動移行・CRM/deals全CRUD操作・別CompanyIDとの分離を確認。Next TaskをTask8(Company Brainサーバー永続化、CEO承認待ち)に更新 |
 
 *最終更新: 2026-07-11*
