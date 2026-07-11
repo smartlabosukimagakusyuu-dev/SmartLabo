@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 4.0**
+> **PROJECT_BIBLE Version: 4.1**
 
 ---
 
@@ -124,7 +124,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 4.0**
+- 現在: **Version 4.1**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -200,5 +200,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v3.8** | 2026-07-10 | Claude Code(CEO承認による) | Task2完了(`smartlabo-works/REFACTOR_PLAN.md`新規作成)を反映。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.2→v3.3)のStep進捗表とNext Taskを更新 |
 | **v3.9** | 2026-07-10 | Claude Code(CEO承認による) | Task3完了(最小構成のサーバー認証実装)を反映。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.3→v3.4)のStep進捗表とNext Taskを更新 |
 | **v4.0** | 2026-07-10 | Claude Code(CEO承認による) | Task4完了(AI Routerの正式整理、Providerパターン統一)を反映。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.4→v3.5)のStep進捗表とNext Taskを更新 |
+| **v4.1** | 2026-07-10 | Claude Code(CEO承認による) | **Task5完了により「Version1.0リファクタリング」5Stepが全完了。** `app.html`・`manifest.json`から「Company OS」文言を全除去しSmart Labo Worksへ統一(コミット`b864dd4`)。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v3.5→v3.6)のStep進捗表を更新し、次スコープ(REFACTOR_PLAN.md Phase1残り)はCEOへ改めて提案する運用とした |
 
 *最終更新: 2026-07-10*
