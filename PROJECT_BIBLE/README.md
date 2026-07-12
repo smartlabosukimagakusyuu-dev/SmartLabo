@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 5.2**
+> **PROJECT_BIBLE Version: 5.3**
 
 ---
 
@@ -124,7 +124,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 5.2**
+- 現在: **Version 5.3**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -212,5 +212,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v5.0** | 2026-07-12 | Claude Code(CEO承認による) | **ホームページVersion2リニューアル完了。** `WEBSITE/index.html`を「会社紹介サイト」から「Smart Labo Worksを導入したくなる営業サイト」へ全面刷新。Smart AI Router図解・AI社員カード(6種、モデル名ではなく仕事内容で訴求)・画面ショーケース(横スクロール、実装画面をHTML/CSSで再現)・業種展開(不動産売買のみ「対応中」、他5業種は「今後対応予定」と正確に区別)・導入効果ストーリー・料金プラン(価格は「お問い合わせください」)の各セクションを新設。CEO指示にあった「Builder」カードは実装ルール(社内専用機能を顧客向けに非表示)と矛盾するため除外。既存ブランドカラー・正式ロゴのみ使用。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.4→v4.5)に詳細を追加。SmartLabo repoはpush未実施 |
 | **v5.1** | 2026-07-12 | Claude Code(CEO承認による) | **Smart Labo AIホームページチャットデモ実装完了。** 右下固定ボタン→チャットウィンドウで、Smart Labo Worksを無料体験できるAIデモを新設(問い合わせチャットではない)。「体験できるAI」一覧・おすすめ質問チップ・6機能(営業メール/物件紹介文/査定コメント/FAQ/会社紹介/提案書)のデモ生成・localStorageでの会話履歴保持を実装。実際のSmart AI Routerが本番未デプロイ(公開APIなし)であることを実装前にCEOへ確認し、「UI/UXのみ実装、AI生成はダミー応答で代替」の承認を得て実装(公開APIの新規デプロイはコスト・セキュリティ上未実施)。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.5→v4.6)に詳細を追加。SmartLabo repoはpush未実施 |
 | **v5.2** | 2026-07-12 | Claude Code(CEO承認による) | **ホームページ情報量整理完了。** 「装飾を増やすのではなく、3秒で価値が伝わるデザインへ」というCEO指示のもと、実装前に新構成案・削除統合対象を報告しCEO承認を得たうえで実施。セクション数11→7、背景ブロック11→5。Company BrainをHero直後へ移動、「AI社員」と「社長の1日タイムライン」を時間帯タグ付きカード6枚へ統合、画面ショーケースをDashboard・不動産AIの大型2枚構成へ刷新。「対応業種」「料金」の2セクションを削除(実質「今後対応予定」「お問い合わせください」のみの準備中表示だったため)。HeroとCTAのボタンを「デモを見る」「導入相談」の2つに全ページ統一。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.6→v4.7)に詳細を追加。SmartLabo repoはpush未実施 |
+| **v5.3** | 2026-07-12 | Claude Code(CEO承認による) | **Hero「AI Control Center」実装完了。** 実装前にHero新レイアウト・AI Control Center構成・スクロール後のセクション順・削除統合対象を報告しCEO承認を得たうえで実施。Hero右側の縮小ダッシュボードモックアップを、Smart AI Router LIVE・OpenAI/Claude/Gemini稼働状況・ルーティング例・Company Brain参照中・本日のAI処理件数・最近完了タスクを表示する半透明グラスパネルへ刷新(細い接続線と控えめなパルスのみ、新規ブランドカラーなし)。「Smart AI Router」独立セクションと「AI社員」カードセクションを削除し(Heroで役割が重複するため)、業務フロー図(Router→Company Brain→営業/契約/会議/CRM)としてCompany Brainセクションへ統合。画面ショーケースを「Company Brain→不動産AI→CRM→実際の製品画面」の順に再構成しCRMを復活。セクション数7→5。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.7→v4.8)に詳細を追加。SmartLabo repoはpush未実施 |
 
 *最終更新: 2026-07-12*
