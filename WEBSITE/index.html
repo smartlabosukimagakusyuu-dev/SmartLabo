@@ -642,6 +642,45 @@
   </div>
 </footer>
 
+<!-- Smart Labo AI — ホームページAIチャットデモ(問い合わせチャットではなく、Smart Labo Worksを無料体験できるAIデモ) -->
+<div class="ai-chat" id="aiChat">
+  <button class="ai-chat__toggle" id="aiChatToggle" aria-label="Smart Labo AIを開く">
+    <svg class="ai-chat__icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-8.4 8.4c-1.4 0-2.7-.3-3.9-1L3 20l1.2-4.3a8.3 8.3 0 01-1-4A8.4 8.4 0 0111.6 3.3 8.4 8.4 0 0121 11.5z"/></svg>
+    <svg class="ai-chat__icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    <span class="ai-chat__badge" aria-hidden="true"></span>
+  </button>
+
+  <div class="ai-chat__window" role="dialog" aria-label="Smart Labo AI チャット">
+    <div class="ai-chat__header">
+      <div class="ai-chat__header-info">
+        <span class="ai-chat__avatar">S</span>
+        <div>
+          <p class="ai-chat__title">Smart Labo AI</p>
+          <p class="ai-chat__status">Smart AI Router 搭載デモ</p>
+        </div>
+      </div>
+      <button class="ai-chat__close" id="aiChatClose" aria-label="閉じる">×</button>
+    </div>
+
+    <div class="ai-chat__messages" id="aiChatMessages"></div>
+
+    <div class="ai-chat__footer-cta">
+      <span>もっと詳しく体験したい方は</span>
+      <a href="#cta">無料デモをご予約</a>
+      <span>｜β版受付中｜</span>
+      <a href="#cta">お問い合わせ</a>
+    </div>
+
+    <form class="ai-chat__input-row" id="aiChatForm">
+      <input type="text" id="aiChatInput" placeholder="質問を入力してください" autocomplete="off">
+      <button type="submit" class="ai-chat__send" aria-label="送信">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
 <script src="js/main.js"></script>
+<script src="js/chat.js"></script>
 </body>
 </html>
