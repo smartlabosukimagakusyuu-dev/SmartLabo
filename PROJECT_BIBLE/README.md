@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 4.8**
+> **PROJECT_BIBLE Version: 4.9**
 
 ---
 
@@ -124,7 +124,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 4.8**
+- 現在: **Version 4.9**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -208,5 +208,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v4.6** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint3 Task2完了(Claude API正式実装)。** ClaudeProviderのsummarize(長文整理)/generate(提案書)を、routeTable.jsの実割り当てに合わせた専用プロンプトへ差し替え。ANTHROPIC_API_KEY未設定のため実際のAPI成功応答は未確認、ルーティング・エラー処理の正常動作のみ確認済み。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.0→v4.1)にStep進捗を追加 |
 | **v4.7** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint3 Task3完了(Company Brain Builder)。** 誰でも約30分でCompany Brainを作成できる6Step Wizard(業種選択→会社情報→商品・サービス→業務ルール→FAQ→完成)を新設し、既存のTask8 REST API(`/api/brain`)経由で保存する構成とした。AI自動生成・OCR・Whisper・Gemini・OpenAI生成・Builder自動化は今回対象外。既存デザインを維持するため新規グローバルCSSは追加せず、既存の`.builder-*`/`.template-*`/`.progress-*`クラスを再利用。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.1→v4.2)にStep進捗を追加 |
 | **v4.8** | 2026-07-12 | Claude Code(CEO承認による) | **Sprint3 Task4 Step2.1〜2.2完了、Template Engine正式採用。** 物件紹介文・査定コメントの2テンプレートを実装し、AIテンプレート基盤を「機能追加型」ではなく「Template追加型」の正式アーキテクチャ(Template Engine)として確定。`templates/<namespace>/`(realestate/management/legal/tax/common)配下にファイルを1つ追加するだけで新テンプレートが使える構造とし、`promptManager.js`はswitch文を持たずTemplate Loaderへの窓口として動作するよう変更。AI Router・Providerは無変更(業種ロジックを一切持たない)。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.2→v4.3)にTemplate Engine正式仕様を追加 |
+| **v4.9** | 2026-07-12 | Claude Code(CEO承認による) | **「営業テンプレート」「Appointment Template」ファミリー第一弾完了。** `realestate/mail.js`(物件紹介メール、listing.jsに非依存)・`realestate/visit.js`(内覧・来店予約案内、候補日時は将来のカレンダー連携を見据え自由テキスト)を実装。いずれも「1ファイル=1用途」を維持し、将来の拡張(followup/thanks/contract等、来店予約/オンライン商談/契約日時等)は同形式のファイル追加のみで対応する設計。両テンプレートとも変更ファイルは1つのみでTemplate Engineの拡張性を実証した。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.3→v4.4)にテンプレート詳細を追加 |
 
 *最終更新: 2026-07-12*
