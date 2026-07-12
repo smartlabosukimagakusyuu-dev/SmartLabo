@@ -1141,3 +1141,42 @@ h1, h2, h3, h4 {
     max-height: min(72vh, 640px);
   }
 }
+
+/* ==========================================================================
+   ページ整理(2026-07-12 CEO承認「情報量整理・製品画面主役化」)
+   セクション統合・削減に伴う追加分。新規ブランドカラーは追加しない。
+   ========================================================================== */
+
+/* AI社員カードの時間帯タグ(社長の1日タイムラインを統合したことによる追加) */
+.employee-card__role { display: flex; align-items: center; gap: 8px; }
+.employee-card__time {
+  font-size: 10px; font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--light-gray);
+  border-radius: 100px;
+  padding: 2px 9px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Company Brain 利用イメージ: 1件のみになったため中央寄せ・幅を制限 */
+.brain-scenarios .brain-scenario { max-width: 560px; margin: 0 auto; }
+
+/* 製品画面ショーケース(大型2枚構成) */
+.big-screens { display: flex; flex-direction: column; gap: 72px; margin-top: 16px; }
+.big-screen { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.big-screen--reverse .big-screen__visual { order: 2; }
+.big-screen--reverse .big-screen__info { order: 1; }
+.big-screen__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--smart-blue); text-transform: uppercase; margin: 0 0 12px; }
+.big-screen__title { font-size: clamp(20px, 2.4vw, 27px); margin: 0 0 16px; line-height: 1.4; }
+.big-screen__desc { font-size: 14.5px; color: var(--text-secondary); line-height: 1.9; margin: 0; max-width: 440px; }
+.big-screen__visual .screen-card--lg { max-width: 460px; margin: 0 auto; padding: 26px; }
+.big-screen__visual .screen-card--lg .screen-card__body { min-height: 260px; padding: 22px; }
+.big-screen__visual .screen-card--lg .screen-card__title { font-size: 14px; }
+
+@media (max-width: 860px) {
+  .big-screen, .big-screen--reverse { grid-template-columns: 1fr; }
+  .big-screen--reverse .big-screen__visual, .big-screen--reverse .big-screen__info { order: initial; }
+  .big-screen__desc { max-width: none; }
+  .big-screens { gap: 48px; }
+}
