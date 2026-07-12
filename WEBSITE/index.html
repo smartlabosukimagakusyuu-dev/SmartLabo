@@ -37,7 +37,6 @@
 
     <nav class="nav" id="nav">
       <a href="#brain">Company Brain</a>
-      <a href="#employees">AI社員</a>
       <a href="#screens">画面を見る</a>
     </nav>
 
@@ -84,33 +83,41 @@
     </div>
 
     <div class="hero__visual">
-      <div class="device">
-        <div class="device__notch"></div>
-        <div class="device__screen">
-          <div class="dash">
-            <div class="dash__topbar">
-              <span class="dash__title">ダッシュボード<span class="dash__demo-badge">DEMO</span></span>
-              <span class="dash__avatar">S</span>
-            </div>
-            <p class="dash__subtitle">本日の対応状況をまとめて確認</p>
-            <div class="dash__grid">
-              <div class="dash__stat"><span class="dash__stat-label">対応中のタスク</span><span class="dash__stat-value">24<small>件</small></span></div>
-              <div class="dash__stat"><span class="dash__stat-label">本日の予定</span><span class="dash__stat-value">5<small>件</small></span></div>
-              <div class="dash__stat"><span class="dash__stat-label">未対応メール</span><span class="dash__stat-value">3<small>件</small></span></div>
-              <div class="dash__stat dash__stat--accent"><span class="dash__stat-label">今月の売上</span><span class="dash__stat-value">¥24.5<small>M</small></span></div>
-            </div>
-            <div class="dash__chart">
-              <div class="bar" style="height:40%"></div>
-              <div class="bar" style="height:58%"></div>
-              <div class="bar" style="height:48%"></div>
-              <div class="bar" style="height:78%"></div>
-              <div class="bar bar--accent" style="height:100%"></div>
-            </div>
+      <div class="control-center">
+        <div class="control-center__header">
+          <span class="control-center__title">AI Control Center</span>
+          <span class="control-center__live"><span class="control-center__live-dot"></span>LIVE</span>
+        </div>
+
+        <div class="cc-graph">
+          <div class="cc-node cc-node--core">Smart AI Router</div>
+          <div class="cc-providers">
+            <div class="cc-node"><span class="cc-status-dot"></span>OpenAI</div>
+            <div class="cc-node"><span class="cc-status-dot"></span>Claude</div>
+            <div class="cc-node"><span class="cc-status-dot"></span>Gemini</div>
           </div>
         </div>
-        <div class="device__base"></div>
+
+        <div class="cc-routes">
+          <div class="cc-route"><span class="cc-route__from">問い合わせ返信</span><span class="cc-route__arrow">→</span><span class="cc-route__to">OpenAI</span></div>
+          <div class="cc-route"><span class="cc-route__from">契約書レビュー</span><span class="cc-route__arrow">→</span><span class="cc-route__to">Claude</span></div>
+          <div class="cc-route"><span class="cc-route__from">PDF・画像解析</span><span class="cc-route__arrow">→</span><span class="cc-route__to">Gemini</span></div>
+        </div>
+
+        <div class="cc-brain-badge"><span class="cc-status-dot"></span>Company Brain 参照中</div>
+
+        <div class="cc-stat">
+          <span class="cc-stat__label">本日のAI処理件数</span>
+          <span class="cc-stat__value">128<small>件</small></span>
+        </div>
+
+        <div class="cc-log">
+          <p class="cc-log__label">最近完了したAIタスク</p>
+          <div class="cc-log__item"><span class="cc-log__check">✓</span>契約書レビュー完了 <span class="cc-log__tag">Claude</span></div>
+          <div class="cc-log__item"><span class="cc-log__check">✓</span>物件紹介文を生成 <span class="cc-log__tag">OpenAI</span></div>
+        </div>
       </div>
-      <p class="hero__visual-note">※ 画面はイメージです。表示データはすべてサンプルであり、実績値ではありません。</p>
+      <p class="hero__visual-note">※ 表示は稼働イメージのサンプルです。実際の処理件数・ログではありません。</p>
     </div>
   </div>
 </section>
@@ -167,7 +174,21 @@
   </div>
 
   <div class="container brain-scenarios">
-    <p class="brain-scenarios__label">利用イメージ</p>
+    <p class="brain-scenarios__label">Smart AI Routerからの業務フロー</p>
+    <div class="brain-flow">
+      <div class="router-node">Smart AI Router</div>
+      <div class="router-arrow">↓</div>
+      <div class="router-node router-node--core">Company Brain</div>
+      <div class="router-arrow">↓</div>
+      <div class="brain-flow__row">
+        <div class="router-node">営業</div>
+        <div class="router-node">契約</div>
+        <div class="router-node">会議</div>
+        <div class="router-node">CRM</div>
+      </div>
+    </div>
+
+    <p class="brain-scenarios__label" style="margin-top:48px">利用イメージ</p>
     <div class="brain-scenario">
       <p class="brain-scenario__q">「契約更新ってどうする?」</p>
       <div class="brain-scenario__flow">
@@ -183,93 +204,7 @@
   </div>
 </section>
 
-<!-- 3. Smart AI Router -->
-<section class="section section--navy-deep" id="router">
-  <div class="container">
-    <p class="eyebrow eyebrow--light eyebrow--center">SMART LABO 独自技術</p>
-    <h2 class="section__title section__title--light section__title--center">Smart AI Router</h2>
-    <p class="section__lead section__lead--center" style="color:var(--text-on-navy-secondary)">AIを選ぶ必要はありません。仕事内容から、最適なAIが自動的に働きます。</p>
-
-    <div class="router-diagram">
-      <div class="router-node">質問・依頼</div>
-      <div class="router-arrow">↓</div>
-      <div class="router-node router-node--core">Smart AI Router</div>
-      <div class="router-arrow">↓</div>
-      <div class="router-providers">
-        <div class="router-node">OpenAI</div>
-        <div class="router-node">Claude</div>
-        <div class="router-node">Gemini</div>
-      </div>
-      <div class="router-arrow">↓</div>
-      <div class="router-result">
-        <p class="router-result__title">最適なAIが自動判断</p>
-        <p class="router-result__desc">契約書はClaude、営業メールはOpenAI、図面解析はGemini。仕事内容ごとに、最も得意なAIへ自動で振り分けます。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 4. AI社員（社長の1日を支える） -->
-<section class="section section--white" id="employees">
-  <div class="container">
-    <p class="eyebrow eyebrow--center">AI社員</p>
-    <h2 class="section__title section__title--center">AIの名前ではなく、仕事で選ぶ。</h2>
-    <p class="section__lead section__lead--center">Smart Labo Worksは、社長の1日をそれぞれの持ち場で支えるAI社員のチームです。</p>
-
-    <div class="employee-grid">
-      <div class="employee-card">
-        <div class="employee-card__icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-        </div>
-        <p class="employee-card__role">営業AI <span class="employee-card__time">08:30</span></p>
-        <h3 class="employee-card__title">物件紹介・提案・フォロー</h3>
-        <p class="employee-card__desc">物件紹介文、営業メール、内覧案内まで。顧客対応の下書きを自動で作成します。</p>
-      </div>
-      <div class="employee-card">
-        <div class="employee-card__icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 13h5M9.5 16.5h5"/></svg>
-        </div>
-        <p class="employee-card__role">契約AI <span class="employee-card__time">14:00</span></p>
-        <h3 class="employee-card__title">契約書の作成・確認</h3>
-        <p class="employee-card__desc">査定コメントや契約関連文書の作成を支援し、スピードと正確性を両立します。</p>
-      </div>
-      <div class="employee-card">
-        <div class="employee-card__icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        </div>
-        <p class="employee-card__role">議事録AI <span class="employee-card__time">会議後すぐ</span></p>
-        <h3 class="employee-card__title">会議・商談の記録</h3>
-        <p class="employee-card__desc">会話の内容を要約し、決定事項・TODO・次のアクションまで整理します。</p>
-      </div>
-      <div class="employee-card">
-        <div class="employee-card__icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4.5c-1.4 0-2.5 1.1-2.5 2.5 0 .3.05.6.15.9-1 .4-1.65 1.4-1.65 2.5 0 .8.35 1.5.9 2-.5.5-.8 1.15-.8 1.9 0 1.35 1.05 2.45 2.4 2.5.25 1.2 1.3 2.1 2.55 2.1 1.4 0 2.5-1.1 2.5-2.5v-9.4c0-1.4-1.1-2.5-2.5-2.5z"/><path d="M15 4.5c1.4 0 2.5 1.1 2.5 2.5 0 .3-.05.6-.15.9 1 .4 1.65 1.4 1.65 2.5 0 .8-.35 1.5-.9 2 .5.5.8 1.15.8 1.9 0 1.35-1.05 2.45-2.4 2.5-.25 1.2-1.3 2.1-2.55 2.1-1.4 0-2.5-1.1-2.5-2.5v-9.4c0-1.4 1.1-2.5 2.5-2.5z"/></svg>
-        </div>
-        <p class="employee-card__role">Company Brain <span class="employee-card__time">24時間</span></p>
-        <h3 class="employee-card__title">会社専属の知識AI</h3>
-        <p class="employee-card__desc">社内ルール・商品・マニュアル・FAQを学習し、社員の質問に会社の言葉で答えます。</p>
-      </div>
-      <div class="employee-card">
-        <div class="employee-card__icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c1-4 3.5-6 6.5-6s5.5 2 6.5 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M15.5 20c.4-2.6 1.8-4.4 3.7-5"/></svg>
-        </div>
-        <p class="employee-card__role">CRM AI <span class="employee-card__time">10:00</span></p>
-        <h3 class="employee-card__title">顧客情報の一元管理</h3>
-        <p class="employee-card__desc">顧客との接点をすべて集約。誰が見ても、今の状況がひと目でわかります。</p>
-      </div>
-      <div class="employee-card">
-        <div class="employee-card__icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>
-        </div>
-        <p class="employee-card__role">Meeting AI <span class="employee-card__time">予約時</span></p>
-        <h3 class="employee-card__title">日程調整・予約管理</h3>
-        <p class="employee-card__desc">内覧・来店・商談の候補日時から、日程調整メールを自動で作成します。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 5. Smart Labo Works 画面 -->
+<!-- 3. Smart Labo Works 画面 -->
 <section class="section section--white" id="screens">
   <div class="container">
     <p class="eyebrow eyebrow--center">SCREENS</p>
@@ -278,27 +213,6 @@
 
     <div class="big-screens">
       <div class="big-screen">
-        <div class="big-screen__info">
-          <p class="big-screen__eyebrow">DASHBOARD</p>
-          <h3 class="big-screen__title">今日やることが、ひと目でわかる。</h3>
-          <p class="big-screen__desc">対応中の案件、本日の予定、Company Brainの登録状況、AI利用ログ。ログインした瞬間に、今日の状況をまとめて確認できます。</p>
-        </div>
-        <div class="big-screen__visual">
-          <div class="screen-card screen-card--lg">
-            <div class="screen-card__top"><span class="screen-card__title">ダッシュボード</span><span class="screen-card__badge">DEMO</span></div>
-            <div class="screen-card__body">
-              <div class="dash__grid" style="grid-template-columns:repeat(2,1fr)">
-                <div class="dash__stat"><span class="dash__stat-label">対応中の案件</span><span class="dash__stat-value">12<small>件</small></span></div>
-                <div class="dash__stat"><span class="dash__stat-label">本日の予定</span><span class="dash__stat-value">4<small>件</small></span></div>
-                <div class="dash__stat dash__stat--accent"><span class="dash__stat-label">Company Brain登録</span><span class="dash__stat-value">4<small>件</small></span></div>
-                <div class="dash__stat"><span class="dash__stat-label">AI利用ログ</span><span class="dash__stat-value">28<small>件</small></span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="big-screen big-screen--reverse">
         <div class="big-screen__info">
           <p class="big-screen__eyebrow">AI ASSISTANT — 不動産AI</p>
           <h3 class="big-screen__title">業種特化テンプレートで、そのまま使える文章に。</h3>
@@ -316,11 +230,51 @@
           </div>
         </div>
       </div>
+
+      <div class="big-screen big-screen--reverse">
+        <div class="big-screen__info">
+          <p class="big-screen__eyebrow">CRM</p>
+          <h3 class="big-screen__title">顧客との接点を、ひとつに集約。</h3>
+          <p class="big-screen__desc">商談中・提案済み・成約・フォロー中。顧客ごとの状況が一覧で把握でき、対応漏れを防ぎます。</p>
+        </div>
+        <div class="big-screen__visual">
+          <div class="screen-card screen-card--lg">
+            <div class="screen-card__top"><span class="screen-card__title">CRM</span><span class="screen-card__badge">DEMO</span></div>
+            <div class="screen-card__body">
+              <div class="screen-row"><span class="screen-row__name">札幌商事株式会社</span><span class="screen-tag">商談中</span></div>
+              <div class="screen-row"><span class="screen-row__name">有限会社みらい住宅</span><span class="screen-tag">提案済み</span></div>
+              <div class="screen-row"><span class="screen-row__name">北海道フーズ株式会社</span><span class="screen-tag screen-tag--done">成約</span></div>
+              <div class="screen-row"><span class="screen-row__name">中央法律事務所</span><span class="screen-tag screen-tag--warn">フォロー中</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="big-screen">
+        <div class="big-screen__info">
+          <p class="big-screen__eyebrow">DASHBOARD — 実際の製品画面</p>
+          <h3 class="big-screen__title">今日やることが、ひと目でわかる。</h3>
+          <p class="big-screen__desc">対応中の案件、本日の予定、Company Brainの登録状況、AI利用ログ。ログインした瞬間に、今日の状況をまとめて確認できます。</p>
+        </div>
+        <div class="big-screen__visual">
+          <div class="screen-card screen-card--lg">
+            <div class="screen-card__top"><span class="screen-card__title">ダッシュボード</span><span class="screen-card__badge">DEMO</span></div>
+            <div class="screen-card__body">
+              <div class="dash__grid" style="grid-template-columns:repeat(2,1fr)">
+                <div class="dash__stat"><span class="dash__stat-label">対応中の案件</span><span class="dash__stat-value">12<small>件</small></span></div>
+                <div class="dash__stat"><span class="dash__stat-label">本日の予定</span><span class="dash__stat-value">4<small>件</small></span></div>
+                <div class="dash__stat dash__stat--accent"><span class="dash__stat-label">Company Brain登録</span><span class="dash__stat-value">4<small>件</small></span></div>
+                <div class="dash__stat"><span class="dash__stat-label">AI利用ログ</span><span class="dash__stat-value">28<small>件</small></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- 6. 導入効果 + Mission -->
+<!-- 4. 導入効果 + Mission -->
 <section class="section section--gray">
   <div class="container mission">
     <div class="flow-story">
@@ -344,7 +298,7 @@
   </div>
 </section>
 
-<!-- 7. 最後のCTA -->
+<!-- 5. 最後のCTA -->
 <section class="section section--cta" id="cta">
   <div class="container cta">
     <p class="badge">会社を動かすAI。</p>
@@ -376,8 +330,7 @@
     <div class="footer__col">
       <h4>サービス</h4>
       <a href="#brain">Company Brain</a>
-      <a href="#router">Smart AI Router</a>
-      <a href="#employees">AI社員</a>
+      <a href="#screens">Smart AI Router</a>
     </div>
     <div class="footer__col">
       <h4>製品</h4>
