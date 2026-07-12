@@ -9,12 +9,12 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：5.0
+Project Bible Version：5.1
 Brand Version：5.1
 Design Bible Version：2.3
-Homepage Version：2.0(Version2リニューアル。「会社紹介サイト」から「営業サイト」へ全面刷新。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
+Homepage Version：2.1(Version2リニューアル＋Smart Labo AIチャットデモ追加。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
 Smart Labo Works：正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)。詳細Versionは同リポジトリの`PRODUCT_REQUIREMENTS.md`を参照
-Current Task：ホームページVersion2リニューアル完了(CEO承認2026-07-12)。Smart AI Router図解・AI社員カード・画面ショーケース・業種展開・料金セクションを新設。pushはCEO確認後
+Current Task：ホームページに「Smart Labo AI」チャットデモを実装(CEO承認2026-07-12)。実際のSmart AI Routerは本番未デプロイのためUI/UXのみ実装しデモ回答で代替。pushはCEO確認後
 ```
 
 **用語・体制の重要な変更(2026-07-10)：**
@@ -29,15 +29,15 @@ Current Task：ホームページVersion2リニューアル完了(CEO承認2026-
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 5.0 |
+| Project Bible Version | 5.1 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
-| Homepage Version | **2.0 — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。CEO承認「ホームページVersion2リニューアル」により、「会社紹介サイト」から「Smart Labo Worksを導入したくなる営業サイト」へ全面刷新(2026-07-12)。詳細は下記「ホームページVersion2リニューアル」を参照 |
+| Homepage Version | **2.1 — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。V2リニューアル(2026-07-12)に続き、「Smart Labo AI」チャットデモを追加(2026-07-12)。詳細は下記「Smart Labo AI ホームページチャットデモ」を参照 |
 | デモサイト Version（`WEBSITE/app.html`） | **デモ v1.0（2026-07-07完成、2026-07-10にデモとして再位置づけ）。GitHub Pages公開中。全9ページ・デモデータ(顧客5件・契約7件・物件6件)。Smart Labo Works正式製品ではない** |
 | Smart Labo Works Version（正式コードベース） | 本ファイルでは追跡しない。**別リポジトリ`smartlabo-works`の`PRODUCT_REQUIREMENTS.md`／`PRODUCT_BOUNDARY.md`を参照** |
 | Current Project | Company Setup → **Version1.0リファクタリング（2026-07-10 CEO承認）** |
-| Current Task | **ホームページVersion2リニューアル完了。** Smart AI Router図解・AI社員カード（6種）・画面ショーケース（横スクロール）・業種展開・導入効果ストーリー・料金プランの各セクションを新設し、9セクション構成へ全面刷新 |
-| Next Task | ホームページのpushはCEO確認後。営業テンプレート／Appointment Templateの追加分（followup/thanks/contract等）・他業種テンプレートの追加はCEO承認後に着手 |
+| Current Task | **Smart Labo AIホームページチャットデモ実装完了。** 右下固定チャットボタン→ウィンドウ、初回挨拶＋体験できるAI一覧＋おすすめ質問、6種のデモ生成(営業メール/物件紹介文/査定コメント/FAQ/会社紹介/提案書)、localStorageでの会話履歴保持を実装。実際のSmart AI Routerは本番未デプロイのためAI生成はキーワード分類による高品質なデモ回答で代替(詳細は完了報告・下記セクション参照) |
+| Next Task | ホームページ2コミット分のpushはCEO確認後。営業テンプレート／Appointment Templateの追加分（followup/thanks/contract等）・他業種テンプレートの追加、および将来のSmart AI Router公開API化はCEO承認後に着手 |
 | Last Update | 2026-07-12 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -129,6 +129,26 @@ CEOより「ホームページVersion2リニューアル」の承認があった
 **レスポンシブ**: 既存のブレークポイント(1100px/860px/520px)体系に新規コンポーネント(Router図解・AI社員カード・画面ショーケース・業種カード・料金カード)のレスポンシブ対応を追加し、モバイル(375px)・デスクトップ(1440px)双方で表示確認済み。
 
 ブラウザ実機確認済み（Hero〜最終CTAまで全セクションのレンダリング、Router図解のパルスアニメーション、画面ショーケースの横スクロール（ホイール操作対応）、ハンバーガーメニューの新セクション導線、コンソールエラーなし、全アセットのHTTP 200/304確認）。
+
+---
+
+## Smart Labo AI ホームページチャットデモ(2026-07-12 CEO承認「Smart Labo AI Demo」、SmartLabo repo `WEBSITE/`限定)
+
+CEOより「ホームページAIチャット実装」の承認があった。目的は問い合わせチャットではなく、訪問者が3分でSmart Labo Worksを無料体験できるAIデモを設置すること。コミット`696b3ca`(SmartLabo repo)。
+
+**変更ファイル**: `WEBSITE/index.html`（チャットウィジェットのマーカップ追加）・`WEBSITE/css/style.css`（チャットUIスタイル追加）・`WEBSITE/js/chat.js`（新規）。
+
+**UI構成**: 右下固定の円形チャットボタン(Smart Blue)→クリックでチャットウィンドウを開閉。初回表示時に①挨拶メッセージ、②「体験できるAI」一覧(営業AI/契約AI/Company Brain/AI Router/不動産AI/司法書士AI[Coming Soon]/管理会社AI[Coming Soon])、③おすすめ質問8件をチップ形式で表示。ウィンドウ下部に常時「無料デモをご予約／β版受付中／お問い合わせ」CTAを配置。
+
+**重要なアーキテクチャ上の制約と対応（要CEO確認）**: 実際のSmart AI Router(smartlabo-worksサーバー)は現時点で本番デプロイされておらず、一般公開されたAPIを持たない。「同じRouterを実際に利用して生成する」ことを文字通り実現するには、認証なしでアクセス可能な公開APIをどこかへ新規に本番デプロイする必要があり(レート制限・CORS・ホスティング先選定・APIコスト管理を伴う、単なるファイル追加を超えるインフラ変更)、この場でCEOに選択肢を提示したところ「今回はUI/UXのみ実装し、AI生成はダミー応答で代替する」との回答を得た。そのため`js/chat.js`はキーワード分類器によって、CEO指定の6機能(営業メール/物件紹介文/査定コメント/FAQ/会社紹介/提案書)と情報系Q&Aを、あらかじめ用意した製品トーンに合わせた高品質なデモ回答へ振り分ける構成とした。将来、smartlabo-worksが本番デプロイされ公開APIが用意された段階で、`DEMO_HANDLERS`の呼び出しを実際の`fetch()`呼び出しへ差し替えるだけで済む構造にしてある(UI側の変更は不要)。
+
+**会話履歴**: `localStorage`(キー`slw_ai_chat_history_v1`)に保存し、リロード後も保持されることを確認済み。
+
+**今回は実装しない**: ログイン・CRM・Meeting・Builder・Whisper・OCR・画像生成（いずれもCEO指示どおり非実装）。
+
+**レスポンシブ**: デスクトップ(1440px)・タブレット(768px)・モバイル(375px)すべてで表示・操作を確認済み。モバイルではチャットウィンドウが画面幅いっぱいに広がる設計。
+
+ブラウザ実機確認済み（チャット開閉、初回挨拶＋AI一覧＋おすすめ質問チップの表示、6デモ生成機能の動作、フォールバック応答からのCTA誘導、リロード後の履歴復元、コンソールエラーなし）。
 
 ---
 
@@ -276,5 +296,6 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 | **v4.3** | 2026-07-12 | Claude Code(CEO承認による) | **Sprint3 Task4 Step2.1〜2.2完了、Template Engine正式採用。** Project Bible Version 4.7→4.8に更新。3コミット(`9321880`→`90773dc`→`1347104`、TOEICアプリ repo)：①Step2.1「物件紹介文」・②Step2.2「査定コメント」の2テンプレートを実装(既存AI Router・Providerを再利用、DBテーブル追加なし)、③CEO指示によりAIテンプレート基盤を「Template追加型」の正式アーキテクチャ(Template Engine)として確定。`templates/index.js`(Template Loader)が`templates/<namespace>/`(realestate/management/legal/tax/common)配下を自動走査しid/namespaceをファイルパスから自動生成、`promptManager.js`はswitch文を持たずTemplate Loaderへの窓口(`promptManager.templates`)として動作。実装済みはrealestate/listing.js・realestate/appraisal.js(Step2.2の承認済み内容をそのまま移動)の2件のみで、残り19ファイルは雛形(`status:'planned'`、UI非表示・生成は明確なエラー)。AI Router・Providerは無変更(Routerは業種ロジックを一切持たず、feature→Providerの解決のみ)。ブラウザで両テンプレートの生成・既存`/api/ai/assistant`との無停止共存・雛形テンプレートへの生成試行が正しくエラーを返すことを確認。Next Taskは他業種テンプレート追加(CEO承認待ち)に更新 |
 | **v4.4** | 2026-07-12 | Claude Code(CEO承認による) | **Sprint3 Task4「営業テンプレート」「Appointment Template」ファミリー第一弾完了。** Project Bible Version 4.8→4.9に更新。2コミット(`8c19601`→`f4e6425`、TOEICアプリ repo)：①`realestate/mail.js`(物件紹介メール)を雛形から実体化。入力は顧客名・物件名・物件紹介文(任意)・おすすめポイント・担当者名・会社名。`realestate/listing.js`には依存せず「物件紹介文」欄はlisting.js出力の貼り付け・手入力・空欄いずれでも動作。会社名はテナントごとに異なるためハードコードせず入力項目化。②`realestate/visit.js`(内覧・来店予約案内、新規ファイル)を追加。入力は顧客名・物件名・候補日時(複数可・改行区切り)・集合場所・担当者・持参物/連絡先/備考(いずれも任意)。候補日時は将来のGoogle Calendar/Outlook/予約システム連携を見据え、現時点では構造化せず自由テキストとして扱う。いずれも「1ファイル=1用途」の原則を維持し、他用途を判定するswitch文を書かず、将来の拡張(followup/thanks/contract/proposal、来店予約/オンライン商談/現地案内/契約日時/鍵渡し/引渡し等)は同形式のファイル追加のみで対応する設計とした。両テンプレートとも変更ファイルは1つのみで、Template Loader・Service・API・UIの追加変更は不要だった(Template Engineの「ファイル追加のみで拡張できる」設計を実証)。ブラウザで両テンプレートの生成(候補日時が箇条書きで見やすく表示されること・返信しやすい構成・キャンセル/変更案内を含むこと等を確認)・既存機能との無停止共存を確認。Next Taskは追加のテンプレート実装(CEO承認待ち)に更新 |
 | **v4.5** | 2026-07-12 | Claude Code(CEO承認による) | **ホームページVersion2リニューアル完了。** Project Bible Version 4.9→5.0に更新。コミット`9a63a2b`(SmartLabo repo)：`WEBSITE/index.html`を「会社紹介サイト」から「営業サイト」へ全面刷新し、Hero/Smart AI Router図解/AI社員カード(6種)/Company Brain/画面ショーケース(横スクロール)/業種展開/導入効果ストーリー/料金プラン/最終CTAの9セクション構成へ再編。実装画面はスクリーンショットではなくHTML/CSSでの再現とした(CEO方針「写真よりUI・アニメーション・図解」に対応)。業種展開カードは不動産売買のみ「対応中」、他5業種は「今後対応予定」と正確に区別(CEO指示は全業種同一表示だったが、既出荷機能の過小申告を避けるため表示を修正、完了報告で明記)。CEO指示のAI社員カード一覧にあった「Builder」は実装ルール「社内専用機能は顧客向けに非表示」と矛盾するため6種構成から除外。既存ブランドカラー・正式ロゴのみ使用、「Company OS」表記なし。ブラウザでデスクトップ(1440px)・モバイル(375px)双方のレンダリング、Router図解アニメーション、画面ショーケースの横スクロール、ハンバーガーメニュー、コンソールエラーなしを確認。SmartLabo repoはpush未実施、CEO確認待ち |
+| **v4.6** | 2026-07-12 | Claude Code(CEO承認による) | **Smart Labo AIホームページチャットデモ実装完了。** Project Bible Version 5.0→5.1に更新。コミット`696b3ca`(SmartLabo repo)：右下固定チャットボタン→ウィンドウのUIを新設し、初回挨拶＋「体験できるAI」一覧(7種、司法書士AI/管理会社AIはComing Soon)＋おすすめ質問8件をチップ表示。CEO指定の6機能(営業メール/物件紹介文/査定コメント/FAQ/会社紹介/提案書)はキーワード分類による高品質なデモ回答、その他は情報系Q&Aまたは無料デモ予約/お問い合わせへの誘導で対応。**実装前にアーキテクチャ上の制約(実際のSmart AI RouterはsmartlaboWorksサーバー内にあり、本番デプロイ・公開APIが存在しない)をCEOへ確認し、「今回はUI/UXのみ実装し、AI生成はダミー応答で代替する」との回答を得たうえで実装した**(公開APIの新規デプロイはコスト・セキュリティ上の判断を伴うため実施していない)。会話履歴はlocalStorageで保持しリロード後も復元されることを確認。ログイン・CRM・Meeting・Builder・Whisper・OCR・画像生成は実装せず(CEO指示どおり)。デスクトップ・タブレット・モバイルで表示確認済み |
 
 *最終更新: 2026-07-12*
