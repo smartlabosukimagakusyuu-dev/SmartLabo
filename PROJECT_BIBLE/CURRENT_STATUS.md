@@ -9,12 +9,12 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：4.4
+Project Bible Version：4.5
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：1.0 Release Candidate(Company Brain拡張済み。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/)
 Smart Labo Works：正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)。詳細Versionは同リポジトリの`PRODUCT_REQUIREMENTS.md`を参照
-Current Task：Sprint2 Task8完了(Company Brainのサーバー永続化)。Task9の承認待ち
+Current Task：Sprint3 Task1完了(Smart AI Router基盤実装)。Task2「Claude API正式実装」の承認待ち
 ```
 
 **用語・体制の重要な変更(2026-07-10)：**
@@ -29,15 +29,15 @@ Current Task：Sprint2 Task8完了(Company Brainのサーバー永続化)。Task
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 4.4 |
+| Project Bible Version | 4.5 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **1.0 Release Candidate — GitHub Pagesで公開中**([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Company Brainセクション新設、ダッシュボードのデモ表記、CTA導線の整理、404ページ・OGP・favicon最適化まで完了した最終ブラッシュアップ版。**さらにCompany BrainをSmart Labo Works最大の差別化要素として全面拡張済み**(キャッチコピー・9項目の知識ソース・3利用シナリオ・ガラスUI・専用アイコン) |
 | デモサイト Version（`WEBSITE/app.html`） | **デモ v1.0（2026-07-07完成、2026-07-10にデモとして再位置づけ）。GitHub Pages公開中。全9ページ・デモデータ(顧客5件・契約7件・物件6件)。Smart Labo Works正式製品ではない** |
 | Smart Labo Works Version（正式コードベース） | 本ファイルでは追跡しない。**別リポジトリ`smartlabo-works`の`PRODUCT_REQUIREMENTS.md`／`PRODUCT_BOUNDARY.md`を参照** |
 | Current Project | Company Setup → **Version1.0リファクタリング（2026-07-10 CEO承認）** |
-| Current Task | **Sprint2 Task8完了。** Company BrainをlocalStorageからSQLite（node:sqlite、CompanyIDで分離）へ永続化。REST API化（GET/POST/PUT/DELETE）。CRM・案件・契約（Task7）と同一パターンで統一 |
-| Next Task | Task9はCEO承認後に着手（内容未確定。REFACTOR_PLAN.md Phase1残りのapp.html分割等が候補） |
+| Current Task | **Sprint3 Task1完了。** Smart AI Router基盤（`src/services/router/`）を新設。AIProviderインターフェース（chat/summarize/generate/analyze）、OpenAI/Claude/GeminiProvider、jobType別ルーティングテーブル、Router Monitor（内部ログ）を実装。既存の`/api/ai/*`・Task4のRouterは無変更 |
+| Next Task | Task2「Claude API正式実装」はCEO承認後に着手 |
 | Last Update | 2026-07-11 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -69,7 +69,19 @@ CEOより「Sprint2を開始する。目的はSmart Labo Worksを複数企業で
 | Task7 | CRM・案件・契約のサーバー永続化（localStorage→SQLite。REST API化） | ✅完了(2026-07-11) | `5064513`→`afa1baf`→`41ac221`(TOEICアプリ repo、3コミット) |
 | Task8 | Company Brainのサーバー永続化（localStorage→SQLite。REST API化） | ✅完了(2026-07-11) | `09a2315`→`6b5cfc5`→`75fdaf2`(TOEICアプリ repo、3コミット) |
 
-詳細なデータ構造・影響範囲はTask6〜Task8完了報告を参照。次Task9はCEO承認後に着手する。
+詳細なデータ構造・影響範囲はTask6〜Task8完了報告を参照。Sprint2はTask8で一区切りとし、Sprint3へ移行した。
+
+---
+
+## Sprint3進捗(2026-07-11 CEO承認：Smart Labo Works独自技術「Smart AI Router」の開発)
+
+CEOより「Sprint3 Task1: Smart AI Router基盤実装」の承認があった。目的はOpenAI/Claude/Geminiを共通インターフェースで扱い、ユーザーがAIを選択せず仕事内容から自動選択される仕組みを作ること。
+
+| Step | 内容 | ステータス | コミット |
+|---|---|---|---|
+| Task1 | Smart AI Router基盤実装（AIProviderインターフェース・OpenAI/Claude/GeminiProvider・routerService・Router Monitor） | ✅完了(2026-07-11) | `77a533b`→`67f8a98`→`468c2fd`→`6c85b30`(TOEICアプリ repo、4コミット) |
+
+新設の`src/services/router/`は、Task4で整理済みの既存Router（`src/services/ai/router/`、`/api/ai/*`エンドポイントを引き続き支える）とは別の並存モジュールとして実装した。既存機能への変更は一切なし。次Task2「Claude API正式実装」はCEO承認後に着手する。
 
 詳細な機能境界・優先度は`smartlabo-works/PRODUCT_REQUIREMENTS.md`・`PRODUCT_BOUNDARY.md`・`BUSINESS_STRATEGY.md`を参照。
 
@@ -213,5 +225,6 @@ Xserverのサーバー契約・DNS設定が完了し次第、正式ドメイン(
 | **v3.7** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint2 Task6完了を反映(企業単位データ分離)。** Project Bible Version 4.1→4.2に更新。新設の「Sprint2進捗」表を追加。3コミット(`d7ea0cd`→`0b8fedf`→`707ef92`)：①AIログを`aiLogsByCompany`(Map)へ変更しcompanyId分離、②認証設定を`config.auth`(単一アカウント)から`config.companies`(CompanyID→User[])構造へ再設計、③クライアント側のCompany Brain/CRM/案件/契約のlocalStorageキーを`companyScopedKey()`経由でCompanyID別に分離し、ログイン時のCompanyID切替でページを再読込する仕組みを追加。Innovation Hub等の社内専用データ(INNOVATION_KEY等)は対象外とし、`PRODUCT_BOUNDARY.md`の分類との整合を確認。ブラウザで実際に2社分のダミーデータを作り、互いに影響しないことを確認(defaultの5件のCRMデータが別CompanyIDのテストデータ追加後も無傷)。Next TaskをTask7(内容未確定、CEO承認待ち)に更新 |
 | **v3.8** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint2 Task7完了を反映(CRM・案件・契約のサーバー永続化)。** Project Bible Version 4.2→4.3に更新。3コミット(`5064513`→`afa1baf`→`41ac221`)：①`node:sqlite`(Node.js組み込み、npm依存なし)でCRM/deals/contractsテーブルを新設、company_idインデックス付き・レコードはJSON列で保存する汎用`recordStore`、②`GET/POST/PUT/DELETE`のREST APIをcrm/deals/contractsに追加し認証ガードを`/api/*`全体(auth系除く)へ拡張、③フロントエンドをlocalStorageからAPI呼び出しへ切替え、旧localStorageデータの一度きり自動移行処理を追加。保存方式はSQLite・JSON列・PostgreSQLを比較しSQLiteを採用(理由はTask7完了報告参照)。動作確認中、Service Worker(`sw.js`)がapp.htmlを古いバージョンでキャッシュしたままになる不具合を発見しCACHE_NAMEをv2へ更新。ブラウザで旧データの自動移行・CRM/deals全CRUD操作・別CompanyIDとの分離を確認。Next TaskをTask8(Company Brainサーバー永続化、CEO承認待ち)に更新 |
 | **v3.9** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint2 Task8完了を反映(Company Brainのサーバー永続化)。** Project Bible Version 4.3→4.4に更新。3コミット(`09a2315`→`6b5cfc5`→`75fdaf2`)：①`brain`テーブルをTask7と同じ`recordStore`パターンで追加、②`GET/POST/PUT/DELETE /api/brain`を追加(AI問い合わせ用の`POST /api/ai/brain`とはパス・役割とも別物、正規表現の衝突なしを確認)、③フロントエンドの4箇所の書き込み処理(`saveBrainEntry`・`deleteBrain`・Innovation Hubからの`registerToBrain`・初期データへの`resetBrain`)をAPI呼び出しへ切替え、旧localStorageデータの自動移行にもbrainを追加。Company BrainのAI問い合わせ(`/api/ai/brain`)自体のロジック・プロンプトは一切変更していない(Sprint2の禁止事項どおり)。ブラウザで旧データ移行・CRUD全操作・AI問い合わせが移行後のデータを正しく参照すること・リセット機能を確認。Next TaskをTask9(内容未確定、CEO承認待ち)に更新 |
+| **v4.0** | 2026-07-11 | Claude Code(CEO承認による) | **Sprint3開始、Task1完了(Smart AI Router基盤実装)。** Project Bible Version 4.4→4.5に更新。新設の「Sprint3進捗」表を追加。4コミット(`77a533b`→`67f8a98`→`468c2fd`→`6c85b30`)：①新設`src/services/router/`にAIProviderインターフェース(chat/summarize/generate/analyze/testConnection/isAvailable)・9jobType分のルーティングテーブル(Company Brain/営業メール/査定コメント→OpenAI、契約書/長文整理/提案書→Claude、PDF解析/画像解析/図面→Gemini)・キーワードベースの簡易分類器・内部ログのみのRouter Monitorを追加、②OpenAIProvider(既存実装への薄いアダプター)・ClaudeProvider(同)を追加、③GeminiProvider(新規、Gemini generateContent APIへの実接続。GEMINI_API_KEY未設定のためok:true疎通までは未確認、エラーハンドリングの正常動作は確認済み)を追加、④routerService.js(dispatch関数、①入力解析②仕事分類③AI呼び出し④レスポンス統合の一連の流れ)を追加。既存の`src/services/ai/router/`(Task4)・`server.js`・`app.html`は無変更、`/api/ai/*`エンドポイントへの影響なし。node script経由でgetRouterStatus・実OpenAI呼び出し・Claude未設定時のエラー処理・キーワード分類・モニターログ記録をすべて確認。REFACTOR_PLAN.md Step3.3(Gemini)の記述が本実装と食い違うため、両Routerが並存している旨を追記した。Next TaskをTask2(Claude API正式実装、CEO承認待ち)に更新 |
 
 *最終更新: 2026-07-11*
