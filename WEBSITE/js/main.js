@@ -24,7 +24,8 @@
 
   // Scroll reveal for major sections
   var revealTargets = document.querySelectorAll(
-    ".timeline__item, .value-card, .stat-card, .industry-card, .mission"
+    ".timeline__item, .value-card, .stat-card, .industry-card, .mission, " +
+    ".employee-card, .screen-card, .industry-card2, .pricing-card, .flow-step, .router-diagram"
   );
   revealTargets.forEach(function (el) {
     el.classList.add("reveal");
@@ -49,5 +50,19 @@
     revealTargets.forEach(function (el) {
       el.classList.add("is-visible");
     });
+  }
+
+  // 画面ショーケース: 縦スクロール(ホイール)をそのまま横スクロールへ変換する
+  var showcase = document.querySelector(".screens-showcase");
+  if (showcase) {
+    showcase.addEventListener(
+      "wheel",
+      function (e) {
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        showcase.scrollLeft += e.deltaY;
+        e.preventDefault();
+      },
+      { passive: false }
+    );
   }
 })();
