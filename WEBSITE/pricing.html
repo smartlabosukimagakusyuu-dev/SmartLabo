@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>導入プラン — Smart Labo Works</title>
-<meta name="description" content="Smart Labo Worksの導入プラン。利用規模×プラン×オプションの組み合わせで、会社に合わせた導入をご提案します。">
+<meta name="description" content="Smart Labo Configurator。利用規模・基本プラン・追加オプションを選ぶだけで、会社に合わせたおすすめ構成をシミュレーションできます。">
 <link rel="icon" href="img/logo/favicon.png" type="image/png">
 <link rel="canonical" href="https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/pricing.html">
 <link rel="stylesheet" href="css/style.css">
@@ -43,92 +43,71 @@
 <section class="page-hero">
   <div class="page-hero__watermark" aria-hidden="true"><img src="img/logo/smartlabo_icon_white.webp" alt=""></div>
   <div class="container">
-    <p class="badge">導入プラン</p>
-    <h1 class="page-hero__title">会社の規模・使い方に合わせて。</h1>
-    <p class="page-hero__lead">「料金」ではなく「導入プラン」。利用規模・プラン・オプションの組み合わせで、会社に合わせた導入をご提案します。詳細はすべて個別相談で決定します。</p>
+    <p class="badge">Smart Labo Configurator</p>
+    <h1 class="page-hero__title">あなたの会社に最適な構成を、シミュレーションする。</h1>
+    <p class="page-hero__lead">価格表ではなく、構成を一緒に設計するページです。利用規模・基本プラン・追加オプションを選ぶと、おすすめ構成をリアルタイムに確認できます。金額はすべて個別相談・個別見積りでご案内します。</p>
   </div>
 </section>
 
-<!-- ①利用規模 -->
+<div id="configurator">
+
+<div class="container">
+  <div class="cf-progress" aria-hidden="true"></div>
+  <p class="cf-mini-status" id="cf-mini-status"></p>
+</div>
+
+<!-- Step1 利用規模 -->
 <section class="section section--white">
   <div class="container">
     <p class="plan-step-label"><span class="plan-step-label__num">1</span>利用規模を選ぶ</p>
-    <div class="scale-grid">
-      <div class="scale-card">
-        <p class="scale-card__name">Small</p>
-        <p class="scale-card__desc">小規模企業向け<br>目安：〜10名程度</p>
-      </div>
-      <div class="scale-card">
-        <p class="scale-card__name">Medium</p>
-        <p class="scale-card__desc">中規模企業向け<br>目安：11〜50名程度</p>
-      </div>
-      <div class="scale-card">
-        <p class="scale-card__name">Enterprise</p>
-        <p class="scale-card__desc">大規模企業向け<br>目安：51名以上・複数拠点</p>
-      </div>
-    </div>
+    <div class="scale-grid" id="cf-step1"></div>
   </div>
 </section>
 
-<!-- ②プラン -->
+<!-- Step2 基本プラン -->
 <section class="section section--gray">
   <div class="container">
-    <p class="plan-step-label"><span class="plan-step-label__num">2</span>プランを選ぶ</p>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <p class="pricing-card__plan">Lite</p>
-        <p class="pricing-card__price">個別相談</p>
-        <p class="pricing-card__desc">主要機能をご体験いただける入門プラン。</p>
-        <ul class="pricing-card__list">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Company Brain</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>CRM・案件管理</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>AI Assistant（基本機能）</li>
-        </ul>
-        <a href="contact.html" class="btn btn--secondary" style="color:var(--smart-blue);border-color:var(--smart-blue)">お問い合わせ</a>
-      </div>
-      <div class="pricing-card pricing-card--featured">
-        <span class="pricing-card__badge">おすすめ</span>
-        <p class="pricing-card__plan">Standard</p>
-        <p class="pricing-card__price">個別相談</p>
-        <p class="pricing-card__desc">Smart AI Router・業種特化テンプレートを含む標準プラン。</p>
-        <ul class="pricing-card__list">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Liteの全機能</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Smart AI Router（OpenAI/Claude/Gemini）</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>業種特化テンプレート</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>契約管理</li>
-        </ul>
-        <a href="contact.html" class="btn btn--primary">導入相談をする</a>
-      </div>
-      <div class="pricing-card">
-        <p class="pricing-card__plan">Premium</p>
-        <p class="pricing-card__price">個別見積り</p>
-        <p class="pricing-card__desc">専用カスタマイズ・優先サポートを含む最上位プラン。</p>
-        <ul class="pricing-card__list">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Standardの全機能</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>専用テンプレート開発</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>優先サポート体制</li>
-        </ul>
-        <a href="contact.html" class="btn btn--secondary" style="color:var(--smart-blue);border-color:var(--smart-blue)">お問い合わせ</a>
+    <p class="plan-step-label"><span class="plan-step-label__num">2</span>基本プランを選ぶ</p>
+    <div class="pricing-grid" id="cf-step2"></div>
+  </div>
+</section>
+
+<!-- Step3 利用モジュール(プランに標準搭載・選択不可) -->
+<section class="section section--white">
+  <div class="container">
+    <p class="plan-step-label"><span class="plan-step-label__num">3</span>プランに含まれる利用モジュール</p>
+    <p class="cf-step-note">Company Brain・CRM・AI Assistantなどの中核機能は、選択した基本プランに標準搭載されます（個別の追加オプションではありません）。</p>
+    <div id="cf-step3"></div>
+  </div>
+</section>
+
+<!-- Step4 追加オプション -->
+<section class="section section--gray">
+  <div class="container">
+    <p class="plan-step-label"><span class="plan-step-label__num">4</span>追加オプションを選ぶ</p>
+    <p class="cf-step-note">基本プランに含まれない、個別性の高い追加支援・拡張機能です。複数選択できます。</p>
+    <div id="cf-step4"></div>
+  </div>
+</section>
+
+<!-- Step5 おすすめ構成 -->
+<section class="section section--white">
+  <div class="container">
+    <p class="plan-step-label"><span class="plan-step-label__num">5</span>おすすめ構成を確認</p>
+    <div class="cf-summary">
+      <div class="cf-summary__body"></div>
+      <div class="cf-summary__cta">
+        <button type="button" class="btn btn--primary" data-cf-cta="consult">無料相談</button>
+        <button type="button" class="btn btn--secondary" data-cf-cta="quote" style="color:var(--smart-blue);border-color:var(--smart-blue)">見積り依頼</button>
+        <button type="button" class="btn btn--secondary" data-cf-cta="brochure" style="color:var(--smart-blue);border-color:var(--smart-blue)">資料請求</button>
+        <button type="button" class="btn btn--secondary" data-cf-cta="demo" style="color:var(--smart-blue);border-color:var(--smart-blue)">デモ予約</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ③オプション -->
-<section class="section section--white">
-  <div class="container">
-    <p class="plan-step-label"><span class="plan-step-label__num">3</span>オプションを選ぶ</p>
-    <div class="option-grid">
-      <div class="option-item"><span class="option-item__name">Company Brain構築（初期設定支援）</span><span class="status-badge status-badge--ready">対応可</span></div>
-      <div class="option-item"><span class="option-item__name">テンプレート制作</span><span class="status-badge status-badge--ready">対応可</span></div>
-      <div class="option-item"><span class="option-item__name">API連携</span><span class="status-badge status-badge--consult">要相談</span></div>
-      <div class="option-item"><span class="option-item__name">AI教育（利用研修）</span><span class="status-badge status-badge--consult">要相談</span></div>
-      <div class="option-item"><span class="option-item__name">OCR</span><span class="status-badge status-badge--soon">Coming Soon</span></div>
-      <div class="option-item"><span class="option-item__name">議事録（Meeting AI）</span><span class="status-badge status-badge--soon">Coming Soon</span></div>
-      <div class="option-item"><span class="option-item__name">その他</span><span class="status-badge status-badge--consult">要相談</span></div>
-    </div>
-  </div>
-</section>
+</div>
+<!-- /#configurator -->
 
 <!-- 機能比較表 -->
 <section class="section section--gray">
@@ -164,11 +143,15 @@
     <div class="faq-list">
       <div class="faq-item">
         <button class="faq-item__q">金額はいつ決まりますか？<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l7 7 7-7"/></svg></button>
-        <div class="faq-item__a"><div class="faq-item__a-inner">現在は個別相談制です。導入相談の際に、利用規模・プラン・オプションの組み合わせに応じてご案内します。</div></div>
+        <div class="faq-item__a"><div class="faq-item__a-inner">現在は個別相談制です。Configuratorで選んだ利用規模・基本プラン・追加オプションの組み合わせに応じてご案内します。</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-item__q">利用規模とプランはどう組み合わせますか？<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l7 7 7-7"/></svg></button>
-        <div class="faq-item__a"><div class="faq-item__a-inner">利用規模（Small/Medium/Enterprise）とプラン（Lite/Standard/Premium）は独立した軸です。会社の規模と必要な機能に応じて自由に組み合わせられます。</div></div>
+        <button class="faq-item__q">利用規模と基本プランはどう組み合わせますか？<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l7 7 7-7"/></svg></button>
+        <div class="faq-item__a"><div class="faq-item__a-inner">利用規模（Small/Medium/Enterprise）と基本プラン（Lite/Standard/Premium）は独立した軸です。会社の規模と必要な機能に応じて自由に組み合わせられます。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-item__q">利用モジュールと追加オプションの違いは何ですか？<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l7 7 7-7"/></svg></button>
+        <div class="faq-item__a"><div class="faq-item__a-inner">Company Brain・CRM・AI Assistantなどの中核機能は「利用モジュール」として、選んだ基本プランに標準搭載されます。単品で追加購入する対象ではありません。Meeting／議事録AIやOCR、外部API連携などの個別性の高い拡張のみを「追加オプション」として選択いただけます。</div></div>
       </div>
       <div class="faq-item">
         <button class="faq-item__q">プランは後から変更できますか？<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l7 7 7-7"/></svg></button>
@@ -229,5 +212,6 @@
 
 <script src="js/main.js"></script>
 <script src="js/pages.js"></script>
+<script src="js/configurator.js"></script>
 </body>
 </html>

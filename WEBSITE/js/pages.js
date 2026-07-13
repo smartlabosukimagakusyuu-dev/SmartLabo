@@ -24,6 +24,39 @@
 
   var successBox = document.getElementById("contactSuccess");
 
+  // Smart Labo Configurator(pricing.html)からの選択内容引き継ぎ
+  // クエリ例: contact.html?from=configurator&type=quote&scale=medium&plan=standard&modules=aiAssistant,crm&options=ocr
+  (function prefillFromConfigurator() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("from") !== "configurator") return;
+
+    var SCALE_LABEL = { small: "Small（〜10名程度）", medium: "Medium（11〜50名程度）", enterprise: "Enterprise（51名以上・複数拠点）" };
+    var PLAN_LABEL = { lite: "Lite", standard: "Standard", premium: "Premium" };
+    var TYPE_LABEL = { consult: "無料相談", quote: "見積り依頼", brochure: "資料請求", demo: "デモ予約" };
+
+    var type = params.get("type") || "";
+    var scale = params.get("scale") || "";
+    var plan = params.get("plan") || "";
+    var modules = params.get("modules") ? params.get("modules").split(",") : [];
+    var options = params.get("options") ? params.get("options").split(",") : [];
+
+    var typeSelect = document.getElementById("cf-type");
+    if (typeSelect && TYPE_LABEL[type]) typeSelect.value = type;
+
+    var demoCheckbox = document.getElementById("cf-demo");
+    if (demoCheckbox && type === "demo") demoCheckbox.checked = true;
+
+    var lines = ["【Smart Labo Configuratorでの選択内容】"];
+    if (TYPE_LABEL[type]) lines.push("ご相談種別：" + TYPE_LABEL[type]);
+    lines.push("利用規模：" + (SCALE_LABEL[scale] || "未選択"));
+    lines.push("基本プラン：" + (PLAN_LABEL[plan] || "未選択"));
+    if (modules.length) lines.push("利用モジュール：" + modules.join("、"));
+    if (options.length) lines.push("追加オプション：" + options.join("、"));
+
+    var message = document.getElementById("cf-message");
+    if (message) message.value = lines.join("\n");
+  })();
+
   function setError(fieldId, hasError) {
     var group = document.getElementById(fieldId).closest(".form-group");
     if (!group) return;
