@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 5.7**
+> **PROJECT_BIBLE Version: 5.8**
 
 ---
 
@@ -126,7 +126,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 5.7**
+- 現在: **Version 5.8**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -219,5 +219,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v5.5** | 2026-07-12 | Claude Code(CEO承認による) | **Smart Labo Works 詳細ページ構築完了。** 実装前にワイヤーフレーム・ナビゲーション構成・移動する情報・使用する実画面・表示ルール・URL構成を報告しCEO承認を得たうえで実施。トップページを「興味を持たせる」役割に限定し、`product.html`・`features.html`(10機能詳解)・`real-estate.html`(不動産売買仲介向け)・`pricing.html`(3プラン+機能比較表)・`contact.html`(送信先未接続の問い合わせフォーム)を新設。実装済み／Coming Soon／非表示(社内専用)の3区分表示ルールを全ページへ統一適用し、Company OS・Builder・Innovation Hub等のv1.0対象外機能は非表示。ナビゲーションを全ページ「製品/機能/不動産向け/料金/会社情報」に統一。既存コンポーネントを最大限再利用し新規ブランドカラーなし。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.9→v5.0)に詳細を追加。SmartLabo repoはpush未実施 |
 | **v5.6** | 2026-07-12 | Claude Code(CEO追加指示による) | **ブランド露出強化完了。** 「製品名ではなくブランドを印象付ける」というCEO指示のもと、トップページ＋詳細5ページの全6ページへ統一適用。ヘッダーロゴを32px→44px(1.375倍)、フッターロゴを28px→38pxへ拡大。`index.html`のHero背景へ820px・透明度7%の巨大透かしロゴ、詳細5ページの`page-hero`にも420px・透明度6%の透かしロゴを追加(いずれもモバイルでは非表示、横スクロールなしを確認)。Hero「AI Control Center」最下部に「Powered by Smart Labo Works」を追加。既存アセットの再利用のみで新規ブランドカラーなし。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.0→v5.1)に詳細を追加。SmartLabo repoはpush未実施 |
 | **v5.7** | 2026-07-12 | Claude Code(CEO指示による) | **新章[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)を新設。** 「Smart Labo Worksの料金体系を正式仕様として採用する」というCEO指示に基づき、①利用規模(Small/Medium/Enterprise)×②プラン(Lite/Standard/Premium)×③オプション(Company Brain構築/OCR/議事録/API/AI教育/テンプレート制作/その他)の3要素構造と、「料金ではなく導入プランとして表現する」という基本思想を正式制定。ホームページ・Product Book・Company OS・営業資料・見積書・契約書への共通適用を明記。Company OS「Pricing Manager」(利用規模→プラン→オプション選択で料金表/見積書/契約書/営業資料を自動生成)のデータモデル・画面遷移・生成対象の設計を記載したが、実装はsmartlabo-works側の別Taskとして今後CEO承認を得て着手するものと明記(契約書自動生成は法的正確性のためCEO確認必須)。具体的な金額は未確定のため記載していない。`00_Foundation`の01〜10・`10`〜`11`が既に埋まっているため、`12`として新設 |
+| **v5.8** | 2026-07-13 | Claude Code(CEO承認による) | **pricing.htmlを「Smart Labo Configurator」へ変更、[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)を4層構造(v1.0→v2.0)へ改訂。** 実装前に①UIワイヤー②入力項目③データ構造④Company OSとの共通設計を報告し、CEO承認(4層構造への修正指示付き)を得たうえで実施。CEOの修正指示により、③オプションを単純な追加オプション一覧として扱う方針は不採用となり、「①利用規模×②基本プラン×③利用モジュール×④追加オプション」の4層構造が正式決定。Company Brain/CRM/AI Assistant/案件管理/契約管理/AIテンプレートの6中核機能は選択した基本プランに標準搭載される「③利用モジュール」(選択・変更不可)、Meeting/OCR/外部API連携/AI活用研修等の8項目のみを「④追加オプション」として区別。ホームページを、Step1利用規模→Step2基本プラン→Step3利用モジュール表示→Step4追加オプション→Step5おすすめ構成確認の5Stepシミュレーターへ全面刷新し、新規`WEBSITE/js/configurator.js`が選択状態(`usageScale/plan/modules/options`)を管理・`localStorage`保存。4CTA(無料相談/見積り依頼/資料請求/デモ予約)から選択内容を`contact.html`へURLクエリで自動引き継ぎ。顧客向けUIでは「Company OS」の名称を使用せず、見積書/契約書/提案書の自動生成・CRM連携・バックエンドAPIは今回スコープ外。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.2→v5.3)に詳細を追加。SmartLabo repoはpush未実施 |
 
-*最終更新: 2026-07-12*
+*最終更新: 2026-07-13*
