@@ -1394,3 +1394,140 @@ h1, h2, h3, h4 {
   .cc-providers { flex-wrap: wrap; }
   .hero__scroll-cue { display: none; }
 }
+
+/* ==========================================================================
+   詳細ページ 共通コンポーネント(2026-07-12 CEO承認「Smart Labo Works 詳細ページ構築」)
+   product.html / features.html / real-estate.html / pricing.html / contact.html
+   新規ブランドカラーは追加しない。既存のセクション/カードパターンを最大限再利用する。
+   ========================================================================== */
+
+/* ページHero(トップページのHeroより簡潔。AI Control Centerは持たない) */
+.page-hero {
+  position: relative;
+  padding: 148px 0 64px;
+  background: linear-gradient(160deg, var(--navy-900) 0%, var(--navy-800) 100%);
+  text-align: center;
+  overflow: hidden;
+}
+.page-hero__title { font-size: clamp(28px, 3.6vw, 42px); color: var(--white); margin: 0 0 16px; line-height: 1.35; }
+.page-hero__lead { font-size: 15px; color: var(--text-on-navy-secondary); max-width: 640px; margin: 0 auto; line-height: 1.9; }
+.page-hero__cta { margin-top: 30px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+/* 実装状況バッジ */
+.status-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-left: 8px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.status-badge--soon { background: rgba(251,191,36,0.14); color: #B45309; border: 1px solid rgba(251,191,36,0.4); }
+.section--navy .status-badge--soon, .section--navy-deep .status-badge--soon, .page-hero .status-badge--soon { color: #FBBF24; }
+
+/* Steps(導入までの流れ)。flow-step/flow-arrowを再利用し、番号バッジを追加 */
+.steps-flow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; margin: 40px 0 0; }
+.flow-step__num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(255,255,255,0.18); color: inherit;
+  font-size: 10px; font-weight: 700; margin-right: 8px;
+}
+.flow-step--accent .flow-step__num { background: rgba(255,255,255,0.28); }
+
+/* FAQアコーディオン */
+.faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.faq-item { border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow: hidden; background: var(--white); }
+.faq-item__q {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 18px 22px; cursor: pointer; font-size: 14.5px; font-weight: 600;
+  background: none; border: none; width: 100%; text-align: left; font-family: inherit; color: var(--text-primary);
+}
+.faq-item__q svg { flex-shrink: 0; transition: transform 0.25s var(--ease); color: var(--text-secondary); }
+.faq-item.is-open .faq-item__q svg { transform: rotate(180deg); }
+.faq-item__a { max-height: 0; overflow: hidden; transition: max-height 0.3s var(--ease); }
+.faq-item.is-open .faq-item__a { max-height: 320px; }
+.faq-item__a-inner { padding: 0 22px 18px; font-size: 13.5px; color: var(--text-secondary); line-height: 1.85; }
+
+/* features.html: 機能詳細ブロック */
+.feature-layout { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
+.feature-sidebar { position: sticky; top: 96px; display: flex; flex-direction: column; gap: 2px; }
+.feature-sidebar a { font-size: 13px; color: var(--text-secondary); padding: 9px 14px; border-radius: 8px; font-weight: 500; }
+.feature-sidebar a:hover { background: var(--light-gray); color: var(--smart-blue); }
+
+.feature-block { padding: 52px 0; border-bottom: 1px solid var(--border-light); scroll-margin-top: 96px; }
+.feature-block:first-child { padding-top: 0; }
+.feature-block:last-child { border-bottom: none; }
+.feature-block__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.feature-block__icon {
+  width: 46px; height: 46px; border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--smart-blue), var(--smart-blue-dark));
+  box-shadow: 0 8px 18px rgba(37,99,235,0.28);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+}
+.feature-block__title { font-size: 22px; margin: 0 0 24px; }
+.feature-block__label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--smart-blue); margin: 20px 0 8px; }
+.feature-block__label:first-of-type { margin-top: 0; }
+.feature-block__text { font-size: 14px; color: var(--text-secondary); line-height: 1.85; margin: 0; }
+.feature-block__related { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.feature-block__related a { font-size: 12px; padding: 5px 12px; border-radius: 100px; background: var(--light-gray); color: var(--smart-blue); font-weight: 600; }
+.feature-block__cta { margin-top: 22px; }
+
+@media (max-width: 960px) {
+  .feature-layout { grid-template-columns: 1fr; }
+  .feature-sidebar { position: static; flex-direction: row; flex-wrap: wrap; }
+  .feature-block__grid { grid-template-columns: 1fr; }
+}
+
+/* real-estate.html: よくある課題 */
+.problem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.problem-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 22px; }
+.problem-card__q { color: var(--white); font-size: 14.5px; font-weight: 700; margin: 0 0 8px; }
+.problem-card__a { color: var(--text-on-navy-secondary); font-size: 13px; line-height: 1.8; margin: 0; }
+
+/* pricing.html: 機能比較表 */
+.compare-table-wrap { overflow-x: auto; border: 1px solid var(--border-light); border-radius: var(--radius-md); }
+.compare-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+.compare-table th, .compare-table td { padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--border-light); }
+.compare-table th:first-child, .compare-table td:first-child { text-align: left; color: var(--text-primary); font-weight: 500; }
+.compare-table thead th { font-weight: 700; color: var(--text-primary); background: var(--light-gray); }
+.compare-table tbody tr:last-child td { border-bottom: none; }
+
+/* contact.html: フォーム */
+.contact-form { max-width: 640px; margin: 0 auto; background: var(--white); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 40px; }
+.form-note { font-size: 12.5px; color: #92400E; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.35); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 28px; line-height: 1.7; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+.form-group .req { color: #DC2626; margin-left: 2px; }
+.form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"],
+.form-group select, .form-group textarea {
+  width: 100%; padding: 12px 14px; border: 1px solid var(--border-light); border-radius: var(--radius-sm);
+  font-size: 14px; font-family: inherit; outline: none; color: var(--text-primary);
+  transition: border-color var(--dur) var(--ease); background: var(--white);
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--smart-blue); }
+.form-group textarea { min-height: 110px; resize: vertical; }
+.form-checkbox { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.form-checkbox input { margin-top: 3px; flex-shrink: 0; }
+.form-error { color: #DC2626; font-size: 12px; margin-top: 6px; display: none; }
+.form-group.has-error input, .form-group.has-error select, .form-group.has-error textarea { border-color: #DC2626; }
+.form-group.has-error .form-error { display: block; }
+.form-submit-note { font-size: 12px; color: var(--text-secondary); text-align: center; margin-top: 16px; }
+.form-success {
+  display: none;
+  background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.4); border-radius: var(--radius-md);
+  padding: 18px 20px; font-size: 13.5px; color: #166534; margin-bottom: 24px; line-height: 1.8;
+}
+.form-success.is-visible { display: block; }
+
+@media (max-width: 860px) {
+  .problem-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .page-hero { padding: 120px 0 48px; }
+  .contact-form { padding: 26px; }
+}

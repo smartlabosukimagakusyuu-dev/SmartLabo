@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>導入相談・お問い合わせ — Smart Labo Works</title>
+<meta name="description" content="Smart Labo Worksの導入相談・お問い合わせフォーム。">
+<link rel="icon" href="img/logo/favicon.png" type="image/png">
+<link rel="canonical" href="https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/contact.html">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="container header__inner">
+    <a href="index.html" class="logo">
+      <span class="logo__mark" aria-hidden="true"><img src="img/logo/smartlabo_icon_white.webp" width="32" height="32" alt=""></span>
+      <span class="logo__text">Smart Labo <em>Works</em></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="product.html">製品</a>
+      <a href="features.html">機能</a>
+      <a href="real-estate.html">不動産向け</a>
+      <a href="pricing.html">料金</a>
+      <a href="index.html#mission">会社情報</a>
+    </nav>
+    <div class="header__actions">
+      <a href="app.html" class="btn btn--ghost-light btn--sm" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        デモを見る
+      </a>
+      <a href="contact.html" class="btn btn--primary btn--sm">導入相談</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="メニューを開く" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+    <p class="badge">導入相談・お問い合わせ</p>
+    <h1 class="page-hero__title">まずは、お気軽にご相談ください。</h1>
+    <p class="page-hero__lead">導入のご相談、デモのご希望、その他ご質問など、お気軽にお問い合わせください。</p>
+  </div>
+</section>
+
+<section class="section section--white">
+  <div class="container">
+    <form class="contact-form" id="contactForm" novalidate>
+
+      <div class="form-note">
+        ※ 現在、本フォームの送信先は準備中です。入力内容の確認・バリデーションはご利用いただけますが、実際の送信は行われません。お急ぎの場合は、デモページよりお試しいただくか、今しばらくお待ちください。
+      </div>
+
+      <div class="form-success" id="contactSuccess">
+        入力内容の確認が完了しました。<br>※ 本フォームは現在準備中のため、この内容は実際には送信されていません。
+      </div>
+
+      <div class="form-group">
+        <label for="cf-company">会社名<span class="req">*</span></label>
+        <input type="text" id="cf-company" name="company" placeholder="株式会社スマートラボ">
+        <p class="form-error">会社名を入力してください</p>
+      </div>
+
+      <div class="form-group">
+        <label for="cf-name">氏名<span class="req">*</span></label>
+        <input type="text" id="cf-name" name="name" placeholder="山田 太郎">
+        <p class="form-error">氏名を入力してください</p>
+      </div>
+
+      <div class="form-group">
+        <label for="cf-email">メールアドレス<span class="req">*</span></label>
+        <input type="email" id="cf-email" name="email" placeholder="you@example.com">
+        <p class="form-error">正しいメールアドレスを入力してください</p>
+      </div>
+
+      <div class="form-group">
+        <label for="cf-tel">電話番号</label>
+        <input type="tel" id="cf-tel" name="tel" placeholder="090-1234-5678">
+      </div>
+
+      <div class="form-group">
+        <label for="cf-industry">業種<span class="req">*</span></label>
+        <select id="cf-industry" name="industry">
+          <option value="">選択してください</option>
+          <option value="realestate_sales">不動産売買仲介</option>
+          <option value="realestate_management">不動産管理</option>
+          <option value="legal">司法書士</option>
+          <option value="tax">税理士</option>
+          <option value="construction">建築</option>
+          <option value="other">その他</option>
+        </select>
+        <p class="form-error">業種を選択してください</p>
+      </div>
+
+      <div class="form-group">
+        <label for="cf-employees">社員数</label>
+        <select id="cf-employees" name="employees">
+          <option value="">選択してください</option>
+          <option value="1-10">1〜10名</option>
+          <option value="11-50">11〜50名</option>
+          <option value="51-200">51〜200名</option>
+          <option value="201+">201名以上</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="cf-message">相談内容<span class="req">*</span></label>
+        <textarea id="cf-message" name="message" placeholder="ご相談内容をご記入ください"></textarea>
+        <p class="form-error">相談内容を入力してください</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-checkbox"><input type="checkbox" id="cf-demo" name="demo"> 無料デモを希望する</label>
+      </div>
+
+      <div class="form-group">
+        <label class="form-checkbox"><input type="checkbox" id="cf-consent" name="consent"> 個人情報の取り扱いについて同意します<span class="req">*</span></label>
+        <p class="form-error">個人情報の取り扱いへの同意が必要です</p>
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--lg" style="width:100%">送信する</button>
+      <p class="form-submit-note">送信先は現在準備中です。正式なお問い合わせ窓口は準備が整い次第ご案内します。</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href="index.html" class="logo">
+        <span class="logo__mark" aria-hidden="true"><img src="img/logo/smartlabo_icon_white.webp" width="28" height="28" alt=""></span>
+        <span class="logo__text">Smart Labo <em>Works</em></span>
+      </a>
+      <p class="footer__tagline">会社を動かすAI。</p>
+    </div>
+    <div class="footer__col">
+      <h4>製品</h4>
+      <a href="product.html">製品紹介</a>
+      <a href="features.html">機能一覧</a>
+    </div>
+    <div class="footer__col">
+      <h4>業種</h4>
+      <a href="real-estate.html">不動産会社向け</a>
+    </div>
+    <div class="footer__col">
+      <h4>ご利用</h4>
+      <a href="pricing.html">料金プラン</a>
+      <a href="contact.html">導入相談・お問い合わせ</a>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <p>&copy; 2026 Smart Labo Inc. All rights reserved.</p>
+    <div class="footer__legal">
+      <a href="#">プライバシーポリシー</a>
+      <a href="#">利用規約</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/pages.js"></script>
+</body>
+</html>
