@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 5.6**
+> **PROJECT_BIBLE Version: 5.7**
 
 ---
 
@@ -39,6 +39,7 @@ AIが変わっても、社員が増えても、会社の思想が変わらない
 | UIルール | [20_UI_UX_Rules.md](20_UI_UX_Rules.md) |
 | 会社の歴史 | [00_Foundation/01_Company_Story.md](00_Foundation/01_Company_Story.md)、[00_Foundation/09_Product_History.md](00_Foundation/09_Product_History.md) |
 | 開発原則(何を作る前に何を確認するか) | [11_Development_Principles.md](11_Development_Principles.md) |
+| 料金・導入プランの思想 | [12_Pricing_Philosophy.md](12_Pricing_Philosophy.md) |
 
 人間の社員だけでなく、ChatGPT・Claude Code・Codex などのAIエージェントも、作業前に必ずこのフォルダを参照することを前提としています。
 
@@ -69,6 +70,7 @@ PROJECT_BIBLE/
 │
 ├── 10_Development_Rules.md   ← 開発ルール
 ├── 11_Development_Principles.md ← 開発原則(開発前に何を確認・判断するか)
+├── 12_Pricing_Philosophy.md  ← 料金・導入プランの思想(利用規模×プラン×オプション)
 ├── 20_UI_UX_Rules.md         ← デザイン思想・UI/UXルール
 ├── 30_AI_Rules.md            ← AI利用ルール(Claude / Codex / ChatGPT共通)
 ├── 40_Organization.md        ← 組織図・役割分担
@@ -124,7 +126,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 5.6**
+- 現在: **Version 5.7**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -216,5 +218,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v5.4** | 2026-07-12 | Claude Code(CEO承認による) | **Hero Experience Upgrade v3完了。** レイアウト(左コピー／右AI Control Center)は無変更のまま、AI Control Centerを静的UIから常時アニメーションする"Live Dashboard"へ進化。新規`js/hero.js`が2.6秒ごとに処理中ステータス(問い合わせ返信中…/契約レビュー中…/PDF・画像解析中…/Company Brain検索中…)をProviderノードの発光と同期してローテーションし、4.2秒ごとにCompany Brainの状態(参照中→更新中→学習完了)を巡回。Smart AI Routerは呼吸するように発光、接続ラインには小さな光が流れる演出、KPIカード2x2(本日のAI処理件数/Company Brain登録数/契約レビュー件数/問い合わせ返信数)を新設。背景にゆっくり動くglowと淡い浮遊粒子を追加。Heroコピーは「会社を動かすAI。」を主役(54px)、「Smart Labo Works」を副題(20px)に強弱反転。スクロール誘導を新設。`prefers-reduced-motion`で全アニメーション無効化。ロゴ・ブランドカラー・CTA・ナビ・レイアウトは無変更。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.8→v4.9)に詳細を追加。SmartLabo repoはpush未実施 |
 | **v5.5** | 2026-07-12 | Claude Code(CEO承認による) | **Smart Labo Works 詳細ページ構築完了。** 実装前にワイヤーフレーム・ナビゲーション構成・移動する情報・使用する実画面・表示ルール・URL構成を報告しCEO承認を得たうえで実施。トップページを「興味を持たせる」役割に限定し、`product.html`・`features.html`(10機能詳解)・`real-estate.html`(不動産売買仲介向け)・`pricing.html`(3プラン+機能比較表)・`contact.html`(送信先未接続の問い合わせフォーム)を新設。実装済み／Coming Soon／非表示(社内専用)の3区分表示ルールを全ページへ統一適用し、Company OS・Builder・Innovation Hub等のv1.0対象外機能は非表示。ナビゲーションを全ページ「製品/機能/不動産向け/料金/会社情報」に統一。既存コンポーネントを最大限再利用し新規ブランドカラーなし。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.9→v5.0)に詳細を追加。SmartLabo repoはpush未実施 |
 | **v5.6** | 2026-07-12 | Claude Code(CEO追加指示による) | **ブランド露出強化完了。** 「製品名ではなくブランドを印象付ける」というCEO指示のもと、トップページ＋詳細5ページの全6ページへ統一適用。ヘッダーロゴを32px→44px(1.375倍)、フッターロゴを28px→38pxへ拡大。`index.html`のHero背景へ820px・透明度7%の巨大透かしロゴ、詳細5ページの`page-hero`にも420px・透明度6%の透かしロゴを追加(いずれもモバイルでは非表示、横スクロールなしを確認)。Hero「AI Control Center」最下部に「Powered by Smart Labo Works」を追加。既存アセットの再利用のみで新規ブランドカラーなし。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.0→v5.1)に詳細を追加。SmartLabo repoはpush未実施 |
+| **v5.7** | 2026-07-12 | Claude Code(CEO指示による) | **新章[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)を新設。** 「Smart Labo Worksの料金体系を正式仕様として採用する」というCEO指示に基づき、①利用規模(Small/Medium/Enterprise)×②プラン(Lite/Standard/Premium)×③オプション(Company Brain構築/OCR/議事録/API/AI教育/テンプレート制作/その他)の3要素構造と、「料金ではなく導入プランとして表現する」という基本思想を正式制定。ホームページ・Product Book・Company OS・営業資料・見積書・契約書への共通適用を明記。Company OS「Pricing Manager」(利用規模→プラン→オプション選択で料金表/見積書/契約書/営業資料を自動生成)のデータモデル・画面遷移・生成対象の設計を記載したが、実装はsmartlabo-works側の別Taskとして今後CEO承認を得て着手するものと明記(契約書自動生成は法的正確性のためCEO確認必須)。具体的な金額は未確定のため記載していない。`00_Foundation`の01〜10・`10`〜`11`が既に埋まっているため、`12`として新設 |
 
 *最終更新: 2026-07-12*
