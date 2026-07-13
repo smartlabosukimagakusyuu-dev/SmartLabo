@@ -1581,3 +1581,43 @@ h1, h2, h3, h4 {
 @media (max-width: 520px) {
   .hero__watermark, .page-hero__watermark { display: none; }
 }
+
+/* ==========================================================================
+   導入プラン(Pricing Philosophy、2026-07-12 CEO指示)
+   ①利用規模 × ②プラン × ③オプション の3要素構造。金額は個別相談。
+   ========================================================================== */
+
+.plan-step-label { text-align: center; margin-bottom: 40px; }
+.plan-step-label__num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--smart-blue); color: var(--white);
+  font-size: 12px; font-weight: 700; margin-right: 8px;
+}
+
+/* ①利用規模 */
+.scale-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.scale-card {
+  background: var(--white); border: 1px solid var(--border-light); border-radius: var(--radius-md);
+  padding: 26px 22px; text-align: center;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.scale-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(16,24,40,0.08); }
+.scale-card__name { font-size: 17px; font-weight: 700; margin: 0 0 8px; }
+.scale-card__desc { font-size: 12.5px; color: var(--text-secondary); margin: 0; line-height: 1.7; }
+
+/* ③オプション */
+.option-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.option-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: var(--white); border: 1px solid var(--border-light); border-radius: var(--radius-sm);
+  padding: 14px 18px;
+}
+.option-item__name { font-size: 13.5px; font-weight: 600; color: var(--text-primary); }
+.status-badge--ready { background: rgba(37,99,235,0.1); color: var(--smart-blue); border: 1px solid rgba(37,99,235,0.25); }
+.status-badge--consult { background: var(--light-gray); color: var(--text-secondary); border: 1px solid var(--border-light); }
+
+@media (max-width: 860px) {
+  .scale-grid { grid-template-columns: 1fr; }
+  .option-grid { grid-template-columns: 1fr; }
+}
