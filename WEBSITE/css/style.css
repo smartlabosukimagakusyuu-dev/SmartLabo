@@ -160,7 +160,7 @@ h1, h2, h3, h4 {
   height: 72px;
 }
 
-.logo { display: flex; align-items: center; gap: 10px; }
+.logo { display: flex; align-items: center; gap: 14px; }
 .logo__text { color: var(--white); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; }
 .logo__text em { font-style: normal; font-weight: 400; opacity: 0.75; margin-left: 2px; }
 
@@ -1530,4 +1530,54 @@ h1, h2, h3, h4 {
 @media (max-width: 520px) {
   .page-hero { padding: 120px 0 48px; }
   .contact-form { padding: 26px; }
+}
+
+/* ==========================================================================
+   ブランド露出強化(2026-07-12 CEO追加指示「ロゴの露出を増やす」)
+   派手な演出は禁止。巨大透かしロゴは5〜8%の透明度に限定し、主張しすぎない。
+   ========================================================================== */
+
+/* Hero巨大透かしロゴ(index.htmlのみ。奥行きのある高級感を狙う) */
+.hero__watermark {
+  position: absolute;
+  top: 50%;
+  right: -160px;
+  width: 820px;
+  height: 820px;
+  transform: translateY(-50%);
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero__watermark img { width: 100%; height: 100%; object-fit: contain; }
+
+/* page-hero用の控えめな透かしロゴ(詳細ページ共通) */
+.page-hero__watermark {
+  position: absolute;
+  top: 50%;
+  right: -80px;
+  width: 420px;
+  height: 420px;
+  transform: translateY(-50%);
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+.page-hero__watermark img { width: 100%; height: 100%; object-fit: contain; }
+.page-hero .container { position: relative; z-index: 1; }
+
+/* AI Control Center: Powered by */
+.cc-powered {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 4px; padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 10.5px; color: rgba(255,255,255,0.38); letter-spacing: 0.02em;
+}
+.cc-powered img { width: 13px; height: 13px; opacity: 0.75; }
+
+@media (max-width: 860px) {
+  .hero__watermark { width: 560px; height: 560px; right: -120px; }
+}
+@media (max-width: 520px) {
+  .hero__watermark, .page-hero__watermark { display: none; }
 }
