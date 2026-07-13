@@ -61,6 +61,9 @@
   <div class="hero__bg" aria-hidden="true">
     <div class="hero__grid"></div>
     <div class="hero__glow"></div>
+    <div class="hero__particles">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
 
     <!-- 未来都市+AIネットワーク(実写真)。マスターデータ: DESIGN_ASSETS/01_HERO/Backgrounds/hero_background_02_city_network.webp -->
     <div class="hero__city"></div>
@@ -70,7 +73,7 @@
   <div class="container hero__inner">
     <div class="hero__content">
       <p class="badge">会社を動かすAIプラットフォーム</p>
-      <h1 class="hero__title">会社を動かすAI。<br><span class="hero__title--accent">Smart Labo Works</span></h1>
+      <h1 class="hero__title"><span class="hero__title--main">会社を動かすAI。</span><span class="hero__title--sub">Smart Labo Works</span></h1>
       <p class="hero__lead">営業・契約・議事録・顧客管理を、ひとつのAIプラットフォームへ。</p>
 
       <div class="hero__cta">
@@ -98,17 +101,18 @@
           </div>
         </div>
 
-        <div class="cc-routes">
-          <div class="cc-route"><span class="cc-route__from">問い合わせ返信</span><span class="cc-route__arrow">→</span><span class="cc-route__to">OpenAI</span></div>
-          <div class="cc-route"><span class="cc-route__from">契約書レビュー</span><span class="cc-route__arrow">→</span><span class="cc-route__to">Claude</span></div>
-          <div class="cc-route"><span class="cc-route__from">PDF・画像解析</span><span class="cc-route__arrow">→</span><span class="cc-route__to">Gemini</span></div>
+        <div class="cc-processing">
+          <span class="cc-processing__dots"><span></span><span></span><span></span></span>
+          <span class="cc-processing__text" id="ccProcessingStatus">問い合わせ返信中…</span>
         </div>
 
-        <div class="cc-brain-badge"><span class="cc-status-dot"></span>Company Brain 参照中</div>
+        <div class="cc-brain-badge"><span class="cc-status-dot"></span><span id="ccBrainStatus">Company Brain 参照中</span></div>
 
-        <div class="cc-stat">
-          <span class="cc-stat__label">本日のAI処理件数</span>
-          <span class="cc-stat__value">128<small>件</small></span>
+        <div class="cc-kpi-grid">
+          <div class="cc-kpi"><span class="cc-kpi__value">128<small>件</small></span><span class="cc-kpi__label">今日のAI処理件数</span></div>
+          <div class="cc-kpi"><span class="cc-kpi__value">4<small>件</small></span><span class="cc-kpi__label">Company Brain登録数</span></div>
+          <div class="cc-kpi"><span class="cc-kpi__value">12<small>件</small></span><span class="cc-kpi__label">契約レビュー件数</span></div>
+          <div class="cc-kpi"><span class="cc-kpi__value">36<small>件</small></span><span class="cc-kpi__label">問い合わせ返信数</span></div>
         </div>
 
         <div class="cc-log">
@@ -120,6 +124,11 @@
       <p class="hero__visual-note">※ 表示は稼働イメージのサンプルです。実際の処理件数・ログではありません。</p>
     </div>
   </div>
+
+  <a href="#brain" class="hero__scroll-cue">
+    <span>Company Brainを見る</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg>
+  </a>
 </section>
 
 <!-- 2. Company Brain -->
@@ -392,6 +401,7 @@
 </div>
 
 <script src="js/main.js"></script>
+<script src="js/hero.js"></script>
 <script src="js/chat.js"></script>
 </body>
 </html>
