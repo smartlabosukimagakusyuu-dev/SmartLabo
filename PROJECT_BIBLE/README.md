@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 5.4**
+> **PROJECT_BIBLE Version: 5.5**
 
 ---
 
@@ -124,7 +124,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 5.4**
+- 現在: **Version 5.5**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -214,5 +214,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v5.2** | 2026-07-12 | Claude Code(CEO承認による) | **ホームページ情報量整理完了。** 「装飾を増やすのではなく、3秒で価値が伝わるデザインへ」というCEO指示のもと、実装前に新構成案・削除統合対象を報告しCEO承認を得たうえで実施。セクション数11→7、背景ブロック11→5。Company BrainをHero直後へ移動、「AI社員」と「社長の1日タイムライン」を時間帯タグ付きカード6枚へ統合、画面ショーケースをDashboard・不動産AIの大型2枚構成へ刷新。「対応業種」「料金」の2セクションを削除(実質「今後対応予定」「お問い合わせください」のみの準備中表示だったため)。HeroとCTAのボタンを「デモを見る」「導入相談」の2つに全ページ統一。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.6→v4.7)に詳細を追加。SmartLabo repoはpush未実施 |
 | **v5.3** | 2026-07-12 | Claude Code(CEO承認による) | **Hero「AI Control Center」実装完了。** 実装前にHero新レイアウト・AI Control Center構成・スクロール後のセクション順・削除統合対象を報告しCEO承認を得たうえで実施。Hero右側の縮小ダッシュボードモックアップを、Smart AI Router LIVE・OpenAI/Claude/Gemini稼働状況・ルーティング例・Company Brain参照中・本日のAI処理件数・最近完了タスクを表示する半透明グラスパネルへ刷新(細い接続線と控えめなパルスのみ、新規ブランドカラーなし)。「Smart AI Router」独立セクションと「AI社員」カードセクションを削除し(Heroで役割が重複するため)、業務フロー図(Router→Company Brain→営業/契約/会議/CRM)としてCompany Brainセクションへ統合。画面ショーケースを「Company Brain→不動産AI→CRM→実際の製品画面」の順に再構成しCRMを復活。セクション数7→5。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.7→v4.8)に詳細を追加。SmartLabo repoはpush未実施 |
 | **v5.4** | 2026-07-12 | Claude Code(CEO承認による) | **Hero Experience Upgrade v3完了。** レイアウト(左コピー／右AI Control Center)は無変更のまま、AI Control Centerを静的UIから常時アニメーションする"Live Dashboard"へ進化。新規`js/hero.js`が2.6秒ごとに処理中ステータス(問い合わせ返信中…/契約レビュー中…/PDF・画像解析中…/Company Brain検索中…)をProviderノードの発光と同期してローテーションし、4.2秒ごとにCompany Brainの状態(参照中→更新中→学習完了)を巡回。Smart AI Routerは呼吸するように発光、接続ラインには小さな光が流れる演出、KPIカード2x2(本日のAI処理件数/Company Brain登録数/契約レビュー件数/問い合わせ返信数)を新設。背景にゆっくり動くglowと淡い浮遊粒子を追加。Heroコピーは「会社を動かすAI。」を主役(54px)、「Smart Labo Works」を副題(20px)に強弱反転。スクロール誘導を新設。`prefers-reduced-motion`で全アニメーション無効化。ロゴ・ブランドカラー・CTA・ナビ・レイアウトは無変更。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.8→v4.9)に詳細を追加。SmartLabo repoはpush未実施 |
+| **v5.5** | 2026-07-12 | Claude Code(CEO承認による) | **Smart Labo Works 詳細ページ構築完了。** 実装前にワイヤーフレーム・ナビゲーション構成・移動する情報・使用する実画面・表示ルール・URL構成を報告しCEO承認を得たうえで実施。トップページを「興味を持たせる」役割に限定し、`product.html`・`features.html`(10機能詳解)・`real-estate.html`(不動産売買仲介向け)・`pricing.html`(3プラン+機能比較表)・`contact.html`(送信先未接続の問い合わせフォーム)を新設。実装済み／Coming Soon／非表示(社内専用)の3区分表示ルールを全ページへ統一適用し、Company OS・Builder・Innovation Hub等のv1.0対象外機能は非表示。ナビゲーションを全ページ「製品/機能/不動産向け/料金/会社情報」に統一。既存コンポーネントを最大限再利用し新規ブランドカラーなし。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v4.9→v5.0)に詳細を追加。SmartLabo repoはpush未実施 |
 
 *最終更新: 2026-07-12*
