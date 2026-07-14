@@ -26,6 +26,22 @@
 
   var CONTACT_API_BASE = "https://form.smartlaboworks.com";
 
+  // reCAPTCHA v3 実装位置。ホームページ正式公開直前に、contact.htmlの<script>タグを
+  // 有効化したうえで、このサイトキーを設定すること(CEO作業)。空文字のままであれば
+  // 自動的にスキップされ、現状どおりhoneypot・送信速度トラップ・CSRF・レート制限の
+  // 4層のみでbot対策を行う(xserver-form/public/lib/recaptcha.phpもrecaptcha_enabled=false
+  // の間は同様にスキップする)。
+  var RECAPTCHA_SITE_KEY = "";
+
+  function getRecaptchaToken() {
+    if (!RECAPTCHA_SITE_KEY || typeof grecaptcha === "undefined") return Promise.resolve(null);
+    return new Promise(function (resolve) {
+      grecaptcha.ready(function () {
+        grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "contact" }).then(resolve).catch(function () { resolve(null); });
+      });
+    });
+  }
+
   var completeScreen = document.getElementById("contactComplete");
   var completeReceipt = document.getElementById("contactCompleteReceipt");
   var errorBanner = document.getElementById("contactErrorBanner");
@@ -177,10 +193,13 @@
     hideError();
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "送信中…"; }
 
-    fetch(CONTACT_API_BASE + "/contact.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+    getRecaptchaToken().then(function (recaptchaToken) {
+      payload.recaptchaToken = recaptchaToken;
+      return fetch(CONTACT_API_BASE + "/contact.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
     })
       .then(function (res) {
         return res.json().then(function (data) { return { status: res.status, data: data }; });
