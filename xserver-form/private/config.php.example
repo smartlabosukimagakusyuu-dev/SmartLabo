@@ -1,0 +1,43 @@
+<?php
+// Smart Labo Works — 問い合わせフォーム 環境設定サンプル
+//
+// このファイルをコピーして config.php を作成し、public_html の【外側】
+// (このprivate/ディレクトリと同じ階層)に配置すること。
+// config.php 自体はGitにコミットしない(.gitignoreで除外済み)。
+// すべての値はCEO確認待ちのプレースホルダーであり、推測で埋めていない。
+
+return [
+    // CSRF署名用シークレット。ランダムな長い文字列を設定すること。
+    // 生成例(PHP CLIで実行): php -r "echo bin2hex(random_bytes(32));"
+    'csrf_secret' => '',
+
+    // フォームからのリクエストを許可するオリジン(完全一致)。
+    'allowed_origins' => [
+        'https://smartlaboworks.com',
+        'https://www.smartlaboworks.com',
+        // 移行期間中の暫定URL。正式ドメイン切替後は削除すること。
+        'https://smartlabosukimagakusyuu-dev.github.io',
+    ],
+
+    // 管理者への通知先メールアドレス(CEO確認待ち)
+    'notify_to' => '',
+
+    // 送信元メールアドレス(ご指定のとおり)
+    'from_email' => 'info@smartlaboworks.com',
+    'from_name' => 'Smart Labo Works',
+
+    // SMTP接続情報(CEO確認待ち。XServerのサーバーパネルでinfo@smartlaboworks.comの
+    // メールアカウントを作成した際に発行される値を使用する)
+    'smtp_host' => '',
+    'smtp_port' => 587,
+    'smtp_user' => 'info@smartlaboworks.com',
+    'smtp_pass' => '',
+
+    // reCAPTCHA v3。ホームページ正式公開直前まではfalseのまま運用する。
+    'recaptcha_enabled' => false,
+    'recaptcha_secret' => '',
+
+    // 実行時データの保存先(private/ 配下、Webから直接アクセス不可)
+    'rate_limit_db_path' => __DIR__ . '/rate_limit.sqlite',
+    'log_path' => __DIR__ . '/contact.log',
+];

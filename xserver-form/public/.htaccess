@@ -1,0 +1,9 @@
+# Smart Labo Works 問い合わせフォームAPI — public_html直下に配置する.htaccess
+
+# HTTPSを強制
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# lib/配下は他のPHPファイルからincludeされる前提であり、直接リクエストさせない
+RewriteRule ^lib/ - [F,L]

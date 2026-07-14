@@ -1,0 +1,4 @@
+# 実際の秘密情報・実行時データはコミットしない。config.php.exampleのみ追跡する。
+private/config.php
+private/*.sqlite
+private/*.log
