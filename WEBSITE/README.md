@@ -20,29 +20,23 @@
 
 ---
 
-## 公開状況(2026-07-05時点)
+## 公開状況(2026-07-14時点)
 
-**Homepage Version: 0.9 beta** — CEO指示により、正式完成としてではなく「共有しながら改善するための公開」を目的としたβ版として公開します。
+**Homepage Version: 3.1(v1.0 Release Candidate)** — 正式リリース前 最終整備を経て、正式公開に向けた最終確認段階です。
 
-**公開URL(暫定・GitHub Pages): https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/**
+**公開URL(正式ドメイン、設定済み): https://smartlaboworks.com/**
 
-Xserverはドメイン(`smartlaboworks.com`)取得のみでサーバー契約が未完了のため、契約完了までの暫定公開先としてGitHub Pagesを利用しています([.github/workflows/pages.yml](../.github/workflows/pages.yml) により `master` へのpushで自動デプロイ)。Xserverの契約・DNS設定が完了次第、正式ドメインへ切り替えます。
+Xserverとの契約・`smartlaboworks.com`のドメイン設定・無料SSLの有効化・`form.smartlaboworks.com`サブドメイン(問い合わせフォーム用)の作成はすべて完了しています。GitHub Pages側のカスタムドメイン切替(Settings→Pages)はCEOの最終手順として残っています。詳細は[PROJECT_BIBLE/61_Release_Checklist.md](../PROJECT_BIBLE/61_Release_Checklist.md)を参照してください。
 
-公開前チェック(実施済み):
+**実装済みの機能**：
 
-- [x] スマホ表示(375px幅で全セクションを確認、崩れなし)
-- [x] リンク切れ(内部アンカー4件〈#service/#industries/#mission/#cta〉すべて解決を確認)
-- [x] CTAボタンの動作(スクロール遷移を確認)
-- [x] 表示崩れ(デスクトップ1440px・モバイル375pxで全セクションを確認)
-- [x] 画像読み込み(Hero背景・ロゴ・favicon、すべて200 OKを確認)
-- [x] README/CURRENT_STATUSの更新
+- 問い合わせフォーム(`contact.html` → `form.smartlaboworks.com`、XServer/PHP。CSRF・レート制限・入力値検証・honeypot実装済み、reCAPTCHAは開発モード)
+- プライバシーポリシー・利用規約(`privacy.html`・`terms.html`、専門家確認前提のドラフト)
+- 会社概要ページ(`company.html`、未確定の会社情報は「CEO確認待ち」と明示)
+- Smart Labo Configurator(`pricing.html`、導入プランの5Stepシミュレーター)
+- SEO対応(`robots.txt`・`sitemap.xml`・構造化データ)
 
-**β版として既知の未実装事項**(公開後も改善を続ける前提):
-
-- フォーム送信の実処理(現状はCTAボタンのみで実際の送信機能なし)
-- プライバシーポリシー・利用規約ページ(`LEGAL/` 未整備のためリンクはプレースホルダー`#`)
-- 実写真素材(Hero以外は色ブロック+アイコンで代用)
-- 真のベクター(SVG)ロゴデータ(現状はPNG/WebPのみ)
+公開前チェックの最新状況は[PROJECT_BIBLE/61_Release_Checklist.md](../PROJECT_BIBLE/61_Release_Checklist.md)（v1.0 Release Checklist）を参照してください。
 
 詳細は [PROJECT_BIBLE/CURRENT_STATUS.md](../PROJECT_BIBLE/CURRENT_STATUS.md) を参照してください。
 
@@ -83,5 +77,6 @@ Xserverはドメイン(`smartlaboworks.com`)取得のみでサーバー契約が
 | v1.0 | 2026-07-03 | Claude Code | 初版作成 |
 | v1.1 | 2026-07-04 | Claude Code(CEO指示による) | Homepage Version 0.9 betaとして公開。「公開状況」セクションを新設し、公開前チェック結果と既知の未実装事項を記録 |
 | **v1.2** | 2026-07-10 | Claude Code(CEO指示による) | **`app.html`はSmart Labo Works正式製品ではなく、デモサイト／マーケティング用プレビューであることを明記。** 唯一の正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)であることを新設の節に記載。`app.html`内の「バージョン」表示・`<title>`から「Smart Labo Works v1.0」という誤解を招く表記を修正(デモである旨と正式コードベースへの案内を追記) |
+| **v1.3** | 2026-07-14 | Claude Code(CEO指示による) | **「公開状況」節を正式リリース前の最新状態へ更新。** Homepage Versionを0.9 beta→3.1(v1.0 Release Candidate)に更新。公開URLを暫定のGitHub Pages URLから正式ドメイン`https://smartlaboworks.com/`へ更新。Xserver契約・ドメイン設定・SSL有効化がすべて完了したことを反映し、古い「Xserverサーバー契約未完了」の記載を削除。実装済み機能一覧(問い合わせフォーム・法務ページ・会社概要・Configurator・SEO対応)を追加し、「β版として既知の未実装事項」節(フォーム未実装等、すべて解消済みのため陳腐化していた)を削除 |
 
-*最終更新: 2026-07-10*
+*最終更新: 2026-07-14*

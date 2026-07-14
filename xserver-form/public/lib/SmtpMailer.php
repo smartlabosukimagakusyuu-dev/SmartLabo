@@ -25,6 +25,16 @@ final class SlwSmtpMailer
 
     public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, string $bodyText): void
     {
+        // SMTPヘッダー・コマンドインジェクション対策(多層防御)。
+        // validate.phpのFILTER_VALIDATE_EMAILで大半のCRLF付き不正値は事前に弾かれるが、
+        // それを前提とせず、SMTPコマンド行(MAIL FROM/RCPT TO)へ渡す直前でも
+        // 改行文字の混入を明示的に拒否する。$toEmailは訪問者が入力したメール
+        // アドレスであり、信頼できない値であるため特に重要。
+        $this->assertNoHeaderInjection($fromEmail, 'fromEmail');
+        $this->assertNoHeaderInjection($toEmail, 'toEmail');
+        $this->assertNoHeaderInjection($fromName, 'fromName');
+        $this->assertNoHeaderInjection($subject, 'subject');
+
         $transport = $this->encryption === 'ssl' ? 'ssl' : 'tcp';
         $socket = @stream_socket_client(
             $transport . '://' . $this->host . ':' . $this->port,
@@ -84,6 +94,13 @@ final class SlwSmtpMailer
     private function encodeHeader(string $text): string
     {
         return '=?UTF-8?B?' . base64_encode($text) . '?=';
+    }
+
+    private function assertNoHeaderInjection(string $value, string $fieldName): void
+    {
+        if (preg_match('/[\r\n\x00]/', $value)) {
+            throw new InvalidArgumentException('Invalid characters (CR/LF/NUL) detected in ' . $fieldName);
+        }
     }
 
     /** @param resource $socket */

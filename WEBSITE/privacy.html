@@ -9,6 +9,31 @@
 <link rel="icon" href="img/logo/favicon.png" type="image/png">
 <link rel="canonical" href="https://smartlaboworks.com/privacy.html">
 <link rel="stylesheet" href="css/style.css">
+<!-- ============================================================
+     解析・計測タグの導入位置(2026-07-14、Task2)
+     現時点では一切埋め込んでいない(解析コードなし・Cookieなし)。
+     導入する際は、この直後に以下の順で追加すること。詳細は
+     PROJECT_BIBLE/61_Release_Checklist.md の該当セクションを参照。
+
+     1. Google Search Console 所有権確認用メタタグ(発行後に追加):
+        <meta name="google-site-verification" content="発行された値">
+
+     2. Google Analytics 4 (GA4) 計測タグ(導入する場合のみ。要CEO判断):
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-XXXXXXX');
+        </script>
+        ※GA4を導入する場合、privacy.html の「6. Cookie・アクセス解析について」の
+        記載(現在「アクセス解析ツールを導入していない」と明記)を先に更新すること。
+
+     3. Cookie同意バナー(GA4等、Cookieを使う解析を導入する場合に必要。
+        本サイトは現在Cookieを一切使用しないため未実装。実装する場合は
+        <body>直後にバナー用のマークアップ・JSを追加する想定):
+        例: <div id="cookieConsent">...</div>
+     ============================================================ -->
 </head>
 <body>
 

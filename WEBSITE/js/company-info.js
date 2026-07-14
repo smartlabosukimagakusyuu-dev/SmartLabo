@@ -15,9 +15,9 @@
     founded: null,
     address: null,
     tel: null,
-    email: null,
-    url: "https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/",
-    urlNote: "暫定URL(GitHub Pages)。正式ドメイン smartlaboworks.com は取得済みだが、Xserverのサーバー契約完了待ち",
+    email: "info@smartlaboworks.com",
+    url: "https://smartlaboworks.com/",
+    urlNote: "正式ドメイン・無料SSLは設定済み。GitHub Pages側のカスタムドメイン切替(公開手順書 Step1参照)が完了次第、このURLで公開される",
     business: null
   };
 
