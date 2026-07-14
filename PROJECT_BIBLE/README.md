@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 6.8**
+> **PROJECT_BIBLE Version: 6.9**
 
 ---
 
@@ -41,6 +41,9 @@ AIが変わっても、社員が増えても、会社の思想が変わらない
 | 開発原則(何を作る前に何を確認するか) | [11_Development_Principles.md](11_Development_Principles.md) |
 | 料金・導入プランの思想 | [12_Pricing_Philosophy.md](12_Pricing_Philosophy.md) |
 | v1.0 Release Checklist(本番公開前) | [61_Release_Checklist.md](61_Release_Checklist.md) |
+| CEO公開手順書(8ステップ) | [62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md) |
+| 公開後ロードマップ | [63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md) |
+| Release Notes(homepage-v1.0.0) | [64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md) |
 
 人間の社員だけでなく、ChatGPT・Claude Code・Codex などのAIエージェントも、作業前に必ずこのフォルダを参照することを前提としています。
 
@@ -78,6 +81,9 @@ PROJECT_BIBLE/
 ├── 50_TODO.md                ← 全社レベルの未対応タスク
 ├── 60_Editorial_Workflow.md  ← PROJECT_BIBLE自体の編集体制・更新フロー
 ├── 61_Release_Checklist.md   ← v1.0 Release Checklist(本番公開前・再利用可能テンプレート)
+├── 62_CEO_Publish_Guide.md   ← CEO公開手順書(スクリーンショット不要・8ステップ)
+├── 63_Post_Launch_Roadmap.md ← 公開後ロードマップ(CEO指定優先順位)
+├── 64_Release_Notes_v1.0.0.md ← Release Notes(homepage-v1.0.0)
 │
 └── 99_CEO_MEMORY/             ← 代表個人の記憶(生の記録)
     ├── README.md
@@ -128,7 +134,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 6.8**
+- 現在: **Version 6.9**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -242,5 +248,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v6.7** | 2026-07-14 | Claude Code(CEO指示による) | **新章[61_Release_Checklist.md](61_Release_Checklist.md)を新設。** 「Release Candidate 2として本番公開前チェックリストを作成してください」というCEO指示に基づき、SSL/問い合わせ/メール/リンク/Console Error/favicon/OGP/sitemap/robots/SEO/モバイル/PageSpeed/GitHub Release Tag/バージョン番号/更新履歴の15項目からなる再利用可能なチェックリストテンプレートを制定。Release Candidate 1時点での確認状況(ローカル確認済み✅／本番環境が必要⏸)を反映。公開バージョン番号として`v1.0.0`、Gitタグ名として`homepage-v1.0.0`を提案し、いずれも実行はCEOの明示的な承認後とすることを明記。`60`番台(編集体制・運用フロー)の直後に`61`として追加 |
 
 | **v6.8** | 2026-07-14 | Claude Code(CEO指示による) | **[61_Release_Checklist.md](61_Release_Checklist.md)を「v1.0 Release Checklist」として全面拡充。** 「Release Candidate 2完了後、正式リリース前のv1.0 Release Checklistを作成してください」というCEO指示に基づき、CEO指定の18項目(ホームページ/問い合わせフォーム/SSL/メール送受信/スマホ表示/PC表示/SEO/OGP/favicon/robots.txt/sitemap.xml/404ページ/Google Search Console登録/Google Analytics登録/PageSpeed/GitHub Release/更新履歴/既知の制限事項)へ再編。新規追加：PC表示・404ページ・Google Search Console登録(CEOのGoogleアカウント作業が必要)・Google Analytics登録(現時点で未導入、導入する場合はprivacy.htmlの更新が先に必要)・既知の制限事項(10項目)。全項目チェック完了後に「v1.0 Release」として提出する運用を明記 |
+
+| **v6.9** | 2026-07-14 | Claude Code(CEO指示による) | **「Release Candidate 2 最終仕上げフェーズ」Task1-8完了、新章62/63/64を新設。** SEO最終確認・公開後運用準備(解析コード非埋め込みのプレースホルダー整備)・問い合わせフォーム最終確認(SmtpMailer.phpへSMTPヘッダー・コマンドインジェクション対策を多層防御として追加)・公開前品質確認(Safari対応・陳腐化情報3件修正、コミット`32f3a28`)を実施。[61_Release_Checklist.md](61_Release_Checklist.md)のKnown Issuesを3階層へ再整理。新設[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)(スクリーンショット不要の8ステップ公開手順書)・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)(CEO指定優先順位①〜⑧の公開後ロードマップ)・[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md)(homepage-v1.0.0のRelease Notes)を`60`番台(編集体制・運用フロー)の直後に追加。デザイン変更・新機能追加は行わず、「Smart Labo Works Homepage v1.0 Release Candidate Final」としてCEO承認を待機する方針を[CURRENT_STATUS.md](CURRENT_STATUS.md)(v6.8→v6.9)に反映 |
 
 *最終更新: 2026-07-14*

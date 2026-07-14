@@ -220,22 +220,36 @@ Release Candidate 1（コミット`76a9767`）・Release Candidate 2（コミッ
 
 ### □ 既知の制限事項（Known Issues）
 
-v1.0公開時点で、意図的にスコープ外としている、または今後の対応が必要な事項です。
+2026-07-14、CEO指示「Known Issuesを最新版へ更新し、v1.0で対応しない項目／v1.1予定項目／将来構想を整理してください」に基づき、3階層へ再整理しました。
+
+#### v1.0で対応しない項目（公開時点で未解決のまま進める、CEO了承前提）
 
 | 項目 | 内容 | 対応方針 |
 |---|---|---|
-| 会社情報の未確定 | 代表者・設立年月・所在地・電話番号・事業内容が未確定（[company.html](../WEBSITE/company.html)に「CEO確認待ち」と明示） | CEO確認後、`js/company-info.js`の値を更新すれば全ページへ反映 |
-| 法務ページがドラフト | プライバシーポリシー・利用規約は専門家未確認（両ページに明記済み） | 正式公開前に弁護士等の確認を推奨 |
+| 会社情報の未確定 | 代表者・設立年月・所在地・電話番号・事業内容が未確定（[company.html](../WEBSITE/company.html)に「CEO確認待ち」と明示、推測掲載はしない） | CEO確認後、`js/company-info.js`の値を更新すれば全ページへ反映 |
+| 法務ページがドラフト | プライバシーポリシー・利用規約は専門家未確認（両ページに明記済み） | 正式公開前後に弁護士等の確認を推奨 |
 | 特定商取引法表記 | 該当性の最終判断が未了（BtoB契約のため不要な可能性が高いが未確定） | 専門家確認後、要否に応じて対応 |
-| reCAPTCHA未設定 | 現在は開発モード（honeypot等4層のみでbot対策） | 正式公開直前にCEOがキーを設定し本番モードへ切替 |
-| Google Analytics未導入 | アクセス解析なし | 導入要否をCEO判断後に着手 |
-| レート制限の実装方式 | XServer共有サーバー上のSQLite3による実装（小規模な問い合わせフォームには十分だが、大規模トラフィックには不向き） | 将来的にアクセスが急増した場合は再設計を検討 |
-| CSS/JS未minify | ページサイズ削減の余地あり | 正式公開後のPageSpeed改善タスクとして対応予定 |
-| AIチャットウィジェット | `index.html`のチャットは事前定義のデモ回答のみで、実際のSmart AI Routerには接続していない（2026-07-12実装時からの既知の制約） | 実際のAPI接続はsmartlabo-works側の本番デプロイ後に検討 |
-| 不動産以外の業種テンプレート | 司法書士・税理士・管理会社等のテンプレートは「Coming Soon」表示（実体未実装） | `smartlabo-works`側のロードマップに準拠 |
-| Company Brain・CRM等の非公開機能 | Company OS・Builder・Innovation Hub等は顧客向けページに一切表示しない仕様（意図的） | `PRODUCT_BOUNDARY.md`の分類どおり、v1.0スコープ外 |
+| reCAPTCHA未設定 | 現在は開発モード（honeypot・送信速度トラップ・CSRF・レート制限の4層のみでbot対策） | 正式公開後、CEOがGoogleでキーを発行し本番モードへ切替（[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)⑤参照） |
+| Google Search Console未登録 | サイト所有権確認・sitemap送信が未実施 | 公開後にCEOのGoogleアカウントで登録 |
+| Google Analytics未導入 | アクセス解析なし。導入するかどうか自体が未決定 | 導入要否をCEO判断後に着手（導入時はprivacy.html更新が先） |
+| Company Brain・CRM等の非公開機能 | Company OS・Builder・Innovation Hub等は顧客向けページに一切表示しない仕様（恒久的な意図的仕様） | `PRODUCT_BOUNDARY.md`の分類どおり。将来的に公開する計画自体が現時点でない |
 
-- [x] 既知の制限事項を洗い出し、本チェックリストへ記載済み
+#### v1.1予定項目（次の改善サイクルで対応を見込む）
+
+| 項目 | 内容 | 対応方針 |
+|---|---|---|
+| CSS/JS未minify | `css/style.css`(約72KB)・各JSファイルが未圧縮 | 正式公開後、PageSpeed実測結果を踏まえて対応 |
+| レート制限の実装方式 | XServer共有サーバー上のSQLite3による実装（小規模な問い合わせフォームには十分だが、アクセス急増時は再検討が必要） | トラフィック状況を見て、必要に応じて外部ストア(Redis等)への移行を検討 |
+
+#### 将来構想（時期未定、smartlabo-works本体のロードマップに依存）
+
+| 項目 | 内容 | 対応方針 |
+|---|---|---|
+| AIチャットウィジェット | `index.html`のチャットは事前定義のデモ回答のみで、実際のSmart AI Routerには接続していない（2026-07-12実装時からの既知の制約） | 実際のAPI接続はsmartlabo-works側の本番デプロイ後に検討([63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)優先度①) |
+| 不動産以外の業種テンプレート | 司法書士・税理士・管理会社等のテンプレートは「Coming Soon」表示（実体未実装） | `smartlabo-works`側のロードマップに準拠、時期未定 |
+| Pricing Manager・CRM・Company Brain連携等 | ホームページから見せない社内機能群 | [63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)を参照(いずれもCompany OS側・smartlabo-works側の別Task) |
+
+- [x] Known Issuesを3階層(v1.0で対応しない項目／v1.1予定項目／将来構想)へ整理し、本チェックリストへ記載済み
 
 ---
 
@@ -265,5 +279,6 @@ Analytics導入要否の決定・GitHub Release作成）についてCEOの判断
 |---|---|---|---|
 | v1.0 | 2026-07-14 | Claude Code(CEO指示による) | 新規作成。Release Candidate 2として、本番公開前チェックリスト(SSL/問い合わせ/メール/リンク/Console Error/favicon/OGP/sitemap/robots/SEO/モバイル/PageSpeed/GitHub Release Tag/バージョン番号/更新履歴の15項目)を制定。Release Candidate 1(コミット`76a9767`)時点の確認状況を反映し、本番環境が必要な項目は⏸として明示。バージョン番号は`v1.0.0`(ホームページ正式公開)を提案、Gitタグ・GitHub Releaseの作成はCEOの明示的な承認後に実施する方針を明記 |
 | **v2.0** | 2026-07-14 | Claude Code(CEO指示による) | **「v1.0 Release Checklist」として全面拡充。** 「Release Candidate 2完了後、正式リリース前のv1.0 Release Checklistを作成してください」というCEO指示に基づき、CEO指定の18項目(ホームページ/問い合わせフォーム/SSL/メール送受信/スマホ表示/PC表示/SEO/OGP/favicon/robots.txt/sitemap.xml/404ページ/Google Search Console登録/Google Analytics登録/PageSpeed/GitHub Release/更新履歴/既知の制限事項)へ再編。新規追加：「PC表示」(デスクトップ表示の明示的な確認項目)、「404ページ」(既存確認内容を独立項目化)、「Google Search Console登録」(CEOのGoogleアカウント作業が必要と明記)、「Google Analytics登録」(現時点で未導入、導入要否は要CEO判断とし、導入する場合はprivacy.htmlの更新が先に必要である旨を明記)、「既知の制限事項(Known Issues)」(10項目、意図的なスコープ外事項と今後の対応方針を整理)。「リンク」「Console Error」は「ホームページ」章へ統合。項目別ステータスまとめ(2章)・提出条件(3章)を新設し、全項目チェック完了後に「v1.0 Release」として提出する運用を明記 |
+| **v3.0** | 2026-07-14 | Claude Code(CEO指示による) | **「Release Candidate 2 最終仕上げフェーズ」Task1-5・7・8を反映。** SEO最終確認(構造化データへWebSiteスキーマ追加)・公開後運用準備(GSC/GA/Cookie同意のプレースホルダーコメントを全ページへ設置、解析コードは未実装のまま)・問い合わせフォーム最終確認(SmtpMailer.phpへSMTPヘッダー・コマンドインジェクション対策を多層防御として追加)・公開前品質確認(Safari向け`-webkit-backdrop-filter`追加、company-info.js等3件の陳腐化情報を修正、コミット`32f3a28`)を実施(Task1-4)。既知の制限事項を「v1.0で対応しない項目／v1.1予定項目／将来構想」の3階層へ再整理し、Google Search Console未登録を明示項目として追加(Task5)。新規ドキュメント[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)(CEO向け8ステップ公開手順書、Task7)・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)(公開後ロードマップ、Task8)・[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md)(Release Notes、Task6)を追加し、本チェックリストから相互参照した |
 
 *最終更新: 2026-07-14*
