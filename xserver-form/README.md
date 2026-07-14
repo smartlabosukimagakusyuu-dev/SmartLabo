@@ -55,3 +55,21 @@ CEO指示により、ホームページ正式公開直前まで `config.php` の
 `false` のまま運用します。この間は honeypot・送信速度トラップ・CSRF・レート制限の
 4層のみでbot対策を行います。正式公開直前に、Google reCAPTCHA管理画面でサイトキー・
 シークレットキーを発行し、`recaptcha_enabled` を `true` に切り替えてください。
+
+## バックアップ
+
+| 対象 | 方針 |
+|---|---|
+| `public/`配下のコード | Gitで管理済み(SmartLabo repo)。XServerへは常にリポジトリの内容をそのままアップロードする運用とし、XServer上で直接編集しない |
+| `private/config.php` | Gitでは管理しない秘密情報。XServerへアップロード後、手元の安全な場所(パスワードマネージャー等)に控えを保管する。紛失時は`config.php.sample`から再作成可能(値の再取得は必要) |
+| `private/rate_limit.sqlite` | 再作成可能な一時データ(レート制限の状態のみ)。バックアップ不要。消失してもレート制限がリセットされるだけで実害はない |
+| `private/contact.log` | 運用ログ。個人情報を含まないため、定期的にXServerのファイルマネージャー等でダウンロード・保管する運用を推奨(頻度は運用開始後にCEOと相談) |
+
+## ロールバック手順
+
+**ホームページ本体(GitHub Pages側)**：問題のあるコミットを`git revert`して`master`へpushすれば、GitHub Actionsが自動的に前の状態を再デプロイする(`.github/workflows/pages.yml`が`WEBSITE/**`の変更をトリガーに自動実行)。手動操作は不要。
+
+**問い合わせフォーム(XServer側)**：
+1. `public/`配下に問題が見つかった場合、直前に正常動作していたGitのコミット時点のファイル一式を、XServerへ再アップロードする(上書き)
+2. `private/config.php`はGit管理外のため、設定変更前の値を控えておき、必要に応じて手動で戻す
+3. 緊急時、`private/config.php`の`smtp_pass`を空にする、または`.htaccess`で`contact.php`へのアクセスを一時的に遮断することで、フォーム機能のみを即座に停止できる(ホームページ本体には影響しない)
