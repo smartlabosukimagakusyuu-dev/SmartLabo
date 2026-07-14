@@ -26,7 +26,8 @@
 
   var CONTACT_API_BASE = "https://form.smartlaboworks.com";
 
-  var successBox = document.getElementById("contactSuccess");
+  var completeScreen = document.getElementById("contactComplete");
+  var completeReceipt = document.getElementById("contactCompleteReceipt");
   var errorBanner = document.getElementById("contactErrorBanner");
   var submitBtn = document.getElementById("contactSubmitBtn");
 
@@ -111,7 +112,6 @@
   };
 
   function showError(code, fields) {
-    if (successBox) successBox.classList.remove("is-visible");
     if (errorBanner) {
       errorBanner.textContent = ERROR_MESSAGES[code] || ERROR_MESSAGES.network_error;
       errorBanner.classList.add("is-visible");
@@ -151,7 +151,6 @@
     if (!consent.checked) { setError("cf-consent", true); valid = false; } else { setError("cf-consent", false); }
 
     if (!valid) {
-      if (successBox) successBox.classList.remove("is-visible");
       hideError();
       var firstError = form.querySelector(".form-group.has-error");
       if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -188,14 +187,14 @@
       })
       .then(function (result) {
         if (result.data && result.data.ok) {
-          if (successBox) {
-            successBox.textContent = "お問い合わせを受け付けました。受付番号: " + result.data.receiptId + "。担当者より改めてご連絡いたします。";
-            successBox.classList.add("is-visible");
-            successBox.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
+          hideError();
           form.reset();
-          formRenderedAt = Date.now();
-          fetchCsrfToken();
+          form.style.display = "none";
+          if (completeReceipt) completeReceipt.textContent = "受付番号: " + result.data.receiptId;
+          if (completeScreen) {
+            completeScreen.classList.add("is-visible");
+            completeScreen.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
         } else {
           showError(result.data && result.data.error, result.data && result.data.fields);
         }

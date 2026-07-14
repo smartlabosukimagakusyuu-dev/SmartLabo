@@ -12,32 +12,37 @@ smartlaboworks.com / www.smartlaboworks.com  → GitHub Pages(ホームページ
 form.smartlaboworks.com                       → XServer(このディレクトリ)
 ```
 
-`form.smartlaboworks.com`はXServerのサーバーパネルで追加するサブドメインです
-(名称は仮案。CEOのご判断で変更可)。
+`form.smartlaboworks.com`はXServerのサーバーパネルで追加するサブドメインです。
+**2026-07-14時点でCEOにより作成済み(SSL反映待ち)。**
 
-## メールアドレス構成(2026-07-14 CEO承認)
+## メールアドレス構成
 
-| アドレス | 役割 |
-|---|---|
-| `info@smartlaboworks.com` | 代表メール。送信処理では使用しない |
-| `contact@smartlaboworks.com` | 問い合わせフォーム送信用(推奨構成)。SMTP認証アカウント・管理者通知宛先・自動返信送信元すべてに使用 |
-| `noreply@smartlaboworks.com`(将来) | 自動返信専用。作成後は`config.php`の`auto_reply_from`のみ変更すれば切替可能(コード変更不要) |
+| アドレス | 状態 | 役割 |
+|---|---|---|
+| `info@smartlaboworks.com` | **作成済み(2026-07-14)** | 当面はこのアドレスをSMTP認証アカウント・管理者通知宛先・自動返信送信元のすべてに使用する |
+| `contact@smartlaboworks.com`(将来) | 未作成 | 作成後は`config.php`の`admin_notify_to`/`mail_from`/`smtp_user`を変更すれば切替可能(コード変更不要) |
+| `noreply@smartlaboworks.com`(将来) | 未作成 | 作成後は`config.php`の`auto_reply_from`のみ変更すれば切替可能(コード変更不要) |
 
 ## XServerへの配置手順
 
-1. XServerのサーバーパネルで `form.smartlaboworks.com` サブドメインを追加する
-2. サブドメインに無料独自SSL(Let's Encrypt)を発行する
-3. XServerのメールアカウント管理で `contact@smartlaboworks.com` を作成する
+**CEO側で完了済み**：株式会社スマートラボ設立、XServer契約、`smartlaboworks.com`設定、
+`info@smartlaboworks.com`作成、`form.smartlaboworks.com`サブドメイン作成(SSL反映待ち)。
+
+1. （完了済み）XServerのサーバーパネルで `form.smartlaboworks.com` サブドメインを追加する
+2. `form.smartlaboworks.com`のSSL(Let's Encrypt)反映を確認する（**反映待ち。反映前にHTTPS強制の`.htaccess`を配置すると接続できなくなるため、SSL反映後にアップロードすること**）
+3. （完了済み）XServerのメールアカウント管理で `info@smartlaboworks.com` を作成する
 4. `public/` の中身一式を、サブドメインのドキュメントルート
    (`.../form.smartlaboworks.com/public_html/`)へアップロードする
-5. `private/config.php.sample` をコピーして `private/config.php` を作成し、
+5. `private/config.php.example` をコピーして `private/config.php` を作成し、
    ドキュメントルートの**1つ上の階層**(`.../form.smartlaboworks.com/`直下、
    `public_html`と同じ階層)へアップロードする。**public_html配下には置かないこと。**
 6. `config.php` に実際の値を設定する(SMTP接続情報・`admin_notify_to`・`mail_from`・
-   `auto_reply_from`にはいずれも`contact@smartlaboworks.com`を設定するのが推奨構成。
+   `auto_reply_from`にはいずれも`info@smartlaboworks.com`を設定する。
    CSRF署名鍵など。値の入手方法は各ファイルのコメントを参照)
 7. `private/` 配下(`config.php`・SQLiteファイル・ログファイル)にPHPの書き込み権限が
    あることを確認する
+8. XServerのサーバーパネルで、`form.smartlaboworks.com`のPHPバージョンを8.0以上に
+   設定する(ドメインごとに選択可能)
 
 CORS許可オリジンの一覧(`smartlaboworks.com`等)は秘密情報ではないため、
 `config.php`ではなく`public/lib/settings.php`(Git管理対象)で管理する。
@@ -61,7 +66,7 @@ CEO指示により、ホームページ正式公開直前まで `config.php` の
 | 対象 | 方針 |
 |---|---|
 | `public/`配下のコード | Gitで管理済み(SmartLabo repo)。XServerへは常にリポジトリの内容をそのままアップロードする運用とし、XServer上で直接編集しない |
-| `private/config.php` | Gitでは管理しない秘密情報。XServerへアップロード後、手元の安全な場所(パスワードマネージャー等)に控えを保管する。紛失時は`config.php.sample`から再作成可能(値の再取得は必要) |
+| `private/config.php` | Gitでは管理しない秘密情報。XServerへアップロード後、手元の安全な場所(パスワードマネージャー等)に控えを保管する。紛失時は`config.php.example`から再作成可能(値の再取得は必要) |
 | `private/rate_limit.sqlite` | 再作成可能な一時データ(レート制限の状態のみ)。バックアップ不要。消失してもレート制限がリセットされるだけで実害はない |
 | `private/contact.log` | 運用ログ。個人情報を含まないため、定期的にXServerのファイルマネージャー等でダウンロード・保管する運用を推奨(頻度は運用開始後にCEOと相談) |
 

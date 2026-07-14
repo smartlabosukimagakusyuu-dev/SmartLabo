@@ -3,11 +3,13 @@
 // 送信元・送信先・SMTP接続情報はすべてconfig.php(private/、秘密情報専用)で管理し、
 // コードに直書きしない。未設定の場合は明確な例外を投げる(推測で代替しない)。
 //
-// メールアドレス構成(2026-07-14 CEO承認):
-//   info@smartlaboworks.com   … 代表メール。送信処理では使用しない
-//   contact@smartlaboworks.com … 問い合わせフォーム送信用(推奨構成)。
-//                                  SMTP認証アカウント・管理者通知宛先・自動返信送信元に使用
-//   noreply@smartlaboworks.com … 将来追加。作成後はauto_reply_fromの値のみ変更すればよい
+// メールアドレス構成(2026-07-14 CEO作成分・CEO指示):
+//   info@smartlaboworks.com    … 2026-07-14時点で作成済み。当面はSMTP認証アカウント・
+//                                  管理者通知宛先・自動返信送信元のすべてに使用する
+//   contact@smartlaboworks.com … 将来追加可能。作成後はconfig.phpの
+//                                  admin_notify_to/mail_from/smtp_userの値を変更すれば切替できる
+//   noreply@smartlaboworks.com … 将来追加可能。作成後はauto_reply_fromの値のみ変更すればよい
+// いずれもコード変更は不要で、config.php(Git管理対象外)の値を書き換えるだけで切替できる。
 
 require_once __DIR__ . '/SmtpMailer.php';
 
