@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 5.9**
+> **PROJECT_BIBLE Version: 6.0**
 
 ---
 
@@ -126,7 +126,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 5.9**
+- 現在: **Version 6.0**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -222,5 +222,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v5.8** | 2026-07-13 | Claude Code(CEO承認による) | **pricing.htmlを「Smart Labo Configurator」へ変更、[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)を4層構造(v1.0→v2.0)へ改訂。** 実装前に①UIワイヤー②入力項目③データ構造④Company OSとの共通設計を報告し、CEO承認(4層構造への修正指示付き)を得たうえで実施。CEOの修正指示により、③オプションを単純な追加オプション一覧として扱う方針は不採用となり、「①利用規模×②基本プラン×③利用モジュール×④追加オプション」の4層構造が正式決定。Company Brain/CRM/AI Assistant/案件管理/契約管理/AIテンプレートの6中核機能は選択した基本プランに標準搭載される「③利用モジュール」(選択・変更不可)、Meeting/OCR/外部API連携/AI活用研修等の8項目のみを「④追加オプション」として区別。ホームページを、Step1利用規模→Step2基本プラン→Step3利用モジュール表示→Step4追加オプション→Step5おすすめ構成確認の5Stepシミュレーターへ全面刷新し、新規`WEBSITE/js/configurator.js`が選択状態(`usageScale/plan/modules/options`)を管理・`localStorage`保存。4CTA(無料相談/見積り依頼/資料請求/デモ予約)から選択内容を`contact.html`へURLクエリで自動引き継ぎ。顧客向けUIでは「Company OS」の名称を使用せず、見積書/契約書/提案書の自動生成・CRM連携・バックエンドAPIは今回スコープ外。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.2→v5.3)に詳細を追加。SmartLabo repoはpush未実施 |
 
 | **v5.9** | 2026-07-14 | Claude Code(CEO承認による) | **正式リリース前 最終整備 Step1完了(会社概要ページ新設・会社情報表示統一)。** 実装前に会社情報の不足項目・修正対象ファイル・問い合わせフォーム現状・推奨送信基盤・セキュリティ対策一覧・法務ページの不足・Step分割案・完了条件を報告しCEO承認を得たうえで実施。新設`WEBSITE/company.html`（会社概要ページ）は代表者・設立年月・所在地等の未確定項目を推測せず「CEO確認待ち」と明示。新設`WEBSITE/js/company-info.js`が会社情報を一元管理。全ページのフッター著作権表記を正式法人名「株式会社スマートラボ」へ統一し、機能していなかったnav「会社情報」の`#mission`アンカーリンクを`company.html`へ修正。5ページにOGPタグを新規追加。`privacy.html`/`terms.html`をリンク切れ防止の暫定ページとして先行設置（本文ドラフトはStep2）。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.3→v5.4)に詳細を追加。SmartLabo repoはpush未実施 |
+
+| **v6.0** | 2026-07-14 | Claude Code(CEO承認による) | **正式リリース前 最終整備 Step2完了(プライバシーポリシー・利用規約ドラフト作成)。** Step1完了直後にCEOより「先にステップ2行こう」との指示があり着手。`WEBSITE/privacy.html`（10セクション）・`WEBSITE/terms.html`（8セクション）を「準備中」の暫定表示から正式ドラフトへ差し替え。両ページ冒頭に「専門家確認が必要なドラフト」である旨を明示し、特定商取引法の該当性・準拠法の管轄裁判所等の未確定事項は断定せず`[CEO確認待ち]`と表示。`contact.html`の個人情報同意チェックボックスを`privacy.html`へリンク。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.4→v5.5)に詳細を追加。SmartLabo repoはpush未実施 |
 
 *最終更新: 2026-07-14*
