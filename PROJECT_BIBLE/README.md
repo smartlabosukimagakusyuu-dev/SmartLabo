@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 6.0**
+> **PROJECT_BIBLE Version: 6.1**
 
 ---
 
@@ -126,7 +126,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 6.0**
+- 現在: **Version 6.1**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -224,5 +224,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v5.9** | 2026-07-14 | Claude Code(CEO承認による) | **正式リリース前 最終整備 Step1完了(会社概要ページ新設・会社情報表示統一)。** 実装前に会社情報の不足項目・修正対象ファイル・問い合わせフォーム現状・推奨送信基盤・セキュリティ対策一覧・法務ページの不足・Step分割案・完了条件を報告しCEO承認を得たうえで実施。新設`WEBSITE/company.html`（会社概要ページ）は代表者・設立年月・所在地等の未確定項目を推測せず「CEO確認待ち」と明示。新設`WEBSITE/js/company-info.js`が会社情報を一元管理。全ページのフッター著作権表記を正式法人名「株式会社スマートラボ」へ統一し、機能していなかったnav「会社情報」の`#mission`アンカーリンクを`company.html`へ修正。5ページにOGPタグを新規追加。`privacy.html`/`terms.html`をリンク切れ防止の暫定ページとして先行設置（本文ドラフトはStep2）。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.3→v5.4)に詳細を追加。SmartLabo repoはpush未実施 |
 
 | **v6.0** | 2026-07-14 | Claude Code(CEO承認による) | **正式リリース前 最終整備 Step2完了(プライバシーポリシー・利用規約ドラフト作成)。** Step1完了直後にCEOより「先にステップ2行こう」との指示があり着手。`WEBSITE/privacy.html`（10セクション）・`WEBSITE/terms.html`（8セクション）を「準備中」の暫定表示から正式ドラフトへ差し替え。両ページ冒頭に「専門家確認が必要なドラフト」である旨を明示し、特定商取引法の該当性・準拠法の管轄裁判所等の未確定事項は断定せず`[CEO確認待ち]`と表示。`contact.html`の個人情報同意チェックボックスを`privacy.html`へリンク。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.4→v5.5)に詳細を追加。SmartLabo repoはpush未実施 |
+
+| **v6.1** | 2026-07-14 | Claude Code(CEO承認による) | **正式リリース前 最終整備 Step3(送信基盤設計確定)・Step4(バックエンド実装)完了。** Step3で送信基盤を`smartlabo-works`と独立したVercel Serverless Functionsに決定(CEO承認)。Step4で`WEBSITE/api/`配下に問い合わせフォームのバックエンド(CSRF検証・レート制限・reCAPTCHA v3・入力値検証・メール送信)を実装。ローカルの単体テスト・統合テストでCSRFトークン検証の脆弱性(改ざんトークン末尾のゴミが16進デコード時に切り捨てられ検証を通過する不具合)を発見し修正、全テスト成功を確認。Vercelアカウント作成・reCAPTCHA登録・通知先メール確定はCEOアクション待ちのためStep5(`contact.html`実接続)は未着手。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.5→v5.6)に詳細を追加。SmartLabo repoはpush未実施 |
 
 *最終更新: 2026-07-14*
