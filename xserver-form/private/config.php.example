@@ -1,37 +1,26 @@
 <?php
 // private/config.php.example
 // このファイルをコピーして private/config.php を作成し、値を設定すること。
-// config.php 自体はGit管理対象外(.gitignore)。
-//
-// このファイルにはSMTP情報・各種キー・秘密情報のみを保持する(2026-07-14 CEO指示)。
-// CORS許可オリジンの一覧など秘密情報でない設定値は lib/settings.php(Git管理対象)側で管理する。
+// config.php 自体はGit管理対象外(.gitignore)。必要最低限の項目のみを保持する。
 
 return [
-    // SMTP認証情報(秘密情報)。2026-07-14時点でCEOが作成済みの
-    // info@smartlaboworks.com を認証アカウントとして使用する。
-    'smtp_host' => '',
-    'smtp_port' => 587,
-    'smtp_user' => '',   // 例: info@smartlaboworks.com
+    // --- SMTP ---
+    'smtp_host' => '',                  // 例: sv***.xserver.jp(XServerのサーバーパネルで確認)
+    'smtp_port' => 587,                 // 587=STARTTLS を推奨。465を使う場合は smtp_encryption を 'ssl' に
+    'smtp_encryption' => 'tls',         // 'tls'(STARTTLS、587番想定) または 'ssl'(暗黙のTLS、465番想定)
+    'smtp_user' => '',                  // 例: info@smartlaboworks.com(認証アカウント。送信元アドレスとしても使用)
     'smtp_pass' => '',
 
-    // メールアドレス構成
-    // 現状はinfo@smartlaboworks.com(代表メール)のみ作成済みのため、当面はこれを
-    // 管理者通知・自動返信の両方に使用する。将来 contact@ / noreply@smartlaboworks.com
-    // を作成した場合は、このファイル(実体はconfig.php)の値のみ変更すれば切替できる
-    // (コード変更不要)。
-    'admin_notify_to' => '',       // 管理者通知の宛先。例: info@smartlaboworks.com
-    'mail_from' => '',             // 管理者通知の送信元。例: info@smartlaboworks.com
-    'mail_from_name' => 'Smart Labo Works',
-    'auto_reply_from' => '',       // 自動返信の送信元。当面は info@smartlaboworks.com。
-                                    // 将来 noreply@smartlaboworks.com を作成した場合、
-                                    // この値のみ変更すれば切替できる。
-    'auto_reply_from_name' => 'Smart Labo Works',
+    // --- 管理者メール(問い合わせ通知の宛先) ---
+    'admin_email' => '',                // 例: info@smartlaboworks.com
 
-    // CSRF署名鍵(秘密情報)。生成例: php -r "echo bin2hex(random_bytes(32));"
-    'csrf_secret' => '',
+    // --- CSRF署名鍵 ---
+    'csrf_secret' => '',                // 生成例: php -r "echo bin2hex(random_bytes(32));"
 
-    // reCAPTCHA v3(秘密情報)。ホームページ正式公開直前まで recaptcha_enabled は false のまま運用する。
-    // サイトキー・シークレットキーの発行(Google reCAPTCHA管理画面での登録)はCEO作業。
+    // --- reCAPTCHA(v3 / Enterprise) ---
+    // ホームページ正式公開直前まで recaptcha_enabled は false のまま運用する(開発モード)。
+    // true に切り替えるとreCAPTCHA検証が必須になる(本番モード)。
+    // Enterpriseへ切り替える場合は public/lib/recaptcha.php の検証先を差し替えるだけでよい。
     'recaptcha_enabled' => false,
     'recaptcha_secret' => '',
 ];

@@ -1,5 +1,5 @@
 <?php
-// Smart Labo Works — 依存ライブラリなしの最小SMTPクライアント(STARTTLS + AUTH LOGIN)
+// Smart Labo Works — 依存ライブラリなしの最小SMTPクライアント(STARTTLS/SSL + AUTH LOGIN)
 //
 // PHPMailer等の外部ライブラリを同梱せず、標準のstream関数のみで実装した。
 // 問い合わせフォームという低頻度・低ボリュームの用途に見合った、監査しやすい
@@ -10,21 +10,24 @@ final class SlwSmtpMailer
 {
     private string $host;
     private int $port;
+    private string $encryption; // 'tls'(STARTTLS) または 'ssl'(暗黙のTLS)
     private string $user;
     private string $pass;
 
-    public function __construct(string $host, int $port, string $user, string $pass)
+    public function __construct(string $host, int $port, string $encryption, string $user, string $pass)
     {
         $this->host = $host;
         $this->port = $port;
+        $this->encryption = $encryption === 'ssl' ? 'ssl' : 'tls';
         $this->user = $user;
         $this->pass = $pass;
     }
 
     public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, string $bodyText): void
     {
+        $transport = $this->encryption === 'ssl' ? 'ssl' : 'tcp';
         $socket = @stream_socket_client(
-            'tcp://' . $this->host . ':' . $this->port,
+            $transport . '://' . $this->host . ':' . $this->port,
             $errno,
             $errstr,
             10
@@ -36,13 +39,17 @@ final class SlwSmtpMailer
         try {
             $this->expect($socket, '220');
             $this->command($socket, 'EHLO smartlaboworks.com', '250');
-            $this->command($socket, 'STARTTLS', '220');
 
-            if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
-                throw new RuntimeException('STARTTLS negotiation failed');
+            if ($this->encryption === 'tls') {
+                $this->command($socket, 'STARTTLS', '220');
+                if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+                    throw new RuntimeException('STARTTLS negotiation failed');
+                }
+                $this->command($socket, 'EHLO smartlaboworks.com', '250');
             }
+            // encryption='ssl'の場合は接続自体が暗号化済み(ssl://)のため、
+            // 追加のSTARTTLS交渉は不要でそのままAUTHへ進む。
 
-            $this->command($socket, 'EHLO smartlaboworks.com', '250');
             $this->command($socket, 'AUTH LOGIN', '334');
             $this->command($socket, base64_encode($this->user), '334');
             $this->command($socket, base64_encode($this->pass), '235');
