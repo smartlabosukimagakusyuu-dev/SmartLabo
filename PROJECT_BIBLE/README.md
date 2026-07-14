@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 6.5**
+> **PROJECT_BIBLE Version: 6.6**
 
 ---
 
@@ -126,7 +126,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 6.5**
+- 現在: **Version 6.6**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -234,5 +234,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v6.4** | 2026-07-14 | Claude Code(CEO指示による) | **正式リリース前 最終整備 Step6(正式公開前チェックリスト)、ライブ環境不要分を完了。** 全9ページのリンク・スマホ表示・404・OGP・favicon・consoleエラーを自動巡回で確認しすべて問題なし。`git log --all`で`private/config.php`が一度もコミットされていないこと・`.gitignore`が秘密情報ファイルを正しく除外することを実機確認。`xserver-form/README.md`にバックアップ方針・ロールバック手順を追記。残るチェック項目(フォーム送信・自動返信・HTTPS[XServer側]・PageSpeed)はCEOアクション(XServerサブドメイン追加等)完了後に実施。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.8→v5.9)に詳細を追加。SmartLabo repoはpush未実施 |
 
 | **v6.5** | 2026-07-14 | Claude Code(CEO指示による) | **公開前最終フェーズ Step5(問い合わせフォーム完成)完了。** CEOより会社設立・XServer契約・ドメイン設定・`info@smartlaboworks.com`作成・`form.smartlaboworks.com`サブドメイン作成(SSL反映待ち)というインフラ整備状況の共有と、問い合わせフォーム完成の実装指示があった。`config.php.example`命名へ復元し、実際に作成済みの`info@smartlaboworks.com`を当面の送信用メールとする構成へ更新(`contact@`/`noreply@`への将来切替構造は維持)。送信成功時にフォームが専用の完了画面へ切り替わる実装を追加。PHP8.0以上で動作する設計であることを確認。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.9→v6.0)に詳細を追加。SmartLabo repoはpush未実施 |
+
+| **v6.6** | 2026-07-14 | Claude Code(CEO指示による) | **正式リリース前 最終フェーズ Release Candidate 1完了。** CEO側インフラ整備完了(会社設立・XServer契約・ドメイン設定・`form.smartlaboworks.com`サブドメイン作成・無料SSL有効化・`info@smartlaboworks.com`作成)を受け、`config.php.example`を必要最低限9項目へ整理(SMTP暗号化方式`smtp_encryption`含む、送信元は認証アカウントをそのまま使用)。全9ページのcanonical/OGPを正式ドメイン`smartlaboworks.com`へ切替。新設`robots.txt`/`sitemap.xml`/構造化データ(Organization、未確定情報は含めない)。ローカルPHP環境で23件のユニットテスト＋新config構成でのHTTP統合テスト(tls/ssl)、ブラウザでSEOメタ情報・404・全リンク・モバイル・consoleエラーなしを確認。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v6.0→v6.1)に詳細を追加。SmartLabo repoはpush未実施 |
 
 *最終更新: 2026-07-14*
