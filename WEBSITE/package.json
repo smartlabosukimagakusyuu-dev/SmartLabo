@@ -1,0 +1,9 @@
+{
+  "name": "smartlabo-website-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart Labo Works公式ホームページの問い合わせフォーム送信基盤(Vercel Serverless Functions想定)。ホームページ本体(静的HTML/CSS/JS)はビルド不要。このpackage.jsonはapi/配下のサーバーレス関数の依存関係のみを管理する。",
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  }
+}
