@@ -15,7 +15,9 @@ function slw_rate_limiter_db(): PDO
         return $pdo;
     }
 
-    $path = slw_config('rate_limit_db_path');
+    // private/ 配下(Webから直接アクセス不可)の固定パス。秘密情報ではないため
+    // config.phpには含めず、コード側で算出する。
+    $path = __DIR__ . '/../../private/rate_limit.sqlite';
     $pdo = new PDO('sqlite:' . $path);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->exec('CREATE TABLE IF NOT EXISTS requests (ip TEXT NOT NULL, created_at INTEGER NOT NULL)');

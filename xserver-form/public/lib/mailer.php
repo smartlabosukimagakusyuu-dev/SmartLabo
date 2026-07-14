@@ -1,7 +1,13 @@
 <?php
 // Smart Labo Works — 問い合わせメール送信
-// 送信元・送信先・SMTP接続情報はすべてconfig.php(private/、環境変数相当)で管理し、
+// 送信元・送信先・SMTP接続情報はすべてconfig.php(private/、秘密情報専用)で管理し、
 // コードに直書きしない。未設定の場合は明確な例外を投げる(推測で代替しない)。
+//
+// メールアドレス構成(2026-07-14 CEO承認):
+//   info@smartlaboworks.com   … 代表メール。送信処理では使用しない
+//   contact@smartlaboworks.com … 問い合わせフォーム送信用(推奨構成)。
+//                                  SMTP認証アカウント・管理者通知宛先・自動返信送信元に使用
+//   noreply@smartlaboworks.com … 将来追加。作成後はauto_reply_fromの値のみ変更すればよい
 
 require_once __DIR__ . '/SmtpMailer.php';
 
@@ -36,9 +42,9 @@ function slw_build_mailer(): SlwSmtpMailer
 function slw_send_admin_notification(array $data, string $receiptId): void
 {
     $mailer = slw_build_mailer();
-    $to = slw_require_config('notify_to');
-    $from = slw_require_config('from_email');
-    $fromName = slw_config_or_null('from_name') ?: 'Smart Labo Works';
+    $to = slw_require_config('admin_notify_to');
+    $from = slw_require_config('mail_from');
+    $fromName = slw_config_or_null('mail_from_name') ?: 'Smart Labo Works';
     $typeLabel = SLW_TYPE_LABEL[$data['type']] ?? $data['type'];
 
     $lines = [
@@ -69,8 +75,10 @@ function slw_send_admin_notification(array $data, string $receiptId): void
 function slw_send_auto_reply(array $data, string $receiptId): void
 {
     $mailer = slw_build_mailer();
-    $from = slw_require_config('from_email');
-    $fromName = slw_config_or_null('from_name') ?: 'Smart Labo Works';
+    // 当面はcontact@smartlaboworks.com、将来noreply@smartlaboworks.comを作成した場合は
+    // config.phpのauto_reply_fromのみ変更すれば切り替わる(コード変更不要)。
+    $from = slw_require_config('auto_reply_from');
+    $fromName = slw_config_or_null('auto_reply_from_name') ?: 'Smart Labo Works';
     $typeLabel = SLW_TYPE_LABEL[$data['type']] ?? $data['type'];
 
     $body =

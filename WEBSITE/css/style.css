@@ -1524,6 +1524,16 @@ h1, h2, h3, h4 {
 }
 .form-success.is-visible { display: block; }
 
+.form-error-banner {
+  display: none;
+  background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.3); border-radius: var(--radius-md);
+  padding: 18px 20px; font-size: 13.5px; color: #991B1B; margin-bottom: 24px; line-height: 1.8;
+}
+.form-error-banner.is-visible { display: block; }
+
+/* honeypot(bot対策)。人間には見えない位置へ配置し、display:noneより検知回避されにくい実装にする */
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
 @media (max-width: 860px) {
   .problem-grid { grid-template-columns: 1fr; }
 }

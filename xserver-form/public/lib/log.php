@@ -9,7 +9,9 @@ function slw_hash_ip(string $ip): string
 
 function slw_log_write(array $entry): void
 {
-    $path = slw_config('log_path');
+    // private/ 配下(Webから直接アクセス不可)の固定パス。秘密情報ではないため
+    // config.phpには含めず、コード側で算出する。
+    $path = __DIR__ . '/../../private/contact.log';
     $line = json_encode($entry, JSON_UNESCAPED_UNICODE) . PHP_EOL;
     file_put_contents($path, $line, FILE_APPEND | LOCK_EX);
 }

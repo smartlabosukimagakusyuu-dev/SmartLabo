@@ -56,8 +56,7 @@ function slw_is_allowed_origin(?string $origin): bool
     if (!$origin) {
         return false;
     }
-    $allowed = slw_config('allowed_origins');
-    return in_array($origin, $allowed, true);
+    return in_array($origin, SLW_ALLOWED_ORIGINS, true);
 }
 
 // honeypot: 人間には見えないフィールド。botが自動入力してくると値が入る。

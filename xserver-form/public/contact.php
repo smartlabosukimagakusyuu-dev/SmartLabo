@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/lib/env.php';
+require_once __DIR__ . '/lib/settings.php';
 require_once __DIR__ . '/lib/security.php';
 require_once __DIR__ . '/lib/rateLimiter.php';
 require_once __DIR__ . '/lib/validate.php';

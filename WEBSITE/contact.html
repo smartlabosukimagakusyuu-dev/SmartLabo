@@ -64,13 +64,18 @@
   <div class="container">
     <form class="contact-form" id="contactForm" novalidate>
 
-      <div class="form-note">
-        ※ 現在、本フォームの送信先は準備中です。入力内容の確認・バリデーションはご利用いただけますが、実際の送信は行われません。お急ぎの場合は、デモページよりお試しいただくか、今しばらくお待ちください。
+      <!-- honeypot(bot対策)。人間には見えない項目で、入力があれば機械的送信とみなす -->
+      <div class="hp-field" aria-hidden="true">
+        <label for="cf-website">Website</label>
+        <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off">
       </div>
 
-      <div class="form-success" id="contactSuccess">
-        入力内容の確認が完了しました。<br>※ 本フォームは現在準備中のため、この内容は実際には送信されていません。
+      <div class="form-note" id="contactNote">
+        送信いただいた内容は担当者が確認のうえ、ご連絡いたします。うまく送信できない場合は、恐れ入りますが今しばらく経ってから再度お試しください。
       </div>
+
+      <div class="form-success" id="contactSuccess"></div>
+      <div class="form-error-banner" id="contactErrorBanner"></div>
 
       <div class="form-group">
         <label for="cf-type">ご相談種別</label>
@@ -147,8 +152,8 @@
         <p class="form-error">個人情報の取り扱いへの同意が必要です</p>
       </div>
 
-      <button type="submit" class="btn btn--primary btn--lg" style="width:100%">送信する</button>
-      <p class="form-submit-note">送信先は現在準備中です。正式なお問い合わせ窓口は準備が整い次第ご案内します。</p>
+      <button type="submit" class="btn btn--primary btn--lg" style="width:100%" id="contactSubmitBtn">送信する</button>
+      <p class="form-submit-note">送信いただいた内容は、担当者が内容を確認したうえでご連絡いたします。</p>
     </form>
   </div>
 </section>
