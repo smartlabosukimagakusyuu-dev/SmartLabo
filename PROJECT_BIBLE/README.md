@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 6.2**
+> **PROJECT_BIBLE Version: 6.3**
 
 ---
 
@@ -126,7 +126,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 6.2**
+- 現在: **Version 6.3**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -228,5 +228,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v6.1** | 2026-07-14 | Claude Code(CEO承認による) | **正式リリース前 最終整備 Step3(送信基盤設計確定)・Step4(バックエンド実装)完了。** Step3で送信基盤を`smartlabo-works`と独立したVercel Serverless Functionsに決定(CEO承認)。Step4で`WEBSITE/api/`配下に問い合わせフォームのバックエンド(CSRF検証・レート制限・reCAPTCHA v3・入力値検証・メール送信)を実装。ローカルの単体テスト・統合テストでCSRFトークン検証の脆弱性(改ざんトークン末尾のゴミが16進デコード時に切り捨てられ検証を通過する不具合)を発見し修正、全テスト成功を確認。Vercelアカウント作成・reCAPTCHA登録・通知先メール確定はCEOアクション待ちのためStep5(`contact.html`実接続)は未着手。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.5→v5.6)に詳細を追加。SmartLabo repoはpush未実施 |
 
 | **v6.2** | 2026-07-14 | Claude Code(CEO判断による) | **問い合わせフォーム送信基盤をVercel/Node.jsからXServer(PHP)へ変更。** CEOより「現在契約済みのXServerを優先利用する構成へ変更する」との判断があり、実装前にXServer構成案・SMTP構成・フォーム送信構成・セキュリティ構成を報告しCEO承認を得て実施。ドメイン構成を`smartlaboworks.com`(apex、GitHub Pages)／`form.smartlaboworks.com`(サブドメイン、XServer)に分離。新設`xserver-form/`(GitHub Pages非公開)にPHPバックエンドを実装し、SQLiteによるレート制限永続化・依存ライブラリなしの最小SMTPクライアント・CSRF検証の脆弱性対策(旧Node.js版で発見)を織り込んだ。ローカルにPHP 8.3を導入し22件のユニットテスト＋実HTTP統合テストを実施。旧Vercel/Node.js版(`WEBSITE/api/`等)は削除。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.6→v5.7)に詳細を追加。SmartLabo repoはpush未実施 |
+
+| **v6.3** | 2026-07-14 | Claude Code(CEO承認による) | **正式リリース前 最終整備 Step5完了(問い合わせフォーム実送信対応・メールアドレス構成の正式反映)。** CEOより`form.smartlaboworks.com`専用化・DNS構成・メールアドレス構成(`info@`=代表／`contact@smartlaboworks.com`=フォーム送信用推奨／`noreply@`=将来追加可能)・`config.php`秘密情報専用化の4点承認があり、実装前に構成図・DNSレコード一覧・SMTP送受信フロー・セキュリティ対策・`config.php.sample`構成を報告しCEO承認を得て実施。`WEBSITE/CNAME`新設、`config.php.sample`を秘密情報専用に再編しCORS許可オリジンは`public/lib/settings.php`(Git管理対象)へ分離。`contact.html`にhoneypot・`js/pages.js`に実際のフォーム送信処理(エラーコード別メッセージ表示)を実装。ローカルPHP環境で23件のユニットテスト＋実HTTP統合テストを実施。XServerサブドメイン追加・DNS設定・メールアカウント作成等はCEOアクション待ちのため本番動作確認は未実施。[CURRENT_STATUS.md](CURRENT_STATUS.md)(v5.7→v5.8)に詳細を追加。SmartLabo repoはpush未実施 |
 
 *最終更新: 2026-07-14*
