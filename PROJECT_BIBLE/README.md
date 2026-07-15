@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 6.9**
+> **PROJECT_BIBLE Version: 7.0**
 
 ---
 
@@ -134,7 +134,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 6.9**
+- 現在: **Version 7.0**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -250,5 +250,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v6.8** | 2026-07-14 | Claude Code(CEO指示による) | **[61_Release_Checklist.md](61_Release_Checklist.md)を「v1.0 Release Checklist」として全面拡充。** 「Release Candidate 2完了後、正式リリース前のv1.0 Release Checklistを作成してください」というCEO指示に基づき、CEO指定の18項目(ホームページ/問い合わせフォーム/SSL/メール送受信/スマホ表示/PC表示/SEO/OGP/favicon/robots.txt/sitemap.xml/404ページ/Google Search Console登録/Google Analytics登録/PageSpeed/GitHub Release/更新履歴/既知の制限事項)へ再編。新規追加：PC表示・404ページ・Google Search Console登録(CEOのGoogleアカウント作業が必要)・Google Analytics登録(現時点で未導入、導入する場合はprivacy.htmlの更新が先に必要)・既知の制限事項(10項目)。全項目チェック完了後に「v1.0 Release」として提出する運用を明記 |
 
 | **v6.9** | 2026-07-14 | Claude Code(CEO指示による) | **「Release Candidate 2 最終仕上げフェーズ」Task1-8完了、新章62/63/64を新設。** SEO最終確認・公開後運用準備(解析コード非埋め込みのプレースホルダー整備)・問い合わせフォーム最終確認(SmtpMailer.phpへSMTPヘッダー・コマンドインジェクション対策を多層防御として追加)・公開前品質確認(Safari対応・陳腐化情報3件修正、コミット`32f3a28`)を実施。[61_Release_Checklist.md](61_Release_Checklist.md)のKnown Issuesを3階層へ再整理。新設[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)(スクリーンショット不要の8ステップ公開手順書)・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)(CEO指定優先順位①〜⑧の公開後ロードマップ)・[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md)(homepage-v1.0.0のRelease Notes)を`60`番台(編集体制・運用フロー)の直後に追加。デザイン変更・新機能追加は行わず、「Smart Labo Works Homepage v1.0 Release Candidate Final」としてCEO承認を待機する方針を[CURRENT_STATUS.md](CURRENT_STATUS.md)(v6.8→v6.9)に反映 |
+| **v7.0** | 2026-07-15 | Claude Code(CEO指示による) | **銀行提出用事業計画書 Version 1.0を新規作成。** 「PROJECT_BIBLE/CURRENT_STATUS/CLAUDE.md/BUSINESS_STRATEGY/PRODUCT_REQUIREMENTS/Brand Guideline最新版を確認したうえで作成してください」というCEO指示に基づき、新設[DOCUMENT/FINANCE/](../DOCUMENT/FINANCE/README.md)へ`SmartLabo_BusinessPlan_v1.0.pptx`(PDF提出可能品質、CEO指定の13章構成)を格納。ブランドカラー・正式ロゴ・タイポグラフィをホームページ・PROJECT_BIBLEと統一。代表者名・設立年月・所在地・資本金・代表者略歴はPROJECT_BIBLE内に正式情報が一切存在しないため、推測・捏造せず「CEO確認待ち」表示のまま提出(銀行提出書類における虚偽記載リスクを避けるための対応)。売上計画(3年間)はCEO指示「現実的な数値を提案、無理な成長予測は避ける」に基づく試算、資金使途は絶対額を定めず配分比率のみを図解し、いずれも前提・仮説である旨を明記。詳細は[CURRENT_STATUS.md](CURRENT_STATUS.md)(v6.9→v7.0)を参照 |
 
-*最終更新: 2026-07-14*
+*最終更新: 2026-07-15*
