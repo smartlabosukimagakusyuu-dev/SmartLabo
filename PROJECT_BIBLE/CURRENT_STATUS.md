@@ -9,12 +9,12 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：7.5
+Project Bible Version：7.6
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：3.2（Smart Labo Works Homepage v1.0 Release Candidate Final。構造化データへWebSiteスキーマ追加、GSC/GA/Cookie同意のプレースホルダー整備、SmtpMailer.phpへSMTPヘッダー・コマンドインジェクション対策を多層防御として追加、Safari向け-webkit-backdrop-filter追加、陳腐化情報3件を修正）。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/（GitHubリポジトリ側のカスタムドメイン設定はCEOアクション待ち）
 Smart Labo Works：正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)。詳細Versionは同リポジトリの`PRODUCT_REQUIREMENTS.md`を参照
-Current Task：ホームページは「Release Candidate 2 最終仕上げフェーズ」提出済み、CEO承認待ち(詳細は下記「Release Candidate 2 最終仕上げフェーズ」参照)。並行して銀行提出用事業計画書Version1.4(代表1名・自宅兼事務所を前提とした収支の再修正)を提出([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx))。**⚠️代表者報酬を含まない試算のためYear1から営業利益率62.7%〜82%と高水準になっており、代表者報酬を計上するかCEO判断が必要**。経営計画書Version1.0は旧解釈のまま未更新で本書との前提不整合が拡大、CEO確認待ち。代表者名・設立年月・所在地・資本金・代表者略歴はPROJECT_BIBLE未記入のため「CEO確認待ち」表示のまま提出、CEOの記入待ち
+Current Task：ホームページは「Release Candidate 2 最終仕上げフェーズ」提出済み、CEO承認待ち(詳細は下記「Release Candidate 2 最終仕上げフェーズ」参照)。銀行提出用事業計画書Version1.4は**CEO承認により選択肢1(代表者報酬を含まない試算のまま提出)で確定**([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf)、提出用ファイルとして出力済み)。経営計画書Version1.0は旧解釈のまま未更新で本書との前提不整合が残存、CEO確認待ち。代表者名・設立年月・所在地・資本金・代表者略歴はPROJECT_BIBLE未記入のため「CEO確認待ち」表示のまま提出、CEOの記入待ち
 ```
 
 **用語・体制の重要な変更(2026-07-10)：**
@@ -29,15 +29,15 @@ Current Task：ホームページは「Release Candidate 2 最終仕上げフェ
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 7.5 |
+| Project Bible Version | 7.6 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | 3.2 — GitHub Pagesで公開中([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Smart Labo Works Homepage v1.0 Release Candidate Final：構造化データへWebSiteスキーマ追加、GSC/GA/Cookie同意のプレースホルダー整備、SmtpMailer.phpへSMTPヘッダー・コマンドインジェクション対策を多層防御として追加 |
 | デモサイト Version（`WEBSITE/app.html`） | **デモ v1.0（2026-07-07完成、2026-07-10にデモとして再位置づけ）。GitHub Pages公開中。全9ページ・デモデータ(顧客5件・契約7件・物件6件)。Smart Labo Works正式製品ではない** |
 | Smart Labo Works Version（正式コードベース） | 本ファイルでは追跡しない。**別リポジトリ`smartlabo-works`の`PRODUCT_REQUIREMENTS.md`／`PRODUCT_BOUNDARY.md`を参照** |
 | Current Project | Company Setup → **Version1.0リファクタリング（2026-07-10 CEO承認）** |
-| Current Task | **①ホームページ：「Release Candidate 2 最終仕上げフェーズ」Task1-8完了、CEO承認待機中**(SEO最終確認・公開後運用準備・問い合わせフォーム最終確認・公開前品質確認[コミット`32f3a28`]、[61_Release_Checklist.md](61_Release_Checklist.md)のKnown Issues 3階層再整理、新設[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)・[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md))。**②財務計画：銀行提出用事業計画書Version1.4(代表1名・自宅兼事務所を前提とした収支の再修正)を提出**([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)、詳細は下記「銀行提出用事業計画書 Version 1.4」参照)。**⚠️代表者報酬を含まないためYear1から営業利益率62.7%〜82%と高水準、代表者報酬計上の要否がCEO判断待ち**。経営計画書Version1.0は旧解釈のまま未更新でv1.4との前提不整合が拡大。いずれもCEO確認・承認を待機中 |
-| Next Task | ①CEO承認後、[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の8ステップ(GitHub Pages切替→DNS確認→XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト→公開確認→公開後確認)を実施。Google Search Console登録・Google Analytics導入要否はCEO判断待ち。全項目確認後、Gitタグ`homepage-v1.0.0`・GitHub Releaseを作成し「v1.0 Release」として提出。②銀行提出版は代表者報酬を計上するか(選択肢1:このまま提出／選択肢2:最小限の役員報酬を追加)のCEO判断、および代表者名・設立年月・所在地・資本金・代表者略歴の記入が必要。経営計画書Version1.0を新しい費用構造・新規/更新モデルへ合わせて更新するか要CEO判断。Company OS「Pricing Manager」の実際のコード実装は別Task承認待ち([63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)優先度②) |
+| Current Task | **①ホームページ：「Release Candidate 2 最終仕上げフェーズ」Task1-8完了、CEO承認待機中**(SEO最終確認・公開後運用準備・問い合わせフォーム最終確認・公開前品質確認[コミット`32f3a28`]、[61_Release_Checklist.md](61_Release_Checklist.md)のKnown Issues 3階層再整理、新設[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)・[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md))。**②財務計画：銀行提出用事業計画書Version1.4は2026-07-15のCEO指示「1のままで資料出力して」により選択肢1(代表者報酬を含まない試算のまま)で確定・提出用ファイルを出力済み**([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf)、詳細は下記「銀行提出用事業計画書 Version 1.4」参照)。経営計画書Version1.0は旧解釈のまま未更新でv1.4との前提不整合が残存、CEO確認待ち |
+| Next Task | ①CEO承認後、[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の8ステップ(GitHub Pages切替→DNS確認→XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト→公開確認→公開後確認)を実施。Google Search Console登録・Google Analytics導入要否はCEO判断待ち。全項目確認後、Gitタグ`homepage-v1.0.0`・GitHub Releaseを作成し「v1.0 Release」として提出。②銀行提出版v1.4は代表者報酬の扱いが確定したため、代表者名・設立年月・所在地・資本金・代表者略歴の記入(CEO記入待ち)のみ残課題。実際の銀行提出時はファイル名に「_submitted」を付与([DOCUMENT/FINANCE/README.md](../DOCUMENT/FINANCE/README.md)のVersion管理ルール)。経営計画書Version1.0を新しい費用構造・新規/更新モデルへ合わせて更新するか要CEO判断。Company OS「Pricing Manager」の実際のコード実装は別Task承認待ち([63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)優先度②) |
 | Last Update | 2026-07-15 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -685,12 +685,7 @@ v1.3(固定費800万円→1,705万円→3,320万円、変動費64万円→360万
 
 **利益計画の結果（重要な変化）**: 費用が大幅に縮小した結果、**Year1から黒字**（320万円、営業利益率62.7%）→Year2 2,438万円（79.9%）→Year3 8,107万円（81.9%）。v1.3までの「Year1赤字・Year2黒字化」というストーリーから、「Year1から黒字運営」へ根本的に変化した。
 
-**⚠️ CEOへの重要な確認事項（要判断）**: 上記の試算は、**代表者報酬(役員報酬)を一切含んでいない**（Year1固定費50万円の内訳は通信・保険・管理費等のみ）。これにより営業利益率がYear1 62.7%、Year2以降は約80%という、新設法人としては非常に高い水準になっている。CEO指示「利益率を高く見せることが目的ではありません」との整合性の観点から、以下のいずれかをご判断いただきたい。
-1. **このまま提出する**：「資本効率の高いPlatform Business」として、代表者報酬は黒字化後に設定する方針を明記した上で提出する
-2. **代表者報酬(最小限の生活費相当)を計上する**：固定費に月数万円〜十数万円程度の役員報酬を追加し、利益率をより一般的な水準へ調整する（CEO指示の「銀行説明用として妥当な範囲で調整可」という一文はこの調整を想定したものと考えられる）
-3. **その他の調整**：CEOのご判断による
-
-本書は選択肢1の想定で作成し、「代表者報酬は含まず、創業期は最小限運営とし黒字化後に設定予定」という注記をコスト構造・利益計画の両ページに明記した。選択肢2を希望される場合は再修正が必要。
+**✅ CEO判断確定（2026-07-15）**: 代表者報酬の扱いについて、CEOより「1のままで資料出力して」との指示があり、**選択肢1（代表者報酬を含まない試算のまま提出）で確定**。上記の試算は代表者報酬(役員報酬)を含まない（Year1固定費50万円の内訳は通信・保険・管理費等のみ）ため営業利益率がYear1 62.7%、Year2以降は約80%と高水準になる点を、「資本効率の高いPlatform Business」として説明する方針を維持する。「代表者報酬は含まず、創業期は最小限運営とし黒字化後に設定予定」という注記をコスト構造・利益計画の両ページに明記済み。`SmartLabo_BusinessPlan_v1.4.pptx`／`.pdf`を提出用の最終出力として確定した（内容変更なし、CEO承認記録としてこの節を更新）。
 
 **品質確認**: スキーマ検証・全21スライド内容確認・LibreOfficeでの目視QAを実施。初回レンダリングで「費用計画」ページの費用構造テーブルが説明文（サブタイトル）と位置的に重なる不具合を発見し、テーブル開始位置の調整で解消した。「なぜ利益率が高まるのか」ページの固定費比率もYear1 156.9%→9.8%、Year2 55.9%→5.9%、Year3 33.5%→4.8%へ更新（人件費が大幅に減ったことで固定費比率も一段と低下）。
 
@@ -780,5 +775,6 @@ v1.3(固定費800万円→1,705万円→3,320万円、変動費64万円→360万
 | **v6.8** | 2026-07-15 | Claude Code(CEO追加指示による) | **銀行提出用事業計画書 Version 1.2へ収支計画・利益計画をブラッシュアップ。** Project Bible Version 7.2→7.3に更新。CEO指示「現実的で説得力のある利益計画へ修正し、銀行担当者が『2年目で黒字化できそう』と思える資料へ改善してほしい」に基づき実施。**6/20/50社の解釈を「累計導入社数」から「各年の新規契約数」へ再定義**し、更新契約(継続率Year1→2を83%、Year2→3を90%と提案)＋新規契約で累計契約数(6社→25社→73社)を算出し直す方式に変更(v1.0/v1.1からの重要な前提変更)。①料金前提(月額15万円・年間契約、初期導入費10万円/社)を新設。②契約は年間を通じ段階的に発生する現実的な時期(平均稼働月数)を反映し売上高を再計算(510万円→3,050万円→9,900万円)。③費用を固定費/変動費/開発費の3分類に再編し、開発費は初期開発・機能追加・保守改善の内訳を明示。④サーバー費をXServer本体・バックアップ・監視費(現実的な水準へ大幅下方修正)とAI API費(利用企業数比例の変動費)に分離。⑤Partner Program報酬を顧客獲得コスト(CAC)として整理し、Partner Programページに広告経由CACとの比較card(約15万円/社 vs 参考値約28万円/社)を新設。⑥営業利益をYear1 △899万円→**Year2 487万円(利益率16.0%、黒字化達成)**→Year3 4,632万円(46.8%)と算出し、「無理な利益計画にはしない」「利益率より実現可能性を優先」という指示に沿った保守的な黒字幅とした。⑦「利益計画」ページに銀行向け説明5点(2年目黒字化の理由/利益率改善理由/固定費と変動費の違い/紹介制度による営業効率化/継続課金による利益積み上げ)を追加。⑧新設「利益が改善する理由」ページにCEO指定の3段階フロー図(初年度:開発投資→2年目:契約更新/Partner Program/広告費削減/利益改善→3年目:契約積み上げ/ストック収益/利益拡大)を実装。全13章→19章。QA時に発見した積み上げ棒グラフのラベル重なりを単純棒グラフへの簡素化で、利益グラフのラベル重なりを第2軸範囲調整でそれぞれ解消。**経営計画書Version1.0は旧解釈(累計)のまま未更新であり、本書との前提不整合が発生中、CEO確認待ち** |
 | **v6.9** | 2026-07-15 | Claude Code(CEO追加指示による) | **銀行提出用事業計画書 Version 1.3へ収益構造・利益計画をブラッシュアップ。** Project Bible Version 7.3→7.4に更新。CEO指示「『利益率が高い理由』ではなく『利益率が改善していく事業構造』を銀行・投資家・パートナーへ説明できる資料へ」に基づき実施。①「Smart Labo Worksは受託開発会社ではなくSaaS・Platform Business」という収益モデルを明示的に再定義。②サーバー費(XServer本体・バックアップ・監視・**ドメイン・メール**)と営業活動費を①固定費へ整理(v1.2では変動費計上だった25/43/78万円のサーバー費を30/45/65万円の固定費へ付け替え)、**AI API費のみ**を利用企業数比例の②変動費として残す(固定費計800万円→1,705万円→3,320万円、変動費計64万円→360万円→1,235万円)。③開発費を「共通プラットフォーム開発・テンプレート整備・機能追加・保守改善」への投資として再定義(合計額は550/500/700万円で変更なし)。④費用再分類の結果、営業利益はYear1 △904万円→**Year2 485万円(利益率15.9%、黒字化)**→Year3 4,645万円(46.9%)(v1.2からごく僅かな変動)。⑤新設「Platform Business Model」ページ：CEO指定7要素(①共通プラットフォーム②業種別テンプレート③AI Router④Company Brain⑤ストック収益⑥Partner Program⑦CAC改善)を2段構成で図解。⑥新設「なぜ利益率が高まるのか」ページ：CEO指定7点の説明に加え、**固定費対売上高比率がYear1 156.9%→Year2 55.9%→Year3 33.5%と急速に低下する**ことを示す表で利益率改善の主因を数値裏付けし、銀行向け(返済可能性/継続性/再現性)・投資家向け(スケーラブルなPlatform Business/Recurring Revenue/ストック型ビジネス)の訴求点を併記。⑦「利益が改善する理由」ページを「利益率が改善する理由」へ改題し、2年目のフローへCEO指定の「テンプレート活用」ノードを追加(5ステップ化)。⑧Partner Programページに「営業費ではなくCAC改善施策」である旨の一文を追加。全19章→21章。QA時に発見した固定費比率カード内の注記テキストが次のカードとはみ出す不具合をカード高さ・内部余白の再調整で解消。**経営計画書Version1.0は依然として旧解釈のまま未更新であり、本書との前提不整合が継続中、CEO確認待ち** |
 | **v7.0** | 2026-07-15 | Claude Code(CEO追加指示による) | **銀行提出用事業計画書 Version 1.4へ収支計画を再修正(代表1名・自宅兼事務所の実態反映)。** Project Bible Version 7.4→7.5に更新。CEO指示「現在の固定費・開発費は実態より高い。代表1名・社員採用なし・自宅兼事務所・SaaS型・共通プラットフォーム・テンプレート再利用・XServer利用を前提に、実際の事業モデルに沿った収支へ修正してほしい」に基づき、費用構造を全面的に圧縮・再設計。①固定費(運営費)②技術基盤費(サーバー・AI API)③開発費(保守・改善)④顧客獲得費(CAC)の4分類へ再編し、Year1固定費をCEO指定基準どおり50万円(通信・保険・管理費・予備費のみ、人件費0円)、技術基盤費40万円(XServer等固定8万円+AI API変動32万円)、開発費80万円(外部委託・ツール・テンプレート整備・改善)、顧客獲得費20万円に設定。Year2以降は人件費のみ採用計画に応じ緩やかに増加(Year2パートタイム導入・Year3正社員1名)させ、AI API・Partner Program・導入支援のみを顧客数比例の変動費とした。費用合計はv1.3(1,414万円→2,565万円→5,255万円)から**大幅圧縮**し190万円→612万円→1,793万円に。**結果、営業利益はYear1から黒字化(320万円、利益率62.7%)→Year2 2,438万円(79.9%)→Year3 8,107万円(81.9%)というv1.3までとは根本的に異なる姿になった。** 代表者報酬を一切含まない試算のため利益率が非常に高い水準になっている点を「⚠️CEOへの重要な確認事項」として明記し、①このまま提出②最小限の代表者報酬を計上して調整、の2択をCEOへ提示した(本書は①の想定で作成)。各費用項目の算出根拠を新CURRENT_STATUS本セクションおよびコスト構造スライドの脚注に明記。QA時に発見した費用計画ページのテーブルと説明文の位置重なりを解消。**経営計画書Version1.0は旧い費用構造・旧解釈のまま未更新であり、本書との前提不整合がさらに拡大、CEO確認待ち** |
+| **v7.1** | 2026-07-15 | Claude Code(CEO指示による) | **代表者報酬の扱いをCEO確定、銀行提出用事業計画書 Version 1.4を最終提出用ファイルとして確定。** Project Bible Version 7.5→7.6に更新。v7.0で提示した「⚠️CEOへの重要な確認事項」(代表者報酬を含めず提出するか、最小限計上して利益率を調整するか)に対し、CEOより「1のままで資料出力して」との指示があり、**選択肢1(代表者報酬を含まない試算のまま提出)で確定**。数値・スライド内容の変更は行わず(`SmartLabo_BusinessPlan_v1.4.pptx`/`.pdf`は既に「代表者報酬は含まず、創業期は最小限運営とし黒字化後に設定予定」との注記を明記済みだったため)、PROJECT_BIBLE上のCEO確認事項を「判断待ち」から「確定」へ更新。実際に金融機関へ提出した際は[DOCUMENT/FINANCE/README.md](../DOCUMENT/FINANCE/README.md)のVersion管理ルールに従いファイル名へ「_submitted」を付与する運用を次のアクションとして明記 |
 
 *最終更新: 2026-07-15*
