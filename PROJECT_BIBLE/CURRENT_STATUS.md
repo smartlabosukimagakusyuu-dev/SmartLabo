@@ -9,12 +9,12 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：7.0
+Project Bible Version：7.1
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：3.2（Smart Labo Works Homepage v1.0 Release Candidate Final。構造化データへWebSiteスキーマ追加、GSC/GA/Cookie同意のプレースホルダー整備、SmtpMailer.phpへSMTPヘッダー・コマンドインジェクション対策を多層防御として追加、Safari向け-webkit-backdrop-filter追加、陳腐化情報3件を修正）。GitHub Pagesで公開中: https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/（GitHubリポジトリ側のカスタムドメイン設定はCEOアクション待ち）
 Smart Labo Works：正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)。詳細Versionは同リポジトリの`PRODUCT_REQUIREMENTS.md`を参照
-Current Task：ホームページは「Release Candidate 2 最終仕上げフェーズ」提出済み、CEO承認待ち(詳細は下記「Release Candidate 2 最終仕上げフェーズ」参照)。並行して銀行提出用事業計画書Version1.0を作成([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.0.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.0.pptx))。代表者名・設立年月・所在地・資本金・代表者略歴はPROJECT_BIBLE未記入のため「CEO確認待ち」表示のまま提出、CEOの記入待ち
+Current Task：ホームページは「Release Candidate 2 最終仕上げフェーズ」提出済み、CEO承認待ち(詳細は下記「Release Candidate 2 最終仕上げフェーズ」参照)。並行して銀行提出用事業計画書Version1.1を提出([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.1.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.1.pptx)、新規導入目標6/20/50社への売上計画修正、「持続的な成長を支える販売戦略」「Smart Labo Partner Program」「Smart Labo Philosophy」の3章を新設)。代表者名・設立年月・所在地・資本金・代表者略歴はPROJECT_BIBLE未記入のため「CEO確認待ち」表示のまま提出、CEOの記入待ち
 ```
 
 **用語・体制の重要な変更(2026-07-10)：**
@@ -29,15 +29,15 @@ Current Task：ホームページは「Release Candidate 2 最終仕上げフェ
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 7.0 |
+| Project Bible Version | 7.1 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | 3.2 — GitHub Pagesで公開中([https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/](https://smartlabosukimagakusyuu-dev.github.io/SmartLabo/))。Smart Labo Works Homepage v1.0 Release Candidate Final：構造化データへWebSiteスキーマ追加、GSC/GA/Cookie同意のプレースホルダー整備、SmtpMailer.phpへSMTPヘッダー・コマンドインジェクション対策を多層防御として追加 |
 | デモサイト Version（`WEBSITE/app.html`） | **デモ v1.0（2026-07-07完成、2026-07-10にデモとして再位置づけ）。GitHub Pages公開中。全9ページ・デモデータ(顧客5件・契約7件・物件6件)。Smart Labo Works正式製品ではない** |
 | Smart Labo Works Version（正式コードベース） | 本ファイルでは追跡しない。**別リポジトリ`smartlabo-works`の`PRODUCT_REQUIREMENTS.md`／`PRODUCT_BOUNDARY.md`を参照** |
 | Current Project | Company Setup → **Version1.0リファクタリング（2026-07-10 CEO承認）** |
-| Current Task | **①ホームページ：「Release Candidate 2 最終仕上げフェーズ」Task1-8完了、CEO承認待機中**(SEO最終確認・公開後運用準備・問い合わせフォーム最終確認・公開前品質確認[コミット`32f3a28`]、[61_Release_Checklist.md](61_Release_Checklist.md)のKnown Issues 3階層再整理、新設[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)・[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md))。**②銀行提出用事業計画書Version1.0を作成・提出**([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.0.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.0.pptx)、詳細は下記「銀行提出用事業計画書 Version 1.0」参照)。いずれもCEO確認・承認を待機中 |
-| Next Task | ①CEO承認後、[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の8ステップ(GitHub Pages切替→DNS確認→XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト→公開確認→公開後確認)を実施。Google Search Console登録・Google Analytics導入要否はCEO判断待ち。全項目確認後、Gitタグ`homepage-v1.0.0`・GitHub Releaseを作成し「v1.0 Release」として提出。②事業計画書は代表者名・設立年月・所在地・資本金・代表者略歴のCEO記入と、売上計画・資金使途の数値レビューが必要。Company OS「Pricing Manager」の実際のコード実装は別Task承認待ち([63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)優先度②) |
+| Current Task | **①ホームページ：「Release Candidate 2 最終仕上げフェーズ」Task1-8完了、CEO承認待機中**(SEO最終確認・公開後運用準備・問い合わせフォーム最終確認・公開前品質確認[コミット`32f3a28`]、[61_Release_Checklist.md](61_Release_Checklist.md)のKnown Issues 3階層再整理、新設[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)・[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md))。**②銀行提出用事業計画書Version1.1を作成・提出**([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.1.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.1.pptx)、新規導入目標6/20/50社への売上計画修正と「持続的な成長を支える販売戦略」「Smart Labo Partner Program」「Smart Labo Philosophy」の3章新設、詳細は下記「銀行提出用事業計画書 Version 1.1」参照)。いずれもCEO確認・承認を待機中 |
+| Next Task | ①CEO承認後、[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の8ステップ(GitHub Pages切替→DNS確認→XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト→公開確認→公開後確認)を実施。Google Search Console登録・Google Analytics導入要否はCEO判断待ち。全項目確認後、Gitタグ`homepage-v1.0.0`・GitHub Releaseを作成し「v1.0 Release」として提出。②事業計画書は代表者名・設立年月・所在地・資本金・代表者略歴のCEO記入と、売上計画・Partner Program報酬率・資金使途の数値レビューが必要。Company OS「Pricing Manager」の実際のコード実装は別Task承認待ち([63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)優先度②) |
 | Last Update | 2026-07-15 |
 | Maintainer | Masatoshi Ogawa |
 
@@ -573,6 +573,26 @@ CEOより「PROJECT_BIBLE／CURRENT_STATUS／CLAUDE.md／BUSINESS_STRATEGY／PRO
 
 ---
 
+## 銀行提出用事業計画書 Version 1.1(2026-07-15 CEO追加指示、SmartLabo repo `DOCUMENT/FINANCE/`)
+
+CEOより「銀行担当者が事業計画に納得できる資料へ、"なぜ達成できるのか"が分かる資料へ改善してほしい」との追加指示があり、v1.0からブラッシュアップした。**作成物**: [DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.1.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.1.pptx)（v1.0は`_v1.0`として同フォルダに保持し、変更の比較・追跡を可能にした）。全16章構成(13章→16章)。
+
+**①売上計画の修正**: CEO指定の新規導入目標(Year1:6社／Year2:20社／Year3:50社)へ変更し再計算。年間売上高(約380万円→約1,700万円→約4,500万円)・営業利益(△750万円→△150万円→約700万円)・継続率(―[β期間]→90%→93%)。**②売上計画ページの改善**: サマリー表に新設の「成長の根拠」行(①札幌でβ導入・実績づくり②Partner Program開始③他業種へ横展開)を追加し、スライド下部に「なぜ達成できるのか — 成長ストーリー」として3段階の説明文を新設。数字だけでなく成長ストーリーが伝わる構成へ改善した。
+
+**③新設: 持続的な成長を支える販売戦略**: ホームページ→資料請求→デモ→契約→導入→継続利用→Smart Labo Partner Program→紹介ネットワーク→新規顧客→継続収益の10ステップを2段構成の図解で表現し、紹介が次の資料請求を生む循環構造を明示。「広告だけに依存せず、既存顧客・パートナー企業・専門家とのネットワークを通じて持続可能な顧客獲得を目指す」という方針文を明記し、銀行担当者向けに「ストック型ビジネス／紹介ネットワークによる成長／広告依存ではない営業モデル／段階的な成長／実績を積み上げる戦略」の5点を強調するバッジを新設(CEO指示⑥「銀行向け説明の強化」に対応)。
+
+**④新設: Smart Labo Partner Program**: 紹介制度ではなく正式な提携制度として整理。制度目的「共に成長する。」、契約形態(年間契約)・初年度報酬率(紹介先契約金額の15%)・更新後報酬率(10%、契約継続中は毎年)・紹介件数(制限なし)・支払条件(紹介企業が契約を継続する限り継続報酬)を明記し、「紹介料ではなく長期的なパートナーシップ」というCEO指定の位置づけを本文で明示。
+
+**⑤新設: Smart Labo Philosophy**: 「私たちはAIを販売する会社ではありません。企業が持続的に成長する仕組みを提供する会社です。」「AIで会社を強くする。人との信頼で未来をつくる。」というCEO指定の本文をそのまま採用し、お客様・パートナー・地域社会と共に成長する企業像を表現。代表者プロフィールの直後、結びの直前に配置し、閉幕へ向けた印象づけの役割を持たせた。
+
+**⑥銀行向け説明の強化**: 上記③のバッジに加え、既存の「ビジネスモデル」章(ストック型収益モデル)との一貫性を保つ形で、返済可能性・継続収益・営業戦略が伝わるよう全体の物語構成を調整。
+
+**⑦デザイン**: v1.0のブランドカラー・ロゴ・タイポグラフィをそのまま踏襲し、新設4章(⑧⑨⑮)も同一のカード・アイコン・配色システムで統一。
+
+**品質確認**: pptxgenjsで再構築し、スキーマ検証・全16スライドの内容確認・LibreOfficeでのレンダリングによる目視QAを実施。初回レンダリングで「持続的な成長を支える販売戦略」章のラベルが一部カード外にはみ出し白地に白文字で読めなくなる不具合を発見し、カード高さとラベル位置を再調整して解消した。
+
+---
+
 ## ChatGPTとの同期ルール
 
 - 新しいChatGPTの会話を始める前に、必ずこのファイルの「5行サマリー」を確認・共有してください。
@@ -650,5 +670,6 @@ CEOより「PROJECT_BIBLE／CURRENT_STATUS／CLAUDE.md／BUSINESS_STRATEGY／PRO
 | **v6.3** | 2026-07-14 | Claude Code(CEO指示による) | **61_Release_Checklist.mdを「v1.0 Release Checklist」として全面拡充。** Project Bible Version 6.7→6.8に更新。「Release Candidate 2完了後、正式リリース前のv1.0 Release Checklistを作成してください」というCEO指示に基づき、CEO指定の18項目(ホームページ/問い合わせフォーム/SSL/メール送受信/スマホ表示/PC表示/SEO/OGP/favicon/robots.txt/sitemap.xml/404ページ/Google Search Console登録/Google Analytics登録/PageSpeed/GitHub Release/更新履歴/既知の制限事項)へ再編。新規追加：「PC表示」(デスクトップ1440px基準の確認を独立項目化)、「404ページ」(独立項目化)、「Google Search Console登録」(CEOのGoogleアカウント作業が必要なためClaude Codeでは実施不可と明記)、「Google Analytics登録」(現時点で一切未導入。導入要否はまずCEO判断が必要とし、導入する場合はprivacy.htmlの「Cookie・アクセス解析について」章[現在「導入していない」と明記]を先に更新する必要があると明記)、「既知の制限事項(Known Issues)」(会社情報未確定・法務ページドラフト・reCAPTCHA未設定・Analytics未導入・レート制限の実装方式・CSS/JS未minify・AIチャットのデモ制約・他業種テンプレート未実装・Company OS等の非公開機能の10項目を整理)。「リンク」「Console Error」は新設の「ホームページ」章へ統合。項目別ステータスまとめ(✅9／⏸6／❓3)と提出条件(全項目確認完了後に「v1.0 Release」として提出)を新設。SmartLabo repoはpush未実施、CEO確認待ち |
 | **v6.4** | 2026-07-14 | Claude Code(CEO指示による) | **「Release Candidate 2 最終仕上げフェーズ」Task1-8完了、「Smart Labo Works Homepage v1.0 Release Candidate Final」として提出。** Project Bible Version 6.8→6.9に更新。コミット`32f3a28`(SmartLabo repo、Task1-4)：SEO最終確認(`index.html`の構造化データへWebSiteスキーマを追加、従来のOrganizationのみから拡張)、公開後運用準備(Google Search Console/Analytics/Cookie同意の設置位置を全9ページの`</head>`直前へHTMLコメントで明記。解析コードは埋め込まず、「導入しやすい構造だけ整備」というCEO指示どおりプレースホルダーに留めた。実装時にコメントのネスト([入れ子のHTMLコメントが外側コメントを早期終了させるバグ])を発見しプレーンテキスト表記へ修正)、問い合わせフォーム最終確認(`SmtpMailer.php`へ`assertNoHeaderInjection()`を新設し、SMTPヘッダー・コマンドインジェクション対策を多層防御として追加。既存の`FILTER_VALIDATE_EMAIL`による一次防御が機能していることを事前に検証したうえでの追加的対策と位置づけ)、公開前品質確認(Safari向け`-webkit-backdrop-filter`の付与漏れを修正、`js/company-info.js`の暫定URL/null email/古いインフラ状況の記載を正式ドメイン・確定済みメールアドレスへ修正、`index.html`最終CTAの「送信先未接続」という実装前の古い案内文を削除、`WEBSITE/README.md`の「公開状況」節を最新状態へ更新)を実施。[61_Release_Checklist.md](61_Release_Checklist.md)のKnown Issuesを「v1.0で対応しない項目／v1.1予定項目／将来構想」の3階層へ再整理しGoogle Search Console未登録を明示項目化(Task5)。新設[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md)(homepage-v1.0.0のRelease Notes、Task6)。新設[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)(スクリーンショット不要の初心者向け8ステップ公開手順書、Task7)。新設[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)(CEO指定優先順位①AIチャット②Pricing Manager③CRM④Company Brain⑤API⑥app.smartlaboworks.com⑦Customer Portal⑧管理画面の公開後ロードマップ、Task8)。デザイン変更・新機能追加は行わず、CEO指示どおり品質仕上げのみに限定。SmartLabo repoはpush未実施、「Smart Labo Works Homepage v1.0 Release Candidate Final」としてCEO承認を待機中 |
 | **v6.5** | 2026-07-15 | Claude Code(CEO指示による) | **銀行提出用事業計画書 Version 1.0を新規作成。** Project Bible Version 6.9→7.0に更新。新設[DOCUMENT/FINANCE/](../DOCUMENT/FINANCE/README.md)へ`SmartLabo_BusinessPlan_v1.0.pptx`(PDF提出可能品質、13章構成)を格納。00_Foundation(Mission/Vision/Value/Brand Identity/Company Story)・[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)・`smartlabo-works/PRODUCT_REQUIREMENTS.md`/`PRODUCT_BOUNDARY.md`/`CLAUDE.md`/`BUSINESS_STRATEGY.md`・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)を確認したうえで作成。代表者名・設立年月・所在地・資本金・代表者略歴はPROJECT_BIBLE内に正式情報が存在しないため推測せず「CEO確認待ち」と明示表示。売上計画(3年間)はCEO指示「現実的な数値を提案、無理な成長予測は避ける」に基づく試算(前提を脚注に明記)、資金使途は絶対額を定めず配分比率のみを図解し、いずれも仮説である旨を明記した |
+| **v6.6** | 2026-07-15 | Claude Code(CEO追加指示による) | **銀行提出用事業計画書 Version 1.1へブラッシュアップ。** Project Bible Version 7.0→7.1に更新。CEO指示「銀行担当者が納得できる、"なぜ達成できるのか"が分かる資料へ」に基づき実施。①売上計画をCEO指定の新規導入目標(6/20/50社)へ再計算(年間売上高約380万円→約1,700万円→約4,500万円、営業利益△750万円→△150万円→約700万円)。②サマリー表に「成長の根拠」行、スライド下部に3段階の成長ストーリー説明を新設。③新設「持続的な成長を支える販売戦略」(ホームページ→資料請求→デモ→契約→導入→継続利用→Partner Program→紹介ネットワーク→新規顧客→継続収益の10ステップ図解、銀行向け5ポイントバッジ)。④新設「Smart Labo Partner Program」(制度目的「共に成長する。」、年間契約・初年度15%/更新10%・紹介件数制限なし・継続報酬、紹介料ではなく長期的パートナーシップとして整理)。⑤新設「Smart Labo Philosophy」(CEO指定本文をそのまま採用、代表者プロフィールと結びの間に配置)。全13章→16章。QA時に発見した「持続的な成長を支える販売戦略」章のラベルはみ出し(白地に白文字で不可視)をカード高さ再調整で解消。v1.0ファイルは比較・追跡用に同フォルダへ保持 |
 
 *最終更新: 2026-07-15*
