@@ -47,15 +47,17 @@ Release Candidate 1（コミット`76a9767`）・Release Candidate 2（コミッ
 
 ### □ 問い合わせフォーム
 
+**2026-07-16、CEO最終公開指示により方針変更：v1.0.0では本番フォームを非公開とし、`contact.html`のフォームブロックを撤去して`info@smartlaboworks.com`へのmailtoリンクに差し替えた（本番送信テストが完了していない機能を公開しない、というCEO方針に基づく）。以下のチェック項目はフォーム自体の実装状況の記録として残すが、v1.0.0の公開判定には影響しない。フォームの本番稼働はVersion1.1で対応する。**
+
 - [x] クライアント側バリデーション（必須項目・メール形式）
 - [x] honeypot・送信速度トラップが人間の通常操作を妨げない
 - [x] 送信中の二重送信防止（送信ボタンdisable）
 - [x] 送信成功時、専用の完了画面（受付番号表示）へ切り替わる
 - [x] 送信失敗時、状況別のエラーメッセージが表示される（バリデーション/レート制限/CSRF失効/通信エラー等）
-- [ ] 実際に`form.smartlaboworks.com`へ送信が届き、完了画面が表示される
-- [ ] レート制限（1時間5回）・二重送信検知（10分）が本番のSQLite環境でも機能する
+- [ ] 実際に`form.smartlaboworks.com`へ送信が届き、完了画面が表示される（→v1.1で実施）
+- [ ] レート制限（1時間5回）・二重送信検知（10分）が本番のSQLite環境でも機能する（→v1.1で実施）
 
-現状：ロジックはローカルPHP環境で全経路検証済み（23件のユニットテスト＋実HTTP統合テスト）。⏸ 実ドメインでの送受信確認は未実施
+現状：ロジックはローカルPHP環境で全経路検証済み（23件のユニットテスト＋実HTTP統合テスト）。v1.0.0では非公開化(mailto代替)、実ドメインでの送受信確認・本番稼働はv1.1で実施
 
 ---
 
@@ -66,7 +68,9 @@ Release Candidate 1（コミット`76a9767`）・Release Candidate 2（コミッ
 - [ ] `http://` アクセス時に `https://` へ自動リダイレクトされる（`xserver-form/public/.htaccess`で実装済み。GitHub Pages側は標準で自動リダイレクト）
 - [ ] 混在コンテンツ（HTTP経由の画像・スクリプト等）警告が出ない
 
-現状：⏸ 本番ドメイン確定後に実施
+**2026-07-16、`nslookup`/`curl`による実測を実施した結果を追記：** `smartlaboworks.com`・`www.smartlaboworks.com`・`form.smartlaboworks.com`はいずれも同一のXserver IPアドレスを指しており、`https://smartlaboworks.com/`へアクセスすると本サイトではなくXserverの初期設置ページ(コンテンツ未アップロード時の標準ページ)が表示される状態を確認した(HTTPS自体は有効でSSL証明書エラーは出ない)。GitHub Pages側のカスタムドメイン設定・DNSのAレコード切替(4件、[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)②参照)がまだ実施されていないことを意味する。
+
+現状：⏸ 本番ドメイン確定後に実施。**2026-07-16時点で未着手であることを実測で確認済み**
 
 ---
 
@@ -226,12 +230,15 @@ Release Candidate 1（コミット`76a9767`）・Release Candidate 2（コミッ
 
 | 項目 | 内容 | 対応方針 |
 |---|---|---|
-| 会社情報の未確定 | 代表者・設立年月・所在地・電話番号・事業内容が未確定（[company.html](../WEBSITE/company.html)に「CEO確認待ち」と明示、推測掲載はしない） | CEO確認後、`js/company-info.js`の値を更新すれば全ページへ反映 |
+| 会社情報の一部未確定 | 代表者(小川昌利)・設立年月(2026年7月)・事業内容は2026-07-16にCEO確認済みで反映済み。**所在地・電話番号・資本金・代表者略歴は引き続き未確定**（[company.html](../WEBSITE/company.html)に「CEO確認待ち」と明示、推測掲載はしない） | CEO確認後、`js/company-info.js`の値を更新すれば全ページへ反映 |
+| 問い合わせフォーム非公開 | 2026-07-16のCEO最終公開指示により、本番送信テスト未完了のフォームを`contact.html`から撤去し`info@smartlaboworks.com`へのmailtoリンクへ差し替え(意図的な仕様、実装自体は完了済みで撤去のみ) | Version1.1で送信テスト実施後、フォームを再有効化 |
 | 法務ページがドラフト | プライバシーポリシー・利用規約は専門家未確認（両ページに明記済み） | 正式公開前後に弁護士等の確認を推奨 |
 | 特定商取引法表記 | 該当性の最終判断が未了（BtoB契約のため不要な可能性が高いが未確定） | 専門家確認後、要否に応じて対応 |
-| reCAPTCHA未設定 | 現在は開発モード（honeypot・送信速度トラップ・CSRF・レート制限の4層のみでbot対策） | 正式公開後、CEOがGoogleでキーを発行し本番モードへ切替（[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)⑤参照） |
-| Google Search Console未登録 | サイト所有権確認・sitemap送信が未実施 | 公開後にCEOのGoogleアカウントで登録 |
-| Google Analytics未導入 | アクセス解析なし。導入するかどうか自体が未決定 | 導入要否をCEO判断後に着手（導入時はprivacy.html更新が先） |
+| reCAPTCHA未設定 | 現在は開発モード（honeypot・送信速度トラップ・CSRF・レート制限の4層のみでbot対策）。フォーム自体v1.0.0では非公開のため優先度低 | Version1.1のフォーム再有効化時に、CEOがGoogleでキーを発行し本番モードへ切替（[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)⑤参照） |
+| Google Search Console未登録 | サイト所有権確認・sitemap送信が未実施 | Version1.1でCEOのGoogleアカウントにより登録（2026-07-16 CEO確定） |
+| Google Analytics未導入 | アクセス解析なし | Version1.1で対応（2026-07-16 CEO確定。導入時はprivacy.html更新が先） |
+| AIチャット実API接続 | ホームページのAIチャットウィジェットは事前定義のデモ回答のみ、実際のSmart AI Routerには未接続 | Version1.1で対応（2026-07-16 CEO確定） |
+| DNS/GitHub Pages切替未完了 | 2026-07-16のDNS実測により、`smartlaboworks.com`がGitHub PagesではなくXserverの初期設置ページを指していることを確認。GitHub Pages側のカスタムドメイン設定・DNSのAレコード切替が未実施 | CEO(または担当者)が[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)①②を実施 |
 | Company Brain・CRM等の非公開機能 | Company OS・Builder・Innovation Hub等は顧客向けページに一切表示しない仕様（恒久的な意図的仕様） | `PRODUCT_BOUNDARY.md`の分類どおり。将来的に公開する計画自体が現時点でない |
 
 #### v1.1予定項目（次の改善サイクルで対応を見込む）
@@ -280,5 +287,6 @@ Analytics導入要否の決定・GitHub Release作成）についてCEOの判断
 | v1.0 | 2026-07-14 | Claude Code(CEO指示による) | 新規作成。Release Candidate 2として、本番公開前チェックリスト(SSL/問い合わせ/メール/リンク/Console Error/favicon/OGP/sitemap/robots/SEO/モバイル/PageSpeed/GitHub Release Tag/バージョン番号/更新履歴の15項目)を制定。Release Candidate 1(コミット`76a9767`)時点の確認状況を反映し、本番環境が必要な項目は⏸として明示。バージョン番号は`v1.0.0`(ホームページ正式公開)を提案、Gitタグ・GitHub Releaseの作成はCEOの明示的な承認後に実施する方針を明記 |
 | **v2.0** | 2026-07-14 | Claude Code(CEO指示による) | **「v1.0 Release Checklist」として全面拡充。** 「Release Candidate 2完了後、正式リリース前のv1.0 Release Checklistを作成してください」というCEO指示に基づき、CEO指定の18項目(ホームページ/問い合わせフォーム/SSL/メール送受信/スマホ表示/PC表示/SEO/OGP/favicon/robots.txt/sitemap.xml/404ページ/Google Search Console登録/Google Analytics登録/PageSpeed/GitHub Release/更新履歴/既知の制限事項)へ再編。新規追加：「PC表示」(デスクトップ表示の明示的な確認項目)、「404ページ」(既存確認内容を独立項目化)、「Google Search Console登録」(CEOのGoogleアカウント作業が必要と明記)、「Google Analytics登録」(現時点で未導入、導入要否は要CEO判断とし、導入する場合はprivacy.htmlの更新が先に必要である旨を明記)、「既知の制限事項(Known Issues)」(10項目、意図的なスコープ外事項と今後の対応方針を整理)。「リンク」「Console Error」は「ホームページ」章へ統合。項目別ステータスまとめ(2章)・提出条件(3章)を新設し、全項目チェック完了後に「v1.0 Release」として提出する運用を明記 |
 | **v3.0** | 2026-07-14 | Claude Code(CEO指示による) | **「Release Candidate 2 最終仕上げフェーズ」Task1-5・7・8を反映。** SEO最終確認(構造化データへWebSiteスキーマ追加)・公開後運用準備(GSC/GA/Cookie同意のプレースホルダーコメントを全ページへ設置、解析コードは未実装のまま)・問い合わせフォーム最終確認(SmtpMailer.phpへSMTPヘッダー・コマンドインジェクション対策を多層防御として追加)・公開前品質確認(Safari向け`-webkit-backdrop-filter`追加、company-info.js等3件の陳腐化情報を修正、コミット`32f3a28`)を実施(Task1-4)。既知の制限事項を「v1.0で対応しない項目／v1.1予定項目／将来構想」の3階層へ再整理し、Google Search Console未登録を明示項目として追加(Task5)。新規ドキュメント[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)(CEO向け8ステップ公開手順書、Task7)・[63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md)(公開後ロードマップ、Task8)・[64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md)(Release Notes、Task6)を追加し、本チェックリストから相互参照した |
+| **v4.0** | 2026-07-16 | Claude Code(CEO最終公開指示による) | **Homepage v1.0.0確定に伴う更新。** 会社情報(代表者名・設立年月・事業内容)がCEO確認済みとなったことを反映。問い合わせフォームを本番送信テスト未完了のためv1.0.0では非公開化しmailtoリンクへ差し替えたことを明記し、フォーム関連項目は「v1.1で対応」へ整理。SSL章に2026-07-16実施のDNS実測結果(`smartlaboworks.com`がGitHub PagesではなくXserver初期設置ページを指している)を追記。既知の制限事項に「問い合わせフォーム非公開」「AIチャット実API接続」「DNS/GitHub Pages切替未完了」の3項目を追加し、AIチャット・フォーム本番・GA・Search ConsoleはいずれもVersion1.1で対応するとCEOが確定したことを反映 |
 
-*最終更新: 2026-07-14*
+*最終更新: 2026-07-16*

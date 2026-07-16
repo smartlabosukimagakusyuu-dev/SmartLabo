@@ -9,6 +9,38 @@
 
 ---
 
+## 2026-07-16 — Smart Labo Works Homepage v1.0.0 正式公開版として確定
+
+CEOより「銀行口座開設・融資申込・会社実態の公開」を目的とした最終公開指示があった。
+
+> 現在の実装内容をそのまま正式公開します。追加開発は行いません。①GitHub Pagesの公開手順最終確認②smartlaboworks.comへの切替手順最終確認③DNS切替後の確認項目④コミット⑤push⑥CURRENT_STATUS更新⑦PROJECT_BIBLE更新を対応してください。公開後のVersionはHomepage v1.0.0としてください。AIチャット・問い合わせフォーム本番・Google Analytics・Search ConsoleはVersion1.1で実施します。
+
+### 背景
+
+前回セッションでCEOに代表者名・設立年月・事業内容を確認し、会社概要ページの主要項目が確定した。あわせて、[61_Release_Checklist.md](61_Release_Checklist.md)で「実ドメインでの送受信確認は未実施」と記録されていた問い合わせフォームについて、CEOから「本番送信テストが完了していない場合はフォームへの導線を一時的に外し、メール問い合わせへ変更する」との指示があった。今回の最終公開指示を受け、これらを反映したうえでHomepage v1.0.0として確定し、初めて`SmartLabo`リポジトリへコミット・pushした。
+
+### 主な変更内容
+
+- [WEBSITE/js/company-info.js](../WEBSITE/js/company-info.js)：代表者(小川昌利)・設立年月(2026年7月)・事業内容を追加(所在地・電話番号は引き続き未確定)
+- [WEBSITE/contact.html](../WEBSITE/contact.html)：本番送信テスト未完了の問い合わせフォームを撤去し、`info@smartlaboworks.com`へのmailtoリンクへ差し替え(`js/pages.js`は既存のnullガードにより無変更でconsoleエラーなし動作を確認)
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)(v7.1→v7.2)：Homepage Versionを3.2→v1.0.0に更新
+- [README.md](README.md)：PROJECT_BIBLE Version 7.6→7.7
+- [61_Release_Checklist.md](61_Release_Checklist.md)(v3.0→v4.0)：問い合わせフォーム関連項目をVersion1.1対応として整理、DNS実測結果を追記
+- [64_Release_Notes_v1.0.0.md](64_Release_Notes_v1.0.0.md)(v1.0→v1.1)：Homepage v1.0.0の正式公開内容を反映
+- [../WEBSITE/README.md](../WEBSITE/README.md)(v1.3→v1.4)：公開状況をHomepage v1.0.0の実態に合わせて更新
+
+### DNS実測による発見(重要)
+
+2026-07-16、`nslookup`・`curl`により`smartlaboworks.com`の実際のDNS/HTTP応答を確認したところ、`smartlaboworks.com`・`www.smartlaboworks.com`・`form.smartlaboworks.com`のいずれも同一のXserver IPを指しており、`https://smartlaboworks.com/`は本サイトではなくXserverの初期設置ページを表示する状態だった。従来のドキュメント記載(「Xserverとの契約・ドメイン設定は完了」)は不正確であったため、実測結果に基づき修正した。GitHub Pages側のカスタムドメイン設定・DNSのAレコード切替(4件)は、[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の手順どおりCEO(または担当者)による対応が引き続き必要。
+
+### 今回実施しなかったこと
+
+- Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成(対外公開を伴う操作のため、CEOの別途明示的な承認を得てから実施する方針を維持)
+- GitHub Pages側のカスタムドメイン設定・DNS切替・XServerへのフォームPHPアップロード(Claude Codeからは実行不可。GitHub管理画面・DNSレジストラへのアクセス権がないため)
+- AIチャット実API接続・問い合わせフォーム本番稼働・Google Analytics・Search Console導入(いずれもCEOがVersion1.1で対応する方針を確定済み)
+
+---
+
 ## [Unreleased]
 
 - (次回の変更予定があればここに記載)
