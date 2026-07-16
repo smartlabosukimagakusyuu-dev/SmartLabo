@@ -656,10 +656,10 @@ h1, h2, h3, h4 {
   margin: 0 0 24px;
   font-size: clamp(24px, 3.4vw, 36px);
   line-height: 1.5;
-  color: var(--white);
+  color: var(--text-primary);
   font-weight: 700;
 }
-.mission__sub { font-size: 15px; color: var(--text-on-navy-secondary); margin: 0; }
+.mission__sub { font-size: 15px; color: var(--text-secondary); margin: 0; }
 
 /* ---------------------------------- CTA ---------------------------------- */
 
