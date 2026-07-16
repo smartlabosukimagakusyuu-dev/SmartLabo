@@ -9,6 +9,14 @@
 
 ---
 
+## 2026-07-16 — GitHub Pages/DNS切替完了、smartlaboworks.comで公開確認。所在地・電話番号を削除
+
+Homepage v1.0.0確定・push後、CEOがGitHub PagesのCustom domain設定とXserverのDNS設定(apex Aレコード4件をGitHub Pages IPへ、`www`をCNAMEへ)を実施するのを対話形式で支援した。DNSチェック成功・HTTPS強制有効化を経て、`https://smartlaboworks.com/`へ実際にアクセスし、全9ページ200・存在しないURLで404・証明書エラーなし・会社概要ページの代表者名/設立年月/事業内容の表示・お問い合わせページのmailtoリンク・consoleエラーなしを実機確認した。
+
+続けてCEOより「一旦ホームページの所在地と電話番号を削除してほしい」との指示があり、[WEBSITE/company.html](../WEBSITE/company.html)の該当2行(所在地・電話番号)を削除。あわせて、削除後は参照先を失い宙に浮く形になった「『CEO確認待ち』と表示されている項目は…」という注記文もCEO承認(「お願い」)を得て削除した。[WEBSITE/js/company-info.js](../WEBSITE/js/company-info.js)側の`address`/`tel`の値は`null`のまま変更しておらず、将来所在地・電話番号が確定した際は`company.html`に行を復元するだけで再表示できる。
+
+---
+
 ## 2026-07-16 — Smart Labo Works Homepage v1.0.0 正式公開版として確定
 
 CEOより「銀行口座開設・融資申込・会社実態の公開」を目的とした最終公開指示があった。
