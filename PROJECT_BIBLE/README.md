@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 7.8**
+> **PROJECT_BIBLE Version: 7.9**
 
 ---
 
@@ -40,6 +40,7 @@ AIが変わっても、社員が増えても、会社の思想が変わらない
 | 会社の歴史 | [00_Foundation/01_Company_Story.md](00_Foundation/01_Company_Story.md)、[00_Foundation/09_Product_History.md](00_Foundation/09_Product_History.md) |
 | 開発原則(何を作る前に何を確認するか) | [11_Development_Principles.md](11_Development_Principles.md) |
 | 料金・導入プランの思想 | [12_Pricing_Philosophy.md](12_Pricing_Philosophy.md) |
+| Smart Labo Platform 全体アーキテクチャ(銀行・パートナー・投資家・採用向け正式資料) | [13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md) |
 | v1.0 Release Checklist(本番公開前) | [61_Release_Checklist.md](61_Release_Checklist.md) |
 | CEO公開手順書(8ステップ) | [62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md) |
 | 公開後ロードマップ | [63_Post_Launch_Roadmap.md](63_Post_Launch_Roadmap.md) |
@@ -75,6 +76,7 @@ PROJECT_BIBLE/
 ├── 10_Development_Rules.md   ← 開発ルール
 ├── 11_Development_Principles.md ← 開発原則(開発前に何を確認・判断するか)
 ├── 12_Pricing_Philosophy.md  ← 料金・導入プランの思想(利用規模×プラン×オプション)
+├── 13_Smart_Labo_Platform_Architecture.md ← Smart Labo Platform全体アーキテクチャ(銀行・パートナー・投資家・採用向け正式資料)
 ├── 20_UI_UX_Rules.md         ← デザイン思想・UI/UXルール
 ├── 30_AI_Rules.md            ← AI利用ルール(Claude / Codex / ChatGPT共通)
 ├── 40_Organization.md        ← 組織図・役割分担
@@ -134,7 +136,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 7.6**
+- 現在: **Version 7.9**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -259,5 +261,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v7.6** | 2026-07-15 | Claude Code(CEO指示による) | **代表者報酬の扱いをCEO確定、銀行提出用事業計画書 Version 1.4を最終提出用ファイルとして確定。** v7.5で提示した「⚠️CEOへの重要な確認事項」(代表者報酬を含めず提出するか、最小限計上して調整するか)に対し、CEOより「1のままで資料出力して」との指示があり選択肢1で確定。スライド内容の変更はなく(既に該当注記を明記済みのため)、PROJECT_BIBLE上の確認事項ステータスを「判断待ち」から「確定」へ更新。実提出時は`_submitted`命名ルールを適用予定。詳細は[CURRENT_STATUS.md](CURRENT_STATUS.md)(v7.5→v7.6)を参照 |
 | **v7.7** | 2026-07-16 | Claude Code(CEO最終公開指示による) | **Homepage v1.0.0として正式公開版を確定。** 「銀行口座開設・融資申込・会社実態の公開」を目的としたCEO最終公開指示に基づき、追加開発なしで現状実装を正式公開版として確定。代表者名(小川昌利)・設立年月(2026年7月)をCEOから取得し`company.html`へ反映(所在地・電話番号は引き続き「CEO確認待ち」)。本番送信テスト未完了の問い合わせフォームを`contact.html`から一時撤去し`info@smartlaboworks.com`へのmailtoリンクへ差し替え。AIチャット実API接続・問い合わせフォーム本番稼働・Google Analytics・Search Consoleの対応はVersion1.1へ先送りする方針をCEOが確定。DNS実測により`smartlaboworks.com`がGitHub Pagesへまだ切り替わっていない(Xserver初期設置ページを指している)ことを確認し、GitHub Pages側のカスタムドメイン設定・DNS切替は引き続きCEOアクション待ちであることを明記。Gitタグ・GitHub Release作成は今回のpushに含めず、CEOの別途承認後に実施。詳細は[CURRENT_STATUS.md](CURRENT_STATUS.md)(v7.6→v7.7)を参照 |
 | **v7.8** | 2026-07-16 | Claude Code(CEO指示による) | **GitHub Pages/DNS切替完了、`smartlaboworks.com`で公開確認。会社概要ページから所在地・電話番号を削除。** CEOがGitHub Pages設定・Xserver DNS(apex Aレコード4件をGitHub Pages IPへ、`www`をCNAMEへ)を実施するのを対話形式で支援し、DNSチェック成功・HTTPS強制有効化・実際のサイト表示までを確認。全9ページ200・404正常・証明書エラーなし・会社概要ページ表示・お問い合わせページのmailtoリンクを実機確認。続けてCEO指示「所在地と電話番号を削除してほしい」に基づき`company.html`から該当2行と、参照先を失った「CEO確認待ち」注記文を削除(`js/company-info.js`の値自体は`null`のまま保持し、将来復元可能)。詳細は[CURRENT_STATUS.md](CURRENT_STATUS.md)(v7.2→v7.3)を参照 |
+| **v7.9** | 2026-07-16 | Claude Code(CEO指示による) | **新章[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)を新設。** 「Smart Labo Platform v1.0 全体アーキテクチャ設計」というCEO追加指示に基づき、Smart Labo Works全体のシステム構成を銀行・パートナー・投資家・採用候補者・社内向けに一枚で理解できる形で正式記録した。Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針、6レイヤー構成(利用者→ホームページ→Platform→AI Provider→共通サービス→Database)、Public AI(Smart Concierge AI)とCompany Brainの違いの比較表、Version1.0→2.0→3.0のロードマップを記録。技術的な構成図・データフロー図・AI Router構成図の詳細は`smartlabo-platform/ARCHITECTURE.md`(新設)を正とする。[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.2→v3.3)にSmart Labo Platformへの相互参照を追加。同日CEO承認によりVersion1.0正式版として採用。詳細は[CURRENT_STATUS.md](CURRENT_STATUS.md)を参照 |
 
 *最終更新: 2026-07-16*

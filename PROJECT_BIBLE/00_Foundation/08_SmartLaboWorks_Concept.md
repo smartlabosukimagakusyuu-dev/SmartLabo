@@ -45,6 +45,10 @@ Smart Labo Works は単一の巨大なシステムではなく、業務領域ご
 
 なお「Smart Labo Group」という会社・プロダクトファミリー名、および「Smart Labo AI」「Smart Labo CRM」という商品名は、**現時点では正式名称・正式製品ではなく、将来のブランド構想・商品候補としてのみ**記録している。
 
+### Smart Labo Platform(2026-07-16 CEO決定)
+
+Smart Labo Works全体を支える技術的なバックエンド基盤として、`smartlabo-platform`を新設した。Git構成は`smartlabo-website`(ホームページ)/`smartlabo-works`(製品本体)/`smartlabo-platform`(AI・API・認証・Company Brain等の共通基盤)の3リポジトリへ正式に統一する。ホームページのPublic AI(Smart Concierge AI)を第一段階として、将来Company Brain・CRM・Meeting AI・OCRをこの基盤へ統合していく方針。全体アーキテクチャ(レイヤー構成・データフロー・ロードマップ)は[13_Smart_Labo_Platform_Architecture.md](../13_Smart_Labo_Platform_Architecture.md)を参照。
+
 ### 唯一の正式コードベース(2026-07-10 CEO決定)
 
 Smart Labo Worksの**唯一の正式コードベースは`smartlabo-works`(Node.js版・別リポジトリ)**である。今後のSmart Labo Works機能追加・仕様変更は、すべて`smartlabo-works`側でのみ行う。
@@ -93,6 +97,7 @@ Company Brain は、他の業務モジュール(不動産関連業務支援、MI
 - [10_Development_Rules.md](../10_Development_Rules.md)
 - [11_Development_Principles.md](../11_Development_Principles.md) — 新機能を作る前の判断基準(「社長の時間を増やせるか」等)、Smart Labo Worksの開発原則、製品境界の定義(Company OSとの区別)
 - [PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md) — Company Brainのコピー・UI・画面設計の詳細
+- [13_Smart_Labo_Platform_Architecture.md](../13_Smart_Labo_Platform_Architecture.md) — Smart Labo Platform全体アーキテクチャ(レイヤー構成・データフロー・Public AIとCompany Brainの違い・将来ロードマップ)
 
 ---
 
@@ -105,5 +110,6 @@ Company Brain は、他の業務モジュール(不動産関連業務支援、MI
 | **v3.0** | 2026-07-05 | Claude Code(CEO指示による) | **「Company Brain」をSmart Labo Works最大の差別化要素・中核基盤として正式に追加。** 一般的なマニュアル検索・チャットボットとの違いを比較表で明記し、キャッチコピー「探す時間を、考える時間へ。」を制定。詳細仕様は新設の[PROMPTS/DESIGN/CompanyBrain.md](../../PROMPTS/DESIGN/CompanyBrain.md)を参照する構成にした |
 | v3.1 | 2026-07-10 | Claude Code(CEO指示による) | **「製品境界」を新設し、Smart Labo Works(顧客へ販売するSaaS)とCompany OS(株式会社スマートラボの社内専用システム、非売品)を正式に区別。** 「Smart Labo Group」は非公式な将来のブランド構想、「Smart Labo AI」「Smart Labo CRM」は将来の商品候補(正式製品ではない)であることを明記。関連ドキュメント欄の[11_Development_Principles.md](../11_Development_Principles.md)の説明文も「Company OSとしての開発原則」から修正した。詳細な機能境界は`smartlabo-works/PRODUCT_BOUNDARY.md`を参照 |
 | **v3.2** | 2026-07-10 | Claude Code(CEO指示による) | **「唯一の正式コードベース」を新設。** Smart Labo Worksの正式コードベースは`smartlabo-works`(Node.js版)のみであることを明記し、`WEBSITE/app.html`(GitHub Pages公開版)は正式製品ではなく「デモサイト／マーケティング用プレビュー」であると位置づけを変更した。背景：`WEBSITE/app.html`側で並行して「Smart Labo Works v1.0 — Company OS完成」と記述されたコミットが存在し、`smartlabo-works`と2つの異なる「v1.0」が並立していたため、CEOが正式コードベースを一本化する決定を下した |
+| v3.3 | 2026-07-16 | Claude Code(CEO指示による) | **「Smart Labo Platform」を新設。** Smart Labo Works全体を支える技術基盤`smartlabo-platform`を追加し、Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針を明記。全体アーキテクチャの詳細は新設[13_Smart_Labo_Platform_Architecture.md](../13_Smart_Labo_Platform_Architecture.md)を参照する構成にした |
 
-*最終更新: 2026-07-10*
+*最終更新: 2026-07-16*

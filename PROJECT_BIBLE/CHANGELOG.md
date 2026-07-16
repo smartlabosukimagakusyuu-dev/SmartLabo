@@ -9,6 +9,14 @@
 
 ---
 
+## 2026-07-16 — Smart Labo Platform v1.0 全体アーキテクチャ設計(CEO承認・正式採用)
+
+CEOより「Smart Labo Platform v1.0 全体アーキテクチャ設計」の追加指示があった。Smart Labo Works全体のシステム構成を、銀行・パートナー説明・採用資料・投資家説明・社内設計書のすべてで使える正式資料として一枚で理解できる形にまとめることが目的。「会社を動かすAI。」というコンセプトのもと、Smart Labo Worksが単なるAIチャットではなく企業全体を支援するAI Platformであることを伝える設計とした。**実装は行わず、設計資料のみを作成。**
+
+Git構成を`smartlabo-website`(ホームページ)／`smartlabo-works`(製品本体)／`smartlabo-platform`(AI・API・認証・Company Brain等の共通基盤、2026-07-16新設)の3リポジトリへ正式統一。新設[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)に、6レイヤー構成・データフロー・AI Router構成・Public AIとCompany Brainの違い・Version1.0→2.0→3.0のロードマップを会社公式記録として要約。技術的な構成図の詳細は別リポジトリ`smartlabo-platform/ARCHITECTURE.md`を正とする。[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.2→v3.3)に相互参照を追加し、[README.md](README.md)をVersion 7.8→7.9へ更新。同日CEO承認によりVersion1.0正式版として採用した。詳細は[CURRENT_STATUS.md](CURRENT_STATUS.md)を参照。
+
+---
+
 ## 2026-07-16 — GitHub Pages/DNS切替完了、smartlaboworks.comで公開確認。所在地・電話番号を削除
 
 Homepage v1.0.0確定・push後、CEOがGitHub PagesのCustom domain設定とXserverのDNS設定(apex Aレコード4件をGitHub Pages IPへ、`www`をCNAMEへ)を実施するのを対話形式で支援した。DNSチェック成功・HTTPS強制有効化を経て、`https://smartlaboworks.com/`へ実際にアクセスし、全9ページ200・存在しないURLで404・証明書エラーなし・会社概要ページの代表者名/設立年月/事業内容の表示・お問い合わせページのmailtoリンク・consoleエラーなしを実機確認した。
