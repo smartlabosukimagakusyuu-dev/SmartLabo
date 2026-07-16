@@ -11,14 +11,14 @@
     legalName: "株式会社スマートラボ",
     brandName: "Smart Labo",
     serviceName: "Smart Labo Works",
-    representative: null,
-    founded: null,
+    representative: "小川昌利",
+    founded: "2026年7月",
     address: null,
     tel: null,
     email: "info@smartlaboworks.com",
     url: "https://smartlaboworks.com/",
     urlNote: "正式ドメイン・無料SSLは設定済み。GitHub Pages側のカスタムドメイン切替(公開手順書 Step1参照)が完了次第、このURLで公開される",
-    business: null
+    business: "AI業務支援プラットフォーム「Smart Labo Works」の企画・開発・提供"
   };
 
   var PENDING_LABEL = "CEO確認待ち";

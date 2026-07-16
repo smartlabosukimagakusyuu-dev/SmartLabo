@@ -95,107 +95,15 @@
 
 <section class="section section--white">
   <div class="container">
-    <!-- 送信完了画面。送信成功時にフォームと入れ替わりで表示する -->
-    <div class="contact-complete" id="contactComplete">
-      <div class="contact-complete__icon" aria-hidden="true">✓</div>
-      <h2 class="contact-complete__title">お問い合わせを受け付けました</h2>
-      <p class="contact-complete__receipt" id="contactCompleteReceipt"></p>
-      <p class="contact-complete__desc">担当者が内容を確認のうえ、改めてご連絡いたします。今しばらくお待ちください。</p>
-      <a href="index.html" class="btn btn--secondary">トップページへ戻る</a>
+    <!-- 問い合わせフォームは本番送信テスト未完了のため一時的に非表示とし、
+         メールでの直接連絡へ誘導する(2026-07-16 CEO指示)。
+         再有効化する際はgit履歴からフォームブロックを復元すること。 -->
+    <div class="contact-complete is-visible">
+      <div class="contact-complete__icon" aria-hidden="true">✉</div>
+      <h2 class="contact-complete__title">メールでお問い合わせください</h2>
+      <p class="contact-complete__desc">現在、フォームからのお問い合わせ受付を準備中です。お手数をおかけしますが、下記のメールアドレスへ直接ご連絡ください。会社名・ご担当者名・ご相談内容を添えていただけますと、スムーズにご案内できます。</p>
+      <p class="contact-complete__receipt"><a href="mailto:info@smartlaboworks.com" class="btn btn--primary btn--lg">info@smartlaboworks.com 宛にメールする</a></p>
     </div>
-
-    <form class="contact-form" id="contactForm" novalidate>
-
-      <!-- honeypot(bot対策)。人間には見えない項目で、入力があれば機械的送信とみなす -->
-      <div class="hp-field" aria-hidden="true">
-        <label for="cf-website">Website</label>
-        <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off">
-      </div>
-
-      <div class="form-note" id="contactNote">
-        送信いただいた内容は担当者が確認のうえ、ご連絡いたします。うまく送信できない場合は、恐れ入りますが今しばらく経ってから再度お試しください。
-      </div>
-
-      <div class="form-error-banner" id="contactErrorBanner"></div>
-
-      <div class="form-group">
-        <label for="cf-type">ご相談種別</label>
-        <select id="cf-type" name="type">
-          <option value="">選択してください</option>
-          <option value="consult">無料相談</option>
-          <option value="quote">見積り依頼</option>
-          <option value="brochure">資料請求</option>
-          <option value="demo">デモ予約</option>
-          <option value="other">その他</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="cf-company">会社名<span class="req">*</span></label>
-        <input type="text" id="cf-company" name="company" placeholder="株式会社スマートラボ">
-        <p class="form-error">会社名を入力してください</p>
-      </div>
-
-      <div class="form-group">
-        <label for="cf-name">氏名<span class="req">*</span></label>
-        <input type="text" id="cf-name" name="name" placeholder="山田 太郎">
-        <p class="form-error">氏名を入力してください</p>
-      </div>
-
-      <div class="form-group">
-        <label for="cf-email">メールアドレス<span class="req">*</span></label>
-        <input type="email" id="cf-email" name="email" placeholder="you@example.com">
-        <p class="form-error">正しいメールアドレスを入力してください</p>
-      </div>
-
-      <div class="form-group">
-        <label for="cf-tel">電話番号</label>
-        <input type="tel" id="cf-tel" name="tel" placeholder="090-1234-5678">
-      </div>
-
-      <div class="form-group">
-        <label for="cf-industry">業種<span class="req">*</span></label>
-        <select id="cf-industry" name="industry">
-          <option value="">選択してください</option>
-          <option value="realestate_sales">不動産売買仲介</option>
-          <option value="realestate_management">不動産管理</option>
-          <option value="legal">司法書士</option>
-          <option value="tax">税理士</option>
-          <option value="construction">建築</option>
-          <option value="other">その他</option>
-        </select>
-        <p class="form-error">業種を選択してください</p>
-      </div>
-
-      <div class="form-group">
-        <label for="cf-employees">社員数</label>
-        <select id="cf-employees" name="employees">
-          <option value="">選択してください</option>
-          <option value="1-10">1〜10名</option>
-          <option value="11-50">11〜50名</option>
-          <option value="51-200">51〜200名</option>
-          <option value="201+">201名以上</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="cf-message">相談内容<span class="req">*</span></label>
-        <textarea id="cf-message" name="message" placeholder="ご相談内容をご記入ください"></textarea>
-        <p class="form-error">相談内容を入力してください</p>
-      </div>
-
-      <div class="form-group">
-        <label class="form-checkbox"><input type="checkbox" id="cf-demo" name="demo"> 無料デモを希望する</label>
-      </div>
-
-      <div class="form-group">
-        <label class="form-checkbox"><input type="checkbox" id="cf-consent" name="consent"> <a href="privacy.html" target="_blank" style="color:var(--smart-blue);font-weight:600">プライバシーポリシー</a>に同意します<span class="req">*</span></label>
-        <p class="form-error">個人情報の取り扱いへの同意が必要です</p>
-      </div>
-
-      <button type="submit" class="btn btn--primary btn--lg" style="width:100%" id="contactSubmitBtn">送信する</button>
-      <p class="form-submit-note">送信いただいた内容は、担当者が内容を確認したうえでご連絡いたします。</p>
-    </form>
   </div>
 </section>
 
