@@ -17,7 +17,7 @@
     tel: null,
     email: "info@smartlaboworks.com",
     url: "https://smartlaboworks.com/",
-    urlNote: "正式ドメイン・無料SSLは設定済み。GitHub Pages側のカスタムドメイン切替(公開手順書 Step1参照)が完了次第、このURLで公開される",
+    urlNote: "正式ドメイン・無料SSL・GitHub Pages側のカスタムドメイン切替は完了しており、このURLで公開中です。",
     business: "AI業務支援プラットフォーム「Smart Labo Works」の企画・開発・提供"
   };
 
