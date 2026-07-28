@@ -120,15 +120,26 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .h-3 { font-size: var(--fs-h3); line-height: var(--lh-tight); }
 .h-4 { font-size: var(--fs-h4); line-height: var(--lh-tight); }
 
-.section__title { font-size: var(--fs-h2); line-height: var(--lh-tight); margin-bottom: var(--sp-4); }
+.section__title {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-tight);
+  margin-bottom: var(--sp-4);
+  /* 見出しの行が極端に不均等になるのを避ける */
+  text-wrap: balance;
+}
 .section__lead {
   font-size: var(--fs-body);
   line-height: var(--lh-loose);
   color: var(--text-secondary);
   max-width: 60ch;
+  /* 最終行に1〜2文字だけ残る折り返しを避ける */
+  text-wrap: pretty;
 }
 
-.lead { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); }
+.lead { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); text-wrap: pretty; }
+/* 日本語の折り返し。text-wrap:pretty は主に欧文の孤立語向けなので、
+   文節単位で改行する word-break:auto-phrase を併用する(非対応環境では無視される)。 */
+p { text-wrap: pretty; word-break: auto-phrase; }
 .text-sm { font-size: var(--fs-sm); }
 .text-xs { font-size: var(--fs-xs); }
 

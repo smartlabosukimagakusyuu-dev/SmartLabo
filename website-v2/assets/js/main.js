@@ -98,6 +98,32 @@
     }, { passive: true });
   }
 
+
+  /* -------------------------------------------------- FAQ アコーディオン -- */
+  /* 回答はHTMLに直接書かれており、初期状態では開いている。
+     JSが動いたときだけ閉じる(プログレッシブエンハンスメント)。
+     こうしておくとJSが失敗しても、質問と回答は必ず読める。 */
+
+  document.querySelectorAll('[data-faq]').forEach(function (faq) {
+    var buttons = faq.querySelectorAll('.faq__btn');
+
+    buttons.forEach(function (btn, i) {
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!panel) return;
+
+      // 先頭だけ開いた状態で始める
+      var open = i === 0;
+      btn.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+
+      btn.addEventListener('click', function () {
+        var willOpen = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', String(willOpen));
+        panel.hidden = !willOpen;
+      });
+    });
+  });
+
   /* ---------------------------------------------- 出現アニメーション -- */
 
   var revealables = document.querySelectorAll('.reveal');
