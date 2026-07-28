@@ -9,7 +9,7 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：7.9
+Project Bible Version：8.0
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：v1.0.0（2026-07-16 CEO最終公開指示により正式公開版として確定。代表者名・設立年月・事業内容をCEOより取得し会社概要ページへ反映。所在地・電話番号は同日のCEO指示により会社概要ページの表から一時的に削除(「CEO確認待ち」表示ではなく非掲載)。問い合わせフォームは本番送信テスト未完了のため一時的に撤去し、info@smartlaboworks.comへのmailtoリンクへ差し替え。AIチャット実API接続・問い合わせフォーム本番稼働・Google Analytics・Search ConsoleはVersion1.1で対応する方針をCEOが確定）。**正式ドメイン`smartlaboworks.com`でGitHub Pagesへの切替・DNS移行(Aレコード4件・wwwのCNAME)・HTTPS強制がCEOご自身の作業により完了し、2026-07-16に公開確認済み**（`https://smartlaboworks.com/`で全9ページ200・404ページ正常・証明書エラーなし・会社概要ページの反映を実機確認）
@@ -30,7 +30,7 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 7.9 |
+| Project Bible Version | 8.0 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **v1.0.0**（2026-07-16、CEO最終公開指示により正式公開版として確定。会社概要ページに代表者名・設立年月・事業内容を反映、所在地・電話番号はCEO指示により非掲載、問い合わせフォームはmailtoリンクへ一時差し替え）。**`https://smartlaboworks.com/`で正式公開中**（CEOご自身によるGitHub Pagesカスタムドメイン設定・DNS移行(Aレコード4件・wwwのCNAME)・HTTPS強制が完了し、2026-07-16に全9ページ200・404正常・証明書エラーなしを実機確認済み） |
@@ -40,7 +40,7 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 | Current Project | Company Setup → Homepage v1.0.0 正式公開 → **Smart Labo Platform v1.0 全体アーキテクチャ(2026-07-16 CEO承認・正式採用)** |
 | Current Task | **Smart Labo Platform全体アーキテクチャがCEO承認済み、Version1.0正式版として採用。** Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針、6レイヤー構成、Public AI(Smart Concierge AI)とCompany Brainの違い、Version1.0→2.0→3.0のロードマップを[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)(新設)と`smartlabo-platform/ARCHITECTURE.md`(新設)に記録済み。銀行提出用事業計画書Version1.4は2026-07-15のCEO指示「1のままで資料出力して」により選択肢1(代表者報酬を含まない試算のまま)で確定・提出用ファイルを出力済み([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf))。経営計画書Version1.0は旧解釈のまま未更新でv1.4との前提不整合が残存、CEO確認待ち |
 | Next Task | ①Smart Labo Platform：承認された全体アーキテクチャに基づき、`api.smartlaboworks.com`のDNS設定・本番デプロイ、ホームページ`chat.js`側の接続に着手(CEOの実施タイミング指示待ち)。②公開済みのホームページについて、Version1.1で[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の残りステップ(XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト)を実施し問い合わせフォームを本番稼働へ。Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成はCEOの明示的な指示を得てから実施。③銀行提出版v1.4は代表者報酬の扱いが確定したため、所在地・資本金・代表者略歴の記入(CEO記入待ち)のみ残課題。実際の銀行提出時はファイル名に「_submitted」を付与([DOCUMENT/FINANCE/README.md](../DOCUMENT/FINANCE/README.md)のVersion管理ルール) |
-| Last Update | 2026-07-16(Smart Labo Platform v1.0 全体アーキテクチャ、CEO承認・正式採用を反映) |
+| Last Update | 2026-07-28(WEB-V2-8: 販売モデルSSOT化・14_Sales_And_Billing_Policy.md新設・website-v2ブランチの2導線/創業記念キャンペーン反映。Project Bible Version 7.9→8.0) |
 | Maintainer | Masatoshi Ogawa |
 
 ---
@@ -729,6 +729,28 @@ CEO指定の①〜⑧すべてを作成した。
 
 ---
 
+## 公式サイトVersion2.0リニューアル進捗（`website-v2`ブランチ・未公開・WEB-V2-8まで完了）
+
+公式サイトをVersion1(公開中の`WEBSITE/`)からVersion2(`website-v2/`)へ作り直す作業を、`website-v2`ブランチ(ローカルのみ・未push)で進めている。**本番の`WEBSITE/`・`master`・GitHub Pagesのデプロイ経路には一切触れていない。** 各工程の一次情報は`docs/reviews/WEB_V2_<n>_*.md`。
+
+| 工程 | 内容 | コミット |
+|---|---|---|
+| WEB-V2-1〜7 | 監査・土台〜全8ページ実装・ブランド統一・問い合わせフォーム(XServer向けPHP) | `a102869`〜`b84bb2f` |
+| **WEB-V2-8** | **販売モデルSSOT化・2導線設計・創業記念キャンペーン反映(2026-07-28)** | 本コミット |
+
+**WEB-V2-8の要点（代表決定 2026-07-28）:**
+- **[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を新設**し、販売導線・確定金額・課金サイクル・創業記念キャンペーン・キャンペーンコード・紹介コードの**正本**として制定（Project Bible Version 7.9→8.0）。[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)には優先関係の注記のみ追加
+- ①無料相談／②今すぐ申し込む(セルフ申し込み・クレジットカードのみ)の2販売導線を正式採用
+- 料金名称を「初期費用」→**「初期設定費」**へ統一(10,000円。基本料金20,000円／月・管理者1名込み、追加アカウント3,000円／月・1名、すべて税抜)
+- 課金ルール: 利用開始月は日割り・前払い・初回決済で翌月分もまとめて決済・翌々月以降は毎月1日に当月分を自動決済(日割り端数処理は決済実装工程で確定)
+- 創業記念キャンペーン: 初期設定費無料・**基本料金1か月分無料**(「初月無料」表記は禁止)・先着50社・クレジットカード登録必須。追加アカウントを無料対象に含めるかは**未確定**
+- Web実装: `website-v2/apply.html`(申込案内ページ・フォームなし・「オンライン申し込みは現在準備中」)を新設し、全9ページのCTAを主「今すぐ申し込む」／副「無料相談する」へ統一。トップページへキャンペーンセクションを追加
+- **未実装(意図的):** 決済・カード入力・契約処理・アカウント自動発行・AI初期設定ウィザード本体・キャンペーン/紹介コードDB・残数のリアルタイム表示・自動返信メール
+- 検証: `check-prices.js`(apply.html・キャンペーン表記・禁止表現の検査を追加)・`check-legal.js`ともに[OK]。Puppeteerで全9ページのリンク・h1・console error 0・375/768/1024/1440横スクロールなしを実測
+- **次工程(いずれも代表承認後):** SALES-0(販売・契約・課金の詳細仕様確定)→SALES-1〜6。並行して問い合わせフォームの構成決定(案A/案B)・法務2ページの確定が引き続き必要(詳細は`docs/reviews/WEB_V2_8_SALES_MODEL_AND_CONVERSION.md`の「法務確認事項」)
+
+---
+
 ## ChatGPTとの同期ルール
 
 - 新しいChatGPTの会話を始める前に、必ずこのファイルの「5行サマリー」を確認・共有してください。
@@ -815,4 +837,6 @@ CEO指定の①〜⑧すべてを作成した。
 | **v7.2** | 2026-07-16 | Claude Code(CEO最終公開指示による) | **Homepage v1.0.0として正式公開版を確定。銀行口座開設・融資申込・会社実態の公開を目的とした「CEO最終公開指示」に基づき実施。** Project Bible Version 7.6→7.7に更新。①CEOより代表者名(小川昌利)・設立年月(2026年7月)の確認を得て、事業内容は既存`PRODUCT_REQUIREMENTS.md`の表現を元にした案で承認を得たうえで`js/company-info.js`へ反映(所在地・電話番号は引き続き未確定「CEO確認待ち」)。②[61_Release_Checklist.md](61_Release_Checklist.md)で「実ドメインでの送受信確認は未実施」と明記されていた問い合わせフォームについて、CEO指示「本番送信テストが完了していない場合は導線を一時的に外しメール問い合わせへ変更」に基づき、`contact.html`のフォームブロックを撤去し`info@smartlaboworks.com`へのmailtoリンクへ差し替え(`js/pages.js`は`if (!form) return;`のガードにより無変更でconsoleエラーなし動作を確認)。③CEOより「AIチャット実API接続・問い合わせフォーム本番稼働・Google Analytics・Search ConsoleはVersion1.1で実施する」との方針確定を得た(今回は追加開発なし、現状実装のまま公開)。④DNSを実測したところ、`smartlaboworks.com`/`www`/`form`のいずれも同一IP(Xserverの初期設置ページ)を指しており、GitHub Pages側のカスタムドメイン設定・DNS切替(A×4/CNAME)がまだ実施されていないことを確認。[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の記載どおりCEO(または担当者)による手動対応が引き続き必要である旨を明記。⑤全ページのリンク切れ・アセット参照切れなし、consoleエラーなしを再確認。**Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成は対外公開を伴う操作のため、今回のコミット・pushには含めていない(61_Release_Checklist.md 0章の方針どおり、CEOの別途明示的な承認を得てから実施)。** |
 | **v7.3** | 2026-07-16 | Claude Code(CEO指示による) | **GitHub Pages/DNS切替完了・所在地/電話番号を会社概要ページから削除。** Project Bible Version 7.7→7.8に更新。CEOがGitHub Pages設定(Custom domain保存)・Xserver DNS管理画面(apex Aレコード4件をGitHub Pages IP `185.199.108/109/110/111.153`へ、`www`をAレコードからCNAME `smartlabosukimagakusyuu-dev.github.io`へ)を実施する過程を対話形式で支援し、DNSチェック成功・HTTPS強制有効化までを確認。完了後`https://smartlaboworks.com/`へ実際にアクセスし、全9ページ200・存在しないURLで404・証明書エラーなし・会社概要ページの代表者名/設立年月/事業内容の正しい表示・お問い合わせページのmailtoリンク表示・consoleエラーなしを実機確認した。続けてCEOより「所在地と電話番号を削除してほしい」との指示があり、`company.html`の該当2行(`所在地`・`電話番号`)を削除。あわせて、削除後は参照先を失い宙に浮く形になった「『CEO確認待ち』と表示されている項目は…」という注記文もCEO承認を得て削除。所在地・電話番号は`js/company-info.js`側では`null`のまま保持しており、将来値が確定した際は表の行を復元すれば再表示できる |
 
-*最終更新: 2026-07-16*
+| **v7.4** | 2026-07-28 | Claude Code(代表決定による) | **WEB-V2-8「販売モデルSSOT化・2導線設計・創業記念キャンペーン反映」を実施。** Project Bible Version 7.9→8.0。新章[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を販売導線・確定金額・課金サイクル・キャンペーン・キャンペーンコード・紹介コードの正本として新設。`website-v2`ブランチに`apply.html`(申込案内・フォームなし・準備中表記)を新設し、全9ページのCTAを主「今すぐ申し込む」／副「無料相談する」へ統一、トップページへ創業記念キャンペーン(初期設定費無料・基本料金1か月分無料・先着50社)を追加。料金名称を「初期設定費」へ統一。決済・アカウント自動発行・キャンペーンDB等は意図的に未実装。本セクション上部「公式サイトVersion2.0リニューアル進捗」を新設して詳細を記録。本番`WEBSITE/`・`master`は無変更 |
+
+*最終更新: 2026-07-28*

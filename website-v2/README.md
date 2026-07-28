@@ -74,11 +74,14 @@ cd C:/Users/user/Desktop/SmartLabo && node docs/reviews/tools/check-prices.js
 
 ### 料金を変更するときの手順
 
-**次の3か所すべてを更新する。1か所でも漏れるとスクリプトが失敗する。**
+**次の4か所すべてを更新する。1か所でも漏れるとスクリプトが失敗する。**
 
 1. `docs/reviews/tools/check-prices.js` の `CANONICAL`(正規値)
 2. `website-v2/index.html` の料金表記
 3. `website-v2/pricing.html` の料金表記
+4. `website-v2/apply.html` の料金表記(WEB-V2-8で追加)
+
+金額そのものの正本は `PROJECT_BIBLE/14_Sales_And_Billing_Policy.md`。金額を変更する際は先にそちらを更新する。
 
 ### 設計上の約束
 
@@ -110,6 +113,7 @@ website-v2/
 ├── index.html        トップページ(セクション骨格のみ)
 ├── features.html     機能
 ├── pricing.html      料金
+├── apply.html        お申し込み案内(WEB-V2-8で新設。申込フォームではない)
 ├── company.html      会社情報
 ├── contact.html      お問い合わせ
 ├── privacy.html      プライバシーポリシー

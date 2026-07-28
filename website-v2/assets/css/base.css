@@ -303,6 +303,11 @@ p { text-wrap: pretty; word-break: auto-phrase; }
   .nav-toggle { display: inline-flex; order: 3; }
   .site-header__actions { order: 2; margin-left: auto; }
 
+  /* ドロワー表示になると、ロゴ+CTA2つ+トグルが1行に収まらない。
+     主CTA(今すぐ申し込む)だけを残し、副CTA(無料相談する)はドロワー内の
+     「お問い合わせ」と各ページ本文のCTAに委ねる。 */
+  .site-header__sub { display: none; }
+
   .site-nav {
     position: absolute;
     inset: var(--header-h) 0 auto 0;
@@ -320,8 +325,14 @@ p { text-wrap: pretty; word-break: auto-phrase; }
   .site-nav a + a { border-top: 1px solid var(--border-subtle); }
 }
 
+/* ヘッダーCTAの文言切替。520px以下ではロゴのワードマークと衝突するため、
+   「今すぐ申し込む」→「申し込む」の短縮表記に切り替える(リンク先は同一)。 */
+.btn__label-short { display: none; }
+
 @media (max-width: 520px) {
   .site-header__actions .btn { padding: 9px 14px; font-size: 12px; }
+  .site-header__actions .btn__label-full { display: none; }
+  .site-header__actions .btn__label-short { display: inline; }
 }
 
 /* ------------------------------------------------------------- Footer -- */

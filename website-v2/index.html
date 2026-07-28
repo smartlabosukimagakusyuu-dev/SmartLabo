@@ -13,7 +13,7 @@
      ============================================================ -->
 
 <title>Smart Labo Works — 会社を動かすAI。</title>
-<meta name="description" content="全社員に、AIという戦力を。顧客管理・活動記録・タスク・スケジュール・AI文章作成をひとつにまとめた中小企業向けの業務支援システム。AIは提案のみを行い、保存・更新・送信は利用者が確認して操作します。初期費用10,000円、月額20,000円（税別）から。">
+<meta name="description" content="全社員に、AIという戦力を。顧客管理・活動記録・タスク・スケジュール・AI文章作成をひとつにまとめた中小企業向けの業務支援システム。AIは提案のみを行い、保存・更新・送信は利用者が確認して操作します。初期設定費10,000円、月額20,000円（税別）から。">
 <link rel="canonical" href="https://smartlaboworks.com/">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
@@ -102,7 +102,8 @@
     </nav>
 
     <div class="site-header__actions">
-      <a href="contact.html" class="btn btn--primary btn--sm">無料相談</a>
+      <a href="contact.html" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="apply.html" class="btn btn--primary btn--sm"><span class="btn__label-full">今すぐ申し込む</span><span class="btn__label-short">申し込む</span></a>
     </div>
 
     <button class="nav-toggle" type="button" data-nav-toggle
@@ -129,9 +130,12 @@
           日々の仕事の流れにAIを組み込み、企業が本来の仕事に集中できる時間をつくります。
         </p>
 
+        <!-- 主CTA=今すぐ申し込む / 副CTA=無料相談する（WEB-V2-8で全ページ統一）。
+             セルフ申し込みは未実装のため、apply.html は申込案内ページであり
+             決済画面・申込フォームではない。 -->
         <div class="hero__actions">
-          <a href="contact.html" class="btn btn--primary btn--lg">無料相談</a>
-          <a href="#screens" class="btn btn--secondary btn--lg">デモを見る</a>
+          <a href="apply.html" class="btn btn--primary btn--lg">今すぐ申し込む</a>
+          <a href="contact.html" class="btn btn--secondary btn--lg">無料相談する</a>
         </div>
 
         <ul class="hero__badges">
@@ -780,7 +784,7 @@
 
         <dl class="plan__prices">
           <div class="plan__price">
-            <dt>初期費用</dt>
+            <dt>初期設定費</dt>
             <dd data-price="initial">10,000<small>円</small></dd>
           </div>
           <div class="plan__price plan__price--main">
@@ -812,15 +816,69 @@
             表示価格は税別です。AI利用量や個別対応の内容により、別途ご案内する場合があります。
             上記以外の条件については、ご相談の際にご説明します。
           </p>
-          <a href="contact.html" class="btn btn--primary btn--lg">料金について相談する</a>
+          <span class="plan__actions">
+            <a href="apply.html" class="btn btn--primary btn--lg">今すぐ申し込む</a>
+            <a href="pricing.html" class="btn btn--secondary btn--lg">料金を見る</a>
+          </span>
         </div>
 
       </div>
     </div>
   </section>
 
+  <!-- ========================= 11-2. 創業記念キャンペーン =========================
+       正式決定した販売条件(PROJECT_BIBLE/14_Sales_And_Billing_Policy.md)の掲載。
+       ・「初月無料」ではなく「基本料金1か月分無料」と書く(日割りの初月と
+         無料になる月がずれるため、初月無料は誤認を招く)。
+       ・追加アカウント料金を無料対象に含めるかは未確定。含めると読める表現をしない。
+       ・「先着50社」は表示するが、残数の自動減算・カウントダウンは実装しない
+         (実数の裏付けがないため)。
+       ・「予告なく終了」ではなく「募集枠または期間の終了により終了」と書く。
+       ============================================================================ -->
+  <section class="section" id="campaign">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">創業記念キャンペーン</p>
+        <h2 class="section__title">創業記念の特典をご用意しました。</h2>
+        <p class="section__lead">
+          最初の導入を検討しやすいように、初期設定費と基本料金1か月分の特典を設けています。
+        </p>
+      </div>
+
+      <div class="campaign reveal">
+        <ul class="campaign__list">
+          <li class="campaign__item">
+            <span class="campaign__label">初期設定費</span>
+            <span class="campaign__value">無料</span>
+          </li>
+          <li class="campaign__item">
+            <span class="campaign__label">基本料金</span>
+            <span class="campaign__value">1か月分無料</span>
+          </li>
+          <li class="campaign__item">
+            <span class="campaign__label">対象</span>
+            <span class="campaign__value">先着50社</span>
+          </li>
+        </ul>
+
+        <div class="campaign__actions">
+          <a href="apply.html" class="btn btn--primary btn--lg">今すぐ申し込む</a>
+          <a href="contact.html" class="btn btn--secondary btn--lg">無料相談する</a>
+        </div>
+
+        <p class="campaign__note">
+          特典の内容は<strong>初期設定費無料と、基本料金1か月分無料</strong>です。追加アカウントの料金は無料の対象に含みません。
+          ご利用にはクレジットカードのご登録が必要です。適用には条件があり、募集枠または期間の終了をもって受付を終了します。
+          詳しい条件は<a href="apply.html">お申し込みのご案内</a>をご覧ください。
+        </p>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ============================= 12. 導入の流れ ============================= -->
-  <section class="section" id="steps">
+  <section class="section section--subtle" id="steps">
     <div class="container">
 
       <div class="section__head section__head--center reveal">
@@ -862,7 +920,7 @@
   </section>
 
   <!-- =============================== 13. FAQ =============================== -->
-  <section class="section section--subtle" id="faq">
+  <section class="section" id="faq">
     <div class="container">
 
       <div class="section__head section__head--center reveal">
@@ -974,7 +1032,7 @@
   </section>
 
   <!-- ============================== 14. 会社紹介 ============================== -->
-  <section class="section" id="company">
+  <section class="section section--subtle" id="company">
     <div class="container">
 
       <div class="section__head reveal">
@@ -1043,7 +1101,8 @@
         現在の仕事の流れを伺い、Smart Labo Worksで支援できることをご案内します。
       </p>
       <p class="final-cta__actions">
-        <a href="contact.html" class="btn btn--on-inverse btn--lg">無料で相談する</a>
+        <a href="apply.html" class="btn btn--on-inverse btn--lg">今すぐ申し込む</a>
+        <a href="contact.html" class="btn btn--ghost-light btn--lg">無料相談する</a>
       </p>
       <p class="final-cta__note">
         無理な営業は行いません。導入前のご相談だけでも受け付けています。
@@ -1081,6 +1140,7 @@
 
       <div class="site-footer__col">
         <h4>導入</h4>
+        <a href="apply.html">お申し込み</a>
         <a href="index.html#steps">導入の流れ</a>
         <a href="index.html#faq">よくある質問</a>
         <a href="contact.html">お問い合わせ</a>

@@ -16,7 +16,7 @@
  *   終了コード 0 = 一致 / 1 = 不一致（内容を標準出力に表示）
  *
  * 料金を変更するとき
- *   下の CANONICAL と、index.html・pricing.html の3か所すべてを更新する。
+ *   下の CANONICAL と、index.html・pricing.html・apply.html の4か所すべてを更新する。
  *   1か所でも漏れるとこのスクリプトが失敗する。
  *
  * 設計方針
@@ -35,7 +35,7 @@ const ROOT = path.resolve(__dirname, '../../../website-v2');
 
 /** 料金の正規値。ここが唯一の基準。 */
 const CANONICAL = {
-  initial:    '10,000',   // 初期費用（円・税別）
+  initial:    '10,000',   // 初期設定費（円・税抜）。WEB-V2-8で名称を「初期費用」から正式名称「初期設定費」へ統一
   monthly:    '20,000',   // 月額基本料金（円・税別）
   additional: '3,000',    // 追加アカウント（円／月・1人・税別）
 };
@@ -80,14 +80,19 @@ const errors = [];
 const notes = [];
 
 // ---------- 1. 料金の一致 ----------
+// WEB-V2-8 で apply.html(申込案内)にも料金を掲載したため、突き合わせ対象は3ページ。
 const pricingHtml = fs.readFileSync(path.join(ROOT, 'pricing.html'), 'utf8');
 const indexHtml   = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const applyHtml   = fs.readFileSync(path.join(ROOT, 'apply.html'), 'utf8');
 
 const pricingPrices = extractPrices(pricingHtml);
 const indexPrices   = extractPrices(indexHtml);
+const applyPrices   = extractPrices(applyHtml);
 
 for (const [key, want] of Object.entries(CANONICAL)) {
-  for (const [file, got] of [['pricing.html', pricingPrices[key]], ['index.html', indexPrices[key]]]) {
+  for (const [file, got] of [['pricing.html', pricingPrices[key]],
+                             ['index.html', indexPrices[key]],
+                             ['apply.html', applyPrices[key]]]) {
     if (got === undefined) {
       errors.push(`${file}: data-price="${key}" が見つかりません`);
     } else if (got !== want) {
@@ -106,19 +111,44 @@ for (const [key, want] of Object.entries(EXAMPLES)) {
   }
 }
 
-// ---------- 3. 税別表記が料金ページにあるか ----------
-if (!/税別/.test(pricingHtml)) errors.push('pricing.html: 「税別」の表記が見つかりません');
-if (!/税別/.test(indexHtml))   errors.push('index.html: 「税別」の表記が見つかりません');
+// ---------- 3. 税別・税抜表記が料金掲載ページにあるか ----------
+// 14_Sales_And_Billing_Policy.md は「税抜表示を基本とする」。既存2ページは「税別」
+// 表記で公開準備済みのため、どちらの語でも合格とする(意味は同一)。
+if (!/税別|税抜/.test(pricingHtml)) errors.push('pricing.html: 「税別」「税抜」の表記が見つかりません');
+if (!/税別|税抜/.test(indexHtml))   errors.push('index.html: 「税別」「税抜」の表記が見つかりません');
+if (!/税別|税抜/.test(applyHtml))   errors.push('apply.html: 「税別」「税抜」の表記が見つかりません');
 
 // ---------- 4. 未確定条件が書かれていないか ----------
+// WEB-V2-8で「創業記念キャンペーン」が正式採用されたため、キャンペーンの掲載は
+// index.html と apply.html に限って許可する。pricing.html は通常料金の正本として
+// キャンペーン・割引を書かないままとする(未確定条件の混入も引き続き禁止)。
 const FORBIDDEN = ['最低契約期間', '無料期間', '返金', 'キャンペーン', '割引', '人気No', '最安', 'おすすめプラン'];
 for (const word of FORBIDDEN) {
   if (pricingHtml.includes(word)) errors.push(`pricing.html: 掲載禁止の語「${word}」が含まれています`);
 }
+// apply.html にも、キャンペーン以外の未確定条件は書けない
+for (const word of ['最低契約期間', '無料期間', '返金', '割引', '人気No', '最安', 'おすすめプラン']) {
+  if (applyHtml.includes(word)) errors.push(`apply.html: 掲載禁止の語「${word}」が含まれています`);
+}
+
+// ---------- 4-2. 創業記念キャンペーンの正規表記(WEB-V2-8) ----------
+// 正本: PROJECT_BIBLE/14_Sales_And_Billing_Policy.md
+//   ・「基本料金1か月分無料」と書く(「初月無料」は日割りとずれるため禁止)
+//   ・「先着50社」— 残数の自動減算・カウントダウンは実装しない
+//   ・追加アカウント料金は無料対象に含まれない(未確定のため)
+const CAMPAIGN_PAGES = ['index.html', 'apply.html'];   // キャンペーンを掲載してよいページ
+const CAMPAIGN_REQUIRED = ['創業記念キャンペーン', '基本料金1か月分無料', '先着50社', 'クレジットカード'];
+for (const f of CAMPAIGN_PAGES) {
+  // 注釈(コメント)内の文言は画面に表示されないため、必須表記の判定から除外する
+  const html = fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+  for (const w of CAMPAIGN_REQUIRED) {
+    if (!html.includes(w)) errors.push(`${f}: キャンペーンの必須表記「${w}」が見つかりません`);
+  }
+}
 
 // ---------- 5. ヘッダー・フッターが全ページで同一か ----------
 const PAGES = ['index.html', 'features.html', 'pricing.html', 'company.html',
-               'contact.html', 'privacy.html', 'terms.html', '404.html'];
+               'contact.html', 'apply.html', 'privacy.html', 'terms.html', '404.html'];
 let refHeader = null, refFooter = null;
 for (const f of PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -153,6 +183,28 @@ for (const f of PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
   for (const w of BANNED) {
     if (html.includes(w)) errors.push(`${f}: 禁止語「${w}」が含まれています`);
+  }
+}
+
+// ---------- 7-2. 販売導線で使ってはいけない表現(WEB-V2-8) ----------
+// いずれも正式機能・正式運用として採用されていない。
+// 「初月無料」は採用済みキャンペーンの誤認表現(正しくは「基本料金1か月分無料」)。
+const SALES_BANNED = [
+  '初月無料',            // 誤認表現。日割りの初月と無料になる月がずれる
+  '無料トライアル',       // 未採用
+  '資料請求',            // 未採用
+  'デモ予約',            // 未採用
+  'すぐ契約できます',     // 未採用の断定表現
+  '即時利用可能',         // 未採用の断定表現
+  '今なら必ず無料',       // 誇大表現
+  '受付完了',            // セルフ申し込み未実装のため、完了したかのような表示は禁止
+  '申し込み可能',         // 同上
+];
+for (const f of PAGES) {
+  // 注釈内で「この表現を使うな」と説明している箇所は表示に影響しないため対象外
+  const html = fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+  for (const w of SALES_BANNED) {
+    if (html.includes(w)) errors.push(`${f}: 販売導線の禁止表現「${w}」が含まれています`);
   }
 }
 
@@ -258,8 +310,8 @@ for (const file of PUBLIC_FILES) {
 }
 
 // ---------- 結果 ----------
-notes.push(`正規値: 初期費用 ${CANONICAL.initial}円 / 月額 ${CANONICAL.monthly}円 / 追加 ${CANONICAL.additional}円（税別）`);
-notes.push(`計算例: 1人 ${EXAMPLES.ex1}円 / 3人 ${EXAMPLES.ex3}円 / 5人 ${EXAMPLES.ex5}円（月額のみ・税別）`);
+notes.push(`正規値: 初期設定費 ${CANONICAL.initial}円 / 月額 ${CANONICAL.monthly}円 / 追加 ${CANONICAL.additional}円（税抜）`);
+notes.push(`計算例: 1人 ${EXAMPLES.ex1}円 / 3人 ${EXAMPLES.ex3}円 / 5人 ${EXAMPLES.ex5}円（月額のみ・税抜）`);
 
 notes.forEach((n) => console.log('  ' + n));
 

@@ -10,7 +10,7 @@
 > - 会社の **知識ベース** です。理念からブランド、開発ルール、歴史まで、ここを読めばすべてがわかります。
 > - **ChatGPT・Claude Code・Codex・将来のAI・将来の社員・外部パートナー**、全員が最初に読む設計書です。
 >
-> **PROJECT_BIBLE Version: 7.9**
+> **PROJECT_BIBLE Version: 8.0**
 
 ---
 
@@ -40,6 +40,7 @@ AIが変わっても、社員が増えても、会社の思想が変わらない
 | 会社の歴史 | [00_Foundation/01_Company_Story.md](00_Foundation/01_Company_Story.md)、[00_Foundation/09_Product_History.md](00_Foundation/09_Product_History.md) |
 | 開発原則(何を作る前に何を確認するか) | [11_Development_Principles.md](11_Development_Principles.md) |
 | 料金・導入プランの思想 | [12_Pricing_Philosophy.md](12_Pricing_Philosophy.md) |
+| 販売導線・確定金額・課金サイクル・キャンペーン(正本) | [14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md) |
 | Smart Labo Platform 全体アーキテクチャ(銀行・パートナー・投資家・採用向け正式資料) | [13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md) |
 | v1.0 Release Checklist(本番公開前) | [61_Release_Checklist.md](61_Release_Checklist.md) |
 | CEO公開手順書(8ステップ) | [62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md) |
@@ -77,6 +78,7 @@ PROJECT_BIBLE/
 ├── 11_Development_Principles.md ← 開発原則(開発前に何を確認・判断するか)
 ├── 12_Pricing_Philosophy.md  ← 料金・導入プランの思想(利用規模×プラン×オプション)
 ├── 13_Smart_Labo_Platform_Architecture.md ← Smart Labo Platform全体アーキテクチャ(銀行・パートナー・投資家・採用向け正式資料)
+├── 14_Sales_And_Billing_Policy.md ← 販売導線・確定金額・課金サイクル・キャンペーン・キャンペーンコード・紹介コードの正本
 ├── 20_UI_UX_Rules.md         ← デザイン思想・UI/UXルール
 ├── 30_AI_Rules.md            ← AI利用ルール(Claude / Codex / ChatGPT共通)
 ├── 40_Organization.md        ← 組織図・役割分担
@@ -136,7 +138,7 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 
 ### 1. PROJECT_BIBLE 全体のバージョン
 
-- 現在: **Version 7.9**
+- 現在: **Version 8.0**
 - 大きな構成変更(フォルダ構造の変更、Mission/Visionなど根幹の改訂)があった場合、`1.0 → 1.1 → 1.2 → 2.0` のように育てていきます。
 - 全体バージョンの変更は [CHANGELOG.md](CHANGELOG.md) に必ず記録してください。
 - 目安: 誤字修正や1ファイル内の軽微な追記は据え置き。1ファイルの実質的な内容変更で `+0.1`。フォルダ構成の変更や `00_Foundation` の根幹改訂で `+1.0`。
@@ -263,4 +265,6 @@ PROJECT_BIBLEは、以下の2階層でバージョンを管理します。
 | **v7.8** | 2026-07-16 | Claude Code(CEO指示による) | **GitHub Pages/DNS切替完了、`smartlaboworks.com`で公開確認。会社概要ページから所在地・電話番号を削除。** CEOがGitHub Pages設定・Xserver DNS(apex Aレコード4件をGitHub Pages IPへ、`www`をCNAMEへ)を実施するのを対話形式で支援し、DNSチェック成功・HTTPS強制有効化・実際のサイト表示までを確認。全9ページ200・404正常・証明書エラーなし・会社概要ページ表示・お問い合わせページのmailtoリンクを実機確認。続けてCEO指示「所在地と電話番号を削除してほしい」に基づき`company.html`から該当2行と、参照先を失った「CEO確認待ち」注記文を削除(`js/company-info.js`の値自体は`null`のまま保持し、将来復元可能)。詳細は[CURRENT_STATUS.md](CURRENT_STATUS.md)(v7.2→v7.3)を参照 |
 | **v7.9** | 2026-07-16 | Claude Code(CEO指示による) | **新章[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)を新設。** 「Smart Labo Platform v1.0 全体アーキテクチャ設計」というCEO追加指示に基づき、Smart Labo Works全体のシステム構成を銀行・パートナー・投資家・採用候補者・社内向けに一枚で理解できる形で正式記録した。Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針、6レイヤー構成(利用者→ホームページ→Platform→AI Provider→共通サービス→Database)、Public AI(Smart Concierge AI)とCompany Brainの違いの比較表、Version1.0→2.0→3.0のロードマップを記録。技術的な構成図・データフロー図・AI Router構成図の詳細は`smartlabo-platform/ARCHITECTURE.md`(新設)を正とする。[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)(v3.2→v3.3)にSmart Labo Platformへの相互参照を追加。同日CEO承認によりVersion1.0正式版として採用。詳細は[CURRENT_STATUS.md](CURRENT_STATUS.md)を参照 |
 
-*最終更新: 2026-07-16*
+| **v8.0** | 2026-07-28 | Claude Code(代表決定による) | **新章[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を新設し、販売導線・確定金額・課金サイクル・キャンペーンの正本として制定。** WEB-V2-8「販売モデルSSOT化・2導線設計・創業記念キャンペーン反映」の代表決定に基づき、①無料相談／②今すぐ申し込む(セルフ申し込み)の2販売導線、クレジットカード限定、通常料金(初期設定費10,000円・基本料金20,000円／月・追加アカウント3,000円／月、すべて税抜)、課金ルール(利用開始月は日割り・前払い・初回決済で翌月分もまとめて決済・翌々月以降は毎月1日に当月分を自動決済)、創業記念キャンペーン(初期設定費無料・基本料金1か月分無料・先着50社・クレジットカード登録必須)、キャンペーンコードと紹介コード(別概念として管理・紹介コードによる割引は自動付与しない)、AI初期設定ウィザード、人間確認原則、未実装範囲、今後の実装ステップ(SALES-0〜6)を正式記録。[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)(v2.0→v2.1)には優先関係の注記のみを追加し、思想部分(4要素構造)は変更していない。4要素構造と単一プラン確定金額販売との不一致は代表判断が必要な未決事項として明記。Web側の実装(`apply.html`新設・主副CTA整理・創業記念キャンペーン掲載)は`website-v2`ブランチに限定し、本番`WEBSITE/`・`master`は無変更 |
+
+*最終更新: 2026-07-28*

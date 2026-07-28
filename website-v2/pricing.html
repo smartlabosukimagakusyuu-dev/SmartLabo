@@ -8,7 +8,7 @@
      website-v2/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
 
 <title>料金｜Smart Labo Works ライト</title>
-<meta name="description" content="Smart Labo Works ライトの料金。初期費用10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
+<meta name="description" content="Smart Labo Works ライトの料金。初期設定費10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
 <link rel="canonical" href="https://smartlaboworks.com/pricing.html">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
@@ -17,12 +17,12 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
 <meta property="og:title" content="料金｜Smart Labo Works ライト">
-<meta property="og:description" content="Smart Labo Works ライトの料金。初期費用10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
+<meta property="og:description" content="Smart Labo Works ライトの料金。初期設定費10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
 <meta property="og:url" content="https://smartlaboworks.com/pricing.html">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="料金｜Smart Labo Works ライト">
-<meta name="twitter:description" content="Smart Labo Works ライトの料金。初期費用10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
+<meta name="twitter:description" content="Smart Labo Works ライトの料金。初期設定費10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
 <meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
 
 
@@ -69,7 +69,8 @@
     </nav>
 
     <div class="site-header__actions">
-      <a href="contact.html" class="btn btn--primary btn--sm">無料相談</a>
+      <a href="contact.html" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="apply.html" class="btn btn--primary btn--sm"><span class="btn__label-full">今すぐ申し込む</span><span class="btn__label-short">申し込む</span></a>
     </div>
 
     <button class="nav-toggle" type="button" data-nav-toggle
@@ -108,7 +109,7 @@
 
   <!-- ============================== 2. 料金プラン ============================== -->
   <!-- 料金の正規値は docs/reviews/tools/check-prices.js のCANONICALに定義している。
-       金額を変更する際は、そのファイルと index.html と本ページの3か所を必ず揃えること。
+       金額を変更する際は、そのファイルと index.html・apply.html と本ページの4か所を必ず揃えること。
        data-price 属性は検証スクリプトが値を取り出すための目印であり、表示には使っていない
        (表示は実テキストなのでJS無効でも読める)。 -->
   <section class="section" id="plan">
@@ -129,7 +130,7 @@
 
         <dl class="plan__prices">
           <div class="plan__price">
-            <dt>初期費用</dt>
+            <dt>初期設定費</dt>
             <dd data-price="initial">10,000<small>円</small></dd>
           </div>
           <div class="plan__price plan__price--main">
@@ -147,7 +148,10 @@
             表示価格は税別です。AI利用量や個別対応の内容により、別途ご案内する場合があります。
             上記以外の条件は、ご相談の際にご説明します。
           </p>
-          <a href="contact.html" class="btn btn--primary btn--lg">料金について相談する</a>
+          <span class="plan__actions">
+            <a href="apply.html" class="btn btn--primary btn--lg">今すぐ申し込む</a>
+            <a href="contact.html" class="btn btn--secondary btn--lg">無料相談する</a>
+          </span>
         </div>
       </div>
     </div>
@@ -275,7 +279,7 @@
       </div>
 
       <p class="calc__caution reveal">
-        すべて税別です。上記は月額のみの例で、<strong>初期費用 10,000円は含まれていません</strong>（初月にお支払いいただく総額ではありません）。
+        すべて税別です。上記は月額のみの例で、<strong>初期設定費 10,000円は含まれていません</strong>（初月にお支払いいただく総額ではありません）。
         AI利用量や個別対応の内容により、別途ご案内する場合があります。表示している金額以外の条件は、ご相談の際にご説明します。
       </p>
     </div>
@@ -318,7 +322,7 @@
         <div class="faq__item">
           <h3 class="faq__q">
             <button class="faq__btn" type="button" aria-expanded="true" aria-controls="pf-a3" id="pf-q3">
-              <span>初期費用には何が含まれますか？</span>
+              <span>初期設定費には何が含まれますか？</span>
               <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
             </button>
           </h3>
@@ -375,7 +379,8 @@
         現在の人数や使いたい業務を伺い、必要なアカウント数や利用方法をご説明します。
       </p>
       <p class="final-cta__actions">
-        <a href="contact.html" class="btn btn--on-inverse btn--lg">料金について相談する</a>
+        <a href="apply.html" class="btn btn--on-inverse btn--lg">今すぐ申し込む</a>
+        <a href="contact.html" class="btn btn--ghost-light btn--lg">料金について相談する</a>
       </p>
       <p class="final-cta__note">
         見積りのご相談だけでも受け付けています。
@@ -410,6 +415,7 @@
 
       <div class="site-footer__col">
         <h4>導入</h4>
+        <a href="apply.html">お申し込み</a>
         <a href="index.html#steps">導入の流れ</a>
         <a href="index.html#faq">よくある質問</a>
         <a href="contact.html">お問い合わせ</a>

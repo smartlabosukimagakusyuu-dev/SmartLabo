@@ -705,6 +705,12 @@
 .step__title { font-size: var(--fs-h4); }
 .step__note  { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); }
 
+/* 申し込みの流れ(9ステップ)。.steps は5列固定のため9項目が横一列に収まらない。
+   3列×3行へ変え、横一列を前提とした接続線だけを消す。
+   860px以下は下の media query で .steps の縦積みへ戻る(この規則より後に定義しているため)。 */
+.steps--flow { grid-template-columns: repeat(3, 1fr); row-gap: var(--sp-7); }
+.steps--flow::before { display: none; }
+
 @media (max-width: 860px) {
   .steps { grid-template-columns: 1fr; gap: 0; }
   .steps::before { top: 0; bottom: 0; left: 21px; right: auto; width: 2px; height: auto; }
@@ -821,7 +827,18 @@
   line-height: var(--lh-loose);
   color: var(--text-on-inverse-secondary);
 }
-.final-cta__actions { margin-top: var(--sp-7); }
+/* WEB-V2-8で主CTA(今すぐ申し込む)と副CTA(無料相談する)の2つを並べるためflexへ変更 */
+.final-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-7);
+}
+@media (max-width: 640px) {
+  .final-cta__actions { display: grid; }
+  .final-cta__actions .btn { width: 100%; }
+}
 .final-cta__note { margin-top: var(--sp-4); font-size: var(--fs-xs); color: var(--text-on-inverse-secondary); }
 
 .btn--on-inverse { background: var(--c-white); border-color: var(--c-white); color: var(--c-navy); }
@@ -1632,4 +1649,124 @@
   .cform__actions { justify-items: stretch; }
   .cform__actions .btn { width: 100%; }
   .field--check { padding: var(--sp-4); }
+}
+
+/* ============================ WEB-V2-8: 販売導線 ============================
+   apply.html の申込案内と、トップページの創業記念キャンペーン案内で使う。
+   新しいブランドカラーは追加せず、tokens.css の既存変数のみを使用する。
+   既存の .card / .plan / .steps / .included / .related を優先して再利用し、
+   ここに定義するのは既存に相当物が無い2ブロックだけに絞っている。
+   ========================================================================== */
+
+/* --------------------------------------------- 申込機能の公開状態(apply) -- */
+/* セルフ申し込みが未公開であることを、誤解なく伝えるための枠。
+   警告色は使わず、Smart Blue の縦罫と補助背景で「お知らせ」として扱う。 */
+.apply-status {
+  padding: var(--sp-6);
+  background: var(--bg-subtle);
+  border-left: 3px solid var(--c-blue);
+  border-radius: var(--radius-sm);
+}
+.apply-status__tag {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--c-blue);
+}
+.apply-status__title { font-size: var(--fs-h3); line-height: var(--lh-tight); }
+.apply-status__body {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  color: var(--text-secondary);
+}
+.apply-status__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+/* 料金カード内に主CTA・副CTAの2つを並べる(既存の .plan__foot .btn の
+   640px以下 width:100% がそのまま効くよう、並べる箱だけを足している) */
+.plan__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-3); }
+@media (max-width: 640px) { .plan__actions { display: grid; } }
+
+/* ------------------------------------------------ 創業記念キャンペーン -- */
+/* BtoBらしい落ち着いた見せ方にする。発光・グラデーション・点滅は使わない。
+   残数の自動減算やカウントダウンは実装しない(実数の裏付けがないため)。 */
+.campaign {
+  padding: var(--sp-7);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.campaign__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5);
+  list-style: none;
+}
+.campaign__item {
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-5);
+  background: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+.campaign__label { font-size: var(--fs-xs); color: var(--text-secondary); }
+.campaign__value {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--c-blue);
+}
+
+.campaign__example {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border-subtle);
+}
+.campaign__example-title { font-size: var(--fs-h4); font-weight: 700; }
+.campaign__example-list { display: grid; gap: var(--sp-3); margin-top: var(--sp-4); }
+.campaign__example-list > div {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--sp-4);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+}
+.campaign__example-list dt { font-weight: 700; }
+.campaign__example-list dd { color: var(--text-secondary); }
+
+.campaign__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-6);
+}
+
+.campaign__note {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-loose);
+  color: var(--text-secondary);
+}
+.campaign__note strong { color: var(--text-primary); }
+
+@media (max-width: 860px) {
+  .campaign { padding: var(--sp-6); }
+  .campaign__list { grid-template-columns: 1fr; gap: var(--sp-3); }
+  .campaign__example-list > div { grid-template-columns: 1fr; gap: var(--sp-1); }
+}
+
+@media (max-width: 640px) {
+  .apply-status__actions,
+  .campaign__actions { display: grid; }
+  .apply-status__actions .btn,
+  .campaign__actions .btn { width: 100%; }
 }
