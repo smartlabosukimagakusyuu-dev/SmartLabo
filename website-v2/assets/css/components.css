@@ -1,0 +1,405 @@
+/* ==========================================================================
+   Smart Labo Works — Website v2 / Components
+   --------------------------------------------------------------------------
+   トップページ Section2〜6(ヒーロー / 悩み / 解決 / 業務フロー / 導入前後)。
+   色・余白・角丸・影・タイポは必ず tokens.css の変数を経由する。
+   新しいブランドカラー・新しいブレークポイントを追加しない。
+   ========================================================================== */
+
+/* ------------------------------------------------------- 共通パーツ -- */
+
+/* セクション上部のラベル。装飾を足しすぎず、線1本で位置づけを示す */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--c-blue);
+}
+.eyebrow::before {
+  content: "";
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+}
+.section--inverse .eyebrow { color: var(--c-blue-light); }
+
+.section__head { max-width: 62ch; margin-bottom: var(--sp-8); }
+.section__head .section__title { margin-top: var(--sp-3); }
+.section__head--center { margin-inline: auto; text-align: center; }
+.section__head--center .section__lead { margin-inline: auto; }
+.section__head--center .eyebrow::before { display: none; }
+
+/* 出現アニメーション。JSが is-in を付ける。JS無効でも必ず見える初期値にする */
+.reveal { opacity: 1; }
+.js .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.js .reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ============================================ Section2: ヒーロー ==== */
+
+.hero {
+  position: relative;
+  padding-block: var(--sp-9) var(--sp-8);
+  overflow: hidden;
+}
+
+/* 背景。単色に近い極薄のにじみだけで、グラデーションを主役にしない */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 70%;
+  background: radial-gradient(60% 60% at 70% 20%, rgba(37, 99, 235, 0.07), transparent 70%);
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+.hero__title {
+  font-size: var(--fs-display);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-top: var(--sp-4);
+}
+
+.hero__lead {
+  margin-top: var(--sp-5);
+  font-size: 17px;
+  line-height: var(--lh-loose);
+  color: var(--text-secondary);
+  max-width: 34em;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-6);
+}
+
+/* 安心感バッジ。主張しすぎない罫線ベース */
+.hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.badge-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+}
+.badge-trust svg { flex: none; color: var(--c-blue); }
+
+/* 実画面のフレーム。奥行きは影のみで作り、傾き・光沢は使わない */
+.hero__shot {
+  position: relative;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--c-white);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.hero__shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px var(--sp-4);
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.hero__shot-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #CBD5E1;
+}
+.hero__shot img { width: 100%; height: auto; }
+
+.hero__shot-note {
+  margin-top: var(--sp-3);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+@media (max-width: 1080px) {
+  .hero__inner { grid-template-columns: 1fr; gap: var(--sp-7); }
+  .hero__lead { max-width: none; }
+}
+@media (max-width: 640px) {
+  .hero { padding-block: var(--sp-7) var(--sp-6); }
+  .hero__title { letter-spacing: -0.01em; }
+  .hero__actions .btn { flex: 1 1 100%; }
+  .hero__shot-note { text-align: left; }
+}
+
+/* ========================================== Section3: 企業の悩み ==== */
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+
+.problem-card {
+  padding: var(--sp-6);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
+}
+.problem-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.problem-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; height: 40px;
+  margin-bottom: var(--sp-4);
+  color: var(--c-blue);
+  background: rgba(37, 99, 235, 0.08);
+  border-radius: var(--radius-sm);
+}
+
+.problem-card__title { font-size: var(--fs-h4); margin-bottom: var(--sp-2); }
+.problem-card__body { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); }
+
+@media (max-width: 1080px) { .problem-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .problem-grid { grid-template-columns: 1fr; } }
+
+/* ============================================== Section4: 解決 ==== */
+/* イラストではなく「情報の流れ」で見せる。左=散らばった入力、中央=Smart Labo Works、
+   右=整った出力。装飾の矢印は aria-hidden にし、読み上げは見出しと本文で成立させる。 */
+
+/* 子要素は 入力列 / 矢印 / ハブ / 矢印 / 出力列 の5つ。
+   トラックも5つ用意する(3つだと2行に折り返して流れが読めなくなる)。 */
+.flowmap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(230px, 280px) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.flowmap__col { display: grid; gap: var(--sp-3); }
+
+.flowmap__chip {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  font-size: var(--fs-sm);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+.flowmap__chip svg { flex: none; color: var(--text-secondary); }
+
+.flowmap__col--out .flowmap__chip {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: var(--shadow-sm);
+}
+.flowmap__col--out .flowmap__chip svg { color: var(--c-blue); }
+
+.flowmap__hub {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-6) var(--sp-5);
+  text-align: center;
+  color: var(--text-on-inverse);
+  background: var(--bg-inverse);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+.flowmap__hub img { height: var(--logo-icon-node); width: auto; }
+.flowmap__hub-name { font-size: var(--fs-sm); font-weight: 700; }
+.flowmap__hub-note { font-size: 12px; color: var(--text-on-inverse-secondary); line-height: 1.7; }
+
+.flowmap__arrow { display: grid; place-items: center; color: #CBD5E1; }
+
+@media (max-width: 860px) {
+  .flowmap { grid-template-columns: 1fr; }
+  /* 縦並びのときは矢印を回転させて流れを保つ */
+  .flowmap__arrow svg { transform: rotate(90deg); }
+}
+
+/* AI原則の明示。解決セクションの締めに置く */
+.principle {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  max-width: 62ch;
+  margin: var(--sp-7) auto 0;
+  padding: var(--sp-4) var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+}
+.principle svg { flex: none; margin-top: 4px; color: var(--c-blue); }
+.principle strong { color: var(--text-primary); }
+
+/* ======================================== Section5: 業務フロー ==== */
+/* PCは横並び、スマホは縦並び。横スクロールにはしない。 */
+
+.flow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--sp-2);
+}
+
+.flow__step {
+  position: relative;
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-5) var(--sp-3);
+  text-align: center;
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+/* ステップ間の矢印。装飾のため読み上げ対象から外す */
+.flow__step::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(var(--sp-2) * -1);
+  width: var(--sp-2);
+  height: 1px;
+  background: #CBD5E1;
+}
+.flow__step:last-child::after { display: none; }
+
+.flow__num {
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  border-radius: 50%;
+}
+.flow__label { font-size: var(--fs-sm); font-weight: 700; }
+.flow__note { font-size: 12px; line-height: 1.7; color: var(--text-secondary); }
+
+/* 「確認」は人が行う工程。ここだけブランドカラーで強調する */
+.flow__step--human {
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+.flow__step--human .flow__num { color: var(--c-white); background: var(--c-blue); }
+
+@media (max-width: 1080px) { .flow { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) {
+  .flow { grid-template-columns: 1fr; gap: var(--sp-4); }
+  .flow__step {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-4);
+    text-align: left;
+    padding: var(--sp-4);
+  }
+  .flow__num { grid-row: span 2; }
+  .flow__step::after {
+    top: auto;
+    bottom: calc(var(--sp-4) * -1);
+    right: auto;
+    left: calc(var(--sp-4) + 13px);
+    width: 1px;
+    height: var(--sp-4);
+  }
+}
+
+/* ====================================== Section6: 導入前と導入後 ==== */
+
+.ba {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+.ba__panel {
+  padding: var(--sp-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--c-white);
+}
+
+.ba__panel--before { background: var(--bg-subtle); }
+.ba__panel--after {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: var(--shadow-md);
+}
+
+.ba__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.ba__tag {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+}
+.ba__panel--after .ba__tag { color: var(--c-white); background: var(--c-blue); border-color: var(--c-blue); }
+.ba__title { font-size: var(--fs-h4); }
+
+.ba__list { display: grid; gap: var(--sp-4); }
+.ba__item {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  color: var(--text-secondary);
+}
+.ba__item svg { margin-top: 5px; color: #94A3B8; }
+.ba__panel--after .ba__item { color: var(--text-primary); }
+.ba__panel--after .ba__item svg { color: var(--c-blue); }
+
+@media (max-width: 860px) { .ba { grid-template-columns: 1fr; } }

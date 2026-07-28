@@ -3,11 +3,18 @@
    --------------------------------------------------------------------------
    v1(WEBSITE/js/*.js)と同じく、ビルド不要の素のブラウザJSで書く。
    バンドラ・フレームワーク・外部CDNへの依存を追加しないこと。
-   この段階では「モバイルナビの開閉」と「現在ページのナビ強調」だけを実装する。
+
+   担当するのは次の4つだけ。スクロールジャックや位置の乗っ取りは行わない。
+     1. モバイルナビの開閉
+     2. 現在ページのナビ強調
+     3. スクロール時のヘッダー境界線
+     4. 出現アニメーション(フェード+わずかな上方向スライド)
    ========================================================================== */
 
 (function () {
   'use strict';
+
+  var NAV_BREAKPOINT = '(max-width: 1080px)';
 
   /* ---------------------------------------------- モバイルナビの開閉 -- */
 
@@ -15,9 +22,10 @@
   var nav = document.getElementById('site-nav');
 
   if (toggle && nav) {
-    var mq = window.matchMedia('(max-width: 860px)');
+    var mq = window.matchMedia(NAV_BREAKPOINT);
 
-    // 860px超では常に表示、以下では既定で閉じる。
+    // ブレークポイント超では常に表示、以下では既定で閉じる。
+    // 表示可否の最終判断はCSS側にもあるため、JSが失敗してもナビは消えない。
     var syncToViewport = function () {
       if (mq.matches) {
         nav.hidden = true;
@@ -37,7 +45,15 @@
       toggle.setAttribute('aria-expanded', String(willOpen));
     });
 
-    // Escapeで閉じ、フォーカスをトグルへ戻す(キーボード操作の行き止まり防止)。
+    // ページ内リンクを押したらドロワーを閉じる(移動先が隠れないように)
+    nav.addEventListener('click', function (e) {
+      if (mq.matches && e.target.closest('a')) {
+        nav.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Escapeで閉じ、フォーカスをトグルへ戻す(キーボード操作の行き止まり防止)
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && mq.matches && !nav.hidden) {
         nav.hidden = true;
@@ -60,8 +76,66 @@
   var here = normalize(location.pathname);
 
   document.querySelectorAll('#site-nav a[href]').forEach(function (a) {
-    if (normalize(a.getAttribute('href')) === here) {
-      a.setAttribute('aria-current', 'page');
-    }
+    var href = a.getAttribute('href');
+    // ページ内アンカー(#solution 等)は現在ページ扱いにしない
+    if (href.charAt(0) === '#') return;
+    if (normalize(href) === here) a.setAttribute('aria-current', 'page');
   });
+
+  /* ------------------------------------ スクロール時のヘッダー境界線 -- */
+
+  var header = document.getElementById('siteHeader');
+
+  if (header) {
+    var ticking = false;
+    var updateHeader = function () {
+      header.classList.toggle('is-scrolled', window.scrollY > 8);
+      ticking = false;
+    };
+    updateHeader();
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(updateHeader); }
+    }, { passive: true });
+  }
+
+  /* ---------------------------------------------- 出現アニメーション -- */
+
+  var revealables = document.querySelectorAll('.reveal');
+
+  if (revealables.length) {
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var revealAll = function () {
+      revealables.forEach(function (el) {
+        el.style.transitionDelay = '';
+        el.classList.add('is-in');
+      });
+    };
+
+    // IntersectionObserver が無い環境・動きを減らす設定では、すべて即時表示にする
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      revealAll();
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+
+      revealables.forEach(function (el, i) {
+        // 同じ行のカードが揃って出るよう、ごく短い段差だけ付ける
+        el.style.transitionDelay = Math.min(i % 6, 5) * 45 + 'ms';
+        io.observe(el);
+      });
+
+      // 保険。タブが描画されていない等でIntersectionObserverが発火しない場合でも、
+      // 本文が透明なまま残らないようにする。演出は本文の可読性より優先しない。
+      setTimeout(function () {
+        io.disconnect();
+        revealAll();
+      }, 2000);
+    }
+  }
 })();

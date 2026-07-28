@@ -10,7 +10,7 @@
 <title>会社情報 — Smart Labo Works</title>
 <meta name="description" content="株式会社スマートラボの会社情報。AIで、社長が本来の仕事に集中できる世界をつくる。">
 <link rel="canonical" href="https://smartlaboworks.com/company.html">
-<link rel="icon" href="assets/brand/favicon-512.png" type="image/png">
+<link rel="icon" href="assets/brand/favicon-512.webp" type="image/webp">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
@@ -24,6 +24,9 @@
 
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script>document.documentElement.classList.add('js');</script>
 
 <!-- 計測タグ導入位置。現時点では未導入(解析コードなし・Cookieなし)。
      計測ID・認証キーはこのリポジトリへコミットしない。 -->
@@ -34,30 +37,33 @@
 
 <a class="skip-link" href="#main">本文へスキップ</a>
 
-<header class="site-header">
+<header class="site-header" id="siteHeader">
   <div class="container site-header__inner">
     <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
-      <img class="logo__img" src="assets/brand/logo-white.png" alt="Smart Labo Works">
+      <img class="logo__icon" src="assets/brand/icon-color.webp" alt="" aria-hidden="true">
+      <span class="logo__text">Smart Labo Works</span>
     </a>
 
-    <button class="nav-toggle" type="button" data-nav-toggle
-            aria-controls="site-nav" aria-expanded="false">
-      <span class="visually-hidden">メニューを開閉</span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path d="M3 6h18M3 12h18M3 18h18"/>
-      </svg>
-    </button>
-
     <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="index.html#solution">サービス</a>
       <a href="features.html">機能</a>
       <a href="pricing.html">料金</a>
       <a href="company.html">会社情報</a>
+      <a href="index.html#faq">FAQ</a>
       <a href="contact.html">お問い合わせ</a>
     </nav>
 
     <div class="site-header__actions">
-      <a href="contact.html" class="btn btn--primary btn--sm">導入を相談する</a>
+      <a href="contact.html" class="btn btn--primary btn--sm">無料相談</a>
     </div>
+
+    <button class="nav-toggle" type="button" data-nav-toggle
+            aria-controls="site-nav" aria-expanded="false">
+      <span class="visually-hidden">メニューを開閉</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
   </div>
 </header>
 
@@ -87,12 +93,14 @@
     <div class="site-footer__inner">
       <div class="site-footer__col">
         <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
-          <img class="logo__img logo__img--footer" src="assets/brand/logo-white.png" alt="Smart Labo Works">
+          <img class="logo__icon" src="assets/brand/icon-white.webp" alt="" aria-hidden="true">
+          <span class="logo__text">Smart Labo Works</span>
         </a>
         <p class="text-xs" style="margin-top: var(--sp-3);">会社を動かすAI。</p>
       </div>
       <div class="site-footer__col">
         <h4>製品</h4>
+        <a href="index.html#solution">サービス</a>
         <a href="features.html">機能</a>
         <a href="pricing.html">料金</a>
       </div>

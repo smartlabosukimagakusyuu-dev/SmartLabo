@@ -45,7 +45,13 @@
   --bg-inverse: var(--c-navy);
 
   --text-primary: var(--c-gray-900);
-  --text-secondary: var(--c-gray-500);
+
+  /* 補助テキスト。ブランドの Gray #64748B をそのまま本文に使うと、
+     Light Gray 背景(#F3F6FA)の上で 4.39:1 となり WCAG AA(4.5:1)に届かない。
+     テキスト用途にだけ同系統で1段暗い値を割り当てる(白背景で5.4:1、
+     Light Gray 背景で5.0:1)。ブランドカラーの Gray 自体は変更しておらず、
+     アイコン・罫線など非テキスト用途では引き続き --c-gray-500 を使う。 */
+  --text-secondary: #5C6B82;
   --text-on-inverse: var(--c-white);
   --text-on-inverse-secondary: #C3D2F0;  /* v1 --text-on-navy-secondary を継承 */
   --text-link: var(--c-blue);
@@ -77,7 +83,7 @@
      ------------------------------------------------------------------ */
   --content-max: 1200px;   /* v1 .container max-width と一致 */
   --content-narrow: 760px; /* 本文中心のページ(privacy/terms)用 */
-  --header-h: 72px;
+  --header-h: 64px;        /* 「高さは小さめ」の指示に合わせて低く保つ */
 
   /* ------------------------------------------------------------------
      Radius / Shadow — v1 から継承
@@ -120,10 +126,11 @@
   /* ------------------------------------------------------------------
      Logo — 高さのみ指定し、幅は必ず auto(縦横比変更禁止)
      ------------------------------------------------------------------ */
-  --logo-h-header: 40px;
+  --logo-h-header: 32px;
   --logo-h-footer: 34px;
   --logo-h-hero: 56px;
-  --logo-icon-header: 44px;   /* v1 ヘッダーのアイコン実寸と一致 */
+  --logo-icon-header: 32px;
+  --logo-icon-node: 40px;     /* 解決セクションの中央ノード用 */
 }
 
 /* ==========================================================================
@@ -150,7 +157,7 @@
   :root {
     --section-y: var(--sp-7);
     --gutter: var(--sp-4);
-    --logo-h-header: 34px;
-    --logo-icon-header: 36px;
+    --logo-h-header: 26px;
+    --logo-icon-header: 28px;
   }
 }

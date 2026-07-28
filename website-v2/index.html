@@ -5,32 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ============================================================
-     Smart Labo Works — Website v2 / トップページ(骨格のみ)
-     WEB-V2-1 の成果物。本実装(ヒーロー〜FAQ)は WEB-V2-2 以降。
-     このファイルは website-v2/ 配下にあり、GitHub Pages の
-     デプロイ対象(WEBSITE/)には含まれないため本番へ影響しない。
+     Smart Labo Works — Website v2 / トップページ
+     WEB-V2-2: Section1〜6(ヘッダー/ヒーロー/悩み/解決/業務フロー/導入前後)を実装。
+     Section7〜15 は WEB-V2-3 で実装する。
+     このファイルは website-v2/ 配下にあり、GitHub Pages のデプロイ対象
+     (WEBSITE/)には含まれないため本番へ影響しない。
      ============================================================ -->
 
 <title>Smart Labo Works — 会社を動かすAI。</title>
-<meta name="description" content="全社員に、AIという戦力を。Smart Labo Worksは、日々の業務にAIを組み込み、社長が本来の仕事に集中できる時間をつくる、中小企業向けのAI業務プラットフォームです。">
+<meta name="description" content="全社員に、AIという戦力を。顧客管理、活動記録、タスク、AI文章作成をひとつにまとめた中小企業向けの業務支援システム。AIは提案のみを行い、保存・更新・送信は必ず人が確認します。">
 <link rel="canonical" href="https://smartlaboworks.com/">
-<link rel="icon" href="assets/brand/favicon-512.png" type="image/png">
+<link rel="icon" href="assets/brand/favicon-512.webp" type="image/webp">
 <link rel="apple-touch-icon" href="assets/brand/app-icon-1024.png">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
 <meta property="og:title" content="Smart Labo Works — 会社を動かすAI。">
-<meta property="og:description" content="全社員に、AIという戦力を。社長が本来の仕事に集中できる時間をつくる、中小企業向けのAI業務プラットフォーム。">
+<meta property="og:description" content="全社員に、AIという戦力を。顧客管理、活動記録、タスク、AI文章作成をひとつにまとめた中小企業向けの業務支援システム。">
 <meta property="og:url" content="https://smartlaboworks.com/">
 <meta property="og:locale" content="ja_JP">
-<!-- TODO(WEB-V2-2): og:image を 1200x630 の専用OGP画像に差し替える。
-     v1は hero 背景画像(1200x630ではない)を流用しており、SNS上で見切れる。 -->
+<!-- TODO(WEB-V2-3): og:image を 1200x630 の専用OGP画像に差し替える。 -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Smart Labo Works — 会社を動かすAI。">
-<meta name="twitter:description" content="全社員に、AIという戦力を。社長が本来の仕事に集中できる時間をつくる、中小企業向けのAI業務プラットフォーム。">
+<meta name="twitter:description" content="全社員に、AIという戦力を。顧客管理、活動記録、タスク、AI文章作成をひとつにまとめた中小企業向けの業務支援システム。">
 
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<!-- JS有効時のみ出現アニメーションを適用する。JS無効でも内容は必ず表示される。 -->
+<script>document.documentElement.classList.add('js');</script>
 
 <script type="application/ld+json">
 {
@@ -57,10 +61,9 @@
 </script>
 
 <!-- ============================================================
-     計測タグの導入位置(v1 WEBSITE/index.html の方針を踏襲)
-     現時点では一切埋め込んでいない(解析コードなし・Cookieなし)。
-     導入時はこの直後に、Search Console所有権確認メタタグ → GA4 → Cookie同意
-     の順で追加する。GA4を入れる場合は privacy.html の
+     計測タグの導入位置。現時点では一切埋め込んでいない
+     (解析コードなし・Cookieなし)。導入時は Search Console 所有権確認
+     → GA4 → Cookie同意 の順で追加する。GA4を入れる場合は privacy.html の
      「Cookie・アクセス解析について」を先に更新すること。
      計測ID・認証キーはこのリポジトリへコミットしない。
      ============================================================ -->
@@ -73,124 +76,393 @@
 <a class="skip-link" href="#main">本文へスキップ</a>
 
 <!-- ============================== 1. ヘッダー ============================== -->
-<header class="site-header">
+<header class="site-header" id="siteHeader">
   <div class="container site-header__inner">
     <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
-      <!-- 濃色(Navy)背景のため白抜きロゴを使用。高さのみ指定・幅はauto。 -->
-      <img class="logo__img" src="assets/brand/logo-white.png" alt="Smart Labo Works">
+      <!-- 明色背景のためカラー版のアイコンマークを使用。
+           高さのみ指定・幅はauto(縦横比は変更しない)。 -->
+      <img class="logo__icon" src="assets/brand/icon-color.webp" alt="" aria-hidden="true">
+      <span class="logo__text">Smart Labo Works</span>
     </a>
 
-    <button class="nav-toggle" type="button" data-nav-toggle
-            aria-controls="site-nav" aria-expanded="false">
-      <span class="visually-hidden">メニューを開閉</span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path d="M3 6h18M3 12h18M3 18h18"/>
-      </svg>
-    </button>
-
     <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="#solution">サービス</a>
       <a href="features.html">機能</a>
       <a href="pricing.html">料金</a>
       <a href="company.html">会社情報</a>
+      <a href="#faq">FAQ</a>
       <a href="contact.html">お問い合わせ</a>
     </nav>
 
     <div class="site-header__actions">
-      <a href="contact.html" class="btn btn--primary btn--sm">導入を相談する</a>
+      <a href="contact.html" class="btn btn--primary btn--sm">無料相談</a>
     </div>
+
+    <button class="nav-toggle" type="button" data-nav-toggle
+            aria-controls="site-nav" aria-expanded="false">
+      <span class="visually-hidden">メニューを開閉</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
   </div>
 </header>
 
 <main id="main">
 
-  <!-- ==========================================================
-       WEB-V2-2以降で実装するセクション。
-       「機能の一覧」ではなく「導入すると仕事がどう変わるか」を軸に構成する。
-       各プレースホルダは見出し階層(h1は1ページ1つ)を先に確定させるために置いている。
+  <!-- ============================== 2. ヒーロー ============================== -->
+  <section class="hero" id="hero">
+    <div class="container hero__inner">
 
-         2. ヒーロー                → #hero
-         3. 企業の悩み              → #problem
-         4. Smart Labo Worksの解決  → #solution
-         5. 導入後の業務フロー      → #flow
-         6. 導入前と導入後          → #before-after
-         7. 主要機能                → #features
-         8. 実際のシステム画面      → #screens
-         9. 選ばれる理由            → #reasons
-        10. 料金                    → #pricing
-        11. 導入の流れ              → #steps
-        12. FAQ                     → #faq
-        13. 会社紹介                → #company
-        14. 最終CTA                 → #cta
+      <div class="hero__copy">
+        <p class="eyebrow">全社員に、AIという戦力を。</p>
+        <h1 class="hero__title">会社を動かすAI。</h1>
+        <p class="hero__lead">
+          顧客管理、活動記録、タスク、AI文章作成などを一つにまとめた業務支援システム。
+          日々の仕事の流れにAIを組み込み、社長が本来の仕事に集中できる時間をつくります。
+        </p>
+
+        <div class="hero__actions">
+          <a href="contact.html" class="btn btn--primary btn--lg">無料相談</a>
+          <a href="#screens" class="btn btn--secondary btn--lg">デモを見る</a>
+        </div>
+
+        <ul class="hero__badges">
+          <li class="badge-trust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L4.8 8.3l5-.7z"/></svg>
+            AIは提案のみ
+          </li>
+          <li class="badge-trust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            確認して保存
+          </li>
+          <li class="badge-trust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-5h6v5"/></svg>
+            中小企業向け
+          </li>
+        </ul>
+      </div>
+
+      <div class="hero__visual">
+        <figure class="hero__shot">
+          <div class="hero__shot-bar" aria-hidden="true">
+            <span class="hero__shot-dot"></span>
+            <span class="hero__shot-dot"></span>
+            <span class="hero__shot-dot"></span>
+          </div>
+          <img src="assets/images/app-customer.webp"
+               srcset="assets/images/app-customer.webp 1360w, assets/images/app-customer@2x.webp 2720w"
+               sizes="(max-width: 1080px) 100vw, 58vw"
+               width="1360" height="850" fetchpriority="high" decoding="async"
+               alt="Smart Labo Works の顧客・取引先画面。左に顧客の一覧、右に選んだ顧客の基本情報・担当・次回予定・最近の記録がまとまって表示されている。">
+        </figure>
+        <p class="hero__shot-note">実際の画面です（表示しているデータはすべて架空のものです）</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================== 3. 企業の悩み ============================== -->
+  <section class="section section--subtle" id="problem">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">よくある課題</p>
+        <h2 class="section__title">こんなお悩みありませんか？</h2>
+        <p class="section__lead">
+          特別な会社の話ではありません。人数が少ないほど、一人ひとりの抱えるものが増えていきます。
+        </p>
+      </div>
+
+      <div class="problem-grid">
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="6" width="7" height="7" rx="1.5"/><rect x="6" y="14" width="7" height="7" rx="1.5"/></svg>
+          </span>
+          <h3 class="problem-card__title">顧客情報が分散している</h3>
+          <p class="problem-card__body">名刺、メール、表計算ソフト、個人のメモ。どこに何があるのかを探すところから仕事が始まる。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
+          </span>
+          <h3 class="problem-card__title">議事録が後回しになる</h3>
+          <p class="problem-card__body">打ち合わせは終わったのに、記録は頭の中のまま。数日たつと、決まったことが思い出せない。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2"/><circle cx="9.5" cy="8" r="3"/><path d="M21 20v-2a3 3 0 0 0-2.3-2.9M16.5 5.2a3 3 0 0 1 0 5.6"/></svg>
+          </span>
+          <h3 class="problem-card__title">社員によって品質が違う</h3>
+          <p class="problem-card__body">同じ場面の対応でも、書く文章も進め方も人それぞれ。教えたいが、教える時間もとれない。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+          </span>
+          <h3 class="problem-card__title">タスクが漏れる</h3>
+          <p class="problem-card__body">「あとでやる」が積み重なっていく。気づいたときには、連絡が一週間遅れている。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3l1.9 4.1L17 9l-4.1 1.9L11 15l-1.9-4.1L5 9l4.1-1.9z"/><path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9z"/></svg>
+          </span>
+          <h3 class="problem-card__title">AI導入が進まない</h3>
+          <p class="problem-card__body">便利だとは聞くけれど、自社の何にどう使えばいいのかが決まらないまま止まっている。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/><path d="M3 4l18 16"/></svg>
+          </span>
+          <h3 class="problem-card__title">仕事が属人化している</h3>
+          <p class="problem-card__body">担当者が休むと、その人しか知らない事情ごと仕事が止まる。引き継ぎのたびに一から説明する。</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 4. 解決 ============================== -->
+  <section class="section" id="solution">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">解決</p>
+        <h2 class="section__title">Smart Labo Worksが、<br>日々の仕事を一つにつなぎます。</h2>
+        <p class="section__lead">
+          新しい仕事を増やすのではありません。すでにやっていることを、通り道の上でつなぎ直します。
+        </p>
+      </div>
+
+      <div class="flowmap reveal">
+
+        <div class="flowmap__col flowmap__col--in">
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v12H7l-3 3z"/></svg>
+            顧客とのやり取り
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
+            打ち合わせの会話
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l2 2 4-4"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>
+            頼まれごと
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10z"/><path d="M13 3v7h7"/></svg>
+            受け取った資料
+          </div>
+        </div>
+
+        <div class="flowmap__arrow" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+
+        <div class="flowmap__hub">
+          <img src="assets/brand/icon-white.webp" alt="" aria-hidden="true">
+          <p class="flowmap__hub-name">Smart Labo Works</p>
+          <p class="flowmap__hub-note">散らばった情報を受け取り、要点と<br>次の対応を整理して提案します。</p>
+        </div>
+
+        <div class="flowmap__arrow" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+
+        <div class="flowmap__col flowmap__col--out">
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            整理された記録
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            次にやること
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+            文章の下書き
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            探せる顧客情報
+          </div>
+        </div>
+
+      </div>
+
+      <p class="principle reveal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg>
+        <span><strong>AIは提案のみを行います。</strong>保存・更新・送信は、内容を人が確認してから操作します。AIが勝手に記録を書き換えたり、お客様へ連絡したりすることはありません。</span>
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ============================== 5. 導入後の業務フロー ============================== -->
+  <section class="section section--subtle" id="flow">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">導入後の業務フロー</p>
+        <h2 class="section__title">いつもの一日が、<br>そのまま記録になっていきます。</h2>
+        <p class="section__lead">
+          手順を覚え直す必要はありません。営業に出て、戻ってきて、確認する。その流れは変わりません。
+        </p>
+      </div>
+
+      <ol class="flow reveal">
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">1</span>
+          <span class="flow__label">営業前</span>
+          <span class="flow__note">相手の情報と、これまでのやり取りを開いて確認する。</span>
+        </li>
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">2</span>
+          <span class="flow__label">営業</span>
+          <span class="flow__note">訪問、電話、打ち合わせ。いつもどおり話す。</span>
+        </li>
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">3</span>
+          <span class="flow__label">AI整理</span>
+          <span class="flow__note">話した内容から、要点と次の対応をAIが下書きする。</span>
+        </li>
+
+        <li class="flow__step flow__step--human">
+          <span class="flow__num" aria-hidden="true">4</span>
+          <span class="flow__label">確認</span>
+          <span class="flow__note">人が読んで、直すところを直す。ここは必ず人が行う。</span>
+        </li>
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">5</span>
+          <span class="flow__label">保存</span>
+          <span class="flow__note">確認できた内容だけを、顧客の記録として残す。</span>
+        </li>
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">6</span>
+          <span class="flow__label">次の業務</span>
+          <span class="flow__note">次にやることが、タスクと予定に並んでいる。</span>
+        </li>
+
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================== 6. 導入前と導入後 ============================== -->
+  <section class="section" id="before-after">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">導入前と導入後</p>
+        <h2 class="section__title">変わるのは、仕事の置き場所です。</h2>
+        <p class="section__lead">
+          仕事の量そのものより先に、「どこに何があるか」が変わります。
+        </p>
+      </div>
+
+      <div class="ba reveal">
+
+        <section class="ba__panel ba__panel--before" aria-labelledby="ba-before-title">
+          <header class="ba__head">
+            <span class="ba__tag">従来</span>
+            <h3 class="ba__title" id="ba-before-title">それぞれの手元にある</h3>
+          </header>
+          <ul class="ba__list">
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>顧客の情報が、人と場所に散らばっている</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>記録は後回しになり、最後は記憶が頼りになる</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>対応の進め方が、担当者ごとに変わる</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>次にやることが、個人のメモに埋もれている</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>AIを使ってみたいが、使いどころが決まらない</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="ba__panel ba__panel--after" aria-labelledby="ba-after-title">
+          <header class="ba__head">
+            <span class="ba__tag">Smart Labo Works</span>
+            <h3 class="ba__title" id="ba-after-title">会社の側にそろっている</h3>
+          </header>
+          <ul class="ba__list">
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>顧客の情報と対応履歴が、一か所にそろう</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>話した内容を、その日のうちに記録として残せる</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>下書きから始められるので、出発点がそろう</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>次にやることが、タスクと予定に並んでいる</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>日々の業務の中に、AIの使いどころが決まっている</span>
+            </li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       ここから先は WEB-V2-3 で実装する。
+       見出し階層(h2)とアンカーを先に確定させるためプレースホルダを残す。
 
        掲載禁止(PROJECT_BIBLE準拠・代表指示):
-         - 架空の導入実績 / 導入企業ロゴ
+         - 架空の導入実績 / 導入企業ロゴ / 架空レビュー
          - 根拠のない削減時間・改善率の数値
-         - 社内用語(PROJECT_BIBLE内で使う内部プラットフォーム名称など)。
-           顧客向けサイトには出さない。禁止語の一覧は website-v2/README.md を参照。
+         - 未確定の契約条件
+         - 社内用語(内部プラットフォーム名称)。禁止語は README.md 参照
        ========================================================== -->
 
-  <!-- 2. ヒーロー -->
-  <section class="section section--inverse" id="hero">
-    <div class="container">
-      <h1 class="h-display">会社を動かすAI。</h1>
-      <p class="section__lead">全社員に、AIという戦力を。</p>
-      <p class="section__lead">
-        <!-- TODO(WEB-V2-2): ヒーローコピー・ビジュアル・CTAを実装 -->
-        （ヒーロー本実装は WEB-V2-2）
-      </p>
-    </div>
-  </section>
-
-  <!-- 3. 企業の悩み -->
-  <section class="section" id="problem">
-    <div class="container">
-      <h2 class="section__title">企業の悩み</h2>
-      <p class="section__lead">（WEB-V2-2で実装）</p>
-    </div>
-  </section>
-
-  <!-- 4. Smart Labo Worksによる解決 -->
-  <section class="section section--subtle" id="solution">
-    <div class="container">
-      <h2 class="section__title">Smart Labo Worksによる解決</h2>
-      <p class="section__lead">（WEB-V2-2で実装）</p>
-    </div>
-  </section>
-
-  <!-- 5. 導入後の業務フロー -->
-  <section class="section" id="flow">
-    <div class="container">
-      <h2 class="section__title">導入後の業務フロー</h2>
-      <p class="section__lead">（WEB-V2-2で実装）</p>
-    </div>
-  </section>
-
-  <!-- 6. 導入前と導入後 -->
-  <section class="section section--subtle" id="before-after">
-    <div class="container">
-      <h2 class="section__title">導入前と導入後</h2>
-      <p class="section__lead">（WEB-V2-2で実装）</p>
-    </div>
-  </section>
-
   <!-- 7. 主要機能 -->
-  <section class="section" id="features">
+  <section class="section section--subtle" id="features">
     <div class="container">
       <h2 class="section__title">主要機能</h2>
-      <p class="section__lead">（WEB-V2-2で実装）</p>
+      <p class="section__lead">（WEB-V2-3で実装）</p>
     </div>
   </section>
 
   <!-- 8. 実際のシステム画面 -->
-  <section class="section section--subtle" id="screens">
+  <section class="section" id="screens">
     <div class="container">
       <h2 class="section__title">実際のシステム画面</h2>
-      <p class="section__lead">（WEB-V2-3で実装。実在企業名と衝突しない記号表記のダミーデータのみ使用する）</p>
+      <p class="section__lead">（WEB-V2-3で実装。表示するデータはすべて架空のものを使用する）</p>
     </div>
   </section>
 
   <!-- 9. 選ばれる理由 -->
-  <section class="section" id="reasons">
+  <section class="section section--subtle" id="reasons">
     <div class="container">
       <h2 class="section__title">選ばれる理由</h2>
       <p class="section__lead">（WEB-V2-3で実装）</p>
@@ -198,7 +470,7 @@
   </section>
 
   <!-- 10. 料金 -->
-  <section class="section section--subtle" id="pricing">
+  <section class="section" id="pricing">
     <div class="container">
       <h2 class="section__title">料金</h2>
       <p class="section__lead">（WEB-V2-3で実装。確定済みの条件のみ掲載する）</p>
@@ -206,7 +478,7 @@
   </section>
 
   <!-- 11. 導入の流れ -->
-  <section class="section" id="steps">
+  <section class="section section--subtle" id="steps">
     <div class="container">
       <h2 class="section__title">導入の流れ</h2>
       <p class="section__lead">（WEB-V2-3で実装）</p>
@@ -214,15 +486,15 @@
   </section>
 
   <!-- 12. FAQ -->
-  <section class="section section--subtle" id="faq">
+  <section class="section" id="faq">
     <div class="container">
       <h2 class="section__title">よくあるご質問</h2>
-      <p class="section__lead">（WEB-V2-3で実装。実際に掲載するQ&amp;Aが確定した時点でFAQPage構造化データを追加する）</p>
+      <p class="section__lead">（WEB-V2-3で実装。掲載するQ&amp;Aが確定した時点でFAQPage構造化データを追加する）</p>
     </div>
   </section>
 
   <!-- 13. 会社紹介 -->
-  <section class="section" id="company">
+  <section class="section section--subtle" id="company">
     <div class="container">
       <h2 class="section__title">会社紹介</h2>
       <p class="section__lead">（WEB-V2-3で実装）</p>
@@ -232,7 +504,7 @@
   <!-- 14. 最終CTA -->
   <section class="section section--inverse" id="cta">
     <div class="container">
-      <h2 class="section__title">最終CTA</h2>
+      <h2 class="section__title section__title--light">最終CTA</h2>
       <p class="section__lead">（WEB-V2-3で実装）</p>
     </div>
   </section>
@@ -245,12 +517,15 @@
     <div class="site-footer__inner">
       <div class="site-footer__col">
         <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
-          <img class="logo__img logo__img--footer" src="assets/brand/logo-white.png" alt="Smart Labo Works">
+          <!-- 濃色背景のため白抜きのアイコンマークを使用 -->
+          <img class="logo__icon" src="assets/brand/icon-white.webp" alt="" aria-hidden="true">
+          <span class="logo__text">Smart Labo Works</span>
         </a>
         <p class="text-xs" style="margin-top: var(--sp-3);">会社を動かすAI。</p>
       </div>
       <div class="site-footer__col">
         <h4>製品</h4>
+        <a href="#solution">サービス</a>
         <a href="features.html">機能</a>
         <a href="pricing.html">料金</a>
       </div>
