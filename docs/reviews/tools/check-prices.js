@@ -142,10 +142,29 @@ for (const f of PAGES) {
 }
 
 // ---------- 7. 禁止語の全ページ確認 ----------
+// WEB-V2-5でブランドを「中小企業向けAI業務支援」へ変更したため、
+// 特定業種を強く連想させる語と、社内用語・取引先名をまとめて禁止する。
+const BANNED = [
+  'Company OS',   // 社内用プラットフォーム名称
+  'ミライエ',      // 取引先名
+  '不動産', '物件', '査定', '売買', '仲介',  // 特定業種を連想させる語
+];
 for (const f of PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
-  if (html.includes('Company OS')) errors.push(`${f}: 「Company OS」が含まれています`);
-  if (/ミライエ/.test(html))        errors.push(`${f}: 「ミライエ」が含まれています`);
+  for (const w of BANNED) {
+    if (html.includes(w)) errors.push(`${f}: 禁止語「${w}」が含まれています`);
+  }
+}
+
+// ---------- 8. 代表個人の紹介が復活していないか ----------
+// WEB-V2-5で会社紹介は「企業紹介」へ変更した。会社概要の代表者欄は残すが、
+// 経歴・メッセージ・署名は掲載しない。
+const PERSONAL = ['野村ソリューションズ', 'アーネストワン', '代表メッセージ', '代表の経歴'];
+for (const f of PAGES) {
+  const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
+  for (const w of PERSONAL) {
+    if (html.includes(w)) errors.push(`${f}: 個人紹介の記述「${w}」が含まれています`);
+  }
 }
 
 // ---------- 結果 ----------

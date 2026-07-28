@@ -1251,8 +1251,8 @@
 .corp__row dt { font-size: var(--fs-sm); font-weight: 700; color: var(--text-secondary); }
 .corp__row dd { margin: 0; font-size: var(--fs-body); line-height: var(--lh-loose); }
 .corp__row dd ul { display: grid; gap: var(--sp-2); }
-.corp__row dd li { display: grid; grid-template-columns: 8px 1fr; gap: var(--sp-3); font-size: var(--fs-sm); line-height: var(--lh-loose); }
-.corp__row dd li::before { content: ""; width: 5px; height: 5px; margin-top: 12px; border-radius: 50%; background: var(--c-blue); }
+.corp__row dd li { position: relative; padding-left: 20px; font-size: var(--fs-sm); line-height: var(--lh-loose); }
+.corp__row dd li::before { content: ""; position: absolute; left: 0; top: 12px; width: 5px; height: 5px; border-radius: 50%; background: var(--c-blue); }
 
 @media (max-width: 640px) {
   .corp__row { grid-template-columns: 1fr; gap: var(--sp-2); padding: var(--sp-4) 0; }
@@ -1317,3 +1317,74 @@
   border-radius: var(--radius-full);
 }
 .shot__map a:hover { background: rgba(37, 99, 235, 0.16); }
+
+/* ==========================================================================
+   WEB-V2-5: 法務ページ（プライバシーポリシー / 利用規約）
+   本文は Version1 から一字も変更せず移植している。ここで定義するのは
+   レイアウト（余白・見出し・タイポグラフィ）だけ。
+   ========================================================================== */
+
+.legal { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); }
+
+/* 各条項は section で区切られている */
+.legal > section + section { margin-top: var(--sp-7); }
+
+.legal h2 {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-tight);
+  color: var(--text-primary);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.legal p + p { margin-top: var(--sp-4); }
+
+.legal ul {
+  display: grid;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding-left: 0;
+  list-style: none;
+}
+.legal li {
+  position: relative;
+  padding-left: 20px;
+}
+.legal li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 13px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--c-blue);
+}
+
+.legal a { color: var(--text-link); text-decoration: underline; text-underline-offset: 2px; }
+
+/* 冒頭の注記（ドラフトである旨）。目立たせるが警告色は使わない */
+.legal-notice {
+  margin-bottom: var(--sp-8);
+  padding: var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  background: var(--bg-subtle);
+  border-left: 3px solid var(--c-blue);
+  border-radius: var(--radius-sm);
+}
+.legal-notice strong { display: block; margin-bottom: var(--sp-2); color: var(--text-primary); }
+
+/* 制定日・最終更新日 */
+.legal-meta {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .legal > section + section { margin-top: var(--sp-6); }
+  .legal h2 { font-size: var(--fs-h4); }
+}
