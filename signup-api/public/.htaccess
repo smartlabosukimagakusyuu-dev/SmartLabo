@@ -1,0 +1,28 @@
+# セルフ申し込みAPI — ドキュメントルート直下に置く .htaccess
+# contact-api/public/.htaccess と同じ方針。両方を同じサーバーへ置く場合は
+# 内容をマージする（RewriteEngine On は1回でよい）。
+
+RewriteEngine On
+
+# HTTPSを強制する
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 拡張子なしの正式パスを実ファイルへ割り当てる。
+#   POST /api/signup             → api/signup.php
+#   GET  /api/signup-csrf-token  → api/csrf-token.php
+# 画面側は拡張子なしのパスだけを知っていればよく、
+# 将来PHP以外へ載せ替えてもURLを変えずに済む。
+RewriteRule ^api/signup$            api/signup.php     [L,QSA]
+RewriteRule ^api/signup-csrf-token$ api/csrf-token.php [L,QSA]
+
+# lib/ 配下は他のPHPから読み込まれる前提であり、直接リクエストさせない
+RewriteRule ^(.*/)?lib/ - [F,L]
+
+# 設定ファイルは公開領域の外に置くが、誤配置時の保険として拒否する
+<FilesMatch "(signup-config|\.example)\.php$">
+    Require all denied
+</FilesMatch>
+
+# ディレクトリ一覧を出さない
+Options -Indexes

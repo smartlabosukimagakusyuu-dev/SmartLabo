@@ -40,7 +40,7 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 | Current Project | Company Setup → Homepage v1.0.0 正式公開 → **Smart Labo Platform v1.0 全体アーキテクチャ(2026-07-16 CEO承認・正式採用)** |
 | Current Task | **Smart Labo Platform全体アーキテクチャがCEO承認済み、Version1.0正式版として採用。** Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針、6レイヤー構成、Public AI(Smart Concierge AI)とCompany Brainの違い、Version1.0→2.0→3.0のロードマップを[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)(新設)と`smartlabo-platform/ARCHITECTURE.md`(新設)に記録済み。銀行提出用事業計画書Version1.4は2026-07-15のCEO指示「1のままで資料出力して」により選択肢1(代表者報酬を含まない試算のまま)で確定・提出用ファイルを出力済み([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf))。経営計画書Version1.0は旧解釈のまま未更新でv1.4との前提不整合が残存、CEO確認待ち |
 | Next Task | ①Smart Labo Platform：承認された全体アーキテクチャに基づき、`api.smartlaboworks.com`のDNS設定・本番デプロイ、ホームページ`chat.js`側の接続に着手(CEOの実施タイミング指示待ち)。②公開済みのホームページについて、Version1.1で[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の残りステップ(XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト)を実施し問い合わせフォームを本番稼働へ。Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成はCEOの明示的な指示を得てから実施。③銀行提出版v1.4は代表者報酬の扱いが確定したため、所在地・資本金・代表者略歴の記入(CEO記入待ち)のみ残課題。実際の銀行提出時はファイル名に「_submitted」を付与([DOCUMENT/FINANCE/README.md](../DOCUMENT/FINANCE/README.md)のVersion管理ルール) |
-| Last Update | 2026-07-28(SALES-0: Stripe対応 販売・契約・課金の詳細設計。15_Stripe_Sales_Billing_Design.md新設・14番v2.0。Project Bible Version 8.0→8.1) |
+| Last Update | 2026-07-29(SALES-1: セルフ申し込み・会社登録基盤。signup-api/新設・website-v2/signup.html新設。入力と検証まで実装し、決済・保存・アカウント作成は未実装) |
 | Maintainer | Masatoshi Ogawa |
 
 ---
@@ -737,7 +737,8 @@ CEO指定の①〜⑧すべてを作成した。
 |---|---|---|
 | WEB-V2-1〜7 | 監査・土台〜全8ページ実装・ブランド統一・問い合わせフォーム(XServer向けPHP) | `a102869`〜`b84bb2f` |
 | WEB-V2-8 | 販売モデルSSOT化・2導線設計・創業記念キャンペーン反映(2026-07-28) | `060727b` |
-| **SALES-0** | **販売・契約・課金仕様(Stripe対応)正式設計(2026-07-28・設計のみ・コード実装なし)** | 本コミット |
+| SALES-0 | 販売・契約・課金仕様(Stripe対応)正式設計(2026-07-28・設計のみ・コード実装なし) | `e8b3bc8` |
+| **SALES-1** | **セルフ申し込み・会社登録基盤(2026-07-29・入力と検証まで。決済/保存/アカウント作成は未実装)** | 本コミット |
 
 **WEB-V2-8の要点（代表決定 2026-07-28）:**
 - **[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を新設**し、販売導線・確定金額・課金サイクル・創業記念キャンペーン・キャンペーンコード・紹介コードの**正本**として制定（Project Bible Version 7.9→8.0）。[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)には優先関係の注記のみ追加
@@ -849,4 +850,6 @@ CEO指定の①〜⑧すべてを作成した。
 
 | **v7.5** | 2026-07-28 | Claude Code(代表決定による・SALES-0) | **SALES-0「販売・契約・課金仕様(Stripe対応)正式設計」を実施（設計・SSOT更新のみ、コード実装なし）。** Project Bible Version 8.0→8.1。新章[15_Stripe_Sales_Billing_Design.md](15_Stripe_Sales_Billing_Design.md)を新設し、Stripeオブジェクト設計・Checkout申込フロー(カード情報非保持)・キャンペーンのSubscription Schedule 3フェーズ実装案・契約7状態と遷移図・追加テーブル6種のDB設計・解約/支払い失敗仕様の第一案・Webhook受信設計・法務追加確認16項目・SALES-1前提条件・代表判断12項目を制定。[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)(v2.0)へ確定2点を反映(初回決済=日割りのみ・キャンペーン無料対象=基本料金のみ)。website-v2のWeb表示は無変更(apply.htmlの「翌々月以降」文言修正はSALES-1で実施予定) |
 
-*最終更新: 2026-07-28*
+| **v7.6** | 2026-07-29 | Claude Code(代表指示による・SALES-1) | **SALES-1「セルフ申し込み・会社登録基盤」を実装。** `signup-api/`(PHP)を新設し `POST /api/signup` を実装。会社情報・管理者情報・契約内容の**サーバー側検証**と料金の再計算までを行い、**保存・メール送信・Stripe・アカウント作成はいずれも行わない**(応答に`persisted:false`を明示)。`website-v2/signup.html`(3ステップ)・`assets/js/signup.js`を新設。決済(SALES-2)が未実装で確認画面の先が無いため、signup.htmlは**noindex・sitemap未掲載・公開ページから未リンク**とし、`check-prices.js`に公開導線へ載っていないことを検査する節を追加した。テストはユニット56件・HTTP統合33件・料金整合・法務一致・Puppeteerによる4幅の実測(横スクロール0・h1各1・新規Console Error 0)がすべて成功。実装場所(PHP仮実装 or Nodeへ移設)は15番の代表判断9-8として未決のまま。詳細は`docs/reviews/SALES_1_SELF_SIGNUP_FOUNDATION.md` |
+
+*最終更新: 2026-07-29*

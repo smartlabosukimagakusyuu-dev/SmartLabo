@@ -80,19 +80,23 @@ const errors = [];
 const notes = [];
 
 // ---------- 1. 料金の一致 ----------
-// WEB-V2-8 で apply.html(申込案内)にも料金を掲載したため、突き合わせ対象は3ページ。
+// WEB-V2-8 で apply.html(申込案内)、SALES-1 で signup.html(申込手続き)にも
+// 料金を掲載したため、突き合わせ対象は4ページ。
 const pricingHtml = fs.readFileSync(path.join(ROOT, 'pricing.html'), 'utf8');
 const indexHtml   = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const applyHtml   = fs.readFileSync(path.join(ROOT, 'apply.html'), 'utf8');
+const signupHtml  = fs.readFileSync(path.join(ROOT, 'signup.html'), 'utf8');
 
 const pricingPrices = extractPrices(pricingHtml);
 const indexPrices   = extractPrices(indexHtml);
 const applyPrices   = extractPrices(applyHtml);
+const signupPrices  = extractPrices(signupHtml);
 
 for (const [key, want] of Object.entries(CANONICAL)) {
   for (const [file, got] of [['pricing.html', pricingPrices[key]],
                              ['index.html', indexPrices[key]],
-                             ['apply.html', applyPrices[key]]]) {
+                             ['apply.html', applyPrices[key]],
+                             ['signup.html', signupPrices[key]]]) {
     if (got === undefined) {
       errors.push(`${file}: data-price="${key}" が見つかりません`);
     } else if (got !== want) {
@@ -117,6 +121,7 @@ for (const [key, want] of Object.entries(EXAMPLES)) {
 if (!/税別|税抜/.test(pricingHtml)) errors.push('pricing.html: 「税別」「税抜」の表記が見つかりません');
 if (!/税別|税抜/.test(indexHtml))   errors.push('index.html: 「税別」「税抜」の表記が見つかりません');
 if (!/税別|税抜/.test(applyHtml))   errors.push('apply.html: 「税別」「税抜」の表記が見つかりません');
+if (!/税別|税抜/.test(signupHtml))  errors.push('signup.html: 「税別」「税抜」の表記が見つかりません');
 
 // ---------- 4. 未確定条件が書かれていないか ----------
 // WEB-V2-8で「創業記念キャンペーン」が正式採用されたため、キャンペーンの掲載は
@@ -147,10 +152,18 @@ for (const f of CAMPAIGN_PAGES) {
 }
 
 // ---------- 5. ヘッダー・フッターが全ページで同一か ----------
+// PAGES        … 公開する9ページ(sitemap・SEO・パンくずの検査対象)
+// INTERNAL_PAGES … 公開導線に載せていないページ。SALES-1で追加した申込手続き画面は
+//                  決済(SALES-2)が未実装で確認画面の先が無いため、noindexにし
+//                  sitemap・リンクのいずれにも載せていない。ただしヘッダー/フッターの
+//                  同一性・禁止語・フォームの検査は同じように受ける。
 const PAGES = ['index.html', 'features.html', 'pricing.html', 'company.html',
                'contact.html', 'apply.html', 'privacy.html', 'terms.html', '404.html'];
+const INTERNAL_PAGES = ['signup.html'];
+const ALL_PAGES = PAGES.concat(INTERNAL_PAGES);
+
 let refHeader = null, refFooter = null;
-for (const f of PAGES) {
+for (const f of ALL_PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
   const header = extractBlock(html, '<header class="site-header"', '</header>');
   const footer = extractBlock(html, '<footer class="site-footer">', '</footer>');
@@ -179,7 +192,7 @@ const BANNED = [
   'ミライエ',      // 取引先名
   '不動産', '物件', '査定', '売買', '仲介',  // 特定業種を連想させる語
 ];
-for (const f of PAGES) {
+for (const f of ALL_PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
   for (const w of BANNED) {
     if (html.includes(w)) errors.push(`${f}: 禁止語「${w}」が含まれています`);
@@ -200,7 +213,7 @@ const SALES_BANNED = [
   '受付完了',            // セルフ申し込み未実装のため、完了したかのような表示は禁止
   '申し込み可能',         // 同上
 ];
-for (const f of PAGES) {
+for (const f of ALL_PAGES) {
   // 注釈内で「この表現を使うな」と説明している箇所は表示に影響しないため対象外
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/<!--[\s\S]*?-->/g, '');
   for (const w of SALES_BANNED) {
@@ -212,7 +225,7 @@ for (const f of PAGES) {
 // WEB-V2-5で会社紹介は「企業紹介」へ変更した。会社概要の代表者欄は残すが、
 // 経歴・メッセージ・署名は掲載しない。
 const PERSONAL = ['野村ソリューションズ', 'アーネストワン', '代表メッセージ', '代表の経歴'];
-for (const f of PAGES) {
+for (const f of ALL_PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
   for (const w of PERSONAL) {
     if (html.includes(w)) errors.push(`${f}: 個人紹介の記述「${w}」が含まれています`);
@@ -222,10 +235,12 @@ for (const f of PAGES) {
 // ---------- 9. フォームの扱い ----------
 // WEB-V2-7で contact.html に正式フォームを実装した。
 // 「フォーム禁止」から「contact.html だけ許可し、条件を満たすこと」へ方針を変更する。
-const FORM_PAGES = ['contact.html'];          // フォームを置いてよいページ
-const ALLOWED_ACTIONS = ['/api/contact.php']; // 送信先として認めるパス
+// SALES-1で signup.html(申込手続き)を追加した。送信先 /api/signup は入力を
+// 検証して結果を返すだけで、保存も決済も行わない(signup-api/public/signup.php)。
+const FORM_PAGES = ['contact.html', 'signup.html'];        // フォームを置いてよいページ
+const ALLOWED_ACTIONS = ['/api/contact.php', '/api/signup']; // 送信先として認めるパス
 
-for (const f of PAGES) {
+for (const f of ALL_PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
   const stripped = html.replace(/<!--[\s\S]*?-->/g, '');   // 注釈内の説明文は対象外
   const hasForm = /<form[\s>]/i.test(stripped);
@@ -277,7 +292,7 @@ const BAD_TARGETS = [
   [/action=""/i,                      '空の送信先'],
   [/\bexample\.(com|org|net)\/(api|contact|form)/i, 'ダミーの送信先(example)'],
 ];
-for (const f of PAGES) {
+for (const f of ALL_PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/<!--[\s\S]*?-->/g, '');
   for (const [re, label] of BAD_TARGETS) {
     if (re.test(html)) errors.push(`${f}: ${label} は使用できません`);
@@ -287,8 +302,9 @@ for (const f of PAGES) {
 // ---------- 11. 秘密情報・受信メールアドレスの混入 ----------
 // 公開HTML・CSS・JSに、受信先メールアドレスや鍵らしき文字列が出ていないこと。
 const PUBLIC_FILES = [
-  ...PAGES.map(f => path.join(ROOT, f)),
-  ...['assets/js/main.js', 'assets/js/contact-form.js', 'assets/css/components.css']
+  ...ALL_PAGES.map(f => path.join(ROOT, f)),
+  ...['assets/js/main.js', 'assets/js/contact-form.js', 'assets/js/signup.js',
+      'assets/css/components.css']
       .map(f => path.join(ROOT, f)),
 ];
 const SECRET_PATTERNS = [
@@ -305,6 +321,50 @@ for (const file of PUBLIC_FILES) {
   for (const [re, label] of SECRET_PATTERNS) {
     if (re.test(src)) {
       errors.push(`${path.basename(file)}: 公開ファイルに${label}が含まれています`);
+    }
+  }
+}
+
+// ---------- 12. 内部ページが公開導線に載っていないか(SALES-1) ----------
+// signup.html は決済(SALES-2)・アカウント作成(SALES-5)が未実装で、確認画面の
+// 先が存在しない。公開すると行き止まりになるため、次の3点を機械的に守る。
+//   ・noindex が付いていること
+//   ・sitemap.xml に載っていないこと
+//   ・公開ページからリンクされていないこと
+// SALES-2で決済が繋がったら、この節を「公開してよい」条件へ書き換える。
+const sitemapXml = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
+
+for (const f of INTERNAL_PAGES) {
+  const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
+
+  if (!/<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html)) {
+    errors.push(`${f}: 公開導線に載せていないページには noindex が必要です`);
+  }
+  if (sitemapXml.includes(f)) {
+    errors.push(`${f}: sitemap.xml に載せてはいけません（決済未実装のため）`);
+  }
+  for (const p of PAGES) {
+    const publicHtml = fs.readFileSync(path.join(ROOT, p), 'utf8')
+      .replace(/<!--[\s\S]*?-->/g, '');   // 注釈内の説明は対象外
+    if (publicHtml.includes(`href="${f}"`)) {
+      errors.push(`${p}: ${f} へのリンクは、決済が実装されるまで置けません`);
+    }
+  }
+}
+
+// 内部ページ側の申込フォームが「契約が成立した」と誤解される状態でないこと。
+// 実際の申込画面が公開できるようになるまで、準備中である旨の明示を必須にする。
+{
+  const html = fs.readFileSync(path.join(ROOT, 'signup.html'), 'utf8')
+    .replace(/<!--[\s\S]*?-->/g, '');
+  if (!html.includes('準備中')) {
+    errors.push('signup.html: 決済が未実装である旨の明示（「準備中」）が必要です');
+  }
+  // カード情報の入力欄は、決済実装(SALES-2)まで置かない。
+  // Stripe Checkout(ホスト型)を採用するため、自サイトにカード欄は最終的にも作らない。
+  for (const re of [/name="card/i, /autocomplete="cc-/i, /カード番号/]) {
+    if (re.test(html)) {
+      errors.push(`signup.html: カード情報の入力欄は置けません（${re}）`);
     }
   }
 }
