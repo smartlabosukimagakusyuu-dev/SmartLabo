@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     Smart Labo Works — Website v2 / トップページ(骨格のみ)
+     WEB-V2-1 の成果物。本実装(ヒーロー〜FAQ)は WEB-V2-2 以降。
+     このファイルは website-v2/ 配下にあり、GitHub Pages の
+     デプロイ対象(WEBSITE/)には含まれないため本番へ影響しない。
+     ============================================================ -->
+
+<title>Smart Labo Works — 会社を動かすAI。</title>
+<meta name="description" content="全社員に、AIという戦力を。Smart Labo Worksは、日々の業務にAIを組み込み、社長が本来の仕事に集中できる時間をつくる、中小企業向けのAI業務プラットフォームです。">
+<link rel="canonical" href="https://smartlaboworks.com/">
+<link rel="icon" href="assets/brand/favicon-512.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/brand/app-icon-1024.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Smart Labo Works">
+<meta property="og:title" content="Smart Labo Works — 会社を動かすAI。">
+<meta property="og:description" content="全社員に、AIという戦力を。社長が本来の仕事に集中できる時間をつくる、中小企業向けのAI業務プラットフォーム。">
+<meta property="og:url" content="https://smartlaboworks.com/">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO(WEB-V2-2): og:image を 1200x630 の専用OGP画像に差し替える。
+     v1は hero 背景画像(1200x630ではない)を流用しており、SNS上で見切れる。 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Smart Labo Works — 会社を動かすAI。">
+<meta name="twitter:description" content="全社員に、AIという戦力を。社長が本来の仕事に集中できる時間をつくる、中小企業向けのAI業務プラットフォーム。">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://smartlaboworks.com/#organization",
+      "name": "Smart Labo Works",
+      "legalName": "株式会社スマートラボ",
+      "url": "https://smartlaboworks.com/",
+      "logo": "https://smartlaboworks.com/assets/brand/logo-primary.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://smartlaboworks.com/#website",
+      "name": "Smart Labo Works",
+      "url": "https://smartlaboworks.com/",
+      "inLanguage": "ja",
+      "publisher": { "@id": "https://smartlaboworks.com/#organization" }
+    }
+  ]
+}
+</script>
+
+<!-- ============================================================
+     計測タグの導入位置(v1 WEBSITE/index.html の方針を踏襲)
+     現時点では一切埋め込んでいない(解析コードなし・Cookieなし)。
+     導入時はこの直後に、Search Console所有権確認メタタグ → GA4 → Cookie同意
+     の順で追加する。GA4を入れる場合は privacy.html の
+     「Cookie・アクセス解析について」を先に更新すること。
+     計測ID・認証キーはこのリポジトリへコミットしない。
+     ============================================================ -->
+</head>
+<body>
+
+<!-- 開発中バナー。本番切替の直前に必ず削除する(README.md「本番切替手順」参照)。 -->
+<p class="dev-banner">Website v2 — ローカル開発版(未公開)</p>
+
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<!-- ============================== 1. ヘッダー ============================== -->
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+      <!-- 濃色(Navy)背景のため白抜きロゴを使用。高さのみ指定・幅はauto。 -->
+      <img class="logo__img" src="assets/brand/logo-white.png" alt="Smart Labo Works">
+    </a>
+
+    <button class="nav-toggle" type="button" data-nav-toggle
+            aria-controls="site-nav" aria-expanded="false">
+      <span class="visually-hidden">メニューを開閉</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="features.html">機能</a>
+      <a href="pricing.html">料金</a>
+      <a href="company.html">会社情報</a>
+      <a href="contact.html">お問い合わせ</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <a href="contact.html" class="btn btn--primary btn--sm">導入を相談する</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ==========================================================
+       WEB-V2-2以降で実装するセクション。
+       「機能の一覧」ではなく「導入すると仕事がどう変わるか」を軸に構成する。
+       各プレースホルダは見出し階層(h1は1ページ1つ)を先に確定させるために置いている。
+
+         2. ヒーロー                → #hero
+         3. 企業の悩み              → #problem
+         4. Smart Labo Worksの解決  → #solution
+         5. 導入後の業務フロー      → #flow
+         6. 導入前と導入後          → #before-after
+         7. 主要機能                → #features
+         8. 実際のシステム画面      → #screens
+         9. 選ばれる理由            → #reasons
+        10. 料金                    → #pricing
+        11. 導入の流れ              → #steps
+        12. FAQ                     → #faq
+        13. 会社紹介                → #company
+        14. 最終CTA                 → #cta
+
+       掲載禁止(PROJECT_BIBLE準拠・代表指示):
+         - 架空の導入実績 / 導入企業ロゴ
+         - 根拠のない削減時間・改善率の数値
+         - 社内用語(PROJECT_BIBLE内で使う内部プラットフォーム名称など)。
+           顧客向けサイトには出さない。禁止語の一覧は website-v2/README.md を参照。
+       ========================================================== -->
+
+  <!-- 2. ヒーロー -->
+  <section class="section section--inverse" id="hero">
+    <div class="container">
+      <h1 class="h-display">会社を動かすAI。</h1>
+      <p class="section__lead">全社員に、AIという戦力を。</p>
+      <p class="section__lead">
+        <!-- TODO(WEB-V2-2): ヒーローコピー・ビジュアル・CTAを実装 -->
+        （ヒーロー本実装は WEB-V2-2）
+      </p>
+    </div>
+  </section>
+
+  <!-- 3. 企業の悩み -->
+  <section class="section" id="problem">
+    <div class="container">
+      <h2 class="section__title">企業の悩み</h2>
+      <p class="section__lead">（WEB-V2-2で実装）</p>
+    </div>
+  </section>
+
+  <!-- 4. Smart Labo Worksによる解決 -->
+  <section class="section section--subtle" id="solution">
+    <div class="container">
+      <h2 class="section__title">Smart Labo Worksによる解決</h2>
+      <p class="section__lead">（WEB-V2-2で実装）</p>
+    </div>
+  </section>
+
+  <!-- 5. 導入後の業務フロー -->
+  <section class="section" id="flow">
+    <div class="container">
+      <h2 class="section__title">導入後の業務フロー</h2>
+      <p class="section__lead">（WEB-V2-2で実装）</p>
+    </div>
+  </section>
+
+  <!-- 6. 導入前と導入後 -->
+  <section class="section section--subtle" id="before-after">
+    <div class="container">
+      <h2 class="section__title">導入前と導入後</h2>
+      <p class="section__lead">（WEB-V2-2で実装）</p>
+    </div>
+  </section>
+
+  <!-- 7. 主要機能 -->
+  <section class="section" id="features">
+    <div class="container">
+      <h2 class="section__title">主要機能</h2>
+      <p class="section__lead">（WEB-V2-2で実装）</p>
+    </div>
+  </section>
+
+  <!-- 8. 実際のシステム画面 -->
+  <section class="section section--subtle" id="screens">
+    <div class="container">
+      <h2 class="section__title">実際のシステム画面</h2>
+      <p class="section__lead">（WEB-V2-3で実装。実在企業名と衝突しない記号表記のダミーデータのみ使用する）</p>
+    </div>
+  </section>
+
+  <!-- 9. 選ばれる理由 -->
+  <section class="section" id="reasons">
+    <div class="container">
+      <h2 class="section__title">選ばれる理由</h2>
+      <p class="section__lead">（WEB-V2-3で実装）</p>
+    </div>
+  </section>
+
+  <!-- 10. 料金 -->
+  <section class="section section--subtle" id="pricing">
+    <div class="container">
+      <h2 class="section__title">料金</h2>
+      <p class="section__lead">（WEB-V2-3で実装。確定済みの条件のみ掲載する）</p>
+    </div>
+  </section>
+
+  <!-- 11. 導入の流れ -->
+  <section class="section" id="steps">
+    <div class="container">
+      <h2 class="section__title">導入の流れ</h2>
+      <p class="section__lead">（WEB-V2-3で実装）</p>
+    </div>
+  </section>
+
+  <!-- 12. FAQ -->
+  <section class="section section--subtle" id="faq">
+    <div class="container">
+      <h2 class="section__title">よくあるご質問</h2>
+      <p class="section__lead">（WEB-V2-3で実装。実際に掲載するQ&amp;Aが確定した時点でFAQPage構造化データを追加する）</p>
+    </div>
+  </section>
+
+  <!-- 13. 会社紹介 -->
+  <section class="section" id="company">
+    <div class="container">
+      <h2 class="section__title">会社紹介</h2>
+      <p class="section__lead">（WEB-V2-3で実装）</p>
+    </div>
+  </section>
+
+  <!-- 14. 最終CTA -->
+  <section class="section section--inverse" id="cta">
+    <div class="container">
+      <h2 class="section__title">最終CTA</h2>
+      <p class="section__lead">（WEB-V2-3で実装）</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================== 15. フッター ============================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__inner">
+      <div class="site-footer__col">
+        <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+          <img class="logo__img logo__img--footer" src="assets/brand/logo-white.png" alt="Smart Labo Works">
+        </a>
+        <p class="text-xs" style="margin-top: var(--sp-3);">会社を動かすAI。</p>
+      </div>
+      <div class="site-footer__col">
+        <h4>製品</h4>
+        <a href="features.html">機能</a>
+        <a href="pricing.html">料金</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>会社</h4>
+        <a href="company.html">会社情報</a>
+        <a href="contact.html">お問い合わせ</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>規約</h4>
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+      </div>
+    </div>
+    <p class="site-footer__bottom">&copy; 株式会社スマートラボ</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
