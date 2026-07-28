@@ -1487,3 +1487,149 @@
 .related__go { color: var(--c-blue); }
 
 @media (max-width: 860px) { .related { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   WEB-V2-7: お問い合わせフォーム
+   タップ領域は44px以上、エラーは色だけでなく文字とアイコンでも示す。
+   ========================================================================== */
+
+.cform { display: grid; gap: var(--sp-5); }
+
+.cform__required-note { font-size: var(--fs-xs); color: var(--text-secondary); }
+.cform__req { color: var(--c-blue); font-weight: 700; }
+
+/* 送信結果の通知。空のときは場所を取らない */
+.cform__status {
+  display: none;
+  padding: var(--sp-4) var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+.cform__status.is-busy,
+.cform__status.is-ok,
+.cform__status.is-error { display: block; }
+
+.cform__status.is-busy  { background: var(--bg-subtle); color: var(--text-secondary); }
+.cform__status.is-ok    { background: rgba(37, 99, 235, 0.06); border-color: rgba(37, 99, 235, 0.35); color: var(--text-primary); font-weight: 600; }
+.cform__status.is-error { background: #FDF2F2; border-color: #E3B4B4; color: #8A2A2A; font-weight: 600; }
+
+/* ------------------------------------------------------------ 各項目 -- */
+
+.field { display: grid; gap: 6px; }
+
+.field__label { font-size: var(--fs-sm); font-weight: 600; }
+.field__req { color: var(--c-blue); }
+.field__optional {
+  margin-left: 4px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  border-radius: var(--radius-full);
+}
+
+.field__input {
+  width: 100%;
+  /* タップ領域を44px以上に保つ */
+  min-height: 48px;
+  padding: 12px var(--sp-4);
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+  background: var(--c-white);
+  border: 1px solid #CBD5E1;
+  border-radius: var(--radius-sm);
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+.field__input::placeholder { color: #94A3B8; }
+.field__input:hover { border-color: #94A3B8; }
+.field__input:focus {
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.field__textarea { min-height: 180px; padding-top: var(--sp-4); resize: vertical; line-height: var(--lh-body); }
+
+/* selectの矢印。背景画像を使わずCSSだけで描く */
+.field__select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: var(--sp-8);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%),
+    linear-gradient(135deg, var(--text-secondary) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(50% + 2px),
+    calc(100% - 14px) calc(50% + 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* 入力に問題がある項目。枠線の色だけに頼らず、左に太い線も足す */
+.field__input[aria-invalid="true"] {
+  border-color: #C0392B;
+  border-left-width: 4px;
+  background: #FEFAFA;
+}
+.field__input[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.16);
+}
+
+.field__hint { font-size: var(--fs-xs); color: var(--text-secondary); }
+
+/* エラー文。空のときは表示しない */
+.field__error { display: none; font-size: var(--fs-xs); line-height: var(--lh-loose); color: #8A2A2A; }
+.field__error.is-shown { display: flex; gap: 6px; align-items: flex-start; }
+/* 記号を添えて、色が判別できない場合にも異常が分かるようにする */
+.field__error.is-shown::before { content: "!"; flex: none; font-weight: 700; }
+
+/* ------------------------------------------------- 同意チェックボックス -- */
+
+.field--check {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-5);
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+}
+.field__checkbox {
+  width: 24px; height: 24px;
+  accent-color: var(--c-blue);
+  cursor: pointer;
+}
+/* ラベルもタップ領域に含まれる（for属性で結び付けている）。
+   チェックボックス自体は24pxなので、ラベル側の高さで44pxを満たすようにする。 */
+.field__check-label {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  cursor: pointer;
+}
+.field__check-label a { color: var(--text-link); text-decoration: underline; text-underline-offset: 2px; }
+.field--check .field__error { grid-column: 1 / -1; }
+
+/* -------------------------------------------------------- 送信ボタン -- */
+
+.cform__actions { display: grid; justify-items: start; gap: var(--sp-3); margin-top: var(--sp-2); }
+.cform__actions .btn[disabled] { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+.cform__note { font-size: var(--fs-xs); line-height: var(--lh-loose); color: var(--text-secondary); }
+
+/* 自動送信対策の項目。画面からは完全に隠すが、display:none にはしない
+   （表示されていない項目を埋める挙動を検出するため） */
+.cform__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .cform__actions { justify-items: stretch; }
+  .cform__actions .btn { width: 100%; }
+  .field--check { padding: var(--sp-4); }
+}

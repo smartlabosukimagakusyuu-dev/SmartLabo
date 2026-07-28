@@ -1,0 +1,17 @@
+# 問い合わせAPI — ドキュメントルート直下に置く .htaccess
+
+# HTTPSを強制する
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# lib/ 配下は他のPHPから読み込まれる前提であり、直接リクエストさせない
+RewriteRule ^(.*/)?lib/ - [F,L]
+
+# 設定ファイルは公開領域の外に置くが、誤配置時の保険として拒否する
+<FilesMatch "(contact-config|\.example)\.php$">
+    Require all denied
+</FilesMatch>
+
+# ディレクトリ一覧を出さない
+Options -Indexes

@@ -200,20 +200,161 @@
     </div>
   </section>
 
-  <!-- ========================= 4. お問い合わせ方法 ========================= -->
-  <!-- フォームは実装しない。ダミーの入力欄・送信ボタンも置かない。
-       送信手段が確定するまでは、準備中であることだけを明示する。 -->
-  <section class="section" id="how">
+  <!-- ========================= 4. お問い合わせフォーム ========================= -->
+  <!-- 送信先は data-endpoint で指定する。同一オリジン構成なら相対パスのまま。
+       別ドメインのAPIへ送る場合は絶対URLへ変更し、API側の allowed_origins に
+       このサイトのオリジンを登録する（contact-api/README.md 参照）。
+       JavaScriptが無効でも form の action へ通常POSTされ、PHPがHTMLで結果を返す。 -->
+  <section class="section" id="form">
     <div class="container container--narrow">
-      <div class="prep reveal">
-        <span class="prep__icon" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
-        </span>
-        <h2 class="prep__title">現在、お問い合わせ方法を準備しています。</h2>
-        <p class="prep__body">
-          ご不便をおかけしております。準備が整い次第、このページでご案内します。
+      <div class="section__head reveal">
+        <p class="eyebrow">お問い合わせフォーム</p>
+        <h2 class="section__title">お問い合わせ</h2>
+        <p class="section__lead">
+          内容を確認のうえ、担当者よりご連絡いたします。
+          送信前に、入力内容をお確かめください。
         </p>
       </div>
+
+      <form class="cform reveal"
+            id="contactForm"
+            method="post"
+            action="/api/contact.php"
+            data-endpoint="/api/contact.php"
+            data-token-endpoint="/api/csrf-token.php"
+            novalidate>
+
+        <p class="cform__required-note">
+          <span class="cform__req" aria-hidden="true">*</span> は必須項目です。
+        </p>
+
+        <!-- 送信結果の通知。読み上げにも伝わるようにする -->
+        <p class="cform__status" id="formStatus" role="status" aria-live="polite"></p>
+
+        <!-- 会社名 -->
+        <div class="field">
+          <label class="field__label" for="f-company">
+            会社名 <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <input class="field__input" type="text" id="f-company" name="company"
+                 required maxlength="100" autocomplete="organization"
+                 aria-describedby="f-company-error">
+          <p class="field__error" id="f-company-error" data-error-for="company"></p>
+        </div>
+
+        <!-- お名前 -->
+        <div class="field">
+          <label class="field__label" for="f-name">
+            お名前 <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <input class="field__input" type="text" id="f-name" name="name"
+                 required maxlength="100" autocomplete="name"
+                 aria-describedby="f-name-error">
+          <p class="field__error" id="f-name-error" data-error-for="name"></p>
+        </div>
+
+        <!-- メールアドレス -->
+        <div class="field">
+          <label class="field__label" for="f-email">
+            メールアドレス <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <input class="field__input" type="email" id="f-email" name="email"
+                 required maxlength="254" autocomplete="email" inputmode="email"
+                 aria-describedby="f-email-hint f-email-error">
+          <p class="field__hint" id="f-email-hint">ご連絡先として使用します。</p>
+          <p class="field__error" id="f-email-error" data-error-for="email"></p>
+        </div>
+
+        <!-- 電話番号（任意） -->
+        <div class="field">
+          <label class="field__label" for="f-tel">
+            電話番号 <span class="field__optional">任意</span>
+          </label>
+          <input class="field__input" type="tel" id="f-tel" name="tel"
+                 maxlength="30" autocomplete="tel" inputmode="tel"
+                 aria-describedby="f-tel-error">
+          <p class="field__error" id="f-tel-error" data-error-for="tel"></p>
+        </div>
+
+        <!-- お問い合わせ種別 -->
+        <div class="field">
+          <label class="field__label" for="f-type">
+            お問い合わせ種別 <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <select class="field__input field__select" id="f-type" name="type" required
+                  aria-describedby="f-type-error">
+            <option value="">選択してください</option>
+            <option value="intro">導入について</option>
+            <option value="price">料金について</option>
+            <option value="feature">機能について</option>
+            <option value="fit">自社で利用できるか相談</option>
+            <option value="other">その他</option>
+          </select>
+          <p class="field__error" id="f-type-error" data-error-for="type"></p>
+        </div>
+
+        <!-- 利用予定人数（任意） -->
+        <div class="field">
+          <label class="field__label" for="f-headcount">
+            利用予定人数 <span class="field__optional">任意</span>
+          </label>
+          <select class="field__input field__select" id="f-headcount" name="headcount"
+                  aria-describedby="f-headcount-error">
+            <option value="">選択してください</option>
+            <option value="1">1人</option>
+            <option value="2-5">2〜5人</option>
+            <option value="6-10">6〜10人</option>
+            <option value="11-30">11〜30人</option>
+            <option value="31plus">31人以上</option>
+            <option value="undecided">未定</option>
+          </select>
+          <p class="field__error" id="f-headcount-error" data-error-for="headcount"></p>
+        </div>
+
+        <!-- お問い合わせ内容 -->
+        <div class="field">
+          <label class="field__label" for="f-message">
+            お問い合わせ内容 <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <textarea class="field__input field__textarea" id="f-message" name="message"
+                    required maxlength="3000" rows="8"
+                    aria-describedby="f-message-hint f-message-error"></textarea>
+          <p class="field__hint" id="f-message-hint">3,000文字以内でご記入ください。</p>
+          <p class="field__error" id="f-message-error" data-error-for="message"></p>
+        </div>
+
+        <!-- プライバシーポリシーへの同意 -->
+        <div class="field field--check">
+          <input class="field__checkbox" type="checkbox" id="f-privacy" name="privacy" value="1"
+                 required aria-describedby="f-privacy-error">
+          <label class="field__check-label" for="f-privacy">
+            <a href="privacy.html">プライバシーポリシー</a>に同意します
+            <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <p class="field__error" id="f-privacy-error" data-error-for="privacy"></p>
+        </div>
+
+        <!-- 自動送信対策。画面には表示されない項目 -->
+        <div class="cform__trap" aria-hidden="true">
+          <label for="f-website">Website</label>
+          <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <input type="hidden" name="form_ts" id="f-form-ts" value="">
+        <input type="hidden" name="csrf_token" id="f-csrf" value="">
+
+        <div class="cform__actions">
+          <button class="btn btn--primary btn--lg" type="submit" id="formSubmit">送信する</button>
+          <p class="cform__note">
+            送信いただいた内容は、ご連絡と当社サービスのご案内のために使用します。
+          </p>
+        </div>
+      </form>
     </div>
   </section>
 
@@ -382,5 +523,6 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script src="assets/js/contact-form.js"></script>
 </body>
 </html>

@@ -167,19 +167,93 @@ for (const f of PAGES) {
   }
 }
 
-// ---------- 9. フォーム・外部送信が入り込んでいないか ----------
-// 問い合わせ方式が確定するまで、フォーム要素・送信先・外部フォームサービスは
-// 一切置かない方針（WEB-V2-6）。見た目だけのダミーフォームも禁止。
-const FORM_MARKERS = [
-  /<form[\s>]/i, /<input[\s>/]/i, /<textarea[\s>]/i, /<select[\s>]/i,
-  /type=["']submit["']/i, /formspree/i, /docs\.google\.com\/forms/i,
-  /mailto:/i, /action=["'][^"']/i,
+// ---------- 9. フォームの扱い ----------
+// WEB-V2-7で contact.html に正式フォームを実装した。
+// 「フォーム禁止」から「contact.html だけ許可し、条件を満たすこと」へ方針を変更する。
+const FORM_PAGES = ['contact.html'];          // フォームを置いてよいページ
+const ALLOWED_ACTIONS = ['/api/contact.php']; // 送信先として認めるパス
+
+for (const f of PAGES) {
+  const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
+  const stripped = html.replace(/<!--[\s\S]*?-->/g, '');   // 注釈内の説明文は対象外
+  const hasForm = /<form[\s>]/i.test(stripped);
+
+  if (!FORM_PAGES.includes(f)) {
+    // 許可ページ以外にフォーム要素が入っていないこと
+    for (const re of [/<form[\s>]/i, /<input[\s>/]/i, /<textarea[\s>]/i, /<select[\s>]/i]) {
+      if (re.test(stripped)) errors.push(`${f}: このページにフォーム要素は置けません（${re}）`);
+    }
+    continue;
+  }
+
+  if (!hasForm) {
+    errors.push(`${f}: 正式フォームが見当たりません`);
+    continue;
+  }
+
+  // --- 送信方式 ---
+  const methods = [...stripped.matchAll(/<form[^>]*\bmethod="([^"]*)"/gi)].map(m => m[1].toLowerCase());
+  if (methods.some(m => m !== 'post')) {
+    errors.push(`${f}: フォームの method は post のみ許可（GET送信は禁止）`);
+  }
+  if (methods.length === 0) {
+    errors.push(`${f}: フォームに method="post" がありません`);
+  }
+
+  // --- 送信先 ---
+  const actions = [...stripped.matchAll(/<form[^>]*\baction="([^"]*)"/gi)].map(m => m[1]);
+  for (const a of actions) {
+    if (!ALLOWED_ACTIONS.includes(a)) {
+      errors.push(`${f}: 許可されていない送信先です（${a}）`);
+    }
+  }
+  // data-endpoint も同じ範囲に収める
+  for (const m of stripped.matchAll(/data-endpoint="([^"]*)"/gi)) {
+    if (!ALLOWED_ACTIONS.includes(m[1])) {
+      errors.push(`${f}: 許可されていない data-endpoint です（${m[1]}）`);
+    }
+  }
+}
+
+// ---------- 10. 外部フォームサービス・mailto・ダミー送信先 ----------
+const BAD_TARGETS = [
+  [/\bformspree\b/i,                 '外部フォームサービス(Formspree)'],
+  [/docs\.google\.com\/forms/i,      'Googleフォーム'],
+  [/\bmailto:/i,                      'mailto:'],
+  [/action="https?:\/\/(?!smartlaboworks\.com)/i, '外部ドメインへの送信先'],
+  [/action="#"/i,                     'ダミーの送信先(#)'],
+  [/action=""/i,                      '空の送信先'],
+  [/\bexample\.(com|org|net)\/(api|contact|form)/i, 'ダミーの送信先(example)'],
 ];
 for (const f of PAGES) {
-  const html = fs.readFileSync(path.join(ROOT, f), 'utf8')
-    .replace(/<!--[\s\S]*?-->/g, '');   // 注釈内の説明文は対象外
-  for (const re of FORM_MARKERS) {
-    if (re.test(html)) errors.push(`${f}: フォーム/送信先らしき記述があります（${re}）`);
+  const html = fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+  for (const [re, label] of BAD_TARGETS) {
+    if (re.test(html)) errors.push(`${f}: ${label} は使用できません`);
+  }
+}
+
+// ---------- 11. 秘密情報・受信メールアドレスの混入 ----------
+// 公開HTML・CSS・JSに、受信先メールアドレスや鍵らしき文字列が出ていないこと。
+const PUBLIC_FILES = [
+  ...PAGES.map(f => path.join(ROOT, f)),
+  ...['assets/js/main.js', 'assets/js/contact-form.js', 'assets/css/components.css']
+      .map(f => path.join(ROOT, f)),
+];
+const SECRET_PATTERNS = [
+  [/[A-Za-z0-9._%+-]+@(gmail|googlemail)\.com/i, '受信用メールアドレス（Gmail）'],
+  [/[A-Za-z0-9._%+-]+@smartlaboworks\.com/i,     '自社メールアドレス'],
+  [/\bsmtp_pass\b|\bsmtp_user\b/i,             'SMTP設定'],
+  [/csrf_secret|ip_hash_secret/i,                'サーバー側の署名鍵の名称'],
+  [/\b[A-Fa-f0-9]{40,}\b/,                      '鍵らしい長い16進文字列'],
+  [/AIza[0-9A-Za-z_-]{10,}|sk-[A-Za-z0-9]{16,}/, 'APIキーらしい文字列'],
+];
+for (const file of PUBLIC_FILES) {
+  if (!fs.existsSync(file)) continue;
+  const src = fs.readFileSync(file, 'utf8');
+  for (const [re, label] of SECRET_PATTERNS) {
+    if (re.test(src)) {
+      errors.push(`${path.basename(file)}: 公開ファイルに${label}が含まれています`);
+    }
   }
 }
 
