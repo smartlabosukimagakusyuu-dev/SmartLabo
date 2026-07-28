@@ -9,7 +9,7 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：8.0
+Project Bible Version：8.1
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：v1.0.0（2026-07-16 CEO最終公開指示により正式公開版として確定。代表者名・設立年月・事業内容をCEOより取得し会社概要ページへ反映。所在地・電話番号は同日のCEO指示により会社概要ページの表から一時的に削除(「CEO確認待ち」表示ではなく非掲載)。問い合わせフォームは本番送信テスト未完了のため一時的に撤去し、info@smartlaboworks.comへのmailtoリンクへ差し替え。AIチャット実API接続・問い合わせフォーム本番稼働・Google Analytics・Search ConsoleはVersion1.1で対応する方針をCEOが確定）。**正式ドメイン`smartlaboworks.com`でGitHub Pagesへの切替・DNS移行(Aレコード4件・wwwのCNAME)・HTTPS強制がCEOご自身の作業により完了し、2026-07-16に公開確認済み**（`https://smartlaboworks.com/`で全9ページ200・404ページ正常・証明書エラーなし・会社概要ページの反映を実機確認）
@@ -30,7 +30,7 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 8.0 |
+| Project Bible Version | 8.1 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **v1.0.0**（2026-07-16、CEO最終公開指示により正式公開版として確定。会社概要ページに代表者名・設立年月・事業内容を反映、所在地・電話番号はCEO指示により非掲載、問い合わせフォームはmailtoリンクへ一時差し替え）。**`https://smartlaboworks.com/`で正式公開中**（CEOご自身によるGitHub Pagesカスタムドメイン設定・DNS移行(Aレコード4件・wwwのCNAME)・HTTPS強制が完了し、2026-07-16に全9ページ200・404正常・証明書エラーなしを実機確認済み） |
@@ -40,7 +40,7 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 | Current Project | Company Setup → Homepage v1.0.0 正式公開 → **Smart Labo Platform v1.0 全体アーキテクチャ(2026-07-16 CEO承認・正式採用)** |
 | Current Task | **Smart Labo Platform全体アーキテクチャがCEO承認済み、Version1.0正式版として採用。** Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針、6レイヤー構成、Public AI(Smart Concierge AI)とCompany Brainの違い、Version1.0→2.0→3.0のロードマップを[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)(新設)と`smartlabo-platform/ARCHITECTURE.md`(新設)に記録済み。銀行提出用事業計画書Version1.4は2026-07-15のCEO指示「1のままで資料出力して」により選択肢1(代表者報酬を含まない試算のまま)で確定・提出用ファイルを出力済み([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf))。経営計画書Version1.0は旧解釈のまま未更新でv1.4との前提不整合が残存、CEO確認待ち |
 | Next Task | ①Smart Labo Platform：承認された全体アーキテクチャに基づき、`api.smartlaboworks.com`のDNS設定・本番デプロイ、ホームページ`chat.js`側の接続に着手(CEOの実施タイミング指示待ち)。②公開済みのホームページについて、Version1.1で[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の残りステップ(XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト)を実施し問い合わせフォームを本番稼働へ。Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成はCEOの明示的な指示を得てから実施。③銀行提出版v1.4は代表者報酬の扱いが確定したため、所在地・資本金・代表者略歴の記入(CEO記入待ち)のみ残課題。実際の銀行提出時はファイル名に「_submitted」を付与([DOCUMENT/FINANCE/README.md](../DOCUMENT/FINANCE/README.md)のVersion管理ルール) |
-| Last Update | 2026-07-28(WEB-V2-8: 販売モデルSSOT化・14_Sales_And_Billing_Policy.md新設・website-v2ブランチの2導線/創業記念キャンペーン反映。Project Bible Version 7.9→8.0) |
+| Last Update | 2026-07-28(SALES-0: Stripe対応 販売・契約・課金の詳細設計。15_Stripe_Sales_Billing_Design.md新設・14番v2.0。Project Bible Version 8.0→8.1) |
 | Maintainer | Masatoshi Ogawa |
 
 ---
@@ -736,7 +736,8 @@ CEO指定の①〜⑧すべてを作成した。
 | 工程 | 内容 | コミット |
 |---|---|---|
 | WEB-V2-1〜7 | 監査・土台〜全8ページ実装・ブランド統一・問い合わせフォーム(XServer向けPHP) | `a102869`〜`b84bb2f` |
-| **WEB-V2-8** | **販売モデルSSOT化・2導線設計・創業記念キャンペーン反映(2026-07-28)** | 本コミット |
+| WEB-V2-8 | 販売モデルSSOT化・2導線設計・創業記念キャンペーン反映(2026-07-28) | `060727b` |
+| **SALES-0** | **販売・契約・課金仕様(Stripe対応)正式設計(2026-07-28・設計のみ・コード実装なし)** | 本コミット |
 
 **WEB-V2-8の要点（代表決定 2026-07-28）:**
 - **[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を新設**し、販売導線・確定金額・課金サイクル・創業記念キャンペーン・キャンペーンコード・紹介コードの**正本**として制定（Project Bible Version 7.9→8.0）。[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)には優先関係の注記のみ追加
@@ -747,7 +748,14 @@ CEO指定の①〜⑧すべてを作成した。
 - Web実装: `website-v2/apply.html`(申込案内ページ・フォームなし・「オンライン申し込みは現在準備中」)を新設し、全9ページのCTAを主「今すぐ申し込む」／副「無料相談する」へ統一。トップページへキャンペーンセクションを追加
 - **未実装(意図的):** 決済・カード入力・契約処理・アカウント自動発行・AI初期設定ウィザード本体・キャンペーン/紹介コードDB・残数のリアルタイム表示・自動返信メール
 - 検証: `check-prices.js`(apply.html・キャンペーン表記・禁止表現の検査を追加)・`check-legal.js`ともに[OK]。Puppeteerで全9ページのリンク・h1・console error 0・375/768/1024/1440横スクロールなしを実測
-- **次工程(いずれも代表承認後):** SALES-0(販売・契約・課金の詳細仕様確定)→SALES-1〜6。並行して問い合わせフォームの構成決定(案A/案B)・法務2ページの確定が引き続き必要(詳細は`docs/reviews/WEB_V2_8_SALES_MODEL_AND_CONVERSION.md`の「法務確認事項」)
+- **次工程(いずれも代表承認後):** SALES-1〜6。並行して問い合わせフォームの構成決定(案A/案B)・法務2ページの確定が引き続き必要(詳細は`docs/reviews/WEB_V2_8_SALES_MODEL_AND_CONVERSION.md`の「法務確認事項」)
+
+**SALES-0の要点（代表決定 2026-07-28・設計のみ）:**
+- **[15_Stripe_Sales_Billing_Design.md](15_Stripe_Sales_Billing_Design.md)を新設**（Project Bible Version 8.0→8.1）。Stripe実装の詳細設計の正本
+- 確定2点を[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)(v2.0)へ反映: ①初回決済=**利用開始月の日割り分のみ**(「翌月分まとめて決済」廃止) ②キャンペーン無料対象=**基本料金のみ・追加ユーザー対象外**(確定)
+- 設計の柱: Stripe Checkout(カード情報非保持)／1社=1Subscription・`billing_cycle_anchor`翌月1日JST／キャンペーンはCoupon(applies_to基本料金)+Promotion Code(max_redemptions 50)+Subscription Schedule 3フェーズ推奨／契約7状態・遷移図／追加テーブル6種／解約=当月末・返金なし(第一案)／失敗=Smart Retries→猶予14日→停止→30日自動解約(第一案)／Webhookコア6+提案4(署名検証・冪等・順序非保証)
+- **代表判断待ち12項目**(15番9章): 日割り計算方式・税計算方式・月途中の人数変更・名称統一(追加ユーザー/追加アカウント)・apply.html文言修正・先着判定基準・インボイス登録・実装リポジトリ・解約/返金・猶予日数・キャンペーン実装方式・請求書提供方法
+- **SALES-1着手の前提**(15番8章): 本設計の承認＋9章決定＋特商法/キャンペーン規約の整備方針＋Stripeアカウント開設(代表作業)＋実装先リポジトリ確定
 
 ---
 
@@ -838,5 +846,7 @@ CEO指定の①〜⑧すべてを作成した。
 | **v7.3** | 2026-07-16 | Claude Code(CEO指示による) | **GitHub Pages/DNS切替完了・所在地/電話番号を会社概要ページから削除。** Project Bible Version 7.7→7.8に更新。CEOがGitHub Pages設定(Custom domain保存)・Xserver DNS管理画面(apex Aレコード4件をGitHub Pages IP `185.199.108/109/110/111.153`へ、`www`をAレコードからCNAME `smartlabosukimagakusyuu-dev.github.io`へ)を実施する過程を対話形式で支援し、DNSチェック成功・HTTPS強制有効化までを確認。完了後`https://smartlaboworks.com/`へ実際にアクセスし、全9ページ200・存在しないURLで404・証明書エラーなし・会社概要ページの代表者名/設立年月/事業内容の正しい表示・お問い合わせページのmailtoリンク表示・consoleエラーなしを実機確認した。続けてCEOより「所在地と電話番号を削除してほしい」との指示があり、`company.html`の該当2行(`所在地`・`電話番号`)を削除。あわせて、削除後は参照先を失い宙に浮く形になった「『CEO確認待ち』と表示されている項目は…」という注記文もCEO承認を得て削除。所在地・電話番号は`js/company-info.js`側では`null`のまま保持しており、将来値が確定した際は表の行を復元すれば再表示できる |
 
 | **v7.4** | 2026-07-28 | Claude Code(代表決定による) | **WEB-V2-8「販売モデルSSOT化・2導線設計・創業記念キャンペーン反映」を実施。** Project Bible Version 7.9→8.0。新章[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を販売導線・確定金額・課金サイクル・キャンペーン・キャンペーンコード・紹介コードの正本として新設。`website-v2`ブランチに`apply.html`(申込案内・フォームなし・準備中表記)を新設し、全9ページのCTAを主「今すぐ申し込む」／副「無料相談する」へ統一、トップページへ創業記念キャンペーン(初期設定費無料・基本料金1か月分無料・先着50社)を追加。料金名称を「初期設定費」へ統一。決済・アカウント自動発行・キャンペーンDB等は意図的に未実装。本セクション上部「公式サイトVersion2.0リニューアル進捗」を新設して詳細を記録。本番`WEBSITE/`・`master`は無変更 |
+
+| **v7.5** | 2026-07-28 | Claude Code(代表決定による・SALES-0) | **SALES-0「販売・契約・課金仕様(Stripe対応)正式設計」を実施（設計・SSOT更新のみ、コード実装なし）。** Project Bible Version 8.0→8.1。新章[15_Stripe_Sales_Billing_Design.md](15_Stripe_Sales_Billing_Design.md)を新設し、Stripeオブジェクト設計・Checkout申込フロー(カード情報非保持)・キャンペーンのSubscription Schedule 3フェーズ実装案・契約7状態と遷移図・追加テーブル6種のDB設計・解約/支払い失敗仕様の第一案・Webhook受信設計・法務追加確認16項目・SALES-1前提条件・代表判断12項目を制定。[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)(v2.0)へ確定2点を反映(初回決済=日割りのみ・キャンペーン無料対象=基本料金のみ)。website-v2のWeb表示は無変更(apply.htmlの「翌々月以降」文言修正はSALES-1で実施予定) |
 
 *最終更新: 2026-07-28*

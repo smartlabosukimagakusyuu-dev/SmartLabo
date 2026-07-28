@@ -9,6 +9,29 @@
 
 ---
 
+## 2026-07-28 — v8.1: SALES-0 Stripe対応 販売・契約・課金の詳細設計（15_Stripe_Sales_Billing_Design.md 新設）
+
+SALES-0「販売・契約・課金仕様（Stripe対応）正式設計」の代表決定を反映。**設計・SSOT更新のみで、コード実装・マイグレーション・Stripe操作は行っていない。**
+
+- **新設** [15_Stripe_Sales_Billing_Design.md](15_Stripe_Sales_Billing_Design.md)（v1.0）— Stripe実装の詳細設計の正本
+  - Stripeオブジェクト設計: Product 3種／Price 3種（税抜・改定は`_v2`新規作成）／1社=1Customer=1Subscription／`billing_cycle_anchor`=翌月1日JSTで「日割り→毎月1日前払い」を実現
+  - 申込は**Stripe Checkout（ホスト型）でカード情報非保持**（PCI DSS SAQ-A相当）
+  - キャンペーン: Coupon 100% off `applies_to: 基本料金Product` ＋ Promotion Code `max_redemptions: 50`（先着50社をStripe側で強制）。「翌月の基本料金だけ無料」はSubscription Schedule 3フェーズ案を推奨
+  - 契約7状態と状態遷移図（mermaid）／追加テーブル6種のDB設計（カード情報は自社DBに一切保存しない）
+  - 解約=当月末・日割り返金なし（第一案）／決済失敗=Smart Retries→猶予14日→停止→30日で自動解約（第一案）
+  - Webhook: コア6イベント＋追加提案4（charge.refunded / charge.dispute.created / payment_method.attached / invoice.upcoming）・署名検証・冪等処理・順序非保証前提
+- **更新** [14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)（v1.0 → v2.0）— 代表決定2点を確定反映
+  - 初回決済=**利用開始月の日割り分のみ**（「翌月分まとめて決済」を廃止）
+  - キャンペーン無料対象=**基本料金のみ・追加ユーザー（追加アカウント）料金は対象外**（未確定→確定）
+- **更新** [README.md](README.md) — 目次・構成に15番を追加、Version 8.0 → 8.1
+- **更新** [CURRENT_STATUS.md](CURRENT_STATUS.md) — SALES-0完了を反映
+
+法務追加確認16項目・代表判断事項12項目（日割り計算方式・税計算・解約/猶予日数・実装リポジトリ等）は15番の7章・9章に一覧化し、いずれも代表判断待ち。
+
+**変更者:** Claude Code（代表決定による・SALES-0）
+
+---
+
 ## 2026-07-28 — v8.0: 販売モデルの正式制定（14_Sales_And_Billing_Policy.md 新設）
 
 WEB-V2-8「販売モデルSSOT化・2導線設計・創業記念キャンペーン反映」の代表決定を反映。
