@@ -7,8 +7,8 @@
 <!-- Smart Labo Works — Website v2 / 料金(骨格のみ。本実装はWEB-V2-2以降)
      website-v2/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
 
-<title>料金 — Smart Labo Works</title>
-<meta name="description" content="Smart Labo Worksの料金プラン。">
+<title>料金｜Smart Labo Works ライト</title>
+<meta name="description" content="Smart Labo Works ライトの料金。初期費用10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
 <link rel="canonical" href="https://smartlaboworks.com/pricing.html">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
@@ -16,13 +16,13 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
-<meta property="og:title" content="料金 — Smart Labo Works">
-<meta property="og:description" content="Smart Labo Worksの料金プラン。">
+<meta property="og:title" content="料金｜Smart Labo Works ライト">
+<meta property="og:description" content="Smart Labo Works ライトの料金。初期費用10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
 <meta property="og:url" content="https://smartlaboworks.com/pricing.html">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="料金 — Smart Labo Works">
-<meta name="twitter:description" content="Smart Labo Worksの料金プラン。">
+<meta name="twitter:title" content="料金｜Smart Labo Works ライト">
+<meta name="twitter:description" content="Smart Labo Works ライトの料金。初期費用10,000円、月額基本料金20,000円、追加アカウント1人あたり3,000円（すべて税別）。基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。">
 <meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
 
 
@@ -31,6 +31,17 @@
 <link rel="stylesheet" href="assets/css/components.css">
 
 <script>document.documentElement.classList.add('js');</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://smartlaboworks.com/" },
+    { "@type": "ListItem", "position": 2, "name": "料金", "item": "https://smartlaboworks.com/pricing.html" }
+  ]
+}
+</script>
 
 <!-- 計測タグ導入位置。現時点では未導入(解析コードなし・Cookieなし)。
      計測ID・認証キーはこのリポジトリへコミットしない。 -->
@@ -72,19 +83,302 @@
 </header>
 
 <main id="main">
-
-  <section class="section section--inverse">
+  <!-- ============================== 1. ページヒーロー ============================== -->
+  <section class="page-hero">
     <div class="container">
-      <h1 class="h-display">料金</h1>
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol>
+          <li><a href="index.html">ホーム</a></li>
+          <li><span aria-current="page">料金</span></li>
+        </ol>
+      </nav>
+
+      <div class="page-hero__inner">
+        <h1 class="page-hero__title">小さく始められる、<br>分かりやすい料金設計。</h1>
+        <p class="page-hero__lead">
+          基本料金には1アカウントと主要機能が含まれています。利用人数に合わせて、アカウントを追加できます。
+        </p>
+        <p class="page-hero__meta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          このページに表示している価格は、すべて税別です。
+        </p>
+      </div>
     </div>
   </section>
 
-  <section class="section">
+  <!-- ============================== 2. 料金プラン ============================== -->
+  <!-- 料金の正規値は docs/reviews/tools/check-prices.js のCANONICALに定義している。
+       金額を変更する際は、そのファイルと index.html と本ページの3か所を必ず揃えること。
+       data-price 属性は検証スクリプトが値を取り出すための目印であり、表示には使っていない
+       (表示は実テキストなのでJS無効でも読める)。 -->
+  <section class="section" id="plan">
     <div class="container">
-      <h2 class="section__title">（WEB-V2-3で実装）</h2>
-      <p class="section__lead">
-        確定済みの契約条件のみを掲載する。未確定の金額・条件は載せない。
-        価格の考え方は PROJECT_BIBLE/12_Pricing_Philosophy.md に従う。
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">料金プラン</p>
+        <h2 class="section__title">Smart Labo Works ライト</h2>
+        <p class="section__lead">
+          プランは一つだけです。人数や使い方に応じて、アカウント数だけが変わります。
+        </p>
+      </div>
+
+      <div class="plan reveal">
+        <div class="plan__head">
+          <h3 class="plan__name">Smart Labo Works ライト</h3>
+          <p class="plan__lead">日常業務に必要な機能を、ひとまとめにしたプランです。</p>
+        </div>
+
+        <dl class="plan__prices">
+          <div class="plan__price">
+            <dt>初期費用</dt>
+            <dd data-price="initial">10,000<small>円</small></dd>
+          </div>
+          <div class="plan__price plan__price--main">
+            <dt>月額基本料金</dt>
+            <dd data-price="monthly">20,000<small>円／月</small></dd>
+          </div>
+          <div class="plan__price">
+            <dt>追加アカウント</dt>
+            <dd data-price="additional">3,000<small>円／月・1人</small></dd>
+          </div>
+        </dl>
+
+        <div class="plan__foot">
+          <p class="plan__note">
+            表示価格は税別です。AI利用量や個別対応の内容により、別途ご案内する場合があります。
+            上記以外の条件は、ご相談の際にご説明します。
+          </p>
+          <a href="contact.html" class="btn btn--primary btn--lg">料金について相談する</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= 3. 料金に含まれるもの ========================= -->
+  <section class="section section--subtle" id="included">
+    <div class="container">
+      <div class="section__head reveal">
+        <p class="eyebrow">基本料金に含まれるもの</p>
+        <h2 class="section__title">追加費用なしで使える範囲。</h2>
+        <p class="section__lead">
+          下記はすべて月額基本料金に含まれます。機能ごとの追加料金はありません。
+        </p>
+      </div>
+
+      <div class="included reveal">
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">1アカウント</h3>
+            <p class="included__note">1人分の利用アカウントが含まれます。2人目以降は追加アカウントとしてご案内します。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">AIアシスタント</h3>
+            <p class="included__note">業務相談や文章の下書きを支援します。回答は確認したうえでご利用ください。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">顧客・取引先管理</h3>
+            <p class="included__note">顧客情報と対応履歴を会社内で共有できます。件数の上限は設けていません。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">活動記録</h3>
+            <p class="included__note">電話・訪問・会議などの対応内容を記録します。AIによる整理もこの中で行えます。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">タスク管理</h3>
+            <p class="included__note">担当者・期限・進み具合を管理します。顧客と結び付けたタスクも作れます。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">スケジュール管理</h3>
+            <p class="included__note">今日の予定と、顧客ごとの次回対応予定を確認できます。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">AI文章作成</h3>
+            <p class="included__note">お礼・フォローなど用途別の下書きを作成します。送信は利用者が行います。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">初期導入サポート</h3>
+            <p class="included__note">会社情報や利用者の登録、基本操作をご案内します。内容はご相談時にご説明します。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= 4. 利用人数別の料金例 ========================= -->
+  <section class="section" id="examples">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">利用人数別の料金例</p>
+        <h2 class="section__title">人数が増えたときの考え方。</h2>
+        <p class="section__lead">
+          月額基本料金に、2人目以降のアカウント数を足すだけです。下記は計算例で、新しい料金条件ではありません。
+        </p>
+      </div>
+
+      <div class="calc reveal">
+
+        <div class="calc__case">
+          <p class="calc__people">利用者 1人</p>
+          <p class="calc__total"><span data-price="ex1">20,000</span><small>円／月</small></p>
+          <p class="calc__break">基本料金に1アカウントを含む</p>
+        </div>
+
+        <div class="calc__case">
+          <p class="calc__people">利用者 3人</p>
+          <p class="calc__total"><span data-price="ex3">26,000</span><small>円／月</small></p>
+          <p class="calc__break">基本1人 ＋ 追加2人</p>
+        </div>
+
+        <div class="calc__case">
+          <p class="calc__people">利用者 5人</p>
+          <p class="calc__total"><span data-price="ex5">32,000</span><small>円／月</small></p>
+          <p class="calc__break">基本1人 ＋ 追加4人</p>
+        </div>
+
+      </div>
+
+      <div class="calc__formula reveal">
+        <p class="calc__formula-title">計算式</p>
+        <p class="calc__formula-body">
+          月額基本料金 20,000円 ＋ 2人目以降の人数 × 3,000円
+        </p>
+      </div>
+
+      <p class="calc__caution reveal">
+        すべて税別です。上記は月額のみの例で、<strong>初期費用 10,000円は含まれていません</strong>（初月にお支払いいただく総額ではありません）。
+        AI利用量や個別対応の内容により、別途ご案内する場合があります。表示している金額以外の条件は、ご相談の際にご説明します。
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================= 5. 料金に関するFAQ ========================= -->
+  <section class="section section--subtle" id="faq">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">FAQ</p>
+        <h2 class="section__title">料金についてのご質問</h2>
+      </div>
+
+      <div class="faq reveal" data-faq>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="pf-a1" id="pf-q1">
+              <span>何人から利用できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="pf-a1" role="region" aria-labelledby="pf-q1">
+            <p>1アカウントから利用できます。月額基本料金に1アカウントが含まれています。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="pf-a2" id="pf-q2">
+              <span>利用者を追加できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="pf-a2" role="region" aria-labelledby="pf-q2">
+            <p>追加アカウントは1人あたり月額3,000円（税別）です。人数の上限は設けていません。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="pf-a3" id="pf-q3">
+              <span>初期費用には何が含まれますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="pf-a3" role="region" aria-labelledby="pf-q3">
+            <p>初期設定や基本操作のご案内を含みます。個別対応の内容は、ご相談時にご説明します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="pf-a4" id="pf-q4">
+              <span>AIの利用料金はすべて含まれますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="pf-a4" role="region" aria-labelledby="pf-q4">
+            <p>AI利用量や個別対応の内容により、別途ご案内する場合があります。詳しくはご相談時にご説明します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="pf-a5" id="pf-q5">
+              <span>契約期間や解約条件はどうなっていますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="pf-a5" role="region" aria-labelledby="pf-q5">
+            <p>現在の条件は、ご相談時に個別にご説明します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="pf-a6" id="pf-q6">
+              <span>表示価格に消費税は含まれますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="pf-a6" role="region" aria-labelledby="pf-q6">
+            <p>本サイトに表示している価格はすべて税別です。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 6. 相談CTA ============================== -->
+  <section class="section section--inverse" id="cta">
+    <div class="container final-cta reveal">
+      <h2 class="final-cta__title">利用人数や業務内容に合わせてご案内します。</h2>
+      <p class="final-cta__lead">
+        現在の人数や使いたい業務を伺い、必要なアカウント数や利用方法をご説明します。
+      </p>
+      <p class="final-cta__actions">
+        <a href="contact.html" class="btn btn--on-inverse btn--lg">料金について相談する</a>
+      </p>
+      <p class="final-cta__note">
+        見積りのご相談だけでも受け付けています。
       </p>
     </div>
   </section>
