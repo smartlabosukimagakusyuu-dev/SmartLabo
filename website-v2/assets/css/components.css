@@ -1388,3 +1388,102 @@
   .legal > section + section { margin-top: var(--sp-6); }
   .legal h2 { font-size: var(--fs-h4); }
 }
+
+/* ==========================================================================
+   WEB-V2-6: お問い合わせページ
+   フォームは実装しない。ダミーの入力欄・送信ボタンも置かない。
+   ========================================================================== */
+
+/* ------------------------------------------- ご相談いただける内容 -- */
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+
+.topic {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-2);
+  padding: var(--sp-5);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.topic:hover { border-color: #CBD5E1; box-shadow: var(--shadow-sm); }
+
+.topic__icon { display: inline-flex; margin-bottom: var(--sp-2); color: var(--c-blue); }
+.topic__title { font-size: var(--fs-h4); }
+.topic__body  { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); }
+
+@media (max-width: 860px) { .topic-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .topic-grid { grid-template-columns: 1fr; } }
+
+/* --------------------------------------------- 準備中のお知らせ -- */
+/* 送信手段が確定していないことを、はっきり1か所で伝えるための領域。
+   ここに入力欄やボタンを置かない（押せない見た目のボタンも置かない）。 */
+
+.prep {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-8) var(--sp-6);
+  text-align: center;
+  background: var(--c-white);
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+/* このページで一番伝えるべき内容なので、アイコンに焦点をつくる */
+.prep__icon {
+  display: grid;
+  place-items: center;
+  width: 60px; height: 60px;
+  margin-bottom: var(--sp-2);
+  color: var(--c-blue);
+  background: rgba(37, 99, 235, 0.08);
+  border-radius: 50%;
+}
+.prep__title {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+.prep__body {
+  max-width: 44ch;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) { .prep { padding: var(--sp-7) var(--sp-5); } }
+
+/* ------------------------------------------- 関連ページへの導線 -- */
+
+.related { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+
+.related__item {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
+}
+.related__item:hover {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.related__label { font-size: var(--fs-h4); }
+.related__text { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); }
+.related__go { color: var(--c-blue); }
+
+@media (max-width: 860px) { .related { grid-template-columns: 1fr; } }

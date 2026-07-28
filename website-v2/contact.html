@@ -8,7 +8,7 @@
      website-v2/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
 
 <title>お問い合わせ — Smart Labo Works</title>
-<meta name="description" content="Smart Labo Worksの導入相談・お問い合わせ。">
+<meta name="description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <link rel="canonical" href="https://smartlaboworks.com/contact.html">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
@@ -17,12 +17,12 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
 <meta property="og:title" content="お問い合わせ — Smart Labo Works">
-<meta property="og:description" content="Smart Labo Worksの導入相談・お問い合わせ。">
+<meta property="og:description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <meta property="og:url" content="https://smartlaboworks.com/contact.html">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="お問い合わせ — Smart Labo Works">
-<meta name="twitter:description" content="Smart Labo Worksの導入相談・お問い合わせ。">
+<meta name="twitter:description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
 
 
@@ -32,6 +32,16 @@
 
 <script>document.documentElement.classList.add('js');</script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://smartlaboworks.com/" },
+    { "@type": "ListItem", "position": 2, "name": "お問い合わせ", "item": "https://smartlaboworks.com/contact.html" }
+  ]
+}
+</script>
 
 <!-- 計測タグ導入位置。現時点では未導入(解析コードなし・Cookieなし)。
      計測ID・認証キーはこのリポジトリへコミットしない。 -->
@@ -73,24 +83,250 @@
 </header>
 
 <main id="main">
-
-  <section class="section section--inverse">
+  <!-- ============================== 1. ヒーロー ============================== -->
+  <section class="page-hero">
     <div class="container">
-      <h1 class="h-display">お問い合わせ</h1>
-      <p class="section__lead">導入のご相談、デモのご希望、その他ご質問など。</p>
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol>
+          <li><a href="index.html">ホーム</a></li>
+          <li><span aria-current="page">お問い合わせ</span></li>
+        </ol>
+      </nav>
+
+      <div class="page-hero__inner">
+        <h1 class="page-hero__title">お問い合わせ</h1>
+        <p class="page-hero__lead">
+          Smart Labo Worksについてのご質問や導入のご相談など、お気軽にお問い合わせください。
+        </p>
+      </div>
     </div>
   </section>
 
-  <section class="section">
+  <!-- ========================= 2. ご相談いただける内容 ========================= -->
+  <section class="section" id="topics">
     <div class="container">
-      <h2 class="section__title">（WEB-V2-6で実装）</h2>
-      <p class="section__lead">
-        現行サイトはフォームを一時停止し、メール(info@smartlaboworks.com)へ誘導している。
-        v2でフォームを復活させるかは、xserver-form(PHP)の本番送信テスト完了が前提。
-        GitHub Pagesは静的ホスティングのためPHPを実行できない。送信先は
-        外部フォームサービスか、xserverに置いたcontact.phpへのクロスオリジンPOSTになる。
-        方式が確定するまでフォームUIを実装しない。
-      </p>
+      <div class="section__head reveal">
+        <p class="eyebrow">ご相談いただける内容</p>
+        <h2 class="section__title">こんなご相談を承っています。</h2>
+        <p class="section__lead">
+          導入を決めていない段階のご質問でも構いません。下記以外の内容もお気軽にお問い合わせください。
+        </p>
+      </div>
+
+      <div class="topic-grid reveal">
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H7l-3 3z"/><path d="M9 11h6"/></svg>
+          </span>
+          <h3 class="topic__title">導入相談</h3>
+          <p class="topic__body">現在の業務の流れを伺い、どこから使い始められるかをご案内します。</p>
+        </article>
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.7.7-.7 1.1v.5"/><path d="M12 17h.01"/></svg>
+          </span>
+          <h3 class="topic__title">料金について</h3>
+          <p class="topic__body">利用人数や使いたい業務を伺い、必要なアカウント数をご説明します。</p>
+        </article>
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 11l2.5 2.5L16 8"/></svg>
+          </span>
+          <h3 class="topic__title">機能について</h3>
+          <p class="topic__body">できること、できないこと、確認が必要になる場面をご説明します。</p>
+        </article>
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2"/><circle cx="9.5" cy="8" r="3"/><path d="M21 20v-2a3 3 0 0 0-2.3-2.9"/></svg>
+          </span>
+          <h3 class="topic__title">自社に合うか相談</h3>
+          <p class="topic__body">業種や人数、いまお使いの方法を伺い、合うかどうかを一緒に確認します。</p>
+        </article>
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+          </span>
+          <h3 class="topic__title">その他</h3>
+          <p class="topic__body">上記に当てはまらないご質問やご意見も承っています。</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= 3. 導入までの流れ ========================= -->
+  <section class="section section--subtle" id="flow">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">導入までの流れ</p>
+        <h2 class="section__title">お問い合わせから利用開始まで。</h2>
+        <p class="section__lead">
+          お問い合わせをいただいてから、実際に使い始めるまでの流れです。
+        </p>
+      </div>
+
+      <ol class="steps reveal">
+        <li class="step">
+          <span class="step__num" aria-hidden="true">1</span>
+          <h3 class="step__title">お問い合わせ</h3>
+          <p class="step__note">ご質問やご相談の内容をお知らせください。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">2</span>
+          <h3 class="step__title">ヒアリング</h3>
+          <p class="step__note">現在の業務やお困りごとを伺います。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">3</span>
+          <h3 class="step__title">ご提案</h3>
+          <p class="step__note">支援できる内容と利用方法をご説明します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">4</span>
+          <h3 class="step__title">導入準備</h3>
+          <p class="step__note">会社情報と利用者情報を設定し、基本操作をご案内します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">5</span>
+          <h3 class="step__title">利用開始</h3>
+          <p class="step__note">実際の業務で使いながら、必要に応じて調整します。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========================= 4. お問い合わせ方法 ========================= -->
+  <!-- フォームは実装しない。ダミーの入力欄・送信ボタンも置かない。
+       送信手段が確定するまでは、準備中であることだけを明示する。 -->
+  <section class="section" id="how">
+    <div class="container container--narrow">
+      <div class="prep reveal">
+        <span class="prep__icon" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+        </span>
+        <h2 class="prep__title">現在、お問い合わせ方法を準備しています。</h2>
+        <p class="prep__body">
+          ご不便をおかけしております。準備が整い次第、このページでご案内します。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 5. FAQ ============================== -->
+  <section class="section section--subtle" id="faq">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">FAQ</p>
+        <h2 class="section__title">お問い合わせについてのご質問</h2>
+      </div>
+
+      <div class="faq reveal" data-faq>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a1" id="cf-q1">
+              <span>相談だけでも大丈夫ですか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a1" role="region" aria-labelledby="cf-q1">
+            <p>はい。導入を決めていない段階でもご相談いただけます。現在の業務の流れを伺い、支援できることがあるかをご案内します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a2" id="cf-q2">
+              <span>料金は相談できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a2" role="region" aria-labelledby="cf-q2">
+            <p>はい。料金についてのご質問も承ります。金額は<a href="pricing.html">料金ページ</a>に掲載しています。ご相談の際は、利用人数や使いたい業務を伺ったうえでご案内します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a3" id="cf-q3">
+              <span>業種が違っても使えますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a3" role="region" aria-labelledby="cf-q3">
+            <p>顧客管理、記録、タスク、予定、文章作成など、業種を限定しない基本機能を備えています。具体的な使い方はご相談時にご案内します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a4" id="cf-q4">
+              <span>導入サポートはありますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a4" role="region" aria-labelledby="cf-q4">
+            <p>初期設定と基本操作のご案内を行います。内容はご相談の際にご説明します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a5" id="cf-q5">
+              <span>オンライン対応できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a5" role="region" aria-labelledby="cf-q5">
+            <p>Smart Labo WorksはWebブラウザから利用できるサービスのため、オンラインでのご相談や画面のご案内を想定しています。具体的な方法は、お問い合わせ方法の準備が整い次第ご案内します。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= 6. 関連ページへの導線 ========================= -->
+  <!-- 送信手段が無いため、ここでCTAボタンは置かない。
+       代わりに、先に読んでおける情報への導線だけを用意する。 -->
+  <section class="section" id="related">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">お問い合わせの前に</p>
+        <h2 class="section__title">先にご覧いただける情報。</h2>
+        <p class="section__lead">
+          ご質問の内容によっては、下記のページで解決する場合があります。
+        </p>
+      </div>
+
+      <div class="related reveal">
+        <a class="related__item" href="features.html">
+          <span class="related__label">機能</span>
+          <span class="related__text">8つの機能でできること、業務がどう変わるかを実際の画面とあわせて説明しています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="pricing.html">
+          <span class="related__label">料金</span>
+          <span class="related__text">基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="index.html#faq">
+          <span class="related__label">よくある質問</span>
+          <span class="related__text">AIの扱い、情報の分離、対応環境など、サービス全体についての質問をまとめています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
     </div>
   </section>
 

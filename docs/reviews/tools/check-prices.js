@@ -167,6 +167,22 @@ for (const f of PAGES) {
   }
 }
 
+// ---------- 9. フォーム・外部送信が入り込んでいないか ----------
+// 問い合わせ方式が確定するまで、フォーム要素・送信先・外部フォームサービスは
+// 一切置かない方針（WEB-V2-6）。見た目だけのダミーフォームも禁止。
+const FORM_MARKERS = [
+  /<form[\s>]/i, /<input[\s>/]/i, /<textarea[\s>]/i, /<select[\s>]/i,
+  /type=["']submit["']/i, /formspree/i, /docs\.google\.com\/forms/i,
+  /mailto:/i, /action=["'][^"']/i,
+];
+for (const f of PAGES) {
+  const html = fs.readFileSync(path.join(ROOT, f), 'utf8')
+    .replace(/<!--[\s\S]*?-->/g, '');   // 注釈内の説明文は対象外
+  for (const re of FORM_MARKERS) {
+    if (re.test(html)) errors.push(`${f}: フォーム/送信先らしき記述があります（${re}）`);
+  }
+}
+
 // ---------- 結果 ----------
 notes.push(`正規値: 初期費用 ${CANONICAL.initial}円 / 月額 ${CANONICAL.monthly}円 / 追加 ${CANONICAL.additional}円（税別）`);
 notes.push(`計算例: 1人 ${EXAMPLES.ex1}円 / 3人 ${EXAMPLES.ex3}円 / 5人 ${EXAMPLES.ex5}円（月額のみ・税別）`);

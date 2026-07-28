@@ -151,6 +151,16 @@
       }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
 
       revealables.forEach(function (el, i) {
+        // 初期表示の位置にある要素はアニメーションさせず、すぐ出す。
+        // 折りたたみより上の内容を遅らせると、その分だけLCP（最大の要素が
+        // 描画される時刻）が後ろへずれてしまうため。
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          // トランジションも切る。class を足すだけだと 0 → 1 のフェードが
+          // 走り、その分だけ描画完了が遅れてしまう。
+          el.style.transition = 'none';
+          el.classList.add('is-in');
+          return;
+        }
         // 同じ行のカードが揃って出るよう、ごく短い段差だけ付ける
         el.style.transitionDelay = Math.min(i % 6, 5) * 45 + 'ms';
         io.observe(el);
