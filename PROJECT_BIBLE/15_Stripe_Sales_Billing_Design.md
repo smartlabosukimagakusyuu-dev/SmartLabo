@@ -2,9 +2,45 @@
 
 このドキュメントは、[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)（販売方針の正本）を **Stripeで安全に実装するための正式設計** です。SALES-0（2026-07-28・代表決定）で制定しました。
 
-- **本書は設計のみ。コード・マイグレーション・Stripeダッシュボード操作は一切含まない。**
-- 実装は SALES-1 以降で、各工程ごとに代表承認を得てから着手する。
+- **本書は設計。** Stripe連携そのものの実装は SALES-3 で行う（各工程ごとに代表承認を得てから着手する）。
 - 方針レベル（何を・いくらで・いつ請求するか）は14番が正本。実装レベル（Stripeのどのオブジェクトで・どの状態遷移で実現するか）は**本書が正本**。
+
+> ## ⚠️ 販売フローが変更されました（2026-07-29 代表決定・SALES-2）
+>
+> **旧仕様（申込 → 決済成功 → 会社作成 → 利用開始）は廃止しました。**
+> 正式仕様は「**環境を先に作る**」方式です。
+>
+> ```
+> Webサイト申込 → 会社環境作成 → 管理者作成 → 招待メール → 初回ログイン
+>   → 利用規約同意 → payment_required → Stripe決済 → active → AI初期設定
+> ```
+>
+> これに伴い、本書のうち次は**読み替えが必要**です（本文中の該当箇所にも注記しています）。
+>
+> | 箇所 | 旧記述 | 正式仕様 |
+> |---|---|---|
+> | 3-3 申込フロー | Checkout成功 → 契約成立 → 会社アカウント作成 | 会社環境は**申込直後に作成済み**。Checkoutは `payment_required` → `active` の遷移のみを担う |
+> | 4-1 契約状態 | draft / pending_payment / active … | **application_pending / provisioning / payment_required / active**（＋ cancel_scheduled / canceled / suspended） |
+> | 5 DB設計 | contracts に集約 | 実装は `companies.contract_status` ＋ `signup_applications` ＋ `tenant_users` ＋ `invitations` ＋ `invitation_email_outbox`（SALES-2で実装済み。下記「実装状況」参照） |
+>
+> **契約状態の正式な定義と遷移規則は、実装（`smartlabo-works/src/services/sales/contractState.js`）と本書 4-1 を正とします。**
+
+---
+
+## 0. 実装状況（2026-07-29 SALES-2時点）
+
+| 項目 | 状況 | 実装場所（`smartlabo-works`） |
+|---|---|---|
+| 申込情報の保存 | ✅実装済み | `src/repositories/signupApplicationRepository.js` |
+| 会社環境の作成 | ✅実装済み | `src/repositories/companyRepository.js`（`createProvisionedCompany`） |
+| 管理者アカウント作成 | ✅実装済み | `src/repositories/tenantUserRepository.js` |
+| 招待トークン（発行・期限・失効・再発行・使い捨て） | ✅実装済み | `src/repositories/invitationRepository.js` |
+| 招待メールの送信キュー | ✅実装済み（**実送信は未実装**） | `src/repositories/invitationEmailOutboxRepository.js` |
+| 契約状態と遷移規則 | ✅実装済み | `src/services/sales/contractState.js` |
+| `payment_required` の利用制御 | ✅実装済み | `src/services/sales/accessPolicy.js` |
+| **Stripe連携（Checkout・Webhook・Coupon・Promotion Code）** | ❌**未実装** | SALES-3で実装 |
+
+DBスキーマはマイグレーション **version 18**（`create_sales_provisioning_tables`）。
 
 ---
 
@@ -145,37 +181,80 @@ Couponを申込時にそのまま適用すると**初回の日割りInvoiceが�
 
 ## 4. 契約状態とライフサイクル
 
-### 4-1. 正式な契約状態（自社DB `contracts.status`）
+### 4-1. 正式な契約状態（自社DB `companies.contract_status`）
 
-| 状態 | 意味 | Stripe対応物 |
-|---|---|---|
-| `draft` | 申込中（申込フォーム入力中・Checkout未作成） | ―（自社のみ） |
-| `pending_payment` | 決済待ち（Checkout Session作成済み・未決済） | checkout.session(open) / subscription(incomplete) |
-| `active` | 契約中（利用可能） | subscription: active |
-| `past_due` | 支払い失敗・再決済中（利用は継続） | subscription: past_due |
-| `suspended` | 停止（猶予超過・ログイン不可。契約は未解約） | subscription: unpaid（回収停止・請求は保留） |
-| `cancel_scheduled` | 解約予約（当月末まで利用可） | subscription: active + `cancel_at_period_end: true` |
-| `canceled` | 解約済（利用不可・再開は新規契約） | subscription: canceled |
+**2026-07-29 代表決定により改訂。** 実装は `src/services/sales/contractState.js`。
+
+| 状態 | 意味 | 業務機能 | Stripe対応物 |
+|---|---|---|---|
+| `application_pending` | 申込を受け付けた（環境未作成） | 不可（未ログイン） | ―（自社のみ） |
+| `provisioning` | 環境作成中（会社・管理者・招待の作成） | 不可（未ログイン） | ―（自社のみ） |
+| `payment_required` | **環境はできている。支払い待ち** | **不可**（ログインは可） | ―／SALES-3でCheckout待ち |
+| `active` | 決済完了。通常利用できる | 可 | subscription: active |
+| `cancel_scheduled` | 解約予約（当月末まで利用可） | 可 | subscription: active + `cancel_at_period_end: true` |
+| `suspended` | 停止（支払い未解消など。ログイン不可） | 不可 | subscription: unpaid |
+| `canceled` | 解約済（利用不可・再開は新規契約） | 不可 | subscription: canceled |
+
+> **`past_due` について**：SALES-0では独立した状態として設計していたが、
+> SALES-2では採用していない。支払い失敗時は `active → payment_required` へ戻す設計とし、
+> 状態数を増やさずに「支払いが必要」という同じ扱いへ寄せる。
+> 猶予期間中も利用を継続させるかどうかは、SALES-3で決済を実装する際に確定する
+> （9-10の代表判断事項）。
+
+**遷移規則**（`ALLOWED_TRANSITIONS`。ここに無い遷移は実行できない）
+
+| From | To |
+|---|---|
+| `application_pending` | `provisioning` / `canceled` |
+| `provisioning` | `payment_required` / `canceled` |
+| `payment_required` | `active` / `suspended` / `canceled` |
+| `active` | `payment_required` / `cancel_scheduled` / `suspended` |
+| `cancel_scheduled` | `active` / `canceled` |
+| `suspended` | `active` / `payment_required` / `canceled` |
+| `canceled` | （なし） |
+
+遷移は「現在の状態が期待どおりであること」をUPDATEのWHERE句に含めて実行するため、
+同時に2つの処理が走っても片方しか成功しない。
+
+### 4-1-2. 利用制御（`payment_required` の間）
+
+**すべてサーバー側で判定する**（`src/services/sales/accessPolicy.js`）。画面の出し分けは利便性のためであり、制御の根拠にはしない。
+
+| | 内容 |
+|---|---|
+| ログイン | 可能 |
+| 利用できるAPI | `/api/auth/login` `/api/auth/logout` `/api/auth/me` `/api/contract/status` `/api/contract/agree-terms` |
+| 利用できない | 上記以外すべて（CRM・AI・顧客管理・タスク・物件・取込・フィードバック等） |
+
+**許可リスト方式**を採用している。APIを追加したときに許可リストへ足し忘れると「支払い前は使えない」側に倒れるため、業務機能が漏れて使えてしまうことがない。
 
 ### 4-2. 状態遷移図
 
 ```mermaid
 stateDiagram-v2
-    [*] --> draft: 申込フォーム開始
-    draft --> pending_payment: Checkout Session作成
-    draft --> [*]: 離脱(保存しない/一定期間で破棄)
-    pending_payment --> active: 決済成功\n(checkout.session.completed → invoice.paid)
-    pending_payment --> draft: セッション期限切れ\n(checkout.session.expired)
-    active --> past_due: 月次決済失敗\n(invoice.payment_failed)
-    past_due --> active: 再決済成功\n(invoice.paid)
-    past_due --> suspended: 猶予期間超過\n(リトライ全滅 subscription→unpaid)
-    suspended --> active: 支払い解消\n(未収Invoice決済成功)
-    suspended --> canceled: 停止後も未解消\n(自動解約 or 手動解約)
-    active --> cancel_scheduled: 解約申請\n(cancel_at_period_end=true)
-    cancel_scheduled --> active: 解約撤回\n(cancel_at_period_end=false)
-    cancel_scheduled --> canceled: 期末到達\n(customer.subscription.deleted)
+    [*] --> application_pending: Webサイトで申し込み
+    application_pending --> provisioning: 環境作成を開始
+    provisioning --> payment_required: 会社・管理者・招待の作成が完了
+    provisioning --> canceled: 環境作成に失敗(手動対応)
+
+    payment_required --> active: 決済成功(SALES-3)
+    payment_required --> suspended: 長期未払い
+    payment_required --> canceled: 申込取消
+
+    active --> payment_required: 月次決済失敗
+    active --> cancel_scheduled: 解約申請
+    active --> suspended: 支払い未解消
+
+    suspended --> active: 支払い解消
+    suspended --> payment_required: 再請求へ戻す
+    suspended --> canceled: 停止後も未解消
+
+    cancel_scheduled --> active: 解約撤回
+    cancel_scheduled --> canceled: 期末到達
     canceled --> [*]
 ```
+
+**初回ログインは `payment_required` の状態で行われる**（招待メール → 初回パスワード設定 → ログイン → 利用規約同意 → 支払い）。この間、業務機能はサーバー側で拒否される。
 
 - 状態の正は**Stripeイベントで駆動して自社DBへ反映**する（自社で勝手に遷移させない）。手動運用（例: 特別対応での停止解除）は管理操作として `contract_events` に記録する。
 - `suspended`（アクセス遮断）はStripeには存在しない自社概念。`subscription: unpaid` への遷移と猶予日数（→6章）で制御する。
@@ -376,5 +455,6 @@ invoices_mirror（StripeInvoiceの参照キャッシュ・会計/画面表示用
 | バージョン | 日付 | 変更者 | 変更内容 |
 |---|---|---|---|
 | v1.0 | 2026-07-28 | Claude Code(代表決定による・SALES-0) | 新規作成。Stripe実装を前提とした販売・契約・課金の詳細設計を制定。Product/Price/Customer/Subscription/Invoice/Coupon/Promotion Codeの構成、Checkout(Stripeホスト型・カード情報非保持)による申込フロー、創業記念キャンペーンのSubscription Schedule 3フェーズ実装案(推奨)とWebhook後付け案の比較、契約7状態と状態遷移図、追加テーブル6種のDB設計、解約・支払い失敗仕様の第一案、Webhook 6+4イベントの受信設計、法務追加確認16項目、SALES-1前提条件6項目、代表判断事項12項目を記録。**初回請求を「利用開始月の日割りのみ」へ確定(14番v1.0の「翌月分まとめて決済」を廃止)、キャンペーン無料対象を「基本料金のみ・追加ユーザー対象外」へ確定** |
+| **v2.0** | 2026-07-29 | Claude Code(代表決定による・SALES-2) | **販売フローを「環境を先に作る」方式へ正式変更したことを反映。** 冒頭に変更告知と読み替え表を追加し、第0章「実装状況」を新設（SALES-2で実装済みの範囲と、SALES-3で実装するStripe連携を明記）。4-1の契約状態を **application_pending / provisioning / payment_required / active（＋cancel_scheduled / canceled / suspended）** へ改訂し、遷移規則の表を追加。`past_due` は独立状態として採用せず `active → payment_required` へ戻す設計とした理由を明記。4-1-2「利用制御（payment_required の間）」を新設し、許可リスト方式でサーバー側判定することを記録。4-2の状態遷移図を新フローで書き直した。**3-3の申込フロー（Checkout成功→会社作成）と第5章のDB設計（contractsへの集約）は、実装が `companies.contract_status` ＋ 4テーブル構成になったため読み替えが必要**（冒頭の表を参照）。金額・課金サイクル・キャンペーンの設計は変更していない |
 
-*最終更新: 2026-07-28*
+*最終更新: 2026-07-29*
