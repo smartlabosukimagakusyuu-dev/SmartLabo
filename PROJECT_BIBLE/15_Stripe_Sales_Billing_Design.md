@@ -38,9 +38,36 @@
 | 招待メールの送信キュー | ✅実装済み（**実送信は未実装**） | `src/repositories/invitationEmailOutboxRepository.js` |
 | 契約状態と遷移規則 | ✅実装済み | `src/services/sales/contractState.js` |
 | `payment_required` の利用制御 | ✅実装済み | `src/services/sales/accessPolicy.js` |
-| **Stripe連携（Checkout・Webhook・Coupon・Promotion Code）** | ❌**未実装** | SALES-3で実装 |
+| Stripe Customer / Checkout Session の作成 | ✅実装済み（SALES-3） | `src/services/sales/stripeClient.js` |
+| Webhook署名検証・冪等・順不同対策 | ✅実装済み（SALES-3） | `src/services/sales/stripeWebhook.js`／`src/repositories/stripeEventRepository.js` |
+| `payment_required` → `active` の遷移 | ✅実装済み（SALES-3） | `src/services/sales/billingService.js` |
+| **Coupon・Promotion Code（キャンペーン）** | ❌未実装 | SALES-5 |
+| **紹介コード** | ❌未実装 | SALES-6 |
+| **Billing Portal・プラン変更・追加アカウント購入** | ❌未実装 | 未定 |
 
-DBスキーマはマイグレーション **version 18**（`create_sales_provisioning_tables`）。
+DBスキーマはマイグレーション **version 18**（`create_sales_provisioning_tables`）＋
+**version 19**（`create_stripe_billing_tables`）。
+
+> ### ⚠️ SALES-3の実装で確定した重要な差分（2026-07-29）
+>
+> **① 公式SDK（`stripe` npm）を使っていない。**
+> 本リポジトリは依存追加に代表の事前承認を要する運用のため（`pdfjs-dist` 追加時の経緯）、
+> Node標準の `fetch` でStripe REST APIを直接呼ぶ実装にした。呼び出し口は
+> `stripeClient.js` 1枚に閉じてあり、公式SDKへ移行する場合もそこだけを差し替えればよい。
+> **公式SDKを採用するかどうかは代表判断事項**（決済という領域の性質上、
+> 公式SDKのリトライ・APIバージョン管理・型を利用する利点は大きい）。
+>
+> **② 実Stripeでの疎通確認は未実施。**
+> Stripeアカウント・Test Modeのキー・Stripe CLI がいずれも未提供のため、
+> 検証はローカルのモックHTTPサーバーと、署名を自前生成したWebhookで行った。
+> **Test Modeでの実疎通とStripe CLIによる再送試験は、キー提供後に別途必要**。
+>
+> **③ `active → canceled` を許可へ変更。**
+> Stripe側でサブスクリプションが即時削除される場合（管理画面からの即時解約・
+> 未払いによる自動解約）に `customer.subscription.deleted` が届くが、
+> 必ずしも `cancel_scheduled` を経由しない。SALES-2の遷移表では
+> 「Stripeでは解約済みなのに当社では active のまま」という不整合が残るため、
+> `active → canceled` を許可した（テストで検出）。
 
 ---
 
@@ -208,7 +235,7 @@ Couponを申込時にそのまま適用すると**初回の日割りInvoiceが�
 | `application_pending` | `provisioning` / `canceled` |
 | `provisioning` | `payment_required` / `canceled` |
 | `payment_required` | `active` / `suspended` / `canceled` |
-| `active` | `payment_required` / `cancel_scheduled` / `suspended` |
+| `active` | `payment_required` / `cancel_scheduled` / `suspended` / **`canceled`**（SALES-3で追加。Stripeの即時解約に対応） |
 | `cancel_scheduled` | `active` / `canceled` |
 | `suspended` | `active` / `payment_required` / `canceled` |
 | `canceled` | （なし） |
@@ -223,7 +250,7 @@ Couponを申込時にそのまま適用すると**初回の日割りInvoiceが�
 | | 内容 |
 |---|---|
 | ログイン | 可能 |
-| 利用できるAPI | `/api/auth/login` `/api/auth/logout` `/api/auth/me` `/api/contract/status` `/api/contract/agree-terms` |
+| 利用できるAPI | `/api/auth/login` `/api/auth/logout` `/api/auth/me` `/api/contract/status` `/api/contract/agree-terms` **`/api/billing/checkout`**（SALES-3で追加） |
 | 利用できない | 上記以外すべて（CRM・AI・顧客管理・タスク・物件・取込・フィードバック等） |
 
 **許可リスト方式**を採用している。APIを追加したときに許可リストへ足し忘れると「支払い前は使えない」側に倒れるため、業務機能が漏れて使えてしまうことがない。
@@ -456,5 +483,6 @@ invoices_mirror（StripeInvoiceの参照キャッシュ・会計/画面表示用
 |---|---|---|---|
 | v1.0 | 2026-07-28 | Claude Code(代表決定による・SALES-0) | 新規作成。Stripe実装を前提とした販売・契約・課金の詳細設計を制定。Product/Price/Customer/Subscription/Invoice/Coupon/Promotion Codeの構成、Checkout(Stripeホスト型・カード情報非保持)による申込フロー、創業記念キャンペーンのSubscription Schedule 3フェーズ実装案(推奨)とWebhook後付け案の比較、契約7状態と状態遷移図、追加テーブル6種のDB設計、解約・支払い失敗仕様の第一案、Webhook 6+4イベントの受信設計、法務追加確認16項目、SALES-1前提条件6項目、代表判断事項12項目を記録。**初回請求を「利用開始月の日割りのみ」へ確定(14番v1.0の「翌月分まとめて決済」を廃止)、キャンペーン無料対象を「基本料金のみ・追加ユーザー対象外」へ確定** |
 | **v2.0** | 2026-07-29 | Claude Code(代表決定による・SALES-2) | **販売フローを「環境を先に作る」方式へ正式変更したことを反映。** 冒頭に変更告知と読み替え表を追加し、第0章「実装状況」を新設（SALES-2で実装済みの範囲と、SALES-3で実装するStripe連携を明記）。4-1の契約状態を **application_pending / provisioning / payment_required / active（＋cancel_scheduled / canceled / suspended）** へ改訂し、遷移規則の表を追加。`past_due` は独立状態として採用せず `active → payment_required` へ戻す設計とした理由を明記。4-1-2「利用制御（payment_required の間）」を新設し、許可リスト方式でサーバー側判定することを記録。4-2の状態遷移図を新フローで書き直した。**3-3の申込フロー（Checkout成功→会社作成）と第5章のDB設計（contractsへの集約）は、実装が `companies.contract_status` ＋ 4テーブル構成になったため読み替えが必要**（冒頭の表を参照）。金額・課金サイクル・キャンペーンの設計は変更していない |
+| **v3.0** | 2026-07-29 | Claude Code(代表決定による・SALES-3) | **Stripe Checkout・Webhook・契約有効化を実装したことを反映。** 第0章「実装状況」へStripe実装済み範囲を追記し、マイグレーション19（`create_stripe_billing_tables`）を記録。4-1の遷移表へ **active → canceled** を追加（Stripeの即時解約に対応。SALES-2の表では「Stripeでは解約済みなのに当社ではactive」の不整合が残るため。テストで検出）。4-1-2の許可APIへ `/api/billing/checkout` を追加。**重要な差分3点を明記**: ①公式SDK(`stripe` npm)は使わずNode標準fetchで実装（依存追加は代表承認が必要なため。公式SDK採用の可否は代表判断事項）②Stripeアカウント・Test Modeキー・Stripe CLIが未提供のため**実Stripeでの疎通確認は未実施**（モックサーバーと自前署名で検証）③active→canceledの許可。金額・課金サイクル・キャンペーン設計は変更していない |
 
 *最終更新: 2026-07-29*
