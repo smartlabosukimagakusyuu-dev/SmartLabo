@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     Smart Labo Works — Website v3 / セルフ申し込み(SALES-1で新設)
+
+     ★このページはまだ公開導線に載せていない。
+       ・robots は noindex,nofollow
+       ・sitemap.xml に載せていない
+       ・apply.html / ヘッダー / フッター からリンクしていない
+       理由: 決済(SALES-2)とアカウント作成(SALES-5)が未実装のため、
+       確認画面の先が存在しない。公開すると行き止まりになる。
+       導線を繋ぐのは SALES-2 以降とする。
+
+     SALES-1の範囲は「会社情報 → 管理者情報 → 契約内容確認」まで。
+     送信先 /api/signup は入力を検証して結果を返すだけで、何も保存しない。
+     ============================================================ -->
+
+<title>お申し込み手続き｜Smart Labo Works</title>
+<meta name="description" content="Smart Labo Works のお申し込み手続き画面です。">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<p class="dev-banner">Website v3 — ローカル開発版(未公開)</p>
+
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<header class="site-header" id="siteHeader">
+  <div class="container site-header__inner">
+    <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+      <img class="logo__icon" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+      <span class="logo__text">Smart Labo Works</span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="index.html#solution">サービス</a>
+      <a href="features.html">機能</a>
+      <a href="pricing.html">料金</a>
+      <a href="company.html">会社情報</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="contact.html">お問い合わせ</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <a href="contact.html" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="apply.html" class="btn btn--primary btn--sm"><span class="btn__label-full">今すぐ申し込む</span><span class="btn__label-short">申し込む</span></a>
+    </div>
+
+    <button class="nav-toggle" type="button" data-nav-toggle
+            aria-controls="site-nav" aria-expanded="false">
+      <span class="visually-hidden">メニューを開閉</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================== ページヒーロー ============================== -->
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol>
+          <li><a href="index.html">ホーム</a></li>
+          <li><a href="apply.html">お申し込み</a></li>
+          <li><span aria-current="page">お申し込み手続き</span></li>
+        </ol>
+      </nav>
+
+      <div class="page-hero__inner">
+        <h1 class="page-hero__title">お申し込み手続き</h1>
+        <p class="page-hero__lead">
+          会社情報・管理者情報をご入力いただき、契約内容をご確認ください。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="signup">
+    <div class="container container--narrow">
+
+      <!-- 開発中である旨。決済までは進めないことを最初に伝える。
+           SALES-2で決済が実装できたら、このブロックを削除する。 -->
+      <div class="apply-status" id="signupNotice">
+        <p class="apply-status__tag">この画面について</p>
+        <h2 class="apply-status__title">お支払いのお手続きは準備中です。</h2>
+        <p class="apply-status__body">
+          この画面では、入力内容のご確認までお進みいただけます。
+          お支払いと利用開始のお手続きは現在準備中のため、ご契約は成立しません。
+          先行してのご案内をご希望の方は<a href="contact.html">無料相談</a>からお問い合わせください。
+        </p>
+      </div>
+
+      <!-- ============================== 進捗表示 ============================== -->
+      <ol class="wizard-steps" id="wizardSteps" aria-label="お申し込みの進行状況">
+        <li class="wizard-steps__item is-current" data-step-indicator="1" aria-current="step">
+          <span class="wizard-steps__num" aria-hidden="true">1</span>
+          <span class="wizard-steps__label">会社情報</span>
+        </li>
+        <li class="wizard-steps__item" data-step-indicator="2">
+          <span class="wizard-steps__num" aria-hidden="true">2</span>
+          <span class="wizard-steps__label">管理者情報</span>
+        </li>
+        <li class="wizard-steps__item" data-step-indicator="3">
+          <span class="wizard-steps__num" aria-hidden="true">3</span>
+          <span class="wizard-steps__label">内容の確認</span>
+        </li>
+      </ol>
+
+      <!-- ============================== フォーム ==============================
+           JavaScriptが無効な場合は3つのステップがすべて縦に並び、
+           1回のPOSTで /api/signup へ送られる（内容は失われない）。
+           JavaScript有効時は1ステップずつ表示する。 -->
+      <form class="cform signup-form"
+            id="signupForm"
+            method="post"
+            action="/api/signup"
+            data-endpoint="/api/signup"
+            data-token-endpoint="/api/signup-csrf-token"
+            novalidate>
+
+        <p class="cform__required-note">
+          <span class="cform__req" aria-hidden="true">*</span> は必須項目です。
+        </p>
+
+        <p class="cform__status" id="formStatus" role="status" aria-live="polite" tabindex="-1"></p>
+
+        <!-- 自動送信対策。画面には出さない -->
+        <div class="cform__trap" aria-hidden="true">
+          <label for="f-website">この欄は入力しないでください</label>
+          <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <input type="hidden" id="f-form-ts" name="form_ts" value="">
+        <input type="hidden" id="f-csrf" name="csrf_token" value="">
+
+        <!-- ========================= ステップ1: 会社情報 ========================= -->
+        <section class="signup-step" data-step="1" aria-labelledby="step1-title">
+          <h2 class="signup-step__title" id="step1-title">会社情報</h2>
+          <p class="signup-step__note">ご契約者となる会社の情報をご入力ください。</p>
+
+          <div class="field">
+            <label class="field__label" for="f-company-name">
+              会社名 <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input" type="text" id="f-company-name" name="company_name"
+                   required maxlength="100" autocomplete="organization"
+                   aria-describedby="f-company-name-error">
+            <p class="field__error" id="f-company-name-error" data-error-for="company_name"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-company-kana">
+              会社名（カナ） <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input" type="text" id="f-company-kana" name="company_kana"
+                   required maxlength="100"
+                   aria-describedby="f-company-kana-hint f-company-kana-error">
+            <p class="field__hint" id="f-company-kana-hint">全角カタカナでご入力ください。例：カブシキガイシャスマートラボ</p>
+            <p class="field__error" id="f-company-kana-error" data-error-for="company_kana"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-postal-code">
+              郵便番号 <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input field__input--short" type="text" id="f-postal-code" name="postal_code"
+                   required maxlength="8" autocomplete="postal-code" inputmode="numeric"
+                   placeholder="123-4567"
+                   aria-describedby="f-postal-code-error">
+            <p class="field__error" id="f-postal-code-error" data-error-for="postal_code"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-address">
+              住所 <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input" type="text" id="f-address" name="address"
+                   required maxlength="200" autocomplete="street-address"
+                   aria-describedby="f-address-hint f-address-error">
+            <p class="field__hint" id="f-address-hint">都道府県から建物名・部屋番号までご入力ください。</p>
+            <p class="field__error" id="f-address-error" data-error-for="address"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-company-tel">
+              電話番号 <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input field__input--short" type="tel" id="f-company-tel" name="company_tel"
+                   required maxlength="20" autocomplete="tel" inputmode="tel"
+                   placeholder="0857-00-0000"
+                   aria-describedby="f-company-tel-error">
+            <p class="field__error" id="f-company-tel-error" data-error-for="company_tel"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-contact-email">
+              担当者メールアドレス <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input" type="email" id="f-contact-email" name="contact_email"
+                   required maxlength="254" autocomplete="email" inputmode="email"
+                   aria-describedby="f-contact-email-hint f-contact-email-error">
+            <p class="field__hint" id="f-contact-email-hint">ご請求やご連絡の宛先として使用します。</p>
+            <p class="field__error" id="f-contact-email-error" data-error-for="contact_email"></p>
+          </div>
+
+          <div class="signup-step__actions">
+            <button class="btn btn--primary btn--lg" type="button" data-goto-step="2">管理者情報へ進む</button>
+          </div>
+        </section>
+
+        <!-- ======================== ステップ2: 管理者情報 ======================== -->
+        <section class="signup-step" data-step="2" aria-labelledby="step2-title" hidden>
+          <h2 class="signup-step__title" id="step2-title">管理者情報</h2>
+          <p class="signup-step__note">
+            最初にログインする管理者の情報です。管理者1名分の利用料は基本料金に含まれます。
+          </p>
+
+          <div class="field">
+            <label class="field__label" for="f-admin-name">
+              お名前 <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input" type="text" id="f-admin-name" name="admin_name"
+                   required maxlength="100" autocomplete="name"
+                   aria-describedby="f-admin-name-error">
+            <p class="field__error" id="f-admin-name-error" data-error-for="admin_name"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-admin-email">
+              メールアドレス <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input" type="email" id="f-admin-email" name="admin_email"
+                   required maxlength="254" autocomplete="email" inputmode="email"
+                   aria-describedby="f-admin-email-hint f-admin-email-error">
+            <p class="field__hint" id="f-admin-email-hint">ログインIDとして使用します。</p>
+            <p class="field__error" id="f-admin-email-error" data-error-for="admin_email"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-password">
+              パスワード <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input" type="password" id="f-password" name="password"
+                   required maxlength="128" autocomplete="new-password"
+                   aria-describedby="f-password-hint f-password-error">
+            <p class="field__hint" id="f-password-hint">
+              10文字以上で、英大文字・英小文字・数字・記号のうち3種類以上を含めてください。
+            </p>
+            <p class="field__error" id="f-password-error" data-error-for="password"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-password-confirm">
+              パスワード（確認） <span class="field__req" aria-hidden="true">*</span>
+              <span class="visually-hidden">必須</span>
+            </label>
+            <input class="field__input" type="password" id="f-password-confirm" name="password_confirm"
+                   required maxlength="128" autocomplete="new-password"
+                   aria-describedby="f-password-confirm-error">
+            <p class="field__error" id="f-password-confirm-error" data-error-for="password_confirm"></p>
+          </div>
+
+          <div class="signup-step__actions">
+            <button class="btn btn--secondary btn--lg" type="button" data-goto-step="1">会社情報へ戻る</button>
+            <button class="btn btn--primary btn--lg" type="button" data-goto-step="3">契約内容の確認へ進む</button>
+          </div>
+        </section>
+
+        <!-- ======================= ステップ3: 契約内容の確認 ======================= -->
+        <section class="signup-step" data-step="3" aria-labelledby="step3-title" hidden>
+          <h2 class="signup-step__title" id="step3-title">契約内容の確認</h2>
+          <p class="signup-step__note">
+            ご利用人数をお選びいただくと、月額の合計が表示されます。表示はすべて税抜です。
+          </p>
+
+          <div class="field">
+            <label class="field__label" for="f-additional">
+              追加アカウント数
+            </label>
+            <input class="field__input field__input--short" type="number" id="f-additional" name="additional_accounts"
+                   value="0" min="0" max="999" step="1" inputmode="numeric"
+                   aria-describedby="f-additional-hint f-additional-error">
+            <p class="field__hint" id="f-additional-hint">
+              管理者1名は基本料金に含まれます。2人目以降の人数をご入力ください。
+            </p>
+            <p class="field__error" id="f-additional-error" data-error-for="additional_accounts"></p>
+          </div>
+
+          <!-- 契約内容のまとめ。金額の表示はJavaScriptが更新するが、
+               JavaScript無効でも初期値（追加0名）の正しい金額が読める。 -->
+          <div class="quote" id="quote">
+            <h3 class="quote__title">ご契約内容</h3>
+            <dl class="quote__list">
+              <div class="quote__row">
+                <dt>プラン</dt>
+                <dd>Smart Labo Works ライト</dd>
+              </div>
+              <div class="quote__row">
+                <dt>初期設定費</dt>
+                <dd><span data-price="initial">10,000</span> 円</dd>
+              </div>
+              <div class="quote__row">
+                <dt>月額基本料金（管理者1名を含む）</dt>
+                <dd><span data-price="monthly">20,000</span> 円／月</dd>
+              </div>
+              <div class="quote__row">
+                <dt>追加アカウント</dt>
+                <dd>
+                  <span data-price="additional">3,000</span> 円／月・1人 ×
+                  <span id="quoteCount">0</span> 人 ＝
+                  <span id="quoteAdditionalTotal">0</span> 円／月
+                </dd>
+              </div>
+              <div class="quote__row quote__row--total">
+                <dt>月額合計</dt>
+                <dd><strong id="quoteMonthlyTotal">20,000</strong> 円／月</dd>
+              </div>
+            </dl>
+            <p class="quote__note">
+              表示価格はすべて税抜です。初期設定費は月額合計に含まれません。
+              実際の初回のお支払いは利用開始月の日割りとなり、確定額はお支払いのお手続きの前に表示します。
+            </p>
+          </div>
+
+          <div class="signup-step__actions">
+            <button class="btn btn--secondary btn--lg" type="button" data-goto-step="2">管理者情報へ戻る</button>
+            <button class="btn btn--primary btn--lg" type="submit" id="formSubmit">入力内容を確認する</button>
+          </div>
+
+          <p class="cform__note">
+            この操作では、ご契約もお支払いも発生しません。入力内容の確認のみを行います。
+          </p>
+        </section>
+
+      </form>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__inner">
+
+      <div class="site-footer__col">
+        <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+          <img class="logo__icon logo__icon--tile" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+          <span class="logo__text">Smart Labo Works</span>
+        </a>
+        <p class="site-footer__brand-note">
+          会社を動かすAI。<br>
+          株式会社スマートラボ
+        </p>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>サービス</h4>
+        <a href="index.html#capabilities">できること</a>
+        <a href="index.html#features">機能</a>
+        <a href="index.html#screens">システム画面</a>
+        <a href="index.html#pricing">料金</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>導入</h4>
+        <a href="apply.html">お申し込み</a>
+        <a href="contact.html?type=docs#form">資料請求</a>
+        <a href="index.html#steps">導入の流れ</a>
+        <a href="index.html#faq">よくある質問</a>
+        <a href="contact.html">お問い合わせ</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>会社</h4>
+        <a href="company.html">会社概要</a>
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom site-footer__legal">
+      <p>&copy; 株式会社スマートラボ</p>
+      <p class="site-footer__legal-links">
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/signup.js"></script>
+</body>
+</html>

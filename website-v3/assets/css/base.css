@@ -1,0 +1,406 @@
+/* ==========================================================================
+   Smart Labo Works — Website v3 / Base
+   --------------------------------------------------------------------------
+   reset + タイポグラフィ + レイアウト骨格 + ボタン + ロゴ + フォーカス表示。
+   ページ固有の装飾はここに書かない(WEB-V2-2以降で components.css を追加予定)。
+   色・余白・角丸・影は必ず tokens.css の変数を経由すること。
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- Reset -- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  /* 固定ヘッダー分だけアンカー位置をずらす */
+  scroll-padding-top: calc(var(--header-h) + var(--sp-4));
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text-primary);
+  background: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+img { height: auto; }
+
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+
+h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+p { margin: 0; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------- Focus visible -- */
+/* v1(WEBSITE/css/style.css)にはキーボードフォーカスの可視リングが無く、
+   Tab操作で現在位置が分からない状態だった。v2では全ページ共通で必ず表示する。 */
+
+:focus { outline: none; }
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* 濃色(Navy)背景の上では Smart Blue が沈むため、Accent Blue へ切替。
+   ヘッダーは明色背景のため対象外(既定の Smart Blue のまま)。 */
+.on-inverse :focus-visible,
+.section--inverse :focus-visible,
+.site-footer :focus-visible {
+  outline-color: var(--focus-ring-on-inverse);
+}
+
+/* キーボード利用者向けスキップリンク */
+.skip-link {
+  position: absolute;
+  left: var(--sp-4);
+  top: calc(-1 * var(--sp-10));
+  z-index: 200;
+  padding: var(--sp-3) var(--sp-5);
+  background: var(--c-white);
+  color: var(--text-link);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top var(--dur-fast) var(--ease);
+}
+.skip-link:focus-visible { top: var(--sp-4); }
+
+/* ------------------------------------------------------------- Layout -- */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow { max-width: var(--content-narrow); }
+
+.section { padding-block: var(--section-y); }
+.section--subtle  { background: var(--bg-subtle); }
+.section--inverse { background: var(--bg-inverse); color: var(--text-on-inverse); }
+.section--inverse .section__lead { color: var(--text-on-inverse-secondary); }
+
+.stack > * + * { margin-top: var(--sp-4); }
+.stack-lg > * + * { margin-top: var(--sp-6); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------- Typography -- */
+
+.h-display { font-size: var(--fs-display); line-height: var(--lh-tight); }
+.h-2 { font-size: var(--fs-h2); line-height: var(--lh-tight); }
+.h-3 { font-size: var(--fs-h3); line-height: var(--lh-tight); }
+.h-4 { font-size: var(--fs-h4); line-height: var(--lh-tight); }
+
+.section__title {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-tight);
+  margin-bottom: var(--sp-4);
+  /* 見出しの行が極端に不均等になるのを避ける */
+  text-wrap: balance;
+}
+.section__lead {
+  font-size: var(--fs-body);
+  line-height: var(--lh-loose);
+  color: var(--text-secondary);
+  max-width: 60ch;
+  /* 最終行に1〜2文字だけ残る折り返しを避ける */
+  text-wrap: pretty;
+}
+
+.lead { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); text-wrap: pretty; }
+/* 日本語の折り返し。text-wrap:pretty は主に欧文の孤立語向けなので、
+   文節単位で改行する word-break:auto-phrase を併用する(非対応環境では無視される)。 */
+p { text-wrap: pretty; word-break: auto-phrase; }
+.text-sm { font-size: var(--fs-sm); }
+.text-xs { font-size: var(--fs-xs); }
+
+.prose > * + * { margin-top: var(--sp-4); }
+.prose h2 { font-size: var(--fs-h3); margin-top: var(--sp-7); }
+.prose h3 { font-size: var(--fs-h4); margin-top: var(--sp-6); }
+.prose ul { padding-left: 1.25em; list-style: disc; }
+.prose li + li { margin-top: var(--sp-2); }
+.prose a { color: var(--text-link); text-decoration: underline; text-underline-offset: 2px; }
+
+/* -------------------------------------------------------------- Logo -- */
+/* 正式ロゴの取扱い(厳守):
+     - 高さのみ指定し、width は必ず auto(縦横比を変えない)
+     - filter / opacity / mix-blend-mode 等での色変更・加工をしない
+     - 背景色に応じて logo-primary(明色背景)/ logo-white(濃色背景)を使い分ける */
+
+/* ヘッダー/フッターでは「アイコンマーク単体(正式アセット)+ 文字」で組む。
+   Primary/White の正式ロックアップは アイコン+Smart Labo+Works+タグライン の
+   3階層構成で、32〜40px の高さでは文字が潰れて読めないため、小さい場所では使わない
+   (DESIGN_ASSETS/01_LOGO/README.md が用途別に Icon/ を用意しているのに従う)。
+   大きく置ける場所ではロックアップ(logo-primary / logo-white)を使う。 */
+
+.logo { display: inline-flex; align-items: center; gap: 10px; }
+
+.logo__icon {
+  height: var(--logo-icon-header);
+  width: auto;
+}
+
+.logo__text {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.logo__img {
+  height: var(--logo-h-header);
+  width: auto;
+}
+.logo__img--footer { height: var(--logo-h-footer); }
+.logo__img--hero   { height: var(--logo-h-hero); }
+
+@media (max-width: 640px) {
+  .logo__text { font-size: 15px; }
+}
+
+/* ------------------------------------------------------------ Buttons -- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 14px var(--sp-6);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              background-color var(--dur) var(--ease),
+              border-color var(--dur) var(--ease),
+              color var(--dur) var(--ease);
+}
+
+.btn--lg { padding: var(--sp-4) var(--sp-6); font-size: var(--fs-body); border-radius: var(--radius-md); }
+.btn--sm { padding: 10px 18px; font-size: var(--fs-xs); }
+
+.btn--primary { background: var(--c-blue); border-color: var(--c-blue); color: var(--c-white); }
+.btn--primary:hover { background: var(--c-blue-dark); border-color: var(--c-blue-dark); transform: translateY(-1px); box-shadow: var(--shadow-blue); }
+
+.btn--secondary { background: transparent; border-color: var(--c-blue); color: var(--c-blue); }
+.btn--secondary:hover { background: var(--c-blue); color: var(--c-white); transform: translateY(-1px); }
+
+.btn--ghost-light { background: transparent; border-color: rgba(255,255,255,0.35); color: var(--c-white); }
+.btn--ghost-light:hover { border-color: var(--c-white); background: rgba(255,255,255,0.08); }
+
+.btn[aria-disabled="true"], .btn:disabled { opacity: 0.5; pointer-events: none; }
+
+/* ------------------------------------------------------------- Header -- */
+
+/* 明色・低い高さ・スクロール後も固定。境界線はスクロール時にだけ出す。 */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: saturate(1.6) blur(12px);
+  backdrop-filter: saturate(1.6) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+/* backdrop-filter 非対応ブラウザでは半透明だと文字が読みにくいので不透明にする */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header { background: var(--c-white); }
+}
+
+.site-header.is-scrolled {
+  border-bottom-color: var(--border-subtle);
+  box-shadow: 0 1px 3px rgba(10, 27, 61, 0.04);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  width: 100%;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-left: auto;
+}
+
+.site-nav a {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
+}
+.site-nav a:hover { color: var(--text-primary); background: var(--bg-subtle); }
+.site-nav a[aria-current="page"] { color: var(--text-primary); font-weight: 600; }
+
+.site-header__actions { display: flex; align-items: center; gap: var(--sp-3); }
+
+.nav-toggle {
+  display: none;
+  margin-left: auto;
+  padding: var(--sp-2);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.nav-toggle:hover { background: var(--bg-subtle); }
+
+/* 1081px 以上では hidden 属性を無視して常に表示する。
+   ナビの表示可否の最終判断はCSS側に持たせ、JSはモバイルの開閉だけを担う。
+   こうしておくと、JSが失敗した場合やメディアクエリの変化イベントを取りこぼした
+   場合でも、デスクトップでナビが消えることがない。 */
+@media (min-width: 1081px) {
+  .site-nav[hidden] { display: flex; }
+}
+
+/* --- 1080px 以下: ナビをドロワーへ(項目6件+CTAが1行に収まらないため) --- */
+@media (max-width: 1080px) {
+  .nav-toggle { display: inline-flex; order: 3; }
+  .site-header__actions { order: 2; margin-left: auto; }
+
+  /* ドロワー表示になると、ロゴ+CTA2つ+トグルが1行に収まらない。
+     主CTA(今すぐ申し込む)だけを残し、副CTA(無料相談する)はドロワー内の
+     「お問い合わせ」と各ページ本文のCTAに委ねる。 */
+  .site-header__sub { display: none; }
+
+  .site-nav {
+    position: absolute;
+    inset: var(--header-h) 0 auto 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin-left: 0;
+    padding: var(--sp-3) var(--gutter) var(--sp-5);
+    background: var(--c-white);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-lg);
+  }
+  .site-nav[hidden] { display: none; }
+  .site-nav a { padding: var(--sp-3) var(--sp-2); font-size: var(--fs-body); border-radius: 0; }
+  .site-nav a + a { border-top: 1px solid var(--border-subtle); }
+}
+
+/* ヘッダーCTAの文言切替。520px以下ではロゴのワードマークと衝突するため、
+   「今すぐ申し込む」→「申し込む」の短縮表記に切り替える(リンク先は同一)。 */
+.btn__label-short { display: none; }
+
+@media (max-width: 520px) {
+  .site-header__actions .btn { padding: 9px 14px; font-size: 12px; }
+  .site-header__actions .btn__label-full { display: none; }
+  .site-header__actions .btn__label-short { display: inline; }
+}
+
+/* ------------------------------------------------------------- Footer -- */
+
+.site-footer {
+  padding-block: var(--sp-8) var(--sp-6);
+  background: var(--bg-inverse);
+  color: var(--text-on-inverse-secondary);
+  font-size: var(--fs-sm);
+}
+
+.site-footer a { color: var(--text-on-inverse-secondary); }
+.site-footer a:hover { color: var(--c-white); }
+
+.site-footer__inner {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: var(--sp-6);
+}
+
+.site-footer .logo__text { color: var(--c-white); }
+.site-footer .logo__icon { height: 30px; }
+
+.site-footer__col h4 { color: var(--c-white); font-size: var(--fs-xs); letter-spacing: 0.06em; margin-bottom: var(--sp-3); }
+.site-footer__col a { display: block; padding-block: var(--sp-1); }
+
+.site-footer__bottom {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-5);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  font-size: var(--fs-xs);
+}
+
+@media (max-width: 860px) { .site-footer__inner { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .site-footer__inner { grid-template-columns: 1fr; } }
+
+/* --------------------------------------------------------------- Grid -- */
+
+.grid { display: grid; gap: var(--sp-5); }
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 1080px) { .grid--4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 860px)  { .grid--3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  {
+  .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------- Card -- */
+
+.card {
+  padding: var(--sp-6);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ------------------------------------------------------------- Notice -- */
+/* ローカル開発中であることを画面上で明示する帯。
+   本番切替(WEBSITE/へのコピー)の前に必ず削除すること。 */
+
+.dev-banner {
+  padding: var(--sp-2) var(--gutter);
+  background: #7C2D12;
+  color: var(--c-white);
+  font-size: var(--fs-xs);
+  text-align: center;
+  letter-spacing: 0.02em;
+}

@@ -25,7 +25,8 @@ const fs = require('fs');
 const path = require('path');
 
 const V1 = path.resolve(__dirname, '../../../WEBSITE');
-const V2 = path.resolve(__dirname, '../../../website-v2');
+// WEB-V3-1: 比較対象を Version 3 のフォルダへ切り替えた(変数名は据え置き)
+const V2 = path.resolve(__dirname, '../../../website-v3');
 
 const PAGES = [
   { file: 'privacy.html', crumb: 'プライバシーポリシー' },

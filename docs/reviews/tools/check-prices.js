@@ -31,7 +31,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '../../../website-v2');
+// WEB-V3-1: 検査対象を Version 3 のフォルダへ切り替えた
+const ROOT = path.resolve(__dirname, '../../../website-v3');
 
 /** 料金の正規値。ここが唯一の基準。 */
 const CANONICAL = {
@@ -205,7 +206,8 @@ for (const f of ALL_PAGES) {
 const SALES_BANNED = [
   '初月無料',            // 誤認表現。日割りの初月と無料になる月がずれる
   '無料トライアル',       // 未採用
-  '資料請求',            // 未採用
+  // 「資料請求」は WEB-V3-1(2026-08-07 代表指示)で正式採用。お問い合わせ
+  // フォームの種別「docs」として受け付けるため、禁止語から除外した。
   'デモ予約',            // 未採用
   'すぐ契約できます',     // 未採用の断定表現
   '即時利用可能',         // 未採用の断定表現
