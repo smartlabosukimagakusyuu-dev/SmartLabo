@@ -6,14 +6,19 @@
 
 declare(strict_types=1);
 
-/** 画面の項目と、選択肢の対応。ラベルはメール本文に使う */
+/**
+ * 画面の項目と、選択肢の対応。ラベルはメール件名・本文に使う。
+ * WEB-V3-API-1(2026-08-07)で正式6種別へ統一した。
+ * キーは contact.html の option value および URLパラメータ ?type= と1対1。
+ * 種別を増減する場合は contact.html の <select> と必ず同時に更新すること。
+ */
 const SLW_TYPES = [
-    'intro'   => '導入について',
-    'price'   => '料金について',
-    'feature' => '機能について',
-    'fit'     => '自社で利用できるか相談',
-    'docs'    => '資料請求（サービス紹介資料）',   // WEB-V3-1で追加
-    'other'   => 'その他',
+    'contact' => 'お問い合わせ',
+    'consult' => '無料相談',
+    'docs'    => '資料請求',
+    'demo'    => 'デモ依頼',
+    'partner' => 'パートナー募集',
+    'recruit' => '採用',
 ];
 
 const SLW_HEADCOUNTS = [

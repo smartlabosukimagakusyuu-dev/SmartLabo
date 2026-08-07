@@ -8,7 +8,7 @@
      website-v3/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
 
 <title>お問い合わせ — Smart Labo Works</title>
-<meta name="description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、資料請求、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<meta name="description" content="Smart Labo Worksへのお問い合わせ。無料相談・資料請求・デモ依頼・パートナー募集・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <link rel="canonical" href="https://smartlaboworks.com/contact.html">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
@@ -17,12 +17,12 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
 <meta property="og:title" content="お問い合わせ — Smart Labo Works">
-<meta property="og:description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、資料請求、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<meta property="og:description" content="Smart Labo Worksへのお問い合わせ。無料相談・資料請求・デモ依頼・パートナー募集・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <meta property="og:url" content="https://smartlaboworks.com/contact.html">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="お問い合わせ — Smart Labo Works">
-<meta name="twitter:description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、資料請求、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<meta name="twitter:description" content="Smart Labo Worksへのお問い合わせ。無料相談・資料請求・デモ依頼・パートナー募集・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
 
 
@@ -288,13 +288,15 @@
           </label>
           <select class="field__input field__select" id="f-type" name="type" required
                   aria-describedby="f-type-error">
+            <!-- WEB-V3-API-1: 正式6種別。value は contact-api の SLW_TYPES および
+                 URLパラメータ ?type= と1対1で対応する。変更時はAPI側と同時に更新すること。 -->
             <option value="">選択してください</option>
-            <option value="intro">導入について</option>
-            <option value="price">料金について</option>
-            <option value="feature">機能について</option>
-            <option value="fit">自社で利用できるか相談</option>
-            <option value="docs">資料請求（サービス紹介資料）</option>
-            <option value="other">その他</option>
+            <option value="contact">お問い合わせ</option>
+            <option value="consult">無料相談</option>
+            <option value="docs">資料請求</option>
+            <option value="demo">デモ依頼</option>
+            <option value="partner">パートナー募集</option>
+            <option value="recruit">採用</option>
           </select>
           <p class="field__error" id="f-type-error" data-error-for="type"></p>
         </div>
