@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KKRD8BZR');</script>
+<!-- End Google Tag Manager -->
+
 <!-- Smart Labo Works — Website v3 / プライバシーポリシー(骨格のみ。本実装はWEB-V2-2以降)
      website-v3/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
 
@@ -43,10 +51,17 @@
 }
 </script>
 
-<!-- 計測タグ導入位置。現時点では未導入(解析コードなし・Cookieなし)。
-     計測ID・認証キーはこのリポジトリへコミットしない。 -->
+<!-- 計測タグは <head> 上部の Google Tag Manager に集約している。
+     GA4 は GTM 経由でのみ配信し、gtag.js は直接実装しない（二重計測の防止）。
+     コンテナID・測定IDはページソースから見える公開識別子であり秘密ではない。
+     APIキー・認証情報は引き続きこのリポジトリへコミットしない。 -->
 </head>
 <body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKRD8BZR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip-link" href="#main">本文へスキップ</a>
 
@@ -104,6 +119,12 @@
        変更したのは外枠のレイアウト（ヘッダー・フッター・パンくず・余白・
        見出し・タイポグラフィ）だけ。法務文言は書き換えないこと。
        移植の一致は docs/reviews/tools/check-legal.js で機械的に検証している。
+
+       例外は「6. Cookie・アクセス解析について」の1節のみ。
+       WEB-V3-5A-1（2026-08-08・代表承認）で、GA4／Google Tag Manager の
+       利用開示へ正式に改定した。この1節だけは Version1 との一致検査ではなく、
+       check-legal.js 内の承認済み文面（PRIVACY_SECTION6）との一致で検査する。
+       他の節は従来どおり Version1 との完全一致で凍結されている。
        ============================================================== -->
   <section class="section">
     <div class="container container--narrow">
@@ -156,7 +177,12 @@
 
         <section>
           <h2>6. Cookie・アクセス解析について</h2>
-          <p>本サイトでは、本ページ作成時点でGoogle Analytics等のアクセス解析ツール・広告配信のためのCookieを導入していません。将来、これらを導入する場合は、事前に本ページで開示します。</p>
+          <p>当社は、本サイトの利用状況の把握、サイトの改善およびお問い合わせ経路の分析を目的として、Google LLCが提供するGoogle Analytics 4（GA4）を利用しています。また、これらの計測タグの管理にGoogle Tag Managerを利用しています。</p>
+          <p>Google Analyticsでは、Cookie等を利用して、閲覧したページ、参照元、利用端末・ブラウザに関する情報等がGoogleへ送信される場合があります。</p>
+          <p>当社は、お問い合わせフォームに入力された氏名、会社名、メールアドレス、電話番号、お問い合わせ本文等を、Google Analyticsの計測イベントとして送信しません。お問い合わせ種別など、個人を直接特定しない情報のみをサイト改善のための計測に利用する場合があります。</p>
+          <p>Google Analyticsによる計測を希望しない場合は、ブラウザのCookie設定またはGoogleが提供する<a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Google Analyticsオプトアウトブラウザアドオン<span class="visually-hidden">（外部サイト・新しいタブで開きます）</span></a>をご利用いただけます。</p>
+          <p>Google Analyticsにおけるデータの取扱いについては、<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Googleのプライバシーポリシー<span class="visually-hidden">（外部サイト・新しいタブで開きます）</span></a>等をご確認ください。</p>
+          <p>なお、当社が将来、広告効果測定等のために新たな外部サービスを導入する場合は、必要に応じて本ポリシーを更新します。</p>
         </section>
 
         <section>
@@ -179,7 +205,7 @@
           <p>本ポリシーに関するお問い合わせは、<a href="contact.html">お問い合わせフォーム</a>よりご連絡ください。</p>
         </section>
 
-        <p class="legal-meta">制定日：[CEO確認待ち]　最終更新日：2026-07-14（ドラフト作成）</p>
+        <p class="legal-meta">制定日：[CEO確認待ち]　最終更新日：2026-08-08（アクセス解析の利用開始に伴う改定）</p>
 
       </div>
     </div>

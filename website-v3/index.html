@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KKRD8BZR');</script>
+<!-- End Google Tag Manager -->
+
 <!-- ============================================================
      Smart Labo Works — Website v3 / トップページ
      WEB-V2-2: Section1〜6(ヘッダー/ヒーロー/悩み/解決/業務フロー/導入前後)を実装。
@@ -68,14 +76,22 @@
 </script>
 
 <!-- ============================================================
-     計測タグの導入位置。現時点では一切埋め込んでいない
-     (解析コードなし・Cookieなし)。導入時は Search Console 所有権確認
-     → GA4 → Cookie同意 の順で追加する。GA4を入れる場合は privacy.html の
-     「Cookie・アクセス解析について」を先に更新すること。
-     計測ID・認証キーはこのリポジトリへコミットしない。
+     計測タグは <head> 上部の Google Tag Manager に集約している。
+     GA4 は GTM 経由でのみ配信し、gtag.js は直接実装しない（二重計測の防止）。
+     問い合わせの成功計測は assets/js/contact-form.js から dataLayer へ
+     generate_lead を1回だけ送る。送るのは種別（lead_type）のみで、
+     氏名・会社名・メール・電話・本文は一切送らない。
+     開示内容は privacy.html「6. Cookie・アクセス解析について」と一致させること。
+     コンテナID・測定IDはページソースから見える公開識別子であり秘密ではない。
+     APIキー・認証情報は引き続きこのリポジトリへコミットしない。
      ============================================================ -->
 </head>
 <body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKRD8BZR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip-link" href="#main">本文へスキップ</a>
 
