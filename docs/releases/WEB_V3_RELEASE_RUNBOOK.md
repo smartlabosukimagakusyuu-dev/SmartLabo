@@ -36,9 +36,11 @@ git show master:WEBSITE/CNAME    # smartlaboworks.com であることを確認
 2. `WEBSITE/` の中身を `website-v3/` の内容で置き換える。**必ず残すもの**
    - `WEBSITE/CNAME`（先に退避 → 置換後に復元して内容を確認）
    - `WEBSITE/app.html`（デモ画面）
-3. v1固有URL（`product.html` / `real-estate.html`）を削除するか残すかは**代表に確認**。
-   削除する場合はGitHub PagesでURL転送ができないため、`sitemap.xml` の更新と
-   Search Consoleでの確認が必要
+3. v1固有URL（`product.html` / `real-estate.html`）は **WEB-V3-4で転送ページを用意済み**。
+   website-v3 の同名ファイル（canonical＋meta refresh＋location.replace の静的転送）を
+   そのまま `WEBSITE/` へ含めること。転送先は product→features.html、
+   real-estate→index.html。sitemap.xml には載せない（正規URLは転送先）。
+   公開後は Search Console で旧URLの扱いを確認する
 4. `website-v3/README.md` は公開物ではないため `WEBSITE/` へ入れない
 
 ## 4. dev-banner の削除
@@ -48,20 +50,59 @@ git show master:WEBSITE/CNAME    # smartlaboworks.com であることを確認
 grep -rn 'dev-banner' WEBSITE/ | wc -l    # 0 になること
 ```
 
-## 5. contact-api の docs 種別反映（必須・先行または同時）
+## 5. Contact API の本番配置（必須・Website公開より先または同時）
 
-- Websiteの資料請求は `contact.html?type=docs#form` → フォーム種別 `docs` を送信する
-- **XServer本番のAPIが `docs` を許可していないと、資料請求だけが弾かれる**
-- 反映対象：`contact-api/public/lib/validate.php` の `SLW_TYPES`
-- **注意（WEB-V3-3時点の実測）**：`docs` を含む種別更新は
-  `feature/web-v3-api-1-contact-api`（WEB-V3-API-1・6種別＝contact/consult/docs/demo/partner/recruit）
-  にあり、`website-v3` には入っていない。公開前に**どちらの種別体系で公開するかを確定**し、
-  Website側の `<option>` とAPI側の allowlist を必ず一致させること
-- あわせて `contact-api` 本体がXServerへ未配置である（WEB-V3-RELEASE 停止報告の実測）。
-  配置手順は `contact-api/README.md` §2。apexはGitHub PagesのためPHP不可 →
-  **B構成（form.smartlaboworks.com）**で配置し、`contact.html` の
-  `action` / `data-endpoint` / `data-token-endpoint` を絶対URLへ変更、
-  `allowed_origins` に `https://smartlaboworks.com` を設定する
+### 5-0. 正式問い合わせ種別（WEB-V3-4で確定。Website と API で完全一致）
+
+| value | ラベル |
+|---|---|
+| docs | 資料請求 |
+| consult | 無料相談 |
+| demo | デモ依頼 |
+| contact | 一般お問い合わせ |
+| partner | パートナー・代理店相談 |
+| recruit | 採用について |
+
+旧値（intro / price / feature / fit / other）は allowlist に無く、送信されても422で拒否される。
+**Website の `<option>` と `contact-api/public/lib/validate.php` の `SLW_TYPES` は
+必ず同時に更新する**（片方だけ変えると該当種別の送信がすべて失敗する）。
+
+### 5-1. 構成（B構成・WEB-V3-4実測）
+
+| 項目 | 値 |
+|---|---|
+| 公開サイト | `https://smartlaboworks.com` … GitHub Pages（**PHP実行不可**） |
+| Contact API | `https://form.smartlaboworks.com` … XServer（85.131.213.188・nginx） |
+| SSL | CN=form.smartlaboworks.com・2026-10-12まで有効・**HTTPS必須** |
+| Website側の送信先 | `action` / `data-endpoint` = `https://form.smartlaboworks.com/contact.php`／`data-token-endpoint` = `https://form.smartlaboworks.com/csrf-token.php`（すでにwebsite-v3へ設定済み） |
+| 現在の配置状況 | `/contact.php`・`/csrf-token.php` ともに **404 ＝ 未配置**（要作業） |
+
+### 5-2. 配置手順（代表：XServerサーバーパネル／FTP）
+
+1. サーバーパネルで `form.smartlaboworks.com` の **PHP 8.0以上** を選択
+2. `contact-api/public/` の中身を form サブドメインのドキュメントルートへアップロード
+   （`.htaccess`／`contact.php`／`csrf-token.php`／`lib/` 一式）
+3. `contact-api/private/` の中身をドキュメントルートの **1つ上** へアップロード
+4. `contact-config.example.php` を `contact-config.php` としてコピーし、値を設定
+   - `to_email`（受信先）／`from_email`（自ドメインのアドレス）
+   - `csrf_secret` と `ip_hash_secret` を個別に生成
+     `php -r "echo bin2hex(random_bytes(32));"`
+   - **`allowed_origins` に `https://smartlaboworks.com` のみを追加**（CORSの許可元。
+     `*` は使わない。www を使う場合のみ `https://www.smartlaboworks.com` も追加）
+   - `mode` は最初 `test` のまま
+5. 権限：`private/` を 700・`contact-config.php` を 600
+6. `mode=test` で送信し、成功表示が出ることを確認 → 問題なければ `mode=live` へ
+7. 完了をお知らせいただければ、当方が外部から機械確認します
+   （csrf-token 200／不正type 422／正式6種別 allow／内部情報の非露出）
+
+### 5-3. 配置後の確認（外部から実行可能）
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' -H 'Origin: https://smartlaboworks.com' \
+  https://form.smartlaboworks.com/csrf-token.php     # 200
+curl -s -o /dev/null -w '%{http_code}\n' https://form.smartlaboworks.com/csrf-token.php   # 403（Originなし）
+```
+CORSヘッダーが許可オリジンにのみ付くこと・`*` でないことも確認する。
 
 ## 6. 公開前差分確認
 
@@ -102,13 +143,16 @@ done
 - 料金ページ：初期設定費10,000円／月額20,000円／追加3,000円（税別）・含まれるもの
 - 会社情報・プライバシー・利用規約・404
 
-## 11. 資料請求フォームの実送信確認
+## 11. 問い合わせフォームの実送信確認
 
 - `https://smartlaboworks.com/contact.html?type=docs#form` を開く
 - 種別が「資料請求」で自動選択されることを確認
-- **完全架空の情報のみ**で1回送信し、成功応答と受信を確認
-- 既存の他種別（お問い合わせ／無料相談）でも1回確認
-- 失敗する場合は §5 のAPI反映漏れを疑う
+- **完全架空の情報のみ**で1回送信し、成功応答と受信メール
+  （件名「【Smart Labo】資料請求」・本文に会社名/氏名/メール/電話/種別/内容/送信日時/IPハッシュ）を確認
+- 続けて `?type=consult` `?type=demo` `?type=contact` `?type=partner` `?type=recruit` を開き、
+  **種別が自動選択されること**を確認（送信は任意。少なくとも1種別で実送信できていれば経路は確認済み）
+- 旧値（例 `?type=intro`）では**未選択のまま**になることを確認（安全側の挙動）
+- 失敗する場合は §5 の配置・`allowed_origins`・`mode` を疑う
 
 ## 12. モバイル確認
 
@@ -120,6 +164,7 @@ done
 
 ## 13. ロールバック
 
+### Website（GitHub Pages）
 ```bash
 git checkout master
 git revert --no-edit <切替コミットのSHA>
@@ -127,8 +172,15 @@ git push origin master
 ```
 - `WEBSITE/` が変更されるためActionsが再実行され、v1の内容で再デプロイされる（通常1〜2分）
 - `git reset --hard` + force push は使わない（公開履歴とPagesのデプロイ履歴が壊れる）
-- 復旧後：トップ200・CNAME保持・主要ページ200を確認
-- contact-api側の `docs` 追加は後方互換のため戻す必要はない
+- 復旧後：トップ200・**CNAME保持**・主要ページ200・旧URL（product/real-estate）の応答を確認
+
+### Contact API（XServer）
+- 配置前の内容を退避しておき、問題時はその内容へ戻す（今回は新規配置のため、
+  切り戻しは「アップロードしたファイルを削除する」ことに相当）
+- `mode` を `test` に戻せば、メール送信を止めたまま挙動を確認できる
+- Websiteだけを先に切り戻した場合、APIは残っていても害はない（呼び出し元が無くなるだけ）
+- **API側の種別allowlistは後方互換**（旧値を消しただけで新規値は増えている）ため、
+  Websiteをv1へ戻してもv1にフォームは無く影響しない
 
 ## Go / No-Go 判定（公開作業）
 

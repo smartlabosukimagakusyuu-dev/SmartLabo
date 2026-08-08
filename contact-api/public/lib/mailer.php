@@ -54,24 +54,30 @@ function slw_encode_header(string $v): string
     return implode("\r\n ", $encoded);
 }
 
-/** 通知メールの本文を組み立てる */
-function slw_build_body(array $d): string
+/**
+ * 通知メールの本文を組み立てる。
+ * WEB-V3-API-1: 項目順を正式仕様（会社名/氏名/メール/電話/種別/内容/送信日時/IPハッシュ）
+ * に合わせ、IPハッシュを追記した。IPは生値を書かず、復元できないHMACハッシュのみ
+ * （security.php slw_ip_key と同じ値。同一送信元の照合にだけ使える）。
+ */
+function slw_build_body(array $d, array $c): string
 {
     $lines = [
         '公式サイトのお問い合わせフォームから送信されました。',
         '',
-        '受付日時       : ' . date('Y-m-d H:i:s') . ' (JST)',
-        '問い合わせ種別 : ' . (SLW_TYPES[$d['type']] ?? $d['type']),
         '会社名         : ' . $d['company'],
         'お名前         : ' . $d['name'],
         'メールアドレス : ' . $d['email'],
         '電話番号       : ' . ($d['tel'] !== '' ? $d['tel'] : '（未入力）'),
+        '問い合わせ種別 : ' . (SLW_TYPES[$d['type']] ?? $d['type']),
         '利用予定人数   : ' . (SLW_HEADCOUNTS[$d['headcount']] ?? '未回答'),
         '',
         '--- お問い合わせ内容 ---',
         $d['message'],
         '',
         '------------------------',
+        '送信日時       : ' . date('Y-m-d H:i:s') . ' (JST)',
+        'IPハッシュ     : ' . slw_ip_key($c),
         'このメールへ返信すると、送信者へ直接返信されます。',
     ];
     // 本文の改行は CRLF に揃える
@@ -92,8 +98,9 @@ function slw_send_notification(array $d, array $c): bool
 
     $to      = slw_header_safe((string)$c['to_email']);
     $from    = slw_header_safe((string)$c['from_email']);
+    // 件名は正式仕様（WEB-V3-API-1）: 【Smart Labo】＋種別ラベル
     $subject = slw_encode_header(
-        '【お問い合わせ】' . (SLW_TYPES[$d['type']] ?? 'その他') . ' / ' . $d['company']
+        '【Smart Labo】' . (SLW_TYPES[$d['type']] ?? 'お問い合わせ')
     );
 
     // Reply-To には利用者のアドレスを入れる。
@@ -113,7 +120,7 @@ function slw_send_notification(array $d, array $c): bool
         'Auto-Submitted: auto-generated',
     ];
 
-    $body = slw_build_body($d);
+    $body = slw_build_body($d, $c);
 
     // 検証モードでは実際に送信しない
     if (($c['mode'] ?? 'test') !== 'live') {

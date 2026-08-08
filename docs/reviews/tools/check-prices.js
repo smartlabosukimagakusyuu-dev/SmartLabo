@@ -240,7 +240,15 @@ for (const f of ALL_PAGES) {
 // SALES-1で signup.html(申込手続き)を追加した。送信先 /api/signup は入力を
 // 検証して結果を返すだけで、保存も決済も行わない(signup-api/public/signup.php)。
 const FORM_PAGES = ['contact.html', 'signup.html'];        // フォームを置いてよいページ
-const ALLOWED_ACTIONS = ['/api/contact.php', '/api/signup']; // 送信先として認めるパス
+// 送信先として認めるパス。
+// WEB-V3-4: apexはGitHub PagesでPHPを実行できないため、お問い合わせAPIは
+// XServer上の form.smartlaboworks.com（B構成）へ置く。よって絶対URL（HTTPS・
+// 自社サブドメインのみ）を許可する。他ドメインは下のBAD_TARGETSで引き続き弾く。
+const ALLOWED_ACTIONS = [
+  'https://form.smartlaboworks.com/contact.php',
+  'https://form.smartlaboworks.com/csrf-token.php',
+  '/api/signup',
+];
 
 for (const f of ALL_PAGES) {
   const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -289,7 +297,9 @@ const BAD_TARGETS = [
   [/\bformspree\b/i,                 '外部フォームサービス(Formspree)'],
   [/docs\.google\.com\/forms/i,      'Googleフォーム'],
   [/\bmailto:/i,                      'mailto:'],
-  [/action="https?:\/\/(?!smartlaboworks\.com)/i, '外部ドメインへの送信先'],
+  // 自社ドメイン（smartlaboworks.com とそのサブドメイン）以外への送信は禁止。
+  // 例: https://form.smartlaboworks.com/... は許可、https://evil.example/... は不許可。
+  [/action="https?:\/\/(?!(?:[a-z0-9-]+\.)*smartlaboworks\.com\/)/i, '外部ドメインへの送信先'],
   [/action="#"/i,                     'ダミーの送信先(#)'],
   [/action=""/i,                      '空の送信先'],
   [/\bexample\.(com|org|net)\/(api|contact|form)/i, 'ダミーの送信先(example)'],

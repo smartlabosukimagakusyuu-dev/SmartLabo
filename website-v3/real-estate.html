@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     WEB-V3-4: 旧ページの転送用（Version 1 に存在した real-estate.html）
+     Version 3 は業種を限定しない中小企業向けの内容へ統一したため、
+     このURLへ来た訪問者と検索エンジンをトップページへ送る。
+
+     GitHub Pages はサーバー側の301リダイレクトを設定できないため、
+     静的ページで canonical・meta refresh・location.replace の3つを行う。
+     いずれも無効な環境でも、本文のリンクから移動できる。
+
+     このページは sitemap.xml へ載せない（正規URLはトップページ）。
+     ============================================================ -->
+
+<title>ページの移動｜Smart Labo Works</title>
+<meta name="description" content="このページは移動しました。Smart Labo Works のトップページへご案内します。">
+<link rel="canonical" href="https://smartlaboworks.com/">
+<meta http-equiv="refresh" content="0; url=index.html">
+<link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+
+<main id="main" class="section">
+  <div class="container container--narrow">
+    <h1>ページの場所が変わりました</h1>
+    <p>
+      現在のSmart Labo Worksは、業種を限定しない中小企業向けの業務支援システムとして
+      ご案内しています。自動で移動しない場合は、下のリンクからお進みください。
+    </p>
+    <p>
+      <a href="index.html" class="btn btn--primary btn--lg">トップページへ進む</a>
+      <a href="features.html" class="btn btn--secondary btn--lg">機能を見る</a>
+    </p>
+  </div>
+</main>
+
+<script>
+  location.replace('index.html');
+</script>
+</body>
+</html>

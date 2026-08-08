@@ -27,10 +27,22 @@
   var tsField = document.getElementById('f-form-ts');
   if (tsField) tsField.value = String(Date.now());
 
+  /**
+   * ローカルでの開発表示かどうか（WEB-V3-4）。
+   *
+   * 送信先APIは本番では別オリジン（form.smartlaboworks.com）にあり、
+   * その許可オリジンには公開サイトのURLだけを登録する。そのため
+   * localhost から開くとCSRFトークン取得がCORSで必ず失敗し、
+   * ブラウザのコンソールにエラーが残る（画面と操作は壊れないが紛らわしい）。
+   * 開発時は取得そのものを行わないようにして、確認を静かに保つ。
+   * 本番（smartlaboworks.com）での挙動は従来どおり変わらない。
+   */
+  var isLocalPreview = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+
   // CSRFトークンを取得して隠し項目へ入れる。
   // 取得できなくても送信は止めない（サーバー側の設定次第で受け付けられる）。
   var csrfField = document.getElementById('f-csrf');
-  if (csrfField && tokenEndpoint) {
+  if (csrfField && tokenEndpoint && !isLocalPreview) {
     fetch(tokenEndpoint, { method: 'GET', credentials: 'omit' })
       .then(function (res) { return res.ok ? res.json() : null; })
       .then(function (data) { if (data && data.token) csrfField.value = data.token; })
