@@ -391,16 +391,3 @@ p { text-wrap: pretty; word-break: auto-phrase; }
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
-
-/* ------------------------------------------------------------- Notice -- */
-/* ローカル開発中であることを画面上で明示する帯。
-   本番切替(WEBSITE/へのコピー)の前に必ず削除すること。 */
-
-.dev-banner {
-  padding: var(--sp-2) var(--gutter);
-  background: #7C2D12;
-  color: var(--c-white);
-  font-size: var(--fs-xs);
-  text-align: center;
-  letter-spacing: 0.02em;
-}
