@@ -1,3 +1,7 @@
+# Smart Labo Works — Website v2
+# 本番切替(website-v2/ → WEBSITE/)後に有効になる内容。
+# v2はローカル開発中で公開されていないため、現時点でクローラに読まれることはない。
+
 User-agent: *
 Allow: /
 
