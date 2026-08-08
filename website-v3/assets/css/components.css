@@ -2011,3 +2011,205 @@ html:not(.js) .signup-step + .signup-step {
   background: var(--c-blue);
   border-radius: var(--radius-full);
 }
+
+/* ============================ WEB-V3-3: 追加分 ============================
+   本番反映済みの Company Brain Basic / 管理者ダッシュボードの紹介と、
+   主要機能の再編・導入前後の対比・図解のモバイル表示に必要なものだけ。
+   色・余白は tokens.css の既存変数のみ。新ブランドカラー・新ブレークポイントなし。
+   ========================================================================== */
+
+/* ------------------------------------------- コンセプト図解のモバイル表示 -- */
+/* 640pxより広い画面ではSVG（.connect__figure）、以下では縦型（.connect__stack）。
+   display:none 側は読み上げ対象にもならないため、内容の二重読み上げは起きない。 */
+.connect__stack { display: none; }
+
+@media (max-width: 640px) {
+  /* スマートフォンでは横スクロールの図をやめ、縦に読める形へ差し替える */
+  .connect__figure { display: none; }
+  .connect__stack { display: block; }
+}
+
+.connect__stack-label {
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--text-on-inverse-secondary);
+}
+.connect__stack-list {
+  display: grid;
+  gap: var(--sp-2);
+  list-style: none;
+}
+.connect__stack-list li {
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-on-inverse);
+  background: var(--c-navy-700);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: var(--radius-md);
+}
+.connect__stack-arrow {
+  display: grid;
+  place-items: center;
+  margin: var(--sp-2) 0;
+  color: var(--c-blue-light);
+}
+.connect__stack-hub {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: var(--c-white);
+  background: var(--c-blue);
+  border-radius: var(--radius-md);
+}
+.connect__stack-hub-mark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  font-size: 15px;
+  font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+}
+.connect__stack-out {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--c-navy);
+  background: var(--c-white);
+  border-radius: var(--radius-full);
+}
+
+/* --------------------------------------- Company Brain の流れ（brainflow） -- */
+.brainflow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-3);
+  list-style: none;
+}
+.brainflow__step {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-2);
+  padding: var(--sp-5);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+.brainflow__step--key {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: var(--shadow-sm);
+}
+.brainflow__num {
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-white);
+  background: var(--c-blue);
+  border-radius: 50%;
+}
+.brainflow__title { font-size: var(--fs-h4); }
+.brainflow__note { font-size: var(--fs-sm); line-height: var(--lh-loose); color: var(--text-secondary); }
+
+@media (max-width: 1080px) { .brainflow { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .brainflow { grid-template-columns: 1fr; } }
+
+/* ----------------------------------- 管理者ダッシュボードの項目（dashlist） -- */
+.dashlist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  list-style: none;
+}
+.dashlist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  color: var(--text-secondary);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+.dashlist__item svg { flex: none; margin-top: 3px; color: var(--c-blue); }
+.dashlist__item b { color: var(--text-primary); }
+.dashlist__note {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 860px) { .dashlist { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------ これまで → 導入後（shift） -- */
+.shift { display: grid; gap: var(--sp-3); list-style: none; }
+.shift__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.2fr);
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--c-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+.shift__before {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}
+.shift__arrow { display: grid; place-items: center; color: var(--c-blue); }
+.shift__after {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.shift__divider { margin-top: var(--sp-9); }
+
+@media (max-width: 640px) {
+  .shift__row { grid-template-columns: 1fr; gap: var(--sp-2); }
+  /* 縦並びのときは矢印を下向きにして流れを保つ */
+  .shift__arrow svg { transform: rotate(90deg); }
+}
+
+/* ------------------------------------------- 主要機能カードの補足リンク -- */
+.feature-card__more { margin-top: var(--sp-2); font-size: var(--fs-sm); }
+
+/* -------------------------------------- その他の機能一覧（feature-more） -- */
+.feature-more {
+  margin-top: var(--sp-6);
+  padding: var(--sp-6);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+.feature-more__title { font-size: var(--fs-h3); margin-bottom: var(--sp-5); }
+.feature-more__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4) var(--sp-6);
+  list-style: none;
+}
+.feature-more__list li { display: grid; gap: 2px; }
+.feature-more__list b { font-size: var(--fs-body); }
+.feature-more__list span {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}
+.feature-more__link { margin-top: var(--sp-5); font-size: var(--fs-sm); }
+
+@media (max-width: 860px) { .feature-more__list { grid-template-columns: 1fr; } }

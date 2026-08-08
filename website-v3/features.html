@@ -8,7 +8,7 @@
      website-v3/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
 
 <title>Smart Labo Worksの機能｜AI・顧客管理・タスクを一つに</title>
-<meta name="description" content="顧客管理、活動記録、タスク、予定、AI文章作成に、AI資料ボックス・社内マニュアルAI・全体検索を加えた業務支援システムの機能。11の機能でできること、業務がどう変わるか、利用者が確認するポイントを実際の画面とあわせて説明します。">
+<meta name="description" content="会社専用AI「Company Brain Basic」と管理者ダッシュボードを含む、中小企業向けAI業務支援システムの機能。顧客管理・記録・タスク・予定・文書作成・AI資料ボックス・社内マニュアルAI・全体検索まで13の機能でできること、業務がどう変わるか、利用者が確認するポイントを実際の画面とあわせて説明します。">
 <link rel="canonical" href="https://smartlaboworks.com/features.html">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
@@ -17,12 +17,12 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
 <meta property="og:title" content="Smart Labo Worksの機能｜AI・顧客管理・タスクを一つに">
-<meta property="og:description" content="顧客管理、活動記録、タスク、予定、AI文章作成に、AI資料ボックス・社内マニュアルAI・全体検索を加えた業務支援システムの機能。11の機能でできること、業務がどう変わるか、利用者が確認するポイントを実際の画面とあわせて説明します。">
+<meta property="og:description" content="会社専用AI「Company Brain Basic」と管理者ダッシュボードを含む、中小企業向けAI業務支援システムの機能。顧客管理・記録・タスク・予定・文書作成・AI資料ボックス・社内マニュアルAI・全体検索まで13の機能でできること、業務がどう変わるか、利用者が確認するポイントを実際の画面とあわせて説明します。">
 <meta property="og:url" content="https://smartlaboworks.com/features.html">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Smart Labo Worksの機能｜AI・顧客管理・タスクを一つに">
-<meta name="twitter:description" content="顧客管理、活動記録、タスク、予定、AI文章作成に、AI資料ボックス・社内マニュアルAI・全体検索を加えた業務支援システムの機能。11の機能でできること、業務がどう変わるか、利用者が確認するポイントを実際の画面とあわせて説明します。">
+<meta name="twitter:description" content="会社専用AI「Company Brain Basic」と管理者ダッシュボードを含む、中小企業向けAI業務支援システムの機能。顧客管理・記録・タスク・予定・文書作成・AI資料ボックス・社内マニュアルAI・全体検索まで13の機能でできること、業務がどう変わるか、利用者が確認するポイントを実際の画面とあわせて説明します。">
 <meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
 
 
@@ -60,7 +60,7 @@
     </a>
 
     <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
-      <a href="index.html#solution">サービス</a>
+      <a href="index.html#brain">Company Brain</a>
       <a href="features.html">機能</a>
       <a href="pricing.html">料金</a>
       <a href="company.html">会社情報</a>
@@ -271,13 +271,62 @@
     <div class="container">
       <div class="section__head reveal">
         <p class="eyebrow">機能詳細</p>
-        <h2 class="section__title">11の機能でできること。</h2>
+        <h2 class="section__title">13の機能でできること。</h2>
         <p class="section__lead">
           それぞれについて、できること・これまでの業務と何が変わるか・利用者が確認するポイントを記載します。
         </p>
       </div>
 
       <div class="featdetail">
+
+        <!-- WEB-V3-3: 本番反映済みの Company Brain Basic と管理者ダッシュボードを先頭へ。
+             掲載範囲は実装（Basic）に限る。改善提案・分析・規程比較・不足資料の指摘・
+             教育プラン・成熟度分析・自動学習は未実装のため書かない。 -->
+        <article class="featdetail__item reveal" id="f-brain">
+          <div class="featdetail__head">
+            <span class="featdetail__icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a5 5 0 0 0-5 5v.6A3.5 3.5 0 0 0 5.5 15a3.5 3.5 0 0 0 3 3.5V19a3 3 0 0 0 6 0v-.5a3.5 3.5 0 0 0 3-3.5A3.5 3.5 0 0 0 17 8.6V8a5 5 0 0 0-5-5z"/><path d="M12 8v11"/></svg>
+            </span>
+            <h3 class="featdetail__name">Company Brain Basic（会社専用AI）<span class="featdetail__badge">NEW</span></h3>
+          </div>
+          <div class="featdetail__rows">
+            <div class="featdetail__row">
+              <span class="featdetail__label">できること</span>
+              <span class="featdetail__value">会社が登録した社内マニュアル・規程・会社資料を対象に、自然な文章で質問できます。回答は登録資料の内容だけに基づき、参照した資料を表示します。あわせて「次に確認すると良い資料」を最大3件示します（実際に登録されている資料の中から選ばれます）。質問はどの利用者でも行えます。</span>
+            </div>
+            <div class="featdetail__row">
+              <span class="featdetail__label">業務の変化</span>
+              <span class="featdetail__value">「これ、どうするんだった？」を詳しい人に聞かずに確かめられます。根拠の資料までたどれるので、確認のための時間を短くできます。</span>
+            </div>
+            <div class="featdetail__row featdetail__row--check">
+              <span class="featdetail__label">確認ポイント</span>
+              <span class="featdetail__value">根拠となる資料が無い場合は、推測せず「登録されている社内資料からは確認できませんでした」と回答します。会社ごとにデータを分けて管理し、他社の資料が混ざることはありません。AIの回答には誤りが含まれる可能性があるため、重要な判断では参照資料の原文をご確認ください。</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="featdetail__item reveal" id="f-dashboard">
+          <div class="featdetail__head">
+            <span class="featdetail__icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/></svg>
+            </span>
+            <h3 class="featdetail__name">管理者ダッシュボード<span class="featdetail__badge">NEW</span></h3>
+          </div>
+          <div class="featdetail__rows">
+            <div class="featdetail__row">
+              <span class="featdetail__label">できること</span>
+              <span class="featdetail__value">顧客件数、未完了タスク（期限超過・今日期限）、今日の予定、検索できる社内資料の件数、今月のAI利用状況、Company BrainとAI資料ボックスの概要、顧客の状態別内訳、最近の活動記録、お知らせを1つの画面で確認できます。各項目からその機能の画面へ移動できます。</span>
+            </div>
+            <div class="featdetail__row">
+              <span class="featdetail__label">業務の変化</span>
+              <span class="featdetail__value">画面を順番に開いて状況を集める必要がなくなります。期限が近いタスクや未処理の資料に気づきやすくなります。</span>
+            </div>
+            <div class="featdetail__row featdetail__row--check">
+              <span class="featdetail__label">確認ポイント</span>
+              <span class="featdetail__value">管理者向けの画面です（一般利用者には表示されません）。表示されるのは自社の実データの件数と一覧のみで、予測や分析を行う機能ではありません。</span>
+            </div>
+          </div>
+        </article>
 
         <article class="featdetail__item reveal" id="f-assistant">
           <div class="featdetail__head">
