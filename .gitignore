@@ -15,5 +15,13 @@ node_modules/
 .env.*
 !.env.example
 
+# API の実設定ファイル(受信先メールアドレス・署名鍵)。サーバーにのみ置き、Gitへは入れない。
+# contact-api/.gitignore・signup-api/.gitignore は website-v3 ブランチにしか無いため、
+# master をチェックアウトした状態でも確実に除外されるようルートにも同じ規則を置く。
+contact-api/private/contact-config.php
+contact-api/private/ratelimit/
+signup-api/private/signup-config.php
+signup-api/private/ratelimit/
+
 # Logs
 *.log
