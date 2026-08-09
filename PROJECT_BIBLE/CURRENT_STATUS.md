@@ -40,7 +40,7 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 | Current Project | Company Setup → Homepage v1.0.0 正式公開 → **Smart Labo Platform v1.0 全体アーキテクチャ(2026-07-16 CEO承認・正式採用)** |
 | Current Task | **Smart Labo Platform全体アーキテクチャがCEO承認済み、Version1.0正式版として採用。** Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針、6レイヤー構成、Public AI(Smart Concierge AI)とCompany Brainの違い、Version1.0→2.0→3.0のロードマップを[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)(新設)と`smartlabo-platform/ARCHITECTURE.md`(新設)に記録済み。銀行提出用事業計画書Version1.4は2026-07-15のCEO指示「1のままで資料出力して」により選択肢1(代表者報酬を含まない試算のまま)で確定・提出用ファイルを出力済み([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf))。経営計画書Version1.0は旧解釈のまま未更新でv1.4との前提不整合が残存、CEO確認待ち |
 | Next Task | ①Smart Labo Platform：承認された全体アーキテクチャに基づき、`api.smartlaboworks.com`のDNS設定・本番デプロイ、ホームページ`chat.js`側の接続に着手(CEOの実施タイミング指示待ち)。②公開済みのホームページについて、Version1.1で[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の残りステップ(XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト)を実施し問い合わせフォームを本番稼働へ。Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成はCEOの明示的な指示を得てから実施。③銀行提出版v1.4は代表者報酬の扱いが確定したため、所在地・資本金・代表者略歴の記入(CEO記入待ち)のみ残課題。実際の銀行提出時はファイル名に「_submitted」を付与([DOCUMENT/FINANCE/README.md](../DOCUMENT/FINANCE/README.md)のVersion管理ルール) |
-| Last Update | 2026-08-09(WEB-SALES-1: WEB完結申込・契約・決済・顧客登録・利用者招待の現状監査＋正式設計。調査と設計のみ・本番変更0・実装0。判定は条件付きGo) |
+| Last Update | 2026-08-09(WEB-SALES-1R: 旧smartlabo-works SALES実装の読み取り専用監査＋Lite移植可否判定。旧実装は実在しSALES-3SでStripe実機E2E完了済みと確認。旧repo変更0・Lite変更0・本番変更0。WEB-SALES-1BはGo、WEB-SALES-2は条件付きGo) |
 | Maintainer | Masatoshi Ogawa |
 
 ---
@@ -739,7 +739,8 @@ CEO指定の①〜⑧すべてを作成した。
 | WEB-V2-8 | 販売モデルSSOT化・2導線設計・創業記念キャンペーン反映(2026-07-28) | `060727b` |
 | SALES-0 | 販売・契約・課金仕様(Stripe対応)正式設計(2026-07-28・設計のみ・コード実装なし) | `e8b3bc8` |
 | SALES-1 | セルフ申し込み・会社登録基盤(2026-07-29・入力と検証まで。決済/保存/アカウント作成は未実装) | `dcdf8aa` |
-| **WEB-SALES-1** | **WEB完結申込・契約・決済・顧客登録・利用者招待の現状監査＋正式設計(2026-08-09・調査と設計のみ。本番変更0・実装0・migration 0)** | 本コミット |
+| WEB-SALES-1 | WEB完結申込・契約・決済・顧客登録・利用者招待の現状監査＋正式設計(2026-08-09・調査と設計のみ。本番変更0・実装0・migration 0) | `6732b23` |
+| **WEB-SALES-1R** | **旧smartlabo-works SALES実装の読み取り専用監査＋Lite移植可否判定(2026-08-09・調査のみ。旧repo変更0・Lite変更0・本番変更0)** | 本コミット |
 
 **WEB-V2-8の要点（代表決定 2026-07-28）:**
 - **[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を新設**し、販売導線・確定金額・課金サイクル・創業記念キャンペーン・キャンペーンコード・紹介コードの**正本**として制定（Project Bible Version 7.9→8.0）。[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)には優先関係の注記のみ追加
@@ -769,6 +770,18 @@ CEO指定の①〜⑧すべてを作成した。
 - 再利用可能と確認できたもの: signup-apiの受け付け判定・validation・料金サーバー再計算／contact-apiのCSRF・Origin完全一致・IP非保存rate limit・秘密値分離／Liteのセッション認証(scrypt)・`companyIdOf`によるテナント分離・company_id/user_idのサーバー生成・最後の管理者保護・監査ログ書き込み
 - 工程分割はWEB-SALES-1B〜8の9工程、概算41〜62日(旧実装を流用できる場合は25〜38日)。代表判断事項14件を同文書第21節に整理
 - **`website-v3`は本番`master`の最新7コミット(Company Brain SEO・アナリティクス)を取り込んでいない。** 公開切替前にマージが必要
+
+**WEB-SALES-1Rの要点（2026-08-09・読み取り専用監査のみ／旧repo変更0）:**
+- 一次情報は[docs/reviews/WEB_SALES_1R_LEGACY_SALES_REUSE_AUDIT.md](../docs/reviews/WEB_SALES_1R_LEGACY_SALES_REUSE_AUDIT.md)。代表承認のもと旧`smartlabo-works`を読み取り専用で監査（`git archive`で一時展開して調査し、checkout・commit・pushは一切行わず、着手前後でbranch/HEAD/working treeが同一であることを確認）
+- **旧SALES実装は実在した。** SALES-2/3/3R/3S/4の5工程・SALES関連テスト98件・リポジトリ全体1313件。正本は`feature/sales-4-ai-setup` `c25fff4`（`main`/`develop`へ未マージ）
+- **★WEB-SALES-1の認識誤りを1件訂正:** 15番v4.0の「実Stripe疎通は未実施」は**その後のSALES-3Sで解消済み**。Stripeサンドボックスでテストカード決済→Stripe CLI経由の実Webhook受信→署名検証→`payment_required`→`active`→業務機能解放→再送冪等→署名不正400までを実機確認済み。**最大の技術的不確実性は既に解消されている**
+- **★保全リスク:** SALES系branchは**いずれもoriginへpushされておらず、当該PCのローカルbranchが唯一の写し**。保全のためのpushを代表判断事項#1として提起
+- **移植判定:** そのまま使えるファイルは0本。旧＝`node:http`素実装(server.js 5563行)、Lite＝Express 5＋17ルーター。実体は「設計・ロジック・テストケースの移植」。機能27項目のA〜D判定はA=13/B=7/C=1/D=6
+- **再利用禁止3件:** ①`tenant_users`（Liteの`users`と二重台帳になる）②旧認証（インメモリMapセッション＋環境変数テナントの二系統）③旧ロール（`admin`/`member`が完全未使用）。いずれもLite側の実装が優れている
+- **旧実装にも重大欠陥4件:** ①provisioningにトランザクションが無い ②契約人数上限の強制がゼロ ③招待メール送信ワーカーが存在しない（本番でセルフ申込しても管理者がログインできない）④`role`未使用で一般利用者が決済もAPIキー登録も実行できる
+- **新規検出のLite欠陥2件:** S9=状態変更リクエストのOrigin検証もCSRFトークンも無い（旧には3層の対策あり）／S10=単体テスト基盤が無く旧の98テストを活かせない
+- **再見積り: 楽観34日／標準48日／安全63日。** WEB-SALES-1の41〜62日に対し標準値での短縮は約3日。ただし**WEB-SALES-4(決済)は8〜12日→4〜8日**と明確に短縮
+- **判定: WEB-SALES-1BはGo（S9を範囲に追加）。WEB-SALES-2は条件付きGo**（解除条件4件のうち2件が本監査で解除。残るは申込フローの正式確定・実装場所の決定・WEB-SALES-1Bの完了）
 
 ---
 
@@ -865,5 +878,7 @@ CEO指定の①〜⑧すべてを作成した。
 | **v7.6** | 2026-07-29 | Claude Code(代表指示による・SALES-1) | **SALES-1「セルフ申し込み・会社登録基盤」を実装。** `signup-api/`(PHP)を新設し `POST /api/signup` を実装。会社情報・管理者情報・契約内容の**サーバー側検証**と料金の再計算までを行い、**保存・メール送信・Stripe・アカウント作成はいずれも行わない**(応答に`persisted:false`を明示)。`website-v2/signup.html`(3ステップ)・`assets/js/signup.js`を新設。決済(SALES-2)が未実装で確認画面の先が無いため、signup.htmlは**noindex・sitemap未掲載・公開ページから未リンク**とし、`check-prices.js`に公開導線へ載っていないことを検査する節を追加した。テストはユニット56件・HTTP統合33件・料金整合・法務一致・Puppeteerによる4幅の実測(横スクロール0・h1各1・新規Console Error 0)がすべて成功。実装場所(PHP仮実装 or Nodeへ移設)は15番の代表判断9-8として未決のまま。詳細は`docs/reviews/SALES_1_SELF_SIGNUP_FOUNDATION.md` |
 
 | **v7.7** | 2026-08-09 | Claude Code(代表指示による・WEB-SALES-1) | **WEB-SALES-1「WEB完結申込・契約・決済・顧客登録・利用者招待 現状監査＋正式設計」を実施（調査・設計・SSOT更新のみ。製品コード変更0・本番変更0・migration 0・実装0）。** Website(`master` `1252347`／`origin/website-v3` `3ef57db`)とLite(`smartlabo-works-lite` `28e2c60`)を読み取りのみで実測し、[docs/reviews/WEB_SALES_1_CONTRACT_AUTOMATION_AUDIT.md](../docs/reviews/WEB_SALES_1_CONTRACT_AUTOMATION_AUDIT.md)へ記録。**判定は条件付きGo**（設計とWEB-SALES-1BはGo、WEB-SALES-2以降の実装着手と本番公開はNo-Go）。主な確定事項: ①14番/15番が実装済みと記録するSALES-2/3/3Rの実体は凍結リポジトリ`smartlabo-works`側にあり、現行の正式コードベース`smartlabo-works-lite`には申込・招待・契約状態・決済・メールのサーバー実装が存在しないこと（migration 001〜016のみ）を実測で確認 ②指示書と14番v3.0/15番v2.0で申込フローが矛盾しており、環境先行方式（SSOT側）の採用を推奨 ③販売開始前に必ず塞ぐべきLite既存欠陥3件（停止時のセッション非破棄・人数上限の非強制・ログイン試行制限の不在）を検出 ④特商法表記・キャンペーン規約・利用規約の契約条項がいずれも未整備で、これが最大のスケジュールリスクであること ⑤再利用可能な既存資産16件と新規実装が必要な機能20件の切り分け ⑥推奨データモデル8テーブル・契約状態遷移規則・決済方式候補比較・例外処理・E2E受入25項目・工程分割WEB-SALES-1B〜8（概算41〜62日）・代表判断事項14件。**旧リポジトリ`smartlabo-works`は指示どおり一切参照していない**（そのため移植可否は未確定・代表判断事項#1） |
+
+| **v7.8** | 2026-08-09 | Claude Code(代表承認による・WEB-SALES-1R) | **WEB-SALES-1R「旧smartlabo-works SALES実装 読み取り専用監査＋Lite移植可否判定」を実施（調査・SSOT更新のみ。実装0・移植0・製品修正0・本番変更0）。** 代表承認のもと旧リポジトリを読み取り専用で監査し、[docs/reviews/WEB_SALES_1R_LEGACY_SALES_REUSE_AUDIT.md](../docs/reviews/WEB_SALES_1R_LEGACY_SALES_REUSE_AUDIT.md)へ記録。`git archive`で一時ディレクトリへ展開して調査し、checkout・commit・push・stash・migration実行・npm install・サーバー起動・テスト実行はいずれも行わず、着手前後で旧repoのbranch/HEAD/working treeが同一であることを証拠として記録した。主な確定事項: ①旧SALES実装は実在（SALES-2/3/3R/3S/4の5工程、SALES関連テスト98件、全体1313件、正本は`c25fff4`で`main`/`develop`へ未マージ） ②**WEB-SALES-1の認識誤りを訂正 — 15番v4.0の「実Stripe疎通未実施」はSALES-3Sで解消済みで、Stripeサンドボックスでの決済〜実Webhook〜active化〜冪等〜署名不正400までを実機確認済み** ③SALES系branchがoriginへ未pushでローカルが唯一の写しという保全リスクを検出 ④そのまま使えるファイルは0本で、再利用の実体は設計・ロジック・テストケースの移植（旧=node:http素実装5563行 vs Lite=Express 5＋17ルーター） ⑤再利用禁止3件（`tenant_users`の二重台帳化・旧のインメモリセッションと環境変数テナント二系統・未使用のロールモデル） ⑥旧実装の重大欠陥4件（provisioningのトランザクション欠如・契約人数上限の強制ゼロ・招待メール送信ワーカー不在・role完全未使用） ⑦Lite側の新規欠陥2件を検出（S9=Origin検証とCSRFトークンの不在、S10=単体テスト基盤の不在） ⑧migration移行案11本と番号衝突なしの確認 ⑨再見積り 楽観34日/標準48日/安全63日（WEB-SALES-4のみ8〜12日→4〜8日と明確に短縮） ⑩代表判断事項9件。**判定: WEB-SALES-1BはGo（S9を範囲に追加）、WEB-SALES-2は条件付きGo（解除条件4件のうち2件が解除）、本番公開は法務3点未整備によりNo-Go継続** |
 
 *最終更新: 2026-08-09*
