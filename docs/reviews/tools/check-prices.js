@@ -16,7 +16,8 @@
  *   終了コード 0 = 一致 / 1 = 不一致（内容を標準出力に表示）
  *
  * 料金を変更するとき
- *   下の CANONICAL と、index.html・pricing.html・apply.html の4か所すべてを更新する。
+ *   下の CANONICAL と、index.html・pricing.html・apply.html・signup.html・
+ *   company-brain.html の5ページすべてを更新する。
  *   1か所でも漏れるとこのスクリプトが失敗する。
  *
  * 設計方針
@@ -81,23 +82,27 @@ const errors = [];
 const notes = [];
 
 // ---------- 1. 料金の一致 ----------
-// WEB-V2-8 で apply.html(申込案内)、SALES-1 で signup.html(申込手続き)にも
-// 料金を掲載したため、突き合わせ対象は4ページ。
+// WEB-V2-8 で apply.html(申込案内)、SALES-1 で signup.html(申込手続き)、
+// WEB-V3-5B-1 で company-brain.html(SEOランディング)にも料金を掲載したため、
+// 突き合わせ対象は5ページ。
 const pricingHtml = fs.readFileSync(path.join(ROOT, 'pricing.html'), 'utf8');
 const indexHtml   = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const applyHtml   = fs.readFileSync(path.join(ROOT, 'apply.html'), 'utf8');
 const signupHtml  = fs.readFileSync(path.join(ROOT, 'signup.html'), 'utf8');
+const brainHtml   = fs.readFileSync(path.join(ROOT, 'company-brain.html'), 'utf8');
 
 const pricingPrices = extractPrices(pricingHtml);
 const indexPrices   = extractPrices(indexHtml);
 const applyPrices   = extractPrices(applyHtml);
 const signupPrices  = extractPrices(signupHtml);
+const brainPrices   = extractPrices(brainHtml);
 
 for (const [key, want] of Object.entries(CANONICAL)) {
   for (const [file, got] of [['pricing.html', pricingPrices[key]],
                              ['index.html', indexPrices[key]],
                              ['apply.html', applyPrices[key]],
-                             ['signup.html', signupPrices[key]]]) {
+                             ['signup.html', signupPrices[key]],
+                             ['company-brain.html', brainPrices[key]]]) {
     if (got === undefined) {
       errors.push(`${file}: data-price="${key}" が見つかりません`);
     } else if (got !== want) {
@@ -159,7 +164,8 @@ for (const f of CAMPAIGN_PAGES) {
 //                  sitemap・リンクのいずれにも載せていない。ただしヘッダー/フッターの
 //                  同一性・禁止語・フォームの検査は同じように受ける。
 const PAGES = ['index.html', 'features.html', 'pricing.html', 'company.html',
-               'contact.html', 'apply.html', 'privacy.html', 'terms.html', '404.html'];
+               'contact.html', 'apply.html', 'privacy.html', 'terms.html', '404.html',
+               'company-brain.html'];   // WEB-V3-5B-1: Company Brain SEOランディング
 const INTERNAL_PAGES = ['signup.html'];
 const ALL_PAGES = PAGES.concat(INTERNAL_PAGES);
 
