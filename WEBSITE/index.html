@@ -3,28 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Labo Works — 会社を動かすAI。</title>
-<meta name="description" content="中小企業の業務をひとつのAIプラットフォームへ。営業・契約・議事録・Company Brain・Smart AI Routerで、会社を動かすAI、Smart Labo Works。">
-<link rel="icon" href="img/logo/favicon.png" type="image/png">
-<link rel="canonical" href="https://smartlaboworks.com/">
 
-<!-- OGP / SNSシェア用 -->
+<!-- アクセス解析タグ（GTM/GA4）は WEB-SALES-8L で撤去した。
+     再導入する場合の条件（送信項目・送信先・利用目的・保存期間・オプトアウトの確定）は
+     docs/website/ANALYTICS_REINTRODUCTION.md を参照。 -->
+
+<!-- ============================================================
+     Smart Labo Works — Website v3 / トップページ
+     WEB-V2-2: Section1〜6(ヘッダー/ヒーロー/悩み/解決/業務フロー/導入前後)を実装。
+     Section7〜15 は WEB-V2-3 で実装する。
+     このファイルは website-v3/ 配下にあり、GitHub Pages のデプロイ対象
+     (WEBSITE/)には含まれないため本番へ影響しない。
+     ============================================================ -->
+
+<title>Smart Labo Works — 会社を動かすAI。</title>
+<meta name="description" content="全社員に、AIという戦力を。顧客管理・活動記録・タスク・スケジュール・AI文章作成に、AI資料ボックス・社内マニュアルAI・全体検索を加えた中小企業向けの業務支援システム。AIは提案のみを行い、保存・更新・送信は利用者が確認して操作します。初期設定費10,000円、月額20,000円（税別）から。">
+<link rel="canonical" href="https://smartlaboworks.com/">
+<link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
 <meta property="og:title" content="Smart Labo Works — 会社を動かすAI。">
-<meta property="og:description" content="中小企業の業務をひとつのAIプラットフォームへ。営業・契約・議事録・Company Brain・Smart AI Routerで、会社を動かすAI、Smart Labo Works。">
+<meta property="og:description" content="会社専用AI「Company Brain Basic」で社内マニュアル・規程・資料に質問。顧客管理・タスク・予定・記録・文書・全体検索・管理者ダッシュボードをひとつにまとめた中小企業向けAI業務支援システム。">
 <meta property="og:url" content="https://smartlaboworks.com/">
-<meta property="og:image" content="https://smartlaboworks.com/img/hero/hero_background_02_city_network.webp">
 <meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="Smart Labo Works — 会社を動かすAI。全社員に、AIという戦力を。">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Smart Labo Works — 会社を動かすAI。">
-<meta name="twitter:description" content="中小企業の業務をひとつのAIプラットフォームへ。会社を動かすAI、Smart Labo Works。">
-<meta name="twitter:image" content="https://smartlaboworks.com/img/hero/hero_background_02_city_network.webp">
+<meta name="twitter:description" content="会社専用AI「Company Brain Basic」で社内マニュアル・規程・資料に質問。顧客管理・タスク・予定・記録・文書・全体検索・管理者ダッシュボードをひとつにまとめた中小企業向けAI業務支援システム。">
+<meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
+<meta name="twitter:image:alt" content="Smart Labo Works — 会社を動かすAI。全社員に、AIという戦力を。">
 
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
 
-<!-- 構造化データ(Organization)。未確定の会社情報(所在地・電話番号・代表者等)は
-     推測で埋めず、確定済みの項目のみ記載する(詳細はcompany.html参照)。 -->
+<!-- JS有効時のみ出現アニメーションを適用する。JS無効でも内容は必ず表示される。 -->
+<script>document.documentElement.classList.add('js');</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -35,7 +57,7 @@
       "name": "Smart Labo Works",
       "legalName": "株式会社スマートラボ",
       "url": "https://smartlaboworks.com/",
-      "logo": "https://smartlaboworks.com/img/logo/smartlabo_icon_white.webp"
+      "logo": "https://smartlaboworks.com/assets/brand/logo-primary.png"
     },
     {
       "@type": "WebSite",
@@ -48,426 +70,1431 @@
   ]
 }
 </script>
+
 <!-- ============================================================
-     解析・計測タグの導入位置(2026-07-14、Task2)
-     現時点では一切埋め込んでいない(解析コードなし・Cookieなし)。
-     導入する際は、この直後に以下の順で追加すること。詳細は
-     PROJECT_BIBLE/61_Release_Checklist.md の該当セクションを参照。
-
-     1. Google Search Console 所有権確認用メタタグ(発行後に追加):
-        <meta name="google-site-verification" content="発行された値">
-
-     2. Google Analytics 4 (GA4) 計測タグ(導入する場合のみ。要CEO判断):
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-XXXXXXX');
-        </script>
-        ※GA4を導入する場合、privacy.html の「6. Cookie・アクセス解析について」の
-        記載(現在「アクセス解析ツールを導入していない」と明記)を先に更新すること。
-
-     3. Cookie同意バナー(GA4等、Cookieを使う解析を導入する場合に必要。
-        本サイトは現在Cookieを一切使用しないため未実装。実装する場合は
-        <body>直後にバナー用のマークアップ・JSを追加する想定):
-        例: <div id="cookieConsent">...</div>
+     アクセス解析（GTM / GA4 / dataLayer）は WEB-SALES-8L で全ページから撤去した。
+     現在、本サイトはアクセス解析・広告計測のタグを一切読み込まない。
+     再導入する場合は、送信項目・送信先・利用目的・保存期間・オプトアウト手段を
+     確定し、privacy.html の開示とCookie同意の要否整理を済ませてから行うこと
+     （docs/website/ANALYTICS_REINTRODUCTION.md）。
+     APIキー・認証情報は引き続きこのリポジトリへコミットしない。
      ============================================================ -->
 </head>
 <body>
 
-<!-- Header -->
-<header class="header" id="header">
-  <div class="container header__inner">
-    <a href="index.html" class="logo">
-      <span class="logo__mark" aria-hidden="true">
-        <img src="img/logo/smartlabo_icon_white.webp" width="44" height="44" alt="">
-      </span>
-      <span class="logo__text">Smart Labo <em>Works</em></span>
+
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<!-- ============================== 1. ヘッダー ============================== -->
+<header class="site-header" id="siteHeader">
+  <div class="container site-header__inner">
+    <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+      <!-- 明色背景のためカラー版のアイコンマークを使用。
+           高さのみ指定・幅はauto(縦横比は変更しない)。 -->
+      <img class="logo__icon" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+      <span class="logo__text">Smart Labo Works</span>
     </a>
 
-    <nav class="nav" id="nav">
-      <a href="product.html">製品</a>
+    <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="#brain">Company Brain</a>
       <a href="features.html">機能</a>
-      <a href="real-estate.html">不動産向け</a>
-      <a href="pricing.html">導入プラン</a>
+      <a href="pricing.html">料金</a>
       <a href="company.html">会社情報</a>
+      <a href="#faq">FAQ</a>
+      <a href="contact.html">お問い合わせ</a>
     </nav>
 
-    <div class="header__actions">
-      <a href="app.html" class="btn btn--ghost-light btn--sm" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        デモを見る
-      </a>
-      <a href="contact.html" class="btn btn--primary btn--sm">導入相談</a>
+    <div class="site-header__actions">
+      <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="apply.html" class="btn btn--primary btn--sm"><span class="btn__label-full">今すぐ申し込む</span><span class="btn__label-short">申し込む</span></a>
     </div>
 
-    <button class="nav-toggle" id="navToggle" aria-label="メニューを開く" aria-expanded="false">
-      <span></span><span></span><span></span>
+    <button class="nav-toggle" type="button" data-nav-toggle
+            aria-controls="site-nav" aria-expanded="false">
+      <span class="visually-hidden">メニューを開閉</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
     </button>
   </div>
 </header>
 
-<main>
+<main id="main">
 
-<!-- 1. Hero -->
-<section class="hero">
-  <div class="hero__bg" aria-hidden="true">
-    <div class="hero__grid"></div>
-    <div class="hero__glow"></div>
-    <div class="hero__particles">
-      <span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <div class="hero__watermark"><img src="img/logo/smartlabo_icon_white.webp" alt=""></div>
+  <!-- ============================== 2. ヒーロー ============================== -->
+  <section class="hero" id="hero">
+    <div class="container hero__inner">
 
-    <!-- 未来都市+AIネットワーク(実写真)。マスターデータ: DESIGN_ASSETS/01_HERO/Backgrounds/hero_background_02_city_network.webp -->
-    <div class="hero__city"></div>
-    <div class="hero__city-fade"></div>
-  </div>
+      <div class="hero__copy">
+        <p class="eyebrow">全社員に、AIという戦力を。</p>
+        <h1 class="hero__title">会社を動かすAI。</h1>
+        <p class="hero__lead">
+          顧客、予定、タスク、記録、文書、社内資料。バラバラだった会社の情報をひとつにつなぎ、
+          AIが日々の仕事を支援します。中小企業のための業務支援システムです。
+        </p>
 
-  <div class="container hero__inner">
-    <div class="hero__content">
-      <img src="img/logo/smartlabo_logo_white_transparent.png" alt="Smart Labo Works" class="hero__logo">
-      <p class="badge">会社を動かすAIプラットフォーム</p>
-      <h1 class="hero__title"><span class="hero__title--main">会社を動かすAI。</span><span class="hero__title--sub">Smart Labo Works</span></h1>
-      <p class="hero__lead">営業・契約・議事録・顧客管理を、ひとつのAIプラットフォームへ。</p>
-
-      <div class="hero__cta">
-        <a href="app.html" class="btn btn--primary btn--lg" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          デモを見る
-        </a>
-        <a href="contact.html" class="btn btn--secondary btn--lg">導入相談</a>
-      </div>
-    </div>
-
-    <div class="hero__visual">
-      <div class="control-center">
-        <div class="control-center__header">
-          <span class="control-center__title">AI Control Center</span>
-          <span class="control-center__live"><span class="control-center__live-dot"></span>LIVE</span>
+        <!-- 主CTA=今すぐ申し込む / 副CTA=無料相談する（WEB-V2-8で全ページ統一）。
+             セルフ申し込みは未実装のため、apply.html は申込案内ページであり
+             決済画面・申込フォームではない。 -->
+        <div class="hero__actions">
+          <a href="apply.html" class="btn btn--primary btn--lg">今すぐ申し込む</a>
+          <a href="contact.html?type=consult#form" class="btn btn--secondary btn--lg">無料相談する</a>
         </div>
 
-        <div class="cc-graph">
-          <div class="cc-node cc-node--core">Smart AI Router</div>
-          <div class="cc-providers">
-            <div class="cc-node"><span class="cc-status-dot"></span>OpenAI</div>
-            <div class="cc-node"><span class="cc-status-dot"></span>Claude</div>
-            <div class="cc-node"><span class="cc-status-dot"></span>Gemini</div>
+        <!-- WEB-V3-1: 資料請求の導線。お問い合わせフォームの種別「資料請求」へつなぐ -->
+        <p class="hero__doclink">
+          <a href="contact.html?type=docs#form">サービス紹介資料をご希望の方はこちら（資料請求）</a>
+        </p>
+
+        <ul class="hero__badges">
+          <li class="badge-trust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L4.8 8.3l5-.7z"/></svg>
+            根拠を示して回答
+          </li>
+          <li class="badge-trust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg>
+            AIは提案のみ
+          </li>
+          <li class="badge-trust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            確認して保存
+          </li>
+          <li class="badge-trust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-5h6v5"/></svg>
+            中小企業向け
+          </li>
+        </ul>
+      </div>
+
+      <div class="hero__visual">
+        <figure class="hero__shot">
+          <div class="hero__shot-bar" aria-hidden="true">
+            <span class="hero__shot-dot"></span>
+            <span class="hero__shot-dot"></span>
+            <span class="hero__shot-dot"></span>
           </div>
-        </div>
-
-        <div class="cc-processing">
-          <span class="cc-processing__dots"><span></span><span></span><span></span></span>
-          <span class="cc-processing__text" id="ccProcessingStatus">問い合わせ返信中…</span>
-        </div>
-
-        <div class="cc-brain-badge"><span class="cc-status-dot"></span><span id="ccBrainStatus">Company Brain 参照中</span></div>
-
-        <div class="cc-kpi-grid">
-          <div class="cc-kpi"><span class="cc-kpi__value">128<small>件</small></span><span class="cc-kpi__label">今日のAI処理件数</span></div>
-          <div class="cc-kpi"><span class="cc-kpi__value">4<small>件</small></span><span class="cc-kpi__label">Company Brain登録数</span></div>
-          <div class="cc-kpi"><span class="cc-kpi__value">12<small>件</small></span><span class="cc-kpi__label">契約レビュー件数</span></div>
-          <div class="cc-kpi"><span class="cc-kpi__value">36<small>件</small></span><span class="cc-kpi__label">問い合わせ返信数</span></div>
-        </div>
-
-        <div class="cc-log">
-          <p class="cc-log__label">最近完了したAIタスク</p>
-          <div class="cc-log__item"><span class="cc-log__check">✓</span>契約書レビュー完了 <span class="cc-log__tag">Claude</span></div>
-          <div class="cc-log__item"><span class="cc-log__check">✓</span>物件紹介文を生成 <span class="cc-log__tag">OpenAI</span></div>
-        </div>
-
-        <div class="cc-powered">
-          <img src="img/logo/smartlabo_icon_white.webp" alt="">
-          <span>Powered by Smart Labo Works</span>
-        </div>
+          <img src="assets/images/app-customer.webp"
+               srcset="assets/images/app-customer.webp 1360w, assets/images/app-customer@2x.webp 2720w"
+               sizes="(max-width: 1080px) 100vw, 58vw"
+               width="1360" height="850" fetchpriority="high" decoding="async"
+               alt="Smart Labo Works の顧客・取引先画面。左に顧客の一覧、右に選んだ顧客の基本情報・担当・次回予定・最近の記録がまとまって表示されている。">
+        </figure>
+        <p class="hero__shot-note">実際の画面です（表示しているデータはすべて架空のものです）</p>
       </div>
-      <p class="hero__visual-note">※ 表示は稼働イメージのサンプルです。実際の処理件数・ログではありません。</p>
+
     </div>
-  </div>
+  </section>
 
-  <a href="#brain" class="hero__scroll-cue">
-    <span>Company Brainを見る</span>
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg>
-  </a>
-</section>
+  <!-- ========================= 2-2. コンセプト図解(WEB-V3-1) =========================
+       「会社を動かすAI。」の中身を図で示す。会社に散らばる6つの情報がAIを中心に
+       つながり、全体検索で横断して探せることを表す。図はインラインSVGで、色は
+       tokens.css の変数のみを参照する(新しいブランドカラーは追加しない)。
+       正式ロゴの再描画は禁止のため、中央ノードは文字「AI」で表現している。 -->
+  <section class="section section--inverse connect" id="connect">
+    <div class="container">
 
-<!-- 2. Company Brain -->
-<section class="section section--navy-deep brain-section" id="brain">
-  <div class="brain-glow" aria-hidden="true"></div>
-  <div class="container brain">
-    <div class="brain__content">
-      <div class="brain__icon-badge">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 4.5c-1.4 0-2.5 1.1-2.5 2.5 0 .3.05.6.15.9-1 .4-1.65 1.4-1.65 2.5 0 .8.35 1.5.9 2-.5.5-.8 1.15-.8 1.9 0 1.35 1.05 2.45 2.4 2.5.25 1.2 1.3 2.1 2.55 2.1 1.4 0 2.5-1.1 2.5-2.5v-9.4c0-1.4-1.1-2.5-2.5-2.5z"/>
-          <path d="M15 4.5c1.4 0 2.5 1.1 2.5 2.5 0 .3-.05.6-.15.9 1 .4 1.65 1.4 1.65 2.5 0 .8-.35 1.5-.9 2 .5.5.8 1.15.8 1.9 0 1.35-1.05 2.45-2.4 2.5-.25 1.2-1.3 2.1-2.55 2.1-1.4 0-2.5-1.1-2.5-2.5v-9.4c0-1.4 1.1-2.5 2.5-2.5z"/>
-          <circle cx="9.3" cy="9.2" r="0.9" fill="#FFFFFF" stroke="none"/>
-          <circle cx="14.7" cy="12.4" r="0.9" fill="#FFFFFF" stroke="none"/>
-          <circle cx="9.6" cy="15" r="0.9" fill="#FFFFFF" stroke="none"/>
-          <path d="M9.3 9.2l1.5 2M14.7 12.4l-1.5-1.4M9.6 15l3-2" stroke-width="1.1"/>
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">コンセプト</p>
+        <h2 class="section__title">AIを中心に、会社の情報がひとつにつながる。</h2>
+        <p class="section__lead">
+          顧客、記録、タスク、文書、資料、マニュアル。これまで人と場所に散らばっていた情報が
+          AIを通じてつながり、どこからでも探せるようになります。
+        </p>
+      </div>
+
+      <figure class="connect__figure reveal">
+        <svg viewBox="0 0 920 620" role="img" aria-labelledby="connect-title connect-desc" xmlns="http://www.w3.org/2000/svg">
+          <title id="connect-title">AIによって会社全体の情報がつながる図</title>
+          <desc id="connect-desc">顧客・取引先、活動記録・議事録、タスク・予定、AI文章作成、AI資料ボックス、社内マニュアルAIの6つの情報が、中央のSmart Labo WorksのAIとつながり、全体検索でどこからでも横断して探せることを表した図。</desc>
+
+          <!-- 会社の範囲を示す枠 -->
+          <rect x="70" y="48" width="780" height="470" rx="24" fill="none"
+                stroke="#C3D2F0" stroke-opacity="0.28" stroke-dasharray="4 8"/>
+          <text x="102" y="86" font-size="13" fill="var(--text-on-inverse-secondary)">会社のなかの情報</text>
+
+          <!-- 中央AIと各情報をつなぐ線(装飾。読み上げはtitle/descで成立させる) -->
+          <g class="connect__lines" fill="none" stroke="var(--c-blue-light)" stroke-width="2" stroke-opacity="0.7" aria-hidden="true">
+            <path class="connect__line" d="M460 283L225 130"/>
+            <path class="connect__line" d="M460 283L695 130"/>
+            <path class="connect__line" d="M460 283L175 283"/>
+            <path class="connect__line" d="M460 283L745 283"/>
+            <path class="connect__line" d="M460 283L225 436"/>
+            <path class="connect__line" d="M460 283L695 436"/>
+          </g>
+
+          <!-- 6つの情報ノード -->
+          <g class="connect__nodes">
+            <g>
+              <rect x="130" y="103" width="190" height="54" rx="12" fill="var(--c-navy-700)" stroke="#60A5FA" stroke-opacity="0.35"/>
+              <text x="225" y="135" text-anchor="middle" font-size="15" font-weight="700" fill="var(--c-white)">顧客・取引先</text>
+            </g>
+            <g>
+              <rect x="600" y="103" width="190" height="54" rx="12" fill="var(--c-navy-700)" stroke="#60A5FA" stroke-opacity="0.35"/>
+              <text x="695" y="135" text-anchor="middle" font-size="15" font-weight="700" fill="var(--c-white)">活動記録・議事録</text>
+            </g>
+            <g>
+              <rect x="80" y="256" width="190" height="54" rx="12" fill="var(--c-navy-700)" stroke="#60A5FA" stroke-opacity="0.35"/>
+              <text x="175" y="288" text-anchor="middle" font-size="15" font-weight="700" fill="var(--c-white)">タスク・予定</text>
+            </g>
+            <g>
+              <rect x="650" y="256" width="190" height="54" rx="12" fill="var(--c-navy-700)" stroke="#60A5FA" stroke-opacity="0.35"/>
+              <text x="745" y="288" text-anchor="middle" font-size="15" font-weight="700" fill="var(--c-white)">AI文章作成</text>
+            </g>
+            <g>
+              <rect x="130" y="409" width="190" height="54" rx="12" fill="var(--c-navy-700)" stroke="#60A5FA" stroke-opacity="0.35"/>
+              <text x="225" y="441" text-anchor="middle" font-size="15" font-weight="700" fill="var(--c-white)">AI資料ボックス</text>
+              <rect x="286" y="396" width="46" height="21" rx="10" fill="var(--c-blue)"/>
+              <text x="309" y="411" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="0.08em" fill="var(--c-white)">NEW</text>
+            </g>
+            <g>
+              <rect x="600" y="409" width="190" height="54" rx="12" fill="var(--c-navy-700)" stroke="#60A5FA" stroke-opacity="0.35"/>
+              <text x="695" y="441" text-anchor="middle" font-size="15" font-weight="700" fill="var(--c-white)">社内マニュアルAI</text>
+              <rect x="756" y="396" width="46" height="21" rx="10" fill="var(--c-blue)"/>
+              <text x="779" y="411" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="0.08em" fill="var(--c-white)">NEW</text>
+            </g>
+          </g>
+
+          <!-- 中央のAIハブ -->
+          <g>
+            <circle cx="460" cy="283" r="88" fill="none" stroke="var(--c-blue-accent)" stroke-opacity="0.3" stroke-width="1.5"/>
+            <circle cx="460" cy="283" r="70" fill="var(--c-blue)"/>
+            <text x="460" y="280" text-anchor="middle" font-size="30" font-weight="700" fill="var(--c-white)">AI</text>
+            <text x="460" y="306" text-anchor="middle" font-size="12" fill="var(--c-white)" fill-opacity="0.9">Smart Labo Works</text>
+          </g>
+
+          <!-- 全体検索。会社の枠全体を横断して探せることを示す -->
+          <line x1="460" y1="518" x2="460" y2="549" stroke="#C3D2F0" stroke-opacity="0.5" stroke-dasharray="4 6" aria-hidden="true"/>
+          <g>
+            <rect x="310" y="549" width="300" height="52" rx="26" fill="var(--c-white)"/>
+            <circle cx="350" cy="573" r="7" fill="none" stroke="var(--c-blue)" stroke-width="2.2"/>
+            <line x1="355.5" y1="578.5" x2="362" y2="585" stroke="var(--c-blue)" stroke-width="2.2" stroke-linecap="round"/>
+            <text x="380" y="581" font-size="16" font-weight="700" fill="var(--c-navy)">全体検索</text>
+            <rect x="520" y="563" width="46" height="21" rx="10" fill="var(--c-blue)"/>
+            <text x="543" y="578" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="0.08em" fill="var(--c-white)">NEW</text>
+          </g>
         </svg>
+        <figcaption class="connect__caption">
+          情報が同じ場所につながっているため、AIへの相談も、記録も、検索も、同じ前提から始められます。
+        </figcaption>
+      </figure>
+
+      <!-- WEB-V3-3: スマートフォン用の縦型表示。
+           横スクロールの図は小さな画面で読みにくかったため、同じ内容を
+           カードの縦並びで示す。表示はCSSで切り替え、どちらか一方だけが
+           読み上げ対象になる（display:none 側は読まれない）。 -->
+      <div class="connect__stack reveal" aria-label="AIによって会社の情報がつながる流れ">
+        <p class="connect__stack-label">会社のなかの情報</p>
+        <ul class="connect__stack-list">
+          <li>顧客・取引先</li>
+          <li>活動記録・議事録</li>
+          <li>タスク・予定</li>
+          <li>AI文章作成</li>
+          <li>AI資料ボックス</li>
+          <li>社内マニュアルAI</li>
+        </ul>
+        <p class="connect__stack-arrow" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </p>
+        <p class="connect__stack-hub">
+          <span class="connect__stack-hub-mark">AI</span>
+          <span>Smart Labo Works が受け取り、整理して提案します</span>
+        </p>
+        <p class="connect__stack-arrow" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </p>
+        <p class="connect__stack-out">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          全体検索でどこからでも探せる
+        </p>
       </div>
-      <p class="eyebrow eyebrow--light">COMPANY BRAIN</p>
-      <h2 class="section__title section__title--light">Company Brain</h2>
-      <p class="brain__subtitle">会社の知識を、AIへ。</p>
-      <p class="brain__catch">探す時間を、考える時間へ。</p>
-      <p class="brain__desc">社内規程・業務マニュアル・FAQ・契約フロー・ベテラン社員のノウハウ。社員はマニュアルを<strong>「探す」</strong>必要はありません。<strong>AIへ質問するだけ</strong>で、必要な情報・次にやるべきことまで案内します。</p>
-      <ul class="brain__examples">
-        <li>社内規程</li>
-        <li>業務マニュアル</li>
-        <li>FAQ</li>
-        <li>契約フロー</li>
-        <li>社内ルール</li>
-        <li>ベテラン社員のノウハウ</li>
+
+      <ul class="connect__points reveal">
+        <li class="connect__point">
+          <p class="connect__point-title">入れる場所がひとつ</p>
+          <p class="connect__point-note">顧客も記録も資料も、同じシステムに残します。どこに保存するか迷いません。</p>
+        </li>
+        <li class="connect__point">
+          <p class="connect__point-title">AIが同じ情報を踏まえる</p>
+          <p class="connect__point-note">相談も文章の下書きも、会社に蓄積された記録を前提に支援します。</p>
+        </li>
+        <li class="connect__point">
+          <p class="connect__point-title">探す場所もひとつ</p>
+          <p class="connect__point-note">全体検索で、顧客・タスク・予定・記録・文書・社内資料を横断して見つけられます。</p>
+        </li>
       </ul>
-    </div>
 
-    <div class="brain__visual">
-      <div class="brain__chat">
-        <div class="brain__chat-top">
-          <span class="brain__chat-dot"></span>
-          <span class="brain__chat-dot"></span>
-          <span class="brain__chat-dot"></span>
-          <span class="brain__chat-title">Company Brainに質問</span>
-        </div>
-        <div class="brain__msg brain__msg--user">経費精算のやり方を教えて</div>
-        <div class="brain__msg brain__msg--ai">
-          <span class="brain__ai-label">Company Brain</span>
-          経費精算は「経理システム→経費申請」からレシートを添付して申請してください。上長承認後、翌月25日に振込されます。
-          <div class="brain__msg-next">
-            <span>関連資料: 経費精算マニュアル</span>
-            <span>次のアクション: 申請画面を開く</span>
+    </div>
+  </section>
+
+  <!-- ============================== 3. 企業の悩み ============================== -->
+  <section class="section section--subtle" id="problem">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">よくある課題</p>
+        <h2 class="section__title">こんなお悩みありませんか？</h2>
+        <p class="section__lead">
+          特別な会社の話ではありません。人数が少ないほど、一人ひとりの抱えるものが増えていきます。
+        </p>
+      </div>
+
+      <div class="problem-grid">
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="6" width="7" height="7" rx="1.5"/><rect x="6" y="14" width="7" height="7" rx="1.5"/></svg>
+          </span>
+          <h3 class="problem-card__title">顧客情報が分散している</h3>
+          <p class="problem-card__body">名刺、メール、表計算ソフト、個人のメモ。どこに何があるのかを探すところから仕事が始まる。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
+          </span>
+          <h3 class="problem-card__title">議事録が後回しになる</h3>
+          <p class="problem-card__body">打ち合わせは終わったのに、記録は頭の中のまま。数日たつと、決まったことが思い出せない。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2"/><circle cx="9.5" cy="8" r="3"/><path d="M21 20v-2a3 3 0 0 0-2.3-2.9M16.5 5.2a3 3 0 0 1 0 5.6"/></svg>
+          </span>
+          <h3 class="problem-card__title">社員によって品質が違う</h3>
+          <p class="problem-card__body">同じ場面の対応でも、書く文章も進め方も人それぞれ。教えたいが、教える時間もとれない。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+          </span>
+          <h3 class="problem-card__title">タスクが漏れる</h3>
+          <p class="problem-card__body">「あとでやる」が積み重なっていく。気づいたときには、連絡が一週間遅れている。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3l1.9 4.1L17 9l-4.1 1.9L11 15l-1.9-4.1L5 9l4.1-1.9z"/><path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9z"/></svg>
+          </span>
+          <h3 class="problem-card__title">AI導入が進まない</h3>
+          <p class="problem-card__body">便利だとは聞くけれど、自社の何にどう使えばいいのかが決まらないまま止まっている。</p>
+        </article>
+
+        <article class="problem-card reveal">
+          <span class="problem-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/><path d="M3 4l18 16"/></svg>
+          </span>
+          <h3 class="problem-card__title">仕事が属人化している</h3>
+          <p class="problem-card__body">担当者が休むと、その人しか知らない事情ごと仕事が止まる。引き継ぎのたびに一から説明する。</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3-2. Company Brain Basic（WEB-V3-3） =================
+       会社専用AIの価値を「登録 → 質問 → 根拠つき回答 → 参照資料 →
+       次に確認すると良い資料」の流れで示す。
+       掲載してよい範囲は本番実装（Basic）に限る。改善提案・分析・規程比較・
+       不足資料の指摘・教育プラン・成熟度分析・自動学習は未実装のため書かない。 -->
+  <section class="section" id="brain">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">Company Brain Basic</p>
+        <h2 class="section__title">会社の知識をAIへ。<br>探す時間を減らし、本来の仕事へ集中。</h2>
+        <p class="section__lead">
+          会社が登録したマニュアル・規程・資料を対象に、AIが根拠を示しながら回答します。
+          社内の「これ、どうするんだった？」を、人に聞かずに確かめられます。
+        </p>
+      </div>
+
+      <ol class="brainflow reveal">
+        <li class="brainflow__step">
+          <span class="brainflow__num" aria-hidden="true">1</span>
+          <h3 class="brainflow__title">会社の資料を登録する</h3>
+          <p class="brainflow__note">社内マニュアル・規程を書くか、PDF・Word・Excel・画像のファイルを登録します。登録できるのは管理者です。</p>
+        </li>
+        <li class="brainflow__step">
+          <span class="brainflow__num" aria-hidden="true">2</span>
+          <h3 class="brainflow__title">ふつうの言葉で質問する</h3>
+          <p class="brainflow__note">「経費精算の締め日は？」のように聞くだけです。質問はどの利用者でもできます。</p>
+        </li>
+        <li class="brainflow__step brainflow__step--key">
+          <span class="brainflow__num" aria-hidden="true">3</span>
+          <h3 class="brainflow__title">登録資料を根拠に回答する</h3>
+          <p class="brainflow__note">回答は、会社が登録した資料の内容だけに基づきます。書かれていないことは答えず、確認できなかった旨を返します。</p>
+        </li>
+        <li class="brainflow__step">
+          <span class="brainflow__num" aria-hidden="true">4</span>
+          <h3 class="brainflow__title">参照した資料を示す</h3>
+          <p class="brainflow__note">どの資料を根拠にしたかを表示します。原文をその場で開いて確かめられます。</p>
+        </li>
+        <li class="brainflow__step">
+          <span class="brainflow__num" aria-hidden="true">5</span>
+          <h3 class="brainflow__title">次に確認すると良い資料</h3>
+          <p class="brainflow__note">今回の検索で見つかった関連資料を最大3件示します。AIが名前を作るのではなく、実際に登録されている資料だけを挙げます。</p>
+        </li>
+      </ol>
+
+      <p class="principle reveal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg>
+        <span><strong>推測では答えません。</strong>根拠となる資料が無い場合は「登録されている社内資料からは確認できませんでした」とお伝えします。会社ごとにデータを分けて管理し、他社の資料が回答に混ざることはありません。</span>
+      </p>
+
+      <!-- WEB-V3-5B-1: Company Brain 専用ページ（SEOランディング）への内部リンク -->
+      <p class="feature-more__link reveal"><a href="company-brain.html">Company Brainをくわしく見る（社内資料のAI検索）</a></p>
+
+    </div>
+  </section>
+
+  <!-- ================= 3-3. 管理者ダッシュボード（WEB-V3-3） =================
+       実装済みの表示項目だけを書く。経営分析・売上予測・改善提案・社員評価・
+       自動経営判断は未実装のため掲載しない。 -->
+  <section class="section section--subtle" id="dashboard">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">管理者ダッシュボード</p>
+        <h2 class="section__title">必要な情報を、ひとつの画面で確認。</h2>
+        <p class="section__lead">
+          顧客・予定・タスク・AI利用状況・社内資料など、日々確認したい情報をまとめて把握できます。
+          管理者向けの画面です。
+        </p>
+      </div>
+
+      <ul class="dashlist reveal">
+        <li class="dashlist__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20v-2a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2"/><circle cx="9.5" cy="8" r="3"/></svg>
+          <span><b>顧客・取引先の件数</b>と状態別の内訳</span>
+        </li>
+        <li class="dashlist__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 11l2.5 2.5L16 8"/></svg>
+          <span><b>未完了タスク</b>・期限超過・今日期限の件数</span>
+        </li>
+        <li class="dashlist__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <span><b>今日の予定</b>と今日期限のタスク</span>
+        </li>
+        <li class="dashlist__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16M7 16V9M12 16V5M17 16v-4"/></svg>
+          <span><b>AI利用状況</b>（今月の実行回数・よく使われている機能）</span>
+        </li>
+        <li class="dashlist__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10z"/><path d="M13 3v7h7"/></svg>
+          <span><b>Company Brain・AI資料ボックスの概要</b>（検索できる資料の件数・読み取り状況）</span>
+        </li>
+        <li class="dashlist__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          <span><b>最近の活動記録</b>と<b>お知らせ</b>（期限や未処理の資料など）</span>
+        </li>
+      </ul>
+
+      <p class="dashlist__note reveal">
+        表示されるのは自社の実データだけです。各項目からその機能の画面へそのまま移動できます。
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ============================== 4. 解決 ============================== -->
+  <section class="section" id="solution">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">解決</p>
+        <h2 class="section__title">Smart Labo Worksが、<br>日々の仕事を一つにつなぎます。</h2>
+        <p class="section__lead">
+          新しい仕事を増やすのではありません。すでにやっていることを、通り道の上でつなぎ直します。
+        </p>
+      </div>
+
+      <div class="flowmap reveal">
+
+        <div class="flowmap__col flowmap__col--in">
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v12H7l-3 3z"/></svg>
+            顧客とのやり取り
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
+            打ち合わせの会話
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l2 2 4-4"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>
+            頼まれごと
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10z"/><path d="M13 3v7h7"/></svg>
+            受け取った資料
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="container brain-scenarios">
-    <p class="brain-scenarios__label">Smart AI Routerからの業務フロー</p>
-    <div class="brain-flow">
-      <div class="router-node">Smart AI Router</div>
-      <div class="router-arrow">↓</div>
-      <div class="router-node router-node--core">Company Brain</div>
-      <div class="router-arrow">↓</div>
-      <div class="brain-flow__row">
-        <div class="router-node">営業</div>
-        <div class="router-node">契約</div>
-        <div class="router-node">会議</div>
-        <div class="router-node">CRM</div>
-      </div>
-    </div>
-
-    <p class="brain-scenarios__label" style="margin-top:48px">利用イメージ</p>
-    <div class="brain-scenario">
-      <p class="brain-scenario__q">「契約更新ってどうする?」</p>
-      <div class="brain-scenario__flow">
-        <span>契約更新マニュアル</span>
-        <span class="brain-scenario__arrow">→</span>
-        <span>必要書類</span>
-        <span class="brain-scenario__arrow">→</span>
-        <span>次にやる作業</span>
-        <span class="brain-scenario__arrow">→</span>
-        <span>テンプレート</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 3. Smart Labo Works 画面 -->
-<section class="section section--white" id="screens">
-  <div class="container">
-    <p class="eyebrow eyebrow--center">SCREENS</p>
-    <h2 class="section__title section__title--center">Smart Labo Worksの画面。</h2>
-    <p class="section__lead section__lead--center">実際の実装画面から、日々の業務がどう変わるかをご覧ください。</p>
-
-    <div class="big-screens">
-      <div class="big-screen">
-        <div class="big-screen__info">
-          <p class="big-screen__eyebrow">AI ASSISTANT — 不動産AI</p>
-          <h3 class="big-screen__title">業種特化テンプレートで、そのまま使える文章に。</h3>
-          <p class="big-screen__desc">物件紹介文・査定コメント・物件紹介メール・内覧予約案内。不動産売買向けのテンプレートから選ぶだけで、AIが文章を生成します。</p>
+        <div class="flowmap__arrow" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </div>
-        <div class="big-screen__visual">
-          <div class="screen-card screen-card--lg">
-            <div class="screen-card__top"><span class="screen-card__title">AI Assistant（不動産テンプレート）</span><span class="screen-card__badge">DEMO</span></div>
-            <div class="screen-card__body">
-              <div class="screen-row"><span class="screen-row__name">🏠 物件紹介文</span><span class="screen-row__meta">不動産売買</span></div>
-              <div class="screen-row"><span class="screen-row__name">📋 査定コメント</span><span class="screen-row__meta">不動産売買</span></div>
-              <div class="screen-row"><span class="screen-row__name">✉️ 物件紹介メール</span><span class="screen-row__meta">不動産売買</span></div>
-              <div class="screen-row"><span class="screen-row__name">📅 内覧・来店予約案内</span><span class="screen-row__meta">不動産売買</span></div>
+
+        <div class="flowmap__hub">
+          <img class="logo__icon--tile" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+          <p class="flowmap__hub-name">Smart Labo Works</p>
+          <p class="flowmap__hub-note">散らばった情報を受け取り、要点と<br>次の対応を整理して提案します。</p>
+        </div>
+
+        <div class="flowmap__arrow" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+
+        <div class="flowmap__col flowmap__col--out">
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            整理された記録
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            次にやること
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+            文章の下書き
+          </div>
+          <div class="flowmap__chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            全体検索で探せる情報
+          </div>
+        </div>
+
+      </div>
+
+      <p class="principle reveal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg>
+        <span><strong>AIは提案のみを行います。</strong>保存・更新・送信は、内容を人が確認してから操作します。AIが勝手に記録を書き換えたり、お客様へ連絡したりすることはありません。</span>
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ============================== 5. 導入後の業務フロー ============================== -->
+  <section class="section section--subtle" id="flow">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">導入後の業務フロー</p>
+        <h2 class="section__title">いつもの一日が、<br>そのまま記録になっていきます。</h2>
+        <p class="section__lead">
+          手順を覚え直す必要はありません。営業に出て、戻ってきて、確認する。その流れは変わりません。
+        </p>
+      </div>
+
+      <ol class="flow reveal">
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">1</span>
+          <span class="flow__label">営業前</span>
+          <span class="flow__note">相手の情報と、これまでのやり取りを開いて確認する。</span>
+        </li>
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">2</span>
+          <span class="flow__label">営業</span>
+          <span class="flow__note">訪問、電話、打ち合わせ。いつもどおり話す。</span>
+        </li>
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">3</span>
+          <span class="flow__label">AI整理</span>
+          <span class="flow__note">話した内容から、要点と次の対応をAIが下書きする。</span>
+        </li>
+
+        <li class="flow__step flow__step--human">
+          <span class="flow__num" aria-hidden="true">4</span>
+          <span class="flow__label">確認</span>
+          <span class="flow__note">人が読んで、直すところを直す。ここは必ず人が行う。</span>
+        </li>
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">5</span>
+          <span class="flow__label">保存</span>
+          <span class="flow__note">確認できた内容だけを、顧客の記録として残す。</span>
+        </li>
+
+        <li class="flow__step">
+          <span class="flow__num" aria-hidden="true">6</span>
+          <span class="flow__label">次の業務</span>
+          <span class="flow__note">次にやることが、タスクと予定に並んでいる。</span>
+        </li>
+
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================== 6. 導入前と導入後 ============================== -->
+  <section class="section" id="before-after">
+    <div class="container">
+
+      <!-- WEB-V3-3: 機能名ではなく「これまで → 導入後」で伝える対比を先に置く。
+           時間削減率などの数値は根拠が無いため使わない。 -->
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">これまで と 導入後</p>
+        <h2 class="section__title">同じ仕事が、こう変わります。</h2>
+        <p class="section__lead">
+          新しい作業を増やすのではなく、いまやっていることの「探す・確認する」が変わります。
+        </p>
+      </div>
+
+      <ul class="shift reveal">
+        <li class="shift__row">
+          <span class="shift__before">社内規程を共有フォルダから探す</span>
+          <span class="shift__arrow" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+          <span class="shift__after">Company Brainへ質問し、根拠になった社内資料まで確認できる</span>
+        </li>
+        <li class="shift__row">
+          <span class="shift__before">資料がPC・メール・共有フォルダに散在</span>
+          <span class="shift__arrow" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+          <span class="shift__after">AI資料ボックスへ集約し、読み取った本文から探せる・AIの根拠にできる</span>
+        </li>
+        <li class="shift__row">
+          <span class="shift__before">顧客・予定・タスクを別々の画面で確認</span>
+          <span class="shift__arrow" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+          <span class="shift__after">管理者ダッシュボードから必要な情報をまとめて確認できる</span>
+        </li>
+        <li class="shift__row">
+          <span class="shift__before">どこに情報があるか分からない</span>
+          <span class="shift__arrow" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+          <span class="shift__after">全体検索で顧客・タスク・予定・記録・文書・社内資料を横断して探せる</span>
+        </li>
+      </ul>
+
+      <div class="section__head section__head--center reveal shift__divider">
+        <h2 class="section__title">変わるのは、仕事の置き場所です。</h2>
+        <p class="section__lead">
+          仕事の量そのものより先に、「どこに何があるか」が変わります。
+        </p>
+      </div>
+
+      <div class="ba reveal">
+
+        <section class="ba__panel ba__panel--before" aria-labelledby="ba-before-title">
+          <header class="ba__head">
+            <span class="ba__tag">従来</span>
+            <h3 class="ba__title" id="ba-before-title">それぞれの手元にある</h3>
+          </header>
+          <ul class="ba__list">
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>顧客の情報が、人と場所に散らばっている</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>記録は後回しになり、最後は記憶が頼りになる</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>対応の進め方が、担当者ごとに変わる</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>次にやることが、個人のメモに埋もれている</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>AIを使ってみたいが、使いどころが決まらない</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>資料が共有フォルダと机の上に散らばっている</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>仕事のやり方が、詳しい人の頭の中にしかない</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>どこに何があるか、探すことに時間を取られる</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="ba__panel ba__panel--after" aria-labelledby="ba-after-title">
+          <header class="ba__head">
+            <span class="ba__tag">Smart Labo Works</span>
+            <h3 class="ba__title" id="ba-after-title">会社の側にそろっている</h3>
+          </header>
+          <ul class="ba__list">
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>顧客の情報と対応履歴が、一か所にそろう</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>話した内容を、その日のうちに記録として残せる</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>下書きから始められるので、出発点がそろう</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>次にやることが、タスクと予定に並んでいる</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>日々の業務の中に、AIの使いどころが決まっている</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>資料はAI資料ボックスに集まり、顧客と結び付いている</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>仕事の進め方は、社内マニュアルAIに聞ける</span>
+            </li>
+            <li class="ba__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>顧客・記録・資料を、全体検索で横断して見つけられる</span>
+            </li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================== 7. Smart Labo Worksができること ================== -->
+  <section class="section section--subtle" id="capabilities">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">サービス全体像</p>
+        <h2 class="section__title">Smart Labo Worksができること</h2>
+        <p class="section__lead">
+          相談、記録、整理、次の行動まで。日々の仕事を一つの流れにつなぎます。
+        </p>
+      </div>
+
+      <!-- 人がすることとAIがすることを左右に分けた流れ図。
+           「確認」を横断するゲートとして置き、AIの提案がそのまま保存へ
+           流れる形になっていないことを図として示す。 -->
+      <div class="journey reveal">
+
+        <div class="journey__row journey__row--human">
+          <div class="journey__card">
+            <span class="journey__actor">あなた</span>
+            <h3 class="journey__title">AIに相談する</h3>
+            <p class="journey__note">今日の進め方や、伝え方に迷ったことを聞いてみる。</p>
+          </div>
+          <span class="journey__dot" aria-hidden="true"></span>
+        </div>
+
+        <div class="journey__row journey__row--ai">
+          <span class="journey__dot" aria-hidden="true"></span>
+          <div class="journey__card">
+            <span class="journey__actor">Smart Labo Works</span>
+            <h3 class="journey__title">対応方針を整理する</h3>
+            <p class="journey__note">考えられる進め方と、次の一手を候補として示します。</p>
+          </div>
+        </div>
+
+        <div class="journey__row journey__row--human">
+          <div class="journey__card">
+            <span class="journey__actor">あなた</span>
+            <h3 class="journey__title">顧客対応・打ち合わせ</h3>
+            <p class="journey__note">訪問、電話、オンライン。いつもどおり話す。</p>
+          </div>
+          <span class="journey__dot" aria-hidden="true"></span>
+        </div>
+
+        <div class="journey__row journey__row--human">
+          <div class="journey__card">
+            <span class="journey__actor">あなた</span>
+            <h3 class="journey__title">活動内容を記録する</h3>
+            <p class="journey__note">短いメモで十分です。話したことをその場で残す。</p>
+          </div>
+          <span class="journey__dot" aria-hidden="true"></span>
+        </div>
+
+        <div class="journey__row journey__row--ai">
+          <span class="journey__dot" aria-hidden="true"></span>
+          <div class="journey__card">
+            <span class="journey__actor">Smart Labo Works</span>
+            <h3 class="journey__title">要点と次の行動を提案する</h3>
+            <p class="journey__note">メモから、要点・次の対応・タスクの候補を下書きします。</p>
+          </div>
+        </div>
+
+        <!-- ここが人の関門。AIの提案は、この工程を通らないと先へ進まない -->
+        <div class="journey__gate">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg>
+          <div>
+            <span class="journey__actor">あなた</span>
+            <h3 class="journey__title">内容を確認する</h3>
+            <p class="journey__note">
+              提案をそのまま反映することはありません。人が読み、直すところを直してから決めます。
+              確認を通っていない内容は保存されません。
+            </p>
+          </div>
+        </div>
+
+        <div class="journey__row journey__row--human">
+          <div class="journey__card">
+            <span class="journey__actor">あなた</span>
+            <h3 class="journey__title">顧客・タスク・予定へ保存する</h3>
+            <p class="journey__note">確認できた内容だけが、会社の記録として登録されます。</p>
+          </div>
+          <span class="journey__dot" aria-hidden="true"></span>
+        </div>
+
+        <p class="journey__loop">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 4v4h-4"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 20v-4h4"/></svg>
+          <span>次の相談は、ここまでの記録を踏まえたところから始まります。</span>
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 8. 主要機能 ============================== -->
+  <section class="section" id="features">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">主要機能</p>
+        <h2 class="section__title">まず使うのは、この6つです。</h2>
+        <p class="section__lead">
+          機能を全部覚える必要はありません。日々の仕事でよく使うものから始められます。
+        </p>
+      </div>
+
+      <!-- WEB-V3-3: 主要6機能を上段へ。残りは下の「日々の業務もひとつに」で
+           一覧できるようにし、機能が減ったように見えない構成にしている。 -->
+      <div class="feature-grid feature-grid--new reveal">
+
+        <article class="feature-card feature-card--new">
+          <span class="feature-card__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a5 5 0 0 0-5 5v.6A3.5 3.5 0 0 0 5.5 15a3.5 3.5 0 0 0 3 3.5V19a3 3 0 0 0 6 0v-.5a3.5 3.5 0 0 0 3-3.5A3.5 3.5 0 0 0 17 8.6V8a5 5 0 0 0-5-5z"/><path d="M12 8v11"/></svg>
+          </span>
+          <h3 class="feature-card__title">Company Brain Basic</h3>
+          <p class="feature-card__body">会社のマニュアル・規程・資料を対象に質問できる会社専用AI。登録資料を根拠に回答し、参照した資料と次に確認すると良い資料を示します。</p>
+          <p class="feature-card__more"><a href="#brain">くわしく見る</a></p>
+        </article>
+
+        <article class="feature-card feature-card--new">
+          <span class="feature-card__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3l1.9 4.1L17 9l-4.1 1.9L11 15l-1.9-4.1L5 9l4.1-1.9z"/><path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9z"/></svg>
+          </span>
+          <h3 class="feature-card__title">AIアシスタント</h3>
+          <p class="feature-card__body">業務の相談、対応方針の整理、文章の下書きを支援します。顧客を選んで相談すると、その顧客の状況を踏まえた内容になります。</p>
+        </article>
+
+        <article class="feature-card feature-card--new">
+          <span class="feature-card__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10z"/><path d="M13 3v7h7"/></svg>
+          </span>
+          <h3 class="feature-card__title">AI資料ボックス</h3>
+          <p class="feature-card__body">受け取った資料やスキャンした書類を保管します。PDF・Word・Excel・画像に対応し、AIが文字の読み取りと内容の整理を下書きします。</p>
+        </article>
+
+        <article class="feature-card feature-card--new">
+          <span class="feature-card__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </span>
+          <h3 class="feature-card__title">社内マニュアルAI</h3>
+          <p class="feature-card__body">会社の手順やルールを登録すると、登録資料だけを根拠に、参照元とあわせて回答の候補を示します。同じ説明を繰り返す場面を減らせます。</p>
+        </article>
+
+        <article class="feature-card feature-card--new">
+          <span class="feature-card__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          </span>
+          <h3 class="feature-card__title">全体検索</h3>
+          <p class="feature-card__body">顧客・タスク・予定・記録・文書・社内資料などを、ひとつの検索窓から横断して探せます。どこに保存したかを覚えておく必要がなくなります。</p>
+        </article>
+
+        <article class="feature-card feature-card--new">
+          <span class="feature-card__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2"/><circle cx="9.5" cy="8" r="3"/><path d="M21 20v-2a3 3 0 0 0-2.3-2.9M16.5 5.2a3 3 0 0 1 0 5.6"/></svg>
+          </span>
+          <h3 class="feature-card__title">顧客・取引先管理</h3>
+          <p class="feature-card__body">顧客情報と対応履歴を会社の中で共有します。担当者が変わっても経緯をたどれます。名刺を読み取って入力をサポートします。</p>
+        </article>
+
+      </div>
+
+      <!-- 残りの機能。一覧で示し、機能が無くなったように見せない -->
+      <div class="feature-more reveal">
+        <h3 class="feature-more__title">日々の業務も、ひとつに。</h3>
+        <ul class="feature-more__list">
+          <li>
+            <b>管理者ダッシュボード</b>
+            <span>顧客・予定・タスク・AI利用状況・社内資料をまとめて確認（<a href="#dashboard">くわしく</a>）</span>
+          </li>
+          <li>
+            <b>活動記録・議事録</b>
+            <span>電話・訪問・打ち合わせを短いメモから記録</span>
+          </li>
+          <li>
+            <b>AIによる記録整理</b>
+            <span>メモから要点と次の対応を下書き（登録は利用者が判断）</span>
+          </li>
+          <li>
+            <b>タスク管理</b>
+            <span>担当者・期限・進み具合をそろえて管理</span>
+          </li>
+          <li>
+            <b>スケジュール管理</b>
+            <span>今日の予定と顧客ごとの次回対応を確認</span>
+          </li>
+          <li>
+            <b>AI文章作成</b>
+            <span>お礼・フォローなど用途別の下書き（送信は利用者が行う）</span>
+          </li>
+          <li>
+            <b>名刺の読み取り</b>
+            <span>名刺画像から顧客情報の入力をサポート（確認して登録）</span>
+          </li>
+          <li>
+            <b>利用者・権限管理</b>
+            <span>会社単位で利用者を管理し、会社ごとにデータを分離</span>
+          </li>
+        </ul>
+        <p class="feature-more__link"><a href="features.html">すべての機能をくわしく見る</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= 9. 実際のシステム画面 ========================= -->
+  <section class="section section--subtle" id="screens">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">実際のシステム画面</p>
+        <h2 class="section__title">初めてでも迷わない、シンプルな業務画面。</h2>
+        <p class="section__lead">
+          下の画面は、いずれも実際に動いているSmart Labo Worksの画面です。
+        </p>
+      </div>
+
+      <div class="screens">
+
+        <figure class="shot shot--lead reveal">
+          <div class="shot__frame">
+            <div class="shot__bar" aria-hidden="true">
+              <span class="shot__dot"></span><span class="shot__dot"></span><span class="shot__dot"></span>
             </div>
+            <img src="assets/images/app-records.webp"
+                 srcset="assets/images/app-records.webp 1360w, assets/images/app-records@2x.webp 2720w"
+                 sizes="(max-width: 1080px) 100vw, 1136px"
+                 width="1360" height="850" loading="lazy" decoding="async"
+                 alt="Smart Labo Works の記録・議事録画面。左に記録の一覧、右に選んだ記録の詳細が表示され、「確認して記録を保存」「AIで整理」などの操作ボタンと、AI整理結果・タスク候補の欄が並んでいる。">
           </div>
-        </div>
-      </div>
+          <figcaption class="shot__caption">
+            <b>記録・議事録</b>
+            打ち合わせのメモをAIが整理し、要点と次の対応を下書きします。保存は「確認して記録を保存」を押したときだけ行われます。
+          </figcaption>
+        </figure>
 
-      <div class="big-screen big-screen--reverse">
-        <div class="big-screen__info">
-          <p class="big-screen__eyebrow">CRM</p>
-          <h3 class="big-screen__title">顧客との接点を、ひとつに集約。</h3>
-          <p class="big-screen__desc">商談中・提案済み・成約・フォロー中。顧客ごとの状況が一覧で把握でき、対応漏れを防ぎます。</p>
-        </div>
-        <div class="big-screen__visual">
-          <div class="screen-card screen-card--lg">
-            <div class="screen-card__top"><span class="screen-card__title">CRM</span><span class="screen-card__badge">DEMO</span></div>
-            <div class="screen-card__body">
-              <div class="screen-row"><span class="screen-row__name">〇〇商事株式会社</span><span class="screen-tag">商談中</span></div>
-              <div class="screen-row"><span class="screen-row__name">有限会社△△住宅</span><span class="screen-tag">提案済み</span></div>
-              <div class="screen-row"><span class="screen-row__name">□□フーズ株式会社</span><span class="screen-tag screen-tag--done">成約</span></div>
-              <div class="screen-row"><span class="screen-row__name">◇◇法律事務所</span><span class="screen-tag screen-tag--warn">フォロー中</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <div class="screens__grid">
 
-      <div class="big-screen">
-        <div class="big-screen__info">
-          <p class="big-screen__eyebrow">DASHBOARD — 実際の製品画面</p>
-          <h3 class="big-screen__title">今日やることが、ひと目でわかる。</h3>
-          <p class="big-screen__desc">対応中の案件、本日の予定、Company Brainの登録状況、AI利用ログ。ログインした瞬間に、今日の状況をまとめて確認できます。</p>
-        </div>
-        <div class="big-screen__visual">
-          <div class="screen-card screen-card--lg">
-            <div class="screen-card__top"><span class="screen-card__title">ダッシュボード</span><span class="screen-card__badge">DEMO</span></div>
-            <div class="screen-card__body">
-              <div class="dash__grid" style="grid-template-columns:repeat(2,1fr)">
-                <div class="dash__stat"><span class="dash__stat-label">対応中の案件</span><span class="dash__stat-value">12<small>件</small></span></div>
-                <div class="dash__stat"><span class="dash__stat-label">本日の予定</span><span class="dash__stat-value">4<small>件</small></span></div>
-                <div class="dash__stat dash__stat--accent"><span class="dash__stat-label">Company Brain登録</span><span class="dash__stat-value">4<small>件</small></span></div>
-                <div class="dash__stat"><span class="dash__stat-label">AI利用ログ</span><span class="dash__stat-value">28<small>件</small></span></div>
+          <figure class="shot reveal">
+            <div class="shot__frame">
+              <div class="shot__bar" aria-hidden="true">
+                <span class="shot__dot"></span><span class="shot__dot"></span><span class="shot__dot"></span>
               </div>
+              <img src="assets/images/app-customer.webp"
+                   sizes="(max-width: 860px) 100vw, 33vw"
+                   width="1360" height="850" loading="lazy" decoding="async"
+                   alt="Smart Labo Works の顧客・取引先画面。左に顧客の一覧、右に選んだ顧客の基本情報・担当・次回予定・最近の記録が表示されている。">
             </div>
-          </div>
+            <figcaption class="shot__caption">
+              <b>顧客・取引先</b>
+              顧客情報と対応履歴を一つの画面で確認できます。
+            </figcaption>
+          </figure>
+
+          <figure class="shot reveal">
+            <div class="shot__frame">
+              <div class="shot__bar" aria-hidden="true">
+                <span class="shot__dot"></span><span class="shot__dot"></span><span class="shot__dot"></span>
+              </div>
+              <img src="assets/images/app-tasks.webp"
+                   sizes="(max-width: 860px) 100vw, 33vw"
+                   width="1360" height="850" loading="lazy" decoding="async"
+                   alt="Smart Labo Works のタスク画面。未完了・進行中・期限超過・今日期限の件数と、タスクの一覧、選んだタスクの期限や担当、関連する予定が表示されている。">
+            </div>
+            <figcaption class="shot__caption">
+              <b>タスク</b>
+              今日やるべきことと期限を整理できます。
+            </figcaption>
+          </figure>
+
+          <figure class="shot reveal">
+            <div class="shot__frame">
+              <div class="shot__bar" aria-hidden="true">
+                <span class="shot__dot"></span><span class="shot__dot"></span><span class="shot__dot"></span>
+              </div>
+              <img src="assets/images/app-writing.webp"
+                   sizes="(max-width: 860px) 100vw, 33vw"
+                   width="1360" height="850" loading="lazy" decoding="async"
+                   alt="Smart Labo Works の文章作成画面。お礼メール・フォローメール・SMS・電話スクリプトなどの用途別テンプレートが一覧表示され、右側に最近作成した文章の履歴が並んでいる。">
+            </div>
+            <figcaption class="shot__caption">
+              <b>文章作成</b>
+              お礼やフォローの文章を、同じシステム内で下書きできます。
+            </figcaption>
+          </figure>
+
         </div>
       </div>
+
+      <p class="screens__note reveal">
+        実際の画面です。表示データはすべて架空です。画面は改良のため変更する場合があります。
+      </p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 4. 導入効果 + Mission -->
-<section class="section section--gray" id="mission">
-  <div class="container mission">
-    <div class="flow-story">
-      <span class="flow-step">毎日の業務</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step flow-step--accent">AIが支援</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">時間短縮</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">売上向上</span>
+  <!-- ============================ 10. 選ばれる理由 ============================ -->
+  <section class="section" id="reasons">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">選ばれる理由</p>
+        <h2 class="section__title">AIを導入するだけで終わらせない。</h2>
+        <p class="section__lead">
+          道具を増やすことではなく、日々の仕事が回るようにすることを目的にしています。
+        </p>
+      </div>
+
+      <div class="reasons reveal">
+
+        <div class="reason">
+          <div>
+            <h3 class="reason__title">業務の中で使える</h3>
+            <p class="reason__body">AIだけを別の画面で使うのではなく、顧客、記録、予定、タスクとつながった状態で使えます。相談した結果が、そのまま次の仕事につながります。</p>
+          </div>
+        </div>
+
+        <div class="reason">
+          <div>
+            <h3 class="reason__title">確認してから保存</h3>
+            <p class="reason__body">AIの提案を自動で反映することはありません。内容を利用者が確認し、直したうえで保存します。何が記録されるかを人が決められます。</p>
+          </div>
+        </div>
+
+        <div class="reason">
+          <div>
+            <h3 class="reason__title">初めてでも使いやすい</h3>
+            <p class="reason__body">AIやITに詳しくない方でも始められるように、画面の項目と操作を絞っています。日々の相談や記録から使い始められます。</p>
+          </div>
+        </div>
+
+        <div class="reason">
+          <div>
+            <h3 class="reason__title">企業ごとに情報を分離</h3>
+            <p class="reason__body">会社ごとにデータを分けて管理する設計です。ログインした会社の情報だけが表示されます。</p>
+          </div>
+        </div>
+
+        <div class="reason">
+          <div>
+            <h3 class="reason__title">導入後も改善</h3>
+            <p class="reason__body">導入して終わりにはしません。実際の使われ方やご要望を伺いながら、使いやすさを調整していきます。</p>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </section>
 
-    <ul class="check-list">
-      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>高いセキュリティ</li>
-      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>カスタマイズ可能</li>
-      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>安心のサポート体制</li>
-    </ul>
+  <!-- ================================ 11. 料金 ================================ -->
+  <section class="section section--subtle" id="pricing">
+    <div class="container">
 
-    <blockquote class="mission__quote" style="margin-top:56px">AIで、社長が本来の仕事に<br>集中できる世界をつくる。</blockquote>
-    <p class="mission__sub" style="color:var(--text-secondary)">日本で最も信頼される、中小企業向けAI経営プラットフォームになる。</p>
-  </div>
-</section>
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">料金</p>
+        <h2 class="section__title">小さく始められる料金設計。</h2>
+        <p class="section__lead">
+          まず1人から始めて、使う人が増えたぶんだけ広げていくことができます。
+        </p>
+      </div>
 
-<!-- 5. 最後のCTA -->
-<section class="section section--cta" id="cta">
-  <div class="container cta">
-    <p class="badge">会社を動かすAI。</p>
-    <h2 class="cta__title">Smart Labo Works<br class="only-mobile">無料デモ受付中。</h2>
-    <p class="cta__lead">β版として、先行導入企業・パートナー企業を募集しています。導入プランは個別にご案内します。</p>
-    <div class="cta__actions">
-      <a href="app.html" class="btn btn--primary btn--lg" target="_blank">デモを見る</a>
-      <a href="contact.html" class="btn btn--secondary btn--lg">導入相談</a>
+      <div class="plan reveal">
+
+        <div class="plan__head">
+          <h3 class="plan__name">Smart Labo Works ライト</h3>
+          <p class="plan__lead">Company Brain Basic・管理者ダッシュボードを含む全機能を、ひとまとめにしたプランです。上位プランはありません。</p>
+        </div>
+
+        <dl class="plan__prices">
+          <div class="plan__price">
+            <dt>初期設定費</dt>
+            <dd data-price="initial">10,000<small>円</small></dd>
+          </div>
+          <div class="plan__price plan__price--main">
+            <dt>月額基本料金</dt>
+            <dd data-price="monthly">20,000<small>円／月</small></dd>
+          </div>
+          <div class="plan__price">
+            <dt>追加アカウント</dt>
+            <dd data-price="additional">3,000<small>円／月・1人</small></dd>
+          </div>
+        </dl>
+
+        <div class="plan__body">
+          <p class="plan__included-title">基本料金に含まれるもの</p>
+          <ul class="plan__included">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1アカウント</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Company Brain Basic（会社専用AI）</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>管理者ダッシュボード</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>AIアシスタント</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>顧客・取引先管理</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>活動記録</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>タスク管理</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>スケジュール管理</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>AI文章作成</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>AI資料ボックス</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>社内マニュアルAI</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>全体検索</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>名刺の読み取り</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>初期導入サポート</span></li>
+          </ul>
+        </div>
+
+        <div class="plan__foot">
+          <p class="plan__note">
+            表示価格は税別です。AI利用量や個別対応の内容により、別途ご案内する場合があります。
+            上記以外の条件については、ご相談の際にご説明します。
+          </p>
+          <span class="plan__actions">
+            <a href="apply.html" class="btn btn--primary btn--lg">今すぐ申し込む</a>
+            <a href="pricing.html" class="btn btn--secondary btn--lg">料金を見る</a>
+          </span>
+        </div>
+
+      </div>
     </div>
-    <p class="cta__note">導入プランについても、個別相談で丁寧にご案内します。</p>
-  </div>
-</section>
+  </section>
+
+  <!-- 創業記念キャンペーンの節は WEB-SALES-8L で撤去した。
+       Lite本体の販売条件・特商法表記は「キャンペーン：実施していません。無料体験の提供もありません。」
+       であり、実施していない特典を掲載しない。 -->
+
+  <!-- ============================= 12. 導入の流れ ============================= -->
+  <section class="section section--subtle" id="steps">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">導入の流れ</p>
+        <h2 class="section__title">お問い合わせから利用開始まで、丁寧にサポートします。</h2>
+        <p class="section__lead">
+          今の業務を伺うところから始めます。準備が整っていなくても構いません。
+        </p>
+      </div>
+
+      <ol class="steps reveal">
+        <li class="step">
+          <span class="step__num" aria-hidden="true">1</span>
+          <h3 class="step__title">お問い合わせ</h3>
+          <p class="step__note">現在の業務やお困りごとを伺います。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">2</span>
+          <h3 class="step__title">ヒアリング・ご案内</h3>
+          <p class="step__note">改善できる業務と、利用方法をご説明します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">3</span>
+          <h3 class="step__title">初期設定</h3>
+          <p class="step__note">会社情報と利用者情報を設定します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">4</span>
+          <h3 class="step__title">操作案内</h3>
+          <p class="step__note">基本操作とAIの使い方をご案内します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">5</span>
+          <h3 class="step__title">利用開始</h3>
+          <p class="step__note">実際の業務で使いながら、必要に応じて改善します。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- =============================== 13. FAQ =============================== -->
+  <section class="section" id="faq">
+    <div class="container">
+
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">FAQ</p>
+        <h2 class="section__title">よくある質問</h2>
+      </div>
+
+      <!-- 回答はHTMLに直接記述している。JS無効の場合は全問が開いた状態で読める。 -->
+      <div class="faq reveal" data-faq>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a1" id="faq-q1">
+              <span>AIは勝手に顧客情報を書き換えますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a1" role="region" aria-labelledby="faq-q1">
+            <p>いいえ。AIは内容を提案します。保存や更新は、利用者が確認して操作します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a2" id="faq-q2">
+              <span>AIに詳しくなくても利用できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a2" role="region" aria-labelledby="faq-q2">
+            <p>はい。初回案内とシンプルな操作画面を用意しています。日常の相談や記録から始められます。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a3" id="faq-q3">
+              <span>スマートフォンでも利用できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a3" role="region" aria-labelledby="faq-q3">
+            <p>Webブラウザから利用できます。PC、タブレット、スマートフォンに対応した画面設計です。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a4" id="faq-q4">
+              <span>会社の情報が他社に見えることはありませんか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a4" role="region" aria-labelledby="faq-q4">
+            <p>会社ごとにデータを分離する設計を採用しています。ログインした会社の情報だけを表示します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a5" id="faq-q5">
+              <span>何人から利用できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a5" role="region" aria-labelledby="faq-q5">
+            <p>1アカウントから利用できます。追加アカウントは1人あたり月額3,000円（税別）です。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a6" id="faq-q6">
+              <span>導入時の設定が心配です。</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a6" role="region" aria-labelledby="faq-q6">
+            <p>初期設定と基本操作をご案内します。会社情報や利用者の登録もサポートします。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a7" id="faq-q7">
+              <span>業種を問わず利用できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a7" role="region" aria-labelledby="faq-q7">
+            <p>顧客管理、記録、タスク、予定、文章作成など、複数の業種で使える基本機能を備えています。具体的な使い方はヒアリング時にご案内します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a8" id="faq-q8">
+              <span>AIが誤った回答をする可能性はありますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a8" role="region" aria-labelledby="faq-q8">
+            <p>AIの回答には誤りが含まれる可能性があります。そのため、利用者による確認を前提としています。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a9" id="faq-q9">
+              <span>サービスの紹介資料はもらえますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="faq-a9" role="region" aria-labelledby="faq-q9">
+            <p>はい。<a href="contact.html?type=docs#form">お問い合わせフォーム</a>の種別で「資料請求」を選んで送信いただくと、担当者よりご案内します。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 14. 会社紹介 ============================== -->
+  <section class="section section--subtle" id="company">
+    <div class="container">
+
+      <div class="section__head reveal">
+        <p class="eyebrow">会社紹介</p>
+        <h2 class="section__title">AIで、企業が本来の仕事に集中できる世界をつくる。</h2>
+      </div>
+
+      <div class="about reveal">
+
+        <div class="about__body">
+          <p>
+            株式会社スマートラボは、AIそのものを販売することを目的とした会社ではありません。
+          </p>
+          <p>
+            AIを実際の業務に組み込み、企業で働く一人ひとりが本来取り組むべき仕事へ集中できる時間をつくる会社です。
+            道具を増やすことが目的ではなく、日々の仕事が滞りなく回る状態をつくることを大切にしています。
+          </p>
+
+          <div class="about__points">
+            <p class="about__point">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>業務の流れから設計し、機能の多さを競うことはしていません。</span>
+            </p>
+            <p class="about__point">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>機能の多さより、現場で実際に使えることを重視しています。</span>
+            </p>
+            <p class="about__point">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>導入して終わりではなく、実務に合わせて改善を続けます。</span>
+            </p>
+          </div>
+
+          <p style="margin-top: var(--sp-6);">
+            <a href="company.html" class="btn btn--secondary">会社情報を見る</a>
+          </p>
+        </div>
+
+        <div class="about__card">
+          <p class="about__card-title">ブランドの考え方</p>
+          <dl class="about__dl">
+            <div>
+              <dt>会社を動かすAI。</dt>
+              <dd>メインコピー</dd>
+            </div>
+            <div>
+              <dt>全社員に、AIという戦力を。</dt>
+              <dd>商品コピー</dd>
+            </div>
+          </dl>
+          <p class="about__card-note">
+            AIを一部の詳しい人だけのものにせず、日々働くすべての人が使える状態を目指しています。
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 15. 最終CTA ============================== -->
+  <section class="section section--inverse" id="cta">
+    <div class="container final-cta reveal">
+      <h2 class="final-cta__title">まずは、現在の業務をお聞かせください。</h2>
+      <p class="final-cta__lead">
+        AIの導入方法が決まっていなくても問題ありません。
+        現在の仕事の流れを伺い、Smart Labo Worksで支援できることをご案内します。
+      </p>
+
+      <!-- WEB-V3-3: 「知る → 資料 → 相談 → 申し込む」の順で選べるようにする。
+           資料請求を最初に置き、申し込みを最後にしている。 -->
+      <p class="final-cta__actions">
+        <a href="contact.html?type=docs#form" class="btn btn--on-inverse btn--lg">資料請求（サービス紹介資料）</a>
+        <a href="contact.html?type=consult#form" class="btn btn--ghost-light btn--lg">無料相談する</a>
+        <a href="apply.html" class="btn btn--ghost-light btn--lg">お申し込みへ進む</a>
+      </p>
+      <p class="final-cta__note">
+        無理な営業は行いません。まず資料をご覧いただくだけでも、ご相談だけでも受け付けています。
+      </p>
+    </div>
+  </section>
+
 
 </main>
 
-<!-- Footer -->
-<footer class="footer">
-  <div class="container footer__inner">
-    <div class="footer__brand">
-      <a href="index.html" class="logo">
-        <span class="logo__mark" aria-hidden="true">
-          <img src="img/logo/smartlabo_icon_white.webp" width="38" height="38" alt="">
-        </span>
-        <span class="logo__text">Smart Labo <em>Works</em></span>
-      </a>
-      <p class="footer__tagline">会社を動かすAI。</p>
+<!-- ============================== 15. フッター ============================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__inner">
+
+      <div class="site-footer__col">
+        <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+          <!-- 濃色背景。正式アイコンは白い台座に載せる(アセットは無加工) -->
+          <img class="logo__icon logo__icon--tile" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+          <span class="logo__text">Smart Labo Works</span>
+        </a>
+        <p class="site-footer__brand-note">
+          会社を動かすAI。<br>
+          株式会社スマートラボ
+        </p>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>サービス</h4>
+        <a href="index.html#capabilities">できること</a>
+        <a href="index.html#features">機能</a>
+        <a href="index.html#screens">システム画面</a>
+        <a href="index.html#pricing">料金</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>導入</h4>
+        <a href="apply.html">お申し込み</a>
+        <a href="contact.html?type=docs#form">資料請求</a>
+        <a href="index.html#steps">導入の流れ</a>
+        <a href="index.html#faq">よくある質問</a>
+        <a href="contact.html">お問い合わせ</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>会社</h4>
+        <a href="company.html">会社概要</a>
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+        <a href="tokushoho.html">特定商取引法に基づく表記</a>
+        <a href="https://lite.smartlaboworks.com/legal/terms">Lite利用規約</a>
+        <a href="https://lite.smartlaboworks.com/legal/privacy">Liteプライバシーポリシー</a>
+        <a href="https://lite.smartlaboworks.com/legal/commercial-transactions">Lite特定商取引法に基づく表記</a>
+      </div>
+
     </div>
 
-    <div class="footer__col">
-      <h4>製品</h4>
-      <a href="product.html">製品紹介</a>
-      <a href="features.html">機能一覧</a>
-    </div>
-    <div class="footer__col">
-      <h4>業種</h4>
-      <a href="real-estate.html">不動産会社向け</a>
-    </div>
-    <div class="footer__col">
-      <h4>ご利用</h4>
-      <a href="pricing.html">導入プラン</a>
-      <a href="contact.html">導入相談・お問い合わせ</a>
-    </div>
-    <div class="footer__col">
-      <h4>会社情報</h4>
-      <a href="company.html">会社概要</a>
-      <a href="privacy.html">プライバシーポリシー</a>
-      <a href="terms.html">利用規約</a>
-    </div>
-  </div>
-
-  <div class="container footer__bottom">
-    <p>&copy; 2026 株式会社スマートラボ All rights reserved.</p>
-    <div class="footer__legal">
-      <a href="privacy.html">プライバシーポリシー</a>
-      <a href="terms.html">利用規約</a>
+    <div class="site-footer__bottom site-footer__legal">
+      <p>&copy; 株式会社スマートラボ</p>
+      <p class="site-footer__legal-links">
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+        <a href="tokushoho.html">特定商取引法に基づく表記</a>
+      </p>
     </div>
   </div>
 </footer>
 
-<!-- Smart Labo AI — ホームページAIチャットデモ(問い合わせチャットではなく、Smart Labo Worksを無料体験できるAIデモ) -->
-<div class="ai-chat" id="aiChat">
-  <button class="ai-chat__toggle" id="aiChatToggle" aria-label="Smart Labo AIを開く">
-    <svg class="ai-chat__icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-8.4 8.4c-1.4 0-2.7-.3-3.9-1L3 20l1.2-4.3a8.3 8.3 0 01-1-4A8.4 8.4 0 0111.6 3.3 8.4 8.4 0 0121 11.5z"/></svg>
-    <svg class="ai-chat__icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    <span class="ai-chat__badge" aria-hidden="true"></span>
-  </button>
-
-  <div class="ai-chat__window" role="dialog" aria-label="Smart Labo AI チャット">
-    <div class="ai-chat__header">
-      <div class="ai-chat__header-info">
-        <span class="ai-chat__avatar">S</span>
-        <div>
-          <p class="ai-chat__title">Smart Labo AI</p>
-          <p class="ai-chat__status">Smart AI Router 搭載デモ</p>
-        </div>
-      </div>
-      <button class="ai-chat__close" id="aiChatClose" aria-label="閉じる">×</button>
-    </div>
-
-    <div class="ai-chat__messages" id="aiChatMessages"></div>
-
-    <div class="ai-chat__footer-cta">
-      <span>もっと詳しく体験したい方は</span>
-      <a href="#cta">無料デモをご予約</a>
-      <span>｜β版受付中｜</span>
-      <a href="#cta">お問い合わせ</a>
-    </div>
-
-    <form class="ai-chat__input-row" id="aiChatForm">
-      <input type="text" id="aiChatInput" placeholder="質問を入力してください" autocomplete="off">
-      <button type="submit" class="ai-chat__send" aria-label="送信">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
-      </button>
-    </form>
-  </div>
-</div>
-
-<script src="js/main.js"></script>
-<script src="js/hero.js"></script>
-<script src="js/chat.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>

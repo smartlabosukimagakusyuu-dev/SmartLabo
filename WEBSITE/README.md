@@ -26,21 +26,24 @@
 
 **公開URL(正式ドメイン): https://smartlaboworks.com/**
 
-**2026-07-16のDNS実測により、`smartlaboworks.com`はまだGitHub Pagesへ切り替わっておらず、Xserverの初期設置ページを指していることを確認しました。** GitHub Pages側のカスタムドメイン設定(Settings→Pages)・DNSレコードの切替(Aレコード4件・CNAME)は、引き続きCEO(または担当者)による対応が必要です。手順は[PROJECT_BIBLE/62_CEO_Publish_Guide.md](../PROJECT_BIBLE/62_CEO_Publish_Guide.md)を参照してください。
+**現在の状態（2026-08-11 / WEB-SALES-8L で正式化）**：
 
-**実装済みの機能(v1.0.0)**：
-
-- 会社概要ページ(`company.html`、代表者名・設立年月・事業内容を反映。所在地・電話番号は引き続き「CEO確認待ち」)
-- プライバシーポリシー・利用規約(`privacy.html`・`terms.html`、専門家確認前提のドラフト)
-- Smart Labo Configurator(`pricing.html`、導入プランの5Stepシミュレーター)
+- 会社概要ページ(`company.html`)に会社名・代表者・**所在地・電話番号・受付時間**（代表承認値）を掲載
+- プライバシーポリシー・利用規約(`privacy.html`・`terms.html`)を正式化（未確定表示を撤去し制定日を確定）
+- **特定商取引法に基づく表記(`tokushoho.html`)を新設**。フッター・料金・申込ページから到達可能
+- Smart Labo Works Lite本体の法務3文書（`https://lite.smartlaboworks.com/legal/...`）への導線を追加
+- **アクセス解析（GTM/GA4/dataLayer）は全ページ・全JSから撤去**。再導入条件は
+  [docs/website/ANALYTICS_REINTRODUCTION.md](../docs/website/ANALYTICS_REINTRODUCTION.md) を参照
+- 未リンクだった `signup.html` を削除（現行の申込経路では不要）
+- 実施していない創業記念キャンペーンの記載を撤去（Lite本体の販売条件と一致させるため）
 - SEO対応(`robots.txt`・`sitemap.xml`・構造化データ)
+- 公開条件の機械検査：`node docs/reviews/tools/check-legal.js` / `node docs/reviews/tools/check-prices.js`
 
-**v1.0.0では未実施、Version1.1で対応予定(2026-07-16 CEO確定)**：
+**Version1.1で対応予定**：
 
-- 問い合わせフォームの本番稼働(`contact.html`は本番送信テスト未完了のため、フォームを撤去し`info@smartlaboworks.com`へのmailtoリンクへ一時的に差し替え済み)
 - AIチャットウィジェットの実API接続(現状はデモ回答のみ)
-- Google Analytics導入
 - Google Search Console登録
+- アクセス解析の再導入（上記の条件を満たしてから）
 
 公開前チェックの最新状況は[PROJECT_BIBLE/61_Release_Checklist.md](../PROJECT_BIBLE/61_Release_Checklist.md)（v1.0 Release Checklist）を参照してください。
 

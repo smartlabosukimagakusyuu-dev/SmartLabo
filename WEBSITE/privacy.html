@@ -3,199 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- アクセス解析タグ（GTM/GA4）は WEB-SALES-8L で撤去した。
+     再導入する場合の条件（送信項目・送信先・利用目的・保存期間・オプトアウトの確定）は
+     docs/website/ANALYTICS_REINTRODUCTION.md を参照。 -->
+
+<!-- Smart Labo Works — Website v3 / プライバシーポリシー(骨格のみ。本実装はWEB-V2-2以降) -->
+
 <title>プライバシーポリシー — Smart Labo Works</title>
-<meta name="description" content="Smart Labo Worksのプライバシーポリシー。お問い合わせフォームでお預かりする個人情報の取り扱いについて。">
-<meta name="robots" content="noindex">
-<link rel="icon" href="img/logo/favicon.png" type="image/png">
+<meta name="description" content="株式会社スマートラボが、Smart Labo Worksのホームページを通じてお預かりする個人情報の取り扱いについて定めたプライバシーポリシーです。">
 <link rel="canonical" href="https://smartlaboworks.com/privacy.html">
-<link rel="stylesheet" href="css/style.css">
-<!-- ============================================================
-     解析・計測タグの導入位置(2026-07-14、Task2)
-     現時点では一切埋め込んでいない(解析コードなし・Cookieなし)。
-     導入する際は、この直後に以下の順で追加すること。詳細は
-     PROJECT_BIBLE/61_Release_Checklist.md の該当セクションを参照。
+<link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
 
-     1. Google Search Console 所有権確認用メタタグ(発行後に追加):
-        <meta name="google-site-verification" content="発行された値">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Smart Labo Works">
+<meta property="og:title" content="プライバシーポリシー — Smart Labo Works">
+<meta property="og:description" content="株式会社スマートラボが、Smart Labo Worksのホームページを通じてお預かりする個人情報の取り扱いについて定めたプライバシーポリシーです。">
+<meta property="og:url" content="https://smartlaboworks.com/privacy.html">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="プライバシーポリシー — Smart Labo Works">
+<meta name="twitter:description" content="株式会社スマートラボが、Smart Labo Worksのホームページを通じてお預かりする個人情報の取り扱いについて定めたプライバシーポリシーです。">
+<meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
 
-     2. Google Analytics 4 (GA4) 計測タグ(導入する場合のみ。要CEO判断):
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-XXXXXXX');
-        </script>
-        ※GA4を導入する場合、privacy.html の「6. Cookie・アクセス解析について」の
-        記載(現在「アクセス解析ツールを導入していない」と明記)を先に更新すること。
 
-     3. Cookie同意バナー(GA4等、Cookieを使う解析を導入する場合に必要。
-        本サイトは現在Cookieを一切使用しないため未実装。実装する場合は
-        <body>直後にバナー用のマークアップ・JSを追加する想定):
-        例: <div id="cookieConsent">...</div>
-     ============================================================ -->
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script>document.documentElement.classList.add('js');</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://smartlaboworks.com/" },
+    { "@type": "ListItem", "position": 2, "name": "プライバシーポリシー", "item": "https://smartlaboworks.com/privacy.html" }
+  ]
+}
+</script>
+
 </head>
 <body>
 
-<!-- Header -->
-<header class="header" id="header">
-  <div class="container header__inner">
-    <a href="index.html" class="logo">
-      <span class="logo__mark" aria-hidden="true"><img src="img/logo/smartlabo_icon_white.webp" width="44" height="44" alt=""></span>
-      <span class="logo__text">Smart Labo <em>Works</em></span>
+
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<header class="site-header" id="siteHeader">
+  <div class="container site-header__inner">
+    <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+      <img class="logo__icon" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+      <span class="logo__text">Smart Labo Works</span>
     </a>
-    <nav class="nav" id="nav">
-      <a href="product.html">製品</a>
+
+    <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="index.html#brain">Company Brain</a>
       <a href="features.html">機能</a>
-      <a href="real-estate.html">不動産向け</a>
-      <a href="pricing.html">導入プラン</a>
+      <a href="pricing.html">料金</a>
       <a href="company.html">会社情報</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="contact.html">お問い合わせ</a>
     </nav>
-    <div class="header__actions">
-      <a href="app.html" class="btn btn--ghost-light btn--sm" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        デモを見る
-      </a>
-      <a href="contact.html" class="btn btn--primary btn--sm">導入相談</a>
+
+    <div class="site-header__actions">
+      <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="apply.html" class="btn btn--primary btn--sm"><span class="btn__label-full">今すぐ申し込む</span><span class="btn__label-short">申し込む</span></a>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="メニューを開く" aria-expanded="false">
-      <span></span><span></span><span></span>
+
+    <button class="nav-toggle" type="button" data-nav-toggle
+            aria-controls="site-nav" aria-expanded="false">
+      <span class="visually-hidden">メニューを開閉</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
     </button>
   </div>
 </header>
 
-<main>
+<main id="main">
+  <!-- ============================== ページヒーロー ============================== -->
+  <section class="page-hero">
+    <div class="container container--narrow">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol>
+          <li><a href="index.html">ホーム</a></li>
+          <li><span aria-current="page">プライバシーポリシー</span></li>
+        </ol>
+      </nav>
 
-<section class="page-hero">
-  <div class="page-hero__watermark" aria-hidden="true"><img src="img/logo/smartlabo_icon_white.webp" alt=""></div>
-  <div class="container">
-    <p class="badge">プライバシーポリシー</p>
-    <h1 class="page-hero__title">プライバシーポリシー</h1>
-    <p class="page-hero__lead">株式会社スマートラボ（以下「当社」）が、Smart Labo Worksのホームページを通じてお預かりする個人情報の取り扱いについて定めるものです。</p>
-  </div>
-</section>
-
-<section class="section section--white">
-  <div class="container">
-    <div class="legal-doc">
-
-      <div class="legal-doc__notice">
-        <strong>本ページは専門家確認前のドラフトです。</strong>
-        本文は一般的なSaaS事業者向けの内容として作成したものであり、断定的な法的効力を保証するものではありません。弁護士等の専門家による確認・最終調整を経てください。会社の正式情報（代表者等）は<a href="company.html">会社概要ページ</a>を参照しており、未確定の項目（所在地・電話番号等）は同ページに掲載していません。
+      <div class="page-hero__inner">
+        <h1 class="page-hero__title">プライバシーポリシー</h1>
+        <p class="page-hero__lead">株式会社スマートラボ（以下「当社」）が、Smart Labo Worksのホームページを通じてお預かりする個人情報の取り扱いについて定めるものです。</p>
       </div>
-
-      <section>
-        <h2>1. 事業者情報</h2>
-        <p>本ポリシーにおける個人情報取扱事業者は以下のとおりです。詳細は<a href="company.html">会社概要ページ</a>をご覧ください。</p>
-        <ul>
-          <li>商号：株式会社スマートラボ</li>
-          <li>お問い合わせ窓口：<a href="contact.html">お問い合わせフォーム</a></li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>2. 取得する情報</h2>
-        <p>当社は、お問い合わせフォーム（<a href="contact.html">contact.html</a>）を通じて、以下の情報をお預かりします。</p>
-        <ul>
-          <li>会社名、氏名、メールアドレス、電話番号</li>
-          <li>業種、社員数、ご相談種別、ご相談内容</li>
-          <li>Smart Labo Configurator（<a href="pricing.html">導入プランシミュレーター</a>）をご利用の場合、選択いただいた利用規模・基本プラン・利用モジュール・追加オプションの内容（これらはお問い合わせフォームへの入力を補助する目的でのみ利用し、氏名・連絡先とあわせてお預かりして初めて個人情報として扱われます）</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>3. 利用目的</h2>
-        <p>お預かりした情報は、以下の目的の範囲内で利用します。</p>
-        <ul>
-          <li>お問い合わせ・ご相談への回答、見積り・資料のご案内、デモのご予約対応</li>
-          <li>サービス（Smart Labo Works）に関するご案内・改善検討</li>
-          <li>不正利用の防止、お問い合わせフォームの安全な運用</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>4. 第三者提供</h2>
-        <p>当社は、法令に基づく場合を除き、ご本人の同意なく個人情報を第三者へ提供しません。</p>
-      </section>
-
-      <section>
-        <h2>5. 委託</h2>
-        <p>お問い合わせフォームの送信処理・メール配信等の一部業務を、外部の委託先（サーバー・メール配信サービス等）に委託する場合があります。委託先の選定にあたっては、適切な安全管理措置を講じている事業者を選定します。<strong>現時点で送信基盤（サーバー環境）は選定中であり、確定次第、本ページを更新します。</strong></p>
-      </section>
-
-      <section>
-        <h2>6. Cookie・アクセス解析について</h2>
-        <p>本サイトでは、本ページ作成時点でGoogle Analytics等のアクセス解析ツール・広告配信のためのCookieを導入していません。将来、これらを導入する場合は、事前に本ページで開示します。</p>
-      </section>
-
-      <section>
-        <h2>7. 安全管理措置</h2>
-        <p>当社は、お預かりした個人情報の漏えい・滅失・毀損を防止するため、通信の暗号化（HTTPS）、入力値の検証、送信回数の制限、アクセスログの記録など、技術的・組織的な安全管理措置を講じます。</p>
-      </section>
-
-      <section>
-        <h2>8. 開示・訂正・利用停止等のご請求</h2>
-        <p>ご本人からの個人情報の開示・訂正・削除・利用停止等のご請求は、<a href="contact.html">お問い合わせフォーム</a>より承ります。ご本人確認のうえ、法令に従い対応します。</p>
-      </section>
-
-      <section>
-        <h2>9. 特定商取引法に基づく表記について</h2>
-        <p>Smart Labo Worksは法人向け（BtoB）のSaaS契約を前提としたサービスであり、一般的に特定商取引法上の「通信販売」表記が不要となる形態が多いと考えられますが、<strong>本ページ作成時点では該当性の最終判断を行っておらず、専門家確認が必要な未決定事項です。</strong>今後の契約形態・料金体系の確定にあわせて、要否を改めて整理し、必要な場合は別途表記ページを設けます。</p>
-      </section>
-
-      <section>
-        <h2>10. お問い合わせ</h2>
-        <p>本ポリシーに関するお問い合わせは、<a href="contact.html">お問い合わせフォーム</a>よりご連絡ください。</p>
-      </section>
-
-      <p class="legal-doc__meta">制定日：[CEO確認待ち]　最終更新日：2026-07-14（ドラフト作成）</p>
-
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- ============================== 本文 ==============================
+       WEB-SALES-8L で正式化した（未確定表示と古い開示の撤去）。
+       本文を変更する場合は、末尾の legal-meta（最終更新日）を必ず更新すること。
+       ============================================================== -->
+  <section class="section">
+    <div class="container container--narrow">
+      <div class="legal prose">
+
+
+        <div class="legal-notice">
+          本ポリシーは、当社ホームページ（本サイト）およびお問い合わせフォームにおける個人情報の取扱いを定めるものです。Smart Labo Works Lite本体（サービス）における個人情報の取扱いは、<a href="https://lite.smartlaboworks.com/legal/privacy">Smart Labo Works Lite プライバシーポリシー</a>によります。会社の正式情報は<a href="company.html">会社概要ページ</a>および<a href="tokushoho.html">特定商取引法に基づく表記</a>をご覧ください。
+        </div>
+
+        <section>
+          <h2>1. 事業者情報</h2>
+          <p>本ポリシーにおける個人情報取扱事業者は以下のとおりです。詳細は<a href="company.html">会社概要ページ</a>をご覧ください。</p>
+          <ul>
+            <li>商号：株式会社スマートラボ</li>
+            <li>お問い合わせ窓口：<a href="contact.html">お問い合わせフォーム</a></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>2. 取得する情報</h2>
+          <p>当社は、お問い合わせフォーム（<a href="contact.html">contact.html</a>）を通じて、以下の情報をお預かりします。</p>
+          <ul>
+            <li>会社名、氏名、メールアドレス、電話番号</li>
+            <li>お問い合わせ種別、利用予定人数、お問い合わせ本文</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>3. 利用目的</h2>
+          <p>お預かりした情報は、以下の目的の範囲内で利用します。</p>
+          <ul>
+            <li>お問い合わせ・ご相談への回答、見積り・資料のご案内、デモのご予約対応</li>
+            <li>サービス（Smart Labo Works）に関するご案内・改善検討</li>
+            <li>不正利用の防止、お問い合わせフォームの安全な運用</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>4. 第三者提供</h2>
+          <p>当社は、法令に基づく場合を除き、ご本人の同意なく個人情報を第三者へ提供しません。</p>
+        </section>
+
+        <section>
+          <h2>5. 委託</h2>
+          <p>お問い合わせフォームに入力された情報は、当社が管理するフォーム送信サーバー（form.smartlaboworks.com）で受け付け、当社が契約するレンタルサーバー事業者のメール送信基盤を通じて当社の受付窓口へ通知されます。当社は、これらの基盤の運用にあたり、通信の暗号化その他の適切な安全管理措置を講じ、委託先に対して必要かつ適切な監督を行います。</p>
+        </section>
+
+        <section>
+          <h2>6. Cookie・アクセス解析について</h2>
+          <p>本サイトは、現在、Google Analytics等のアクセス解析ツールおよび広告配信・効果測定のためのCookieを使用していません。お問い合わせフォームの安全性確保（CSRF対策等）に必要な仕組みを除き、本サイトが利用者のブラウザへ独自のCookieを保存することはありません。</p>
+          <p>当社が将来、アクセス解析等の外部サービスを導入する場合は、送信される情報・送信先・利用目的・保存期間およびオプトアウトの方法を確定したうえで、導入前に本ポリシーを更新してお知らせします。</p>
+        </section>
+
+        <section>
+          <h2>7. 安全管理措置</h2>
+          <p>当社は、お預かりした個人情報の漏えい・滅失・毀損を防止するため、通信の暗号化（HTTPS）、入力値の検証、送信回数の制限、アクセスログの記録など、技術的・組織的な安全管理措置を講じます。</p>
+        </section>
+
+        <section>
+          <h2>8. 開示・訂正・利用停止等のご請求</h2>
+          <p>ご本人からの個人情報の開示・訂正・削除・利用停止等のご請求は、<a href="contact.html">お問い合わせフォーム</a>より承ります。ご本人確認のうえ、法令に従い対応します。</p>
+        </section>
+
+        <section>
+          <h2>9. 特定商取引法に基づく表記について</h2>
+          <p>販売事業者・販売価格・お支払い方法・解約の条件その他の販売条件は、<a href="tokushoho.html">特定商取引法に基づく表記</a>に記載しています。</p>
+        </section>
+
+        <section>
+          <h2>10. お問い合わせ</h2>
+          <p>本ポリシーに関するお問い合わせは、<a href="contact.html">お問い合わせフォーム</a>よりご連絡ください。</p>
+        </section>
+
+        <p class="legal-meta">制定日：2026-08-11　最終更新日：2026-08-11（正式化・アクセス解析タグの撤去にともなう改定）</p>
+
+      </div>
+    </div>
+  </section>
 
 </main>
 
-<!-- Footer -->
-<footer class="footer">
-  <div class="container footer__inner">
-    <div class="footer__brand">
-      <a href="index.html" class="logo">
-        <span class="logo__mark" aria-hidden="true"><img src="img/logo/smartlabo_icon_white.webp" width="38" height="38" alt=""></span>
-        <span class="logo__text">Smart Labo <em>Works</em></span>
-      </a>
-      <p class="footer__tagline">会社を動かすAI。</p>
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__inner">
+
+      <div class="site-footer__col">
+        <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+          <img class="logo__icon logo__icon--tile" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+          <span class="logo__text">Smart Labo Works</span>
+        </a>
+        <p class="site-footer__brand-note">
+          会社を動かすAI。<br>
+          株式会社スマートラボ
+        </p>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>サービス</h4>
+        <a href="index.html#capabilities">できること</a>
+        <a href="index.html#features">機能</a>
+        <a href="index.html#screens">システム画面</a>
+        <a href="index.html#pricing">料金</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>導入</h4>
+        <a href="apply.html">お申し込み</a>
+        <a href="contact.html?type=docs#form">資料請求</a>
+        <a href="index.html#steps">導入の流れ</a>
+        <a href="index.html#faq">よくある質問</a>
+        <a href="contact.html">お問い合わせ</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>会社</h4>
+        <a href="company.html">会社概要</a>
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+        <a href="tokushoho.html">特定商取引法に基づく表記</a>
+        <a href="https://lite.smartlaboworks.com/legal/terms">Lite利用規約</a>
+        <a href="https://lite.smartlaboworks.com/legal/privacy">Liteプライバシーポリシー</a>
+        <a href="https://lite.smartlaboworks.com/legal/commercial-transactions">Lite特定商取引法に基づく表記</a>
+      </div>
+
     </div>
-    <div class="footer__col">
-      <h4>製品</h4>
-      <a href="product.html">製品紹介</a>
-      <a href="features.html">機能一覧</a>
-    </div>
-    <div class="footer__col">
-      <h4>業種</h4>
-      <a href="real-estate.html">不動産会社向け</a>
-    </div>
-    <div class="footer__col">
-      <h4>ご利用</h4>
-      <a href="pricing.html">導入プラン</a>
-      <a href="contact.html">導入相談・お問い合わせ</a>
-    </div>
-    <div class="footer__col">
-      <h4>会社情報</h4>
-      <a href="company.html">会社概要</a>
-      <a href="privacy.html">プライバシーポリシー</a>
-      <a href="terms.html">利用規約</a>
-    </div>
-  </div>
-  <div class="container footer__bottom">
-    <p>&copy; 2026 株式会社スマートラボ All rights reserved.</p>
-    <div class="footer__legal">
-      <a href="privacy.html">プライバシーポリシー</a>
-      <a href="terms.html">利用規約</a>
+
+    <div class="site-footer__bottom site-footer__legal">
+      <p>&copy; 株式会社スマートラボ</p>
+      <p class="site-footer__legal-links">
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+        <a href="tokushoho.html">特定商取引法に基づく表記</a>
+      </p>
     </div>
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
