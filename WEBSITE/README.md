@@ -26,12 +26,19 @@
 
 **公開URL(正式ドメイン): https://smartlaboworks.com/**
 
-**現在の状態（2026-08-11 / WEB-SALES-8L で正式化）**：
+**現在の状態（2026-08-11 / WEB-SALES-8L で正式化・8L-R で掲載範囲を是正）**：
 
-- 会社概要ページ(`company.html`)に会社名・代表者・**所在地・電話番号・受付時間**（代表承認値）を掲載
-- プライバシーポリシー・利用規約(`privacy.html`・`terms.html`)を正式化（未確定表示を撤去し制定日を確定）
-- **特定商取引法に基づく表記(`tokushoho.html`)を新設**。フッター・料金・申込ページから到達可能
-- Smart Labo Works Lite本体の法務3文書（`https://lite.smartlaboworks.com/legal/...`）への導線を追加
+- **法務情報の掲載場所（8L-R の代表方針）**：Smart Labo Works Lite の契約に関する
+  法務文書（利用規約・プライバシーポリシー・特定商取引法に基づく表記）と、
+  所在地・電話番号・受付時間は、**Lite のお支払いへ進む前の最終確認画面**および
+  **ご契約後の設定画面**で確認できる。公開Websiteへは本文を複製せず、直接リンクも置かない
+  （正本は Lite 側の `server/services/legal/legalDocuments.js` の1か所だけ）
+- 会社概要ページ(`company.html`)は会社名・代表者・資本金・事業内容などの一般的な会社情報のみ
+  （所在地・電話番号・受付時間は掲載しない）
+- プライバシーポリシー・利用規約(`privacy.html`・`terms.html`)は**本サイト（ホームページ・
+  お問い合わせフォーム）の利用条件**を定める Website 独自文書として維持。Lite の契約文書とは別物
+- 料金(`pricing.html`)・申込案内(`apply.html`)には、最終確認画面で法務文書を確認し、
+  すべての項目へ同意した場合にのみお支払いへ進む旨の案内を掲載
 - **アクセス解析（GTM/GA4/dataLayer）は全ページ・全JSから撤去**。再導入条件は
   [docs/website/ANALYTICS_REINTRODUCTION.md](../docs/website/ANALYTICS_REINTRODUCTION.md) を参照
 - 未リンクだった `signup.html` を削除（現行の申込経路では不要）
