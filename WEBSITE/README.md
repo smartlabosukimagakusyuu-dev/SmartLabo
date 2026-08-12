@@ -10,11 +10,20 @@
 
 ---
 
-## `app.html`の位置づけ(2026-07-10 CEO決定)
+## `app.html`の廃止(2026-08-12 / WEB-SALES-8M)
 
-**`app.html`はSmart Labo Worksの正式製品ではありません。** Smart Labo Worksの唯一の正式コードベースは、別リポジトリ`smartlabo-works`(Node.js版・実際のAI Provider連携あり)です。
+**旧デモ `app.html` は削除しました。** 公開Websiteから配信しません。
 
-`app.html`は今後、**デモサイト／マーケティング用プレビュー**として位置づけます。営業・採用・投資家向けの見た目のイメージを伝えるための静的デモであり、GitHub Pagesで公開されているデータ・機能はすべてサンプル(実データ・実処理なし)です。今後の機能追加・仕様変更は`smartlabo-works`側でのみ行い、`app.html`側では原則として行いません(ブランド刷新等に伴う見た目の同期を除く)。
+削除の理由:
+
+- 旧実装のデモであり、現在の正式製品 Smart Labo Works Lite とは別物
+- sitemap未掲載でもURL直打ちで公開されてしまう状態だった
+- 架空人物名・gmail.com形式のメールアドレス・携帯電話番号形式の
+  デモデータを含んでいた
+- 公開を継続する業務上の必要性がない
+
+Smart Labo Works の唯一の正式コードベースは、別リポジトリ
+`smartlabo-works-lite`(Node.js版・実際のAI Provider連携あり)です。
 
 詳細は [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](../PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md)「製品境界」節、および`smartlabo-works`リポジトリの`PRODUCT_BOUNDARY.md`を参照してください。
 
