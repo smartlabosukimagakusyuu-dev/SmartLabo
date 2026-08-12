@@ -4,16 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KKRD8BZR');</script>
-<!-- End Google Tag Manager -->
+<!-- アクセス解析タグ（GTM/GA4）は WEB-SALES-8L で撤去した。
+     再導入する場合の条件（送信項目・送信先・利用目的・保存期間・オプトアウトの確定）は
+     docs/website/ANALYTICS_REINTRODUCTION.md を参照。 -->
 
-<!-- Smart Labo Works — Website v3 / 利用規約(骨格のみ。本実装はWEB-V2-2以降)
-     website-v3/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
+<!-- Smart Labo Works — Website / 利用規約（本サイトの利用条件）
+     WEB-SALES-8L で正式化（未確定表示を撤去し、制定日を確定）。
+     Smart Labo Works Lite 本体の契約条件は Lite 内の利用規約が正本で、
+     Lite の最終確認画面・設定画面から読む（WEB-SALES-8L-R の代表方針により、
+     公開Websiteへ本文を複製せず直接リンクも置かない）。 -->
 
 <title>利用規約 — Smart Labo Works</title>
 <meta name="description" content="株式会社スマートラボが提供するホームページ・お問い合わせフォームのご利用条件を定めた利用規約です。">
@@ -51,17 +50,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 </script>
 
-<!-- 計測タグは <head> 上部の Google Tag Manager に集約している。
-     GA4 は GTM 経由でのみ配信し、gtag.js は直接実装しない（二重計測の防止）。
-     コンテナID・測定IDはページソースから見える公開識別子であり秘密ではない。
-     APIキー・認証情報は引き続きこのリポジトリへコミットしない。 -->
 </head>
 <body>
 
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKRD8BZR"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip-link" href="#main">本文へスキップ</a>
 
@@ -115,10 +106,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ============================== 本文 ==============================
-       本文は Version1（WEBSITE/terms.html）から一字も変更せず移植している。
-       変更したのは外枠のレイアウト（ヘッダー・フッター・パンくず・余白・
-       見出し・タイポグラフィ）だけ。法務文言は書き換えないこと。
-       移植の一致は docs/reviews/tools/check-legal.js で機械的に検証している。
+       WEB-SALES-8L で正式化した（未確定表示と古い開示の撤去）。
+       本文を変更する場合は、末尾の legal-meta（最終更新日）を必ず更新すること。
        ============================================================== -->
   <section class="section">
     <div class="container container--narrow">
@@ -126,8 +115,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
         <div class="legal-notice">
-          <strong>本ページは専門家確認前のドラフトです。</strong>
-          本文は一般的なSaaS事業者向けの内容として作成したものであり、断定的な法的効力を保証するものではありません。弁護士等の専門家による確認・最終調整を経てください。なお、本規約はホームページ（本サイト）のご利用条件を定めるものであり、Smart Labo Works本体（サービス）のご契約に関する条件（契約期間・料金・解約等）は、別途締結する契約書・利用規約により定めます。
+          本規約は、ホームページ（本サイト）およびお問い合わせフォームのご利用条件を定めるものです。Smart Labo Works Lite本体（サービス）のご契約に関する条件（契約期間・料金・解約等）は、同サービスの利用規約により定めます。同サービスの利用規約は、お支払いへ進む前の最終確認画面およびご契約後の設定画面でご確認いただけます。
         </div>
 
         <section>
@@ -168,7 +156,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <section>
           <h2>7. 準拠法・管轄裁判所</h2>
-          <p>本規約の解釈にあたっては日本法を準拠法とします。本サイトに関して当社と利用者との間で紛争が生じた場合には、[CEO確認待ち：所在地確定後に管轄裁判所を記載]を第一審の専属的合意管轄裁判所とします。</p>
+          <p>本規約の解釈にあたっては日本法を準拠法とします。本サイトに関して当社と利用者との間で紛争が生じた場合には、当社の本店所在地を管轄する地方裁判所を第一審の専属的合意管轄裁判所とします。</p>
         </section>
 
         <section>
@@ -176,7 +164,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p>当社は、必要と判断した場合、利用者への事前の通知なく本規約を変更することがあります。変更後の規約は、本ページに掲載した時点から効力を生じるものとします。</p>
         </section>
 
-        <p class="legal-meta">制定日：[CEO確認待ち]　最終更新日：2026-07-14（ドラフト作成）</p>
+        <p class="legal-meta">制定日：2026-08-11　最終更新日：2026-08-11</p>
 
       </div>
     </div>

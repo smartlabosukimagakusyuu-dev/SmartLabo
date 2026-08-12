@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Smart Labo Works — Website v2 / お問い合わせ(骨格のみ。本実装はWEB-V2-2以降)
+     website-v2/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
+
+<title>お問い合わせ — Smart Labo Works</title>
+<meta name="description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<link rel="canonical" href="https://smartlaboworks.com/contact.html">
+<link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Smart Labo Works">
+<meta property="og:title" content="お問い合わせ — Smart Labo Works">
+<meta property="og:description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<meta property="og:url" content="https://smartlaboworks.com/contact.html">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="お問い合わせ — Smart Labo Works">
+<meta name="twitter:description" content="Smart Labo Worksへのお問い合わせ。導入相談、料金、機能、自社に合うかのご相談を承っています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
+
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script>document.documentElement.classList.add('js');</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://smartlaboworks.com/" },
+    { "@type": "ListItem", "position": 2, "name": "お問い合わせ", "item": "https://smartlaboworks.com/contact.html" }
+  ]
+}
+</script>
+
+<!-- 計測タグ導入位置。現時点では未導入(解析コードなし・Cookieなし)。
+     計測ID・認証キーはこのリポジトリへコミットしない。 -->
+</head>
+<body>
+
+<p class="dev-banner">Website v2 — ローカル開発版(未公開)</p>
+
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<header class="site-header" id="siteHeader">
+  <div class="container site-header__inner">
+    <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+      <img class="logo__icon" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+      <span class="logo__text">Smart Labo Works</span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="index.html#solution">サービス</a>
+      <a href="features.html">機能</a>
+      <a href="pricing.html">料金</a>
+      <a href="company.html">会社情報</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="contact.html">お問い合わせ</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <a href="contact.html" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="apply.html" class="btn btn--primary btn--sm"><span class="btn__label-full">今すぐ申し込む</span><span class="btn__label-short">申し込む</span></a>
+    </div>
+
+    <button class="nav-toggle" type="button" data-nav-toggle
+            aria-controls="site-nav" aria-expanded="false">
+      <span class="visually-hidden">メニューを開閉</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- ============================== 1. ヒーロー ============================== -->
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol>
+          <li><a href="index.html">ホーム</a></li>
+          <li><span aria-current="page">お問い合わせ</span></li>
+        </ol>
+      </nav>
+
+      <div class="page-hero__inner">
+        <h1 class="page-hero__title">お問い合わせ</h1>
+        <p class="page-hero__lead">
+          Smart Labo Worksについてのご質問や導入のご相談など、お気軽にお問い合わせください。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= 2. ご相談いただける内容 ========================= -->
+  <section class="section" id="topics">
+    <div class="container">
+      <div class="section__head reveal">
+        <p class="eyebrow">ご相談いただける内容</p>
+        <h2 class="section__title">こんなご相談を承っています。</h2>
+        <p class="section__lead">
+          導入を決めていない段階のご質問でも構いません。下記以外の内容もお気軽にお問い合わせください。
+        </p>
+      </div>
+
+      <div class="topic-grid reveal">
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H7l-3 3z"/><path d="M9 11h6"/></svg>
+          </span>
+          <h3 class="topic__title">導入相談</h3>
+          <p class="topic__body">現在の業務の流れを伺い、どこから使い始められるかをご案内します。</p>
+        </article>
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.7.7-.7 1.1v.5"/><path d="M12 17h.01"/></svg>
+          </span>
+          <h3 class="topic__title">料金について</h3>
+          <p class="topic__body">利用人数や使いたい業務を伺い、必要なアカウント数をご説明します。</p>
+        </article>
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 11l2.5 2.5L16 8"/></svg>
+          </span>
+          <h3 class="topic__title">機能について</h3>
+          <p class="topic__body">できること、できないこと、確認が必要になる場面をご説明します。</p>
+        </article>
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2"/><circle cx="9.5" cy="8" r="3"/><path d="M21 20v-2a3 3 0 0 0-2.3-2.9"/></svg>
+          </span>
+          <h3 class="topic__title">自社に合うか相談</h3>
+          <p class="topic__body">業種や人数、いまお使いの方法を伺い、合うかどうかを一緒に確認します。</p>
+        </article>
+
+        <article class="topic">
+          <span class="topic__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+          </span>
+          <h3 class="topic__title">その他</h3>
+          <p class="topic__body">上記に当てはまらないご質問やご意見も承っています。</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= 3. 導入までの流れ ========================= -->
+  <section class="section section--subtle" id="flow">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">導入までの流れ</p>
+        <h2 class="section__title">お問い合わせから利用開始まで。</h2>
+        <p class="section__lead">
+          お問い合わせをいただいてから、実際に使い始めるまでの流れです。
+        </p>
+      </div>
+
+      <ol class="steps reveal">
+        <li class="step">
+          <span class="step__num" aria-hidden="true">1</span>
+          <h3 class="step__title">お問い合わせ</h3>
+          <p class="step__note">ご質問やご相談の内容をお知らせください。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">2</span>
+          <h3 class="step__title">ヒアリング</h3>
+          <p class="step__note">現在の業務やお困りごとを伺います。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">3</span>
+          <h3 class="step__title">ご提案</h3>
+          <p class="step__note">支援できる内容と利用方法をご説明します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">4</span>
+          <h3 class="step__title">導入準備</h3>
+          <p class="step__note">会社情報と利用者情報を設定し、基本操作をご案内します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">5</span>
+          <h3 class="step__title">利用開始</h3>
+          <p class="step__note">実際の業務で使いながら、必要に応じて調整します。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========================= 4. お問い合わせフォーム ========================= -->
+  <!-- 送信先は data-endpoint で指定する。同一オリジン構成なら相対パスのまま。
+       別ドメインのAPIへ送る場合は絶対URLへ変更し、API側の allowed_origins に
+       このサイトのオリジンを登録する（contact-api/README.md 参照）。
+       JavaScriptが無効でも form の action へ通常POSTされ、PHPがHTMLで結果を返す。 -->
+  <section class="section" id="form">
+    <div class="container container--narrow">
+      <div class="section__head reveal">
+        <p class="eyebrow">お問い合わせフォーム</p>
+        <h2 class="section__title">お問い合わせ</h2>
+        <p class="section__lead">
+          内容を確認のうえ、担当者よりご連絡いたします。
+          送信前に、入力内容をお確かめください。
+        </p>
+      </div>
+
+      <form class="cform reveal"
+            id="contactForm"
+            method="post"
+            action="/api/contact.php"
+            data-endpoint="/api/contact.php"
+            data-token-endpoint="/api/csrf-token.php"
+            novalidate>
+
+        <p class="cform__required-note">
+          <span class="cform__req" aria-hidden="true">*</span> は必須項目です。
+        </p>
+
+        <!-- 送信結果の通知。読み上げにも伝わるようにする -->
+        <p class="cform__status" id="formStatus" role="status" aria-live="polite"></p>
+
+        <!-- 会社名 -->
+        <div class="field">
+          <label class="field__label" for="f-company">
+            会社名 <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <input class="field__input" type="text" id="f-company" name="company"
+                 required maxlength="100" autocomplete="organization"
+                 aria-describedby="f-company-error">
+          <p class="field__error" id="f-company-error" data-error-for="company"></p>
+        </div>
+
+        <!-- お名前 -->
+        <div class="field">
+          <label class="field__label" for="f-name">
+            お名前 <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <input class="field__input" type="text" id="f-name" name="name"
+                 required maxlength="100" autocomplete="name"
+                 aria-describedby="f-name-error">
+          <p class="field__error" id="f-name-error" data-error-for="name"></p>
+        </div>
+
+        <!-- メールアドレス -->
+        <div class="field">
+          <label class="field__label" for="f-email">
+            メールアドレス <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <input class="field__input" type="email" id="f-email" name="email"
+                 required maxlength="254" autocomplete="email" inputmode="email"
+                 aria-describedby="f-email-hint f-email-error">
+          <p class="field__hint" id="f-email-hint">ご連絡先として使用します。</p>
+          <p class="field__error" id="f-email-error" data-error-for="email"></p>
+        </div>
+
+        <!-- 電話番号（任意） -->
+        <div class="field">
+          <label class="field__label" for="f-tel">
+            電話番号 <span class="field__optional">任意</span>
+          </label>
+          <input class="field__input" type="tel" id="f-tel" name="tel"
+                 maxlength="30" autocomplete="tel" inputmode="tel"
+                 aria-describedby="f-tel-error">
+          <p class="field__error" id="f-tel-error" data-error-for="tel"></p>
+        </div>
+
+        <!-- お問い合わせ種別 -->
+        <div class="field">
+          <label class="field__label" for="f-type">
+            お問い合わせ種別 <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <select class="field__input field__select" id="f-type" name="type" required
+                  aria-describedby="f-type-error">
+            <option value="">選択してください</option>
+            <option value="intro">導入について</option>
+            <option value="price">料金について</option>
+            <option value="feature">機能について</option>
+            <option value="fit">自社で利用できるか相談</option>
+            <option value="other">その他</option>
+          </select>
+          <p class="field__error" id="f-type-error" data-error-for="type"></p>
+        </div>
+
+        <!-- 利用予定人数（任意） -->
+        <div class="field">
+          <label class="field__label" for="f-headcount">
+            利用予定人数 <span class="field__optional">任意</span>
+          </label>
+          <select class="field__input field__select" id="f-headcount" name="headcount"
+                  aria-describedby="f-headcount-error">
+            <option value="">選択してください</option>
+            <option value="1">1人</option>
+            <option value="2-5">2〜5人</option>
+            <option value="6-10">6〜10人</option>
+            <option value="11-30">11〜30人</option>
+            <option value="31plus">31人以上</option>
+            <option value="undecided">未定</option>
+          </select>
+          <p class="field__error" id="f-headcount-error" data-error-for="headcount"></p>
+        </div>
+
+        <!-- お問い合わせ内容 -->
+        <div class="field">
+          <label class="field__label" for="f-message">
+            お問い合わせ内容 <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <textarea class="field__input field__textarea" id="f-message" name="message"
+                    required maxlength="3000" rows="8"
+                    aria-describedby="f-message-hint f-message-error"></textarea>
+          <p class="field__hint" id="f-message-hint">3,000文字以内でご記入ください。</p>
+          <p class="field__error" id="f-message-error" data-error-for="message"></p>
+        </div>
+
+        <!-- プライバシーポリシーへの同意 -->
+        <div class="field field--check">
+          <input class="field__checkbox" type="checkbox" id="f-privacy" name="privacy" value="1"
+                 required aria-describedby="f-privacy-error">
+          <label class="field__check-label" for="f-privacy">
+            <a href="privacy.html">プライバシーポリシー</a>に同意します
+            <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <p class="field__error" id="f-privacy-error" data-error-for="privacy"></p>
+        </div>
+
+        <!-- 自動送信対策。画面には表示されない項目 -->
+        <div class="cform__trap" aria-hidden="true">
+          <label for="f-website">Website</label>
+          <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <input type="hidden" name="form_ts" id="f-form-ts" value="">
+        <input type="hidden" name="csrf_token" id="f-csrf" value="">
+
+        <div class="cform__actions">
+          <button class="btn btn--primary btn--lg" type="submit" id="formSubmit">送信する</button>
+          <p class="cform__note">
+            送信いただいた内容は、ご連絡と当社サービスのご案内のために使用します。
+          </p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============================== 5. FAQ ============================== -->
+  <section class="section section--subtle" id="faq">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">FAQ</p>
+        <h2 class="section__title">お問い合わせについてのご質問</h2>
+      </div>
+
+      <div class="faq reveal" data-faq>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a1" id="cf-q1">
+              <span>相談だけでも大丈夫ですか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a1" role="region" aria-labelledby="cf-q1">
+            <p>はい。導入を決めていない段階でもご相談いただけます。現在の業務の流れを伺い、支援できることがあるかをご案内します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a2" id="cf-q2">
+              <span>料金は相談できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a2" role="region" aria-labelledby="cf-q2">
+            <p>はい。料金についてのご質問も承ります。金額は<a href="pricing.html">料金ページ</a>に掲載しています。ご相談の際は、利用人数や使いたい業務を伺ったうえでご案内します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a3" id="cf-q3">
+              <span>業種が違っても使えますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a3" role="region" aria-labelledby="cf-q3">
+            <p>顧客管理、記録、タスク、予定、文章作成など、業種を限定しない基本機能を備えています。具体的な使い方はご相談時にご案内します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a4" id="cf-q4">
+              <span>導入サポートはありますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a4" role="region" aria-labelledby="cf-q4">
+            <p>初期設定と基本操作のご案内を行います。内容はご相談の際にご説明します。</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <h3 class="faq__q">
+            <button class="faq__btn" type="button" aria-expanded="true" aria-controls="cf-a5" id="cf-q5">
+              <span>オンライン対応できますか？</span>
+              <span class="faq__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq__a" id="cf-a5" role="region" aria-labelledby="cf-q5">
+            <p>Smart Labo WorksはWebブラウザから利用できるサービスのため、オンラインでのご相談や画面のご案内を想定しています。具体的な方法は、お問い合わせ方法の準備が整い次第ご案内します。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= 6. 関連ページへの導線 ========================= -->
+  <!-- 送信手段が無いため、ここでCTAボタンは置かない。
+       代わりに、先に読んでおける情報への導線だけを用意する。 -->
+  <section class="section" id="related">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">お問い合わせの前に</p>
+        <h2 class="section__title">先にご覧いただける情報。</h2>
+        <p class="section__lead">
+          ご質問の内容によっては、下記のページで解決する場合があります。
+        </p>
+      </div>
+
+      <div class="related reveal">
+        <a class="related__item" href="features.html">
+          <span class="related__label">機能</span>
+          <span class="related__text">8つの機能でできること、業務がどう変わるかを実際の画面とあわせて説明しています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="pricing.html">
+          <span class="related__label">料金</span>
+          <span class="related__text">基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="index.html#faq">
+          <span class="related__label">よくある質問</span>
+          <span class="related__text">AIの扱い、情報の分離、対応環境など、サービス全体についての質問をまとめています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__inner">
+
+      <div class="site-footer__col">
+        <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+          <img class="logo__icon logo__icon--tile" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+          <span class="logo__text">Smart Labo Works</span>
+        </a>
+        <p class="site-footer__brand-note">
+          会社を動かすAI。<br>
+          株式会社スマートラボ
+        </p>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>サービス</h4>
+        <a href="index.html#capabilities">できること</a>
+        <a href="index.html#features">機能</a>
+        <a href="index.html#screens">システム画面</a>
+        <a href="index.html#pricing">料金</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>導入</h4>
+        <a href="apply.html">お申し込み</a>
+        <a href="index.html#steps">導入の流れ</a>
+        <a href="index.html#faq">よくある質問</a>
+        <a href="contact.html">お問い合わせ</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>会社</h4>
+        <a href="company.html">会社概要</a>
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom site-footer__legal">
+      <p>&copy; 株式会社スマートラボ</p>
+      <p class="site-footer__legal-links">
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/contact-form.js"></script>
+</body>
+</html>

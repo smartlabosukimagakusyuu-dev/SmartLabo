@@ -1,0 +1,6 @@
+# 実際の設定ファイル（受信先メールアドレス・署名鍵など）はGit管理しない。
+# 雛形の contact-config.example.php だけを管理する。
+private/contact-config.php
+
+# 送信間隔制限の記録（ハッシュ化したIPと送信時刻のみ。実行時に生成される）
+private/ratelimit/

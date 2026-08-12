@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KKRD8BZR');</script>
+<!-- End Google Tag Manager -->
+
+<!-- ============================================================
+     Smart Labo Works — Website v3 / お申し込み(WEB-V2-8で新設)
+
+     このページは「申込案内ページ」であり、申込フォームではない。
+     セルフ申し込み(会社情報入力→決済→アカウント自動作成)は未実装のため、
+     フォーム要素・決済導線・ダミーの送信先は一切置いていない。
+     受付が完了したかのような表示も禁止(docs/reviews/tools/check-prices.js が検査)。
+
+     公開状態の切り替えは、下記「申込機能の公開状態」ブロックの
+     1か所を差し替えるだけで済む構造にしてある(第8節の要件)。
+     ============================================================ -->
+
+<title>お申し込み｜Smart Labo Works</title>
+<meta name="description" content="Smart Labo Works のお申し込み案内。オンラインでの申し込みから利用開始までの流れ、初期設定費10,000円・月額基本料金20,000円・追加アカウント3,000円（すべて税抜）の料金、日割りと毎月1日の自動決済という課金ルール、創業記念キャンペーンの内容を掲載しています。">
+<link rel="canonical" href="https://smartlaboworks.com/apply.html">
+<link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Smart Labo Works">
+<meta property="og:title" content="お申し込み｜Smart Labo Works">
+<meta property="og:description" content="オンラインでの申し込みから利用開始までの流れ、料金、課金ルール、創業記念キャンペーンのご案内です。">
+<meta property="og:url" content="https://smartlaboworks.com/apply.html">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="Smart Labo Works — 会社を動かすAI。全社員に、AIという戦力を。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="お申し込み｜Smart Labo Works">
+<meta name="twitter:description" content="オンラインでの申し込みから利用開始までの流れ、料金、課金ルール、創業記念キャンペーンのご案内です。">
+<meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
+<meta name="twitter:image:alt" content="Smart Labo Works — 会社を動かすAI。全社員に、AIという戦力を。">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script>document.documentElement.classList.add('js');</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://smartlaboworks.com/" },
+    { "@type": "ListItem", "position": 2, "name": "お申し込み", "item": "https://smartlaboworks.com/apply.html" }
+  ]
+}
+</script>
+
+<!-- 計測タグは <head> 上部の Google Tag Manager に集約している。
+     GA4 は GTM 経由でのみ配信し、gtag.js は直接実装しない（二重計測の防止）。
+     コンテナID・測定IDはページソースから見える公開識別子であり秘密ではない。
+     APIキー・認証情報は引き続きこのリポジトリへコミットしない。 -->
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKRD8BZR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<header class="site-header" id="siteHeader">
+  <div class="container site-header__inner">
+    <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+      <img class="logo__icon" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+      <span class="logo__text">Smart Labo Works</span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="index.html#brain">Company Brain</a>
+      <a href="features.html">機能</a>
+      <a href="pricing.html">料金</a>
+      <a href="company.html">会社情報</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="contact.html">お問い合わせ</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="apply.html" class="btn btn--primary btn--sm"><span class="btn__label-full">今すぐ申し込む</span><span class="btn__label-short">申し込む</span></a>
+    </div>
+
+    <button class="nav-toggle" type="button" data-nav-toggle
+            aria-controls="site-nav" aria-expanded="false">
+      <span class="visually-hidden">メニューを開閉</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================== 1. ページヒーロー ============================== -->
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <ol>
+          <li><a href="index.html">ホーム</a></li>
+          <li><span aria-current="page">お申し込み</span></li>
+        </ol>
+      </nav>
+
+      <div class="page-hero__inner">
+        <h1 class="page-hero__title">Smart Labo Works<br>お申し込み</h1>
+        <p class="page-hero__lead">
+          会社情報の入力から利用開始まで、オンラインで完結できる申し込み方法をご用意する予定です。
+          ご相談してから決めたい場合は、無料相談からお進みください。
+        </p>
+        <p class="page-hero__meta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          このページに表示している価格は、すべて税抜です。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 2. 申込機能の公開状態（差し替え箇所） ======================
+       ★ここが第8節でいう「公開時期に合わせて変えられる構造」の実体。
+         セルフ申し込みを公開する際は、このセクションの中身だけを
+         正式な申込画面への導線へ差し替える。他のセクションは変更不要。
+         「受付完了」「申し込み可能」など、実装済みに見える表現は使わないこと。
+       ================================================================================ -->
+  <section class="section" id="status">
+    <div class="container container--narrow">
+      <div class="apply-status reveal">
+        <p class="apply-status__tag">オンライン申し込みの公開状態</p>
+        <h2 class="apply-status__title">オンライン申し込みは現在準備中です。</h2>
+        <p class="apply-status__body">
+          下記の申し込みの流れ・料金・課金ルールは、いずれも正式に決定した内容です。
+          オンラインで申し込みを受け付ける画面のみ、現在準備を進めています。
+          先行してのご案内をご希望の方は、無料相談からお問い合わせください。
+          お申し込みの準備が整いましたら、あらためてご連絡いたします。
+        </p>
+        <p class="apply-status__actions">
+          <a href="contact.html?type=consult#form" class="btn btn--primary btn--lg">無料相談する</a>
+          <a href="pricing.html" class="btn btn--secondary btn--lg">料金を見る</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 3. 申し込みの流れ ============================== -->
+  <section class="section section--subtle" id="flow">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">申し込みの流れ</p>
+        <h2 class="section__title">申し込みから利用開始まで。</h2>
+        <p class="section__lead">
+          オンラインでのお申し込みでは、次の順に進んでいただく予定です。
+        </p>
+      </div>
+
+      <ol class="steps steps--flow reveal">
+        <li class="step">
+          <span class="step__num" aria-hidden="true">1</span>
+          <h3 class="step__title">会社情報</h3>
+          <p class="step__note">会社名・ご担当者・ご連絡先を入力します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">2</span>
+          <h3 class="step__title">利用人数・料金確認</h3>
+          <p class="step__note">利用する人数を選び、月額と初回のお支払い内容を確認します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">3</span>
+          <h3 class="step__title">キャンペーンコード</h3>
+          <p class="step__note">お持ちの場合に入力します。特典の内容が画面に表示されます。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">4</span>
+          <h3 class="step__title">紹介コード</h3>
+          <p class="step__note">ご紹介を受けた場合に入力します。キャンペーンコードとは別の欄です。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">5</span>
+          <h3 class="step__title">クレジットカード</h3>
+          <p class="step__note">お支払い方法はクレジットカードのみです。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">6</span>
+          <h3 class="step__title">規約同意</h3>
+          <p class="step__note">利用規約とプライバシーポリシーをご確認のうえ同意いただきます。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">7</span>
+          <h3 class="step__title">アカウント作成</h3>
+          <p class="step__note">お支払いの完了後、会社アカウントを作成します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">8</span>
+          <h3 class="step__title">AI初期設定</h3>
+          <p class="step__note">最初のログイン後、会社に合わせた初期設定をご案内します。</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">9</span>
+          <h3 class="step__title">利用開始</h3>
+          <p class="step__note">実際の業務で使いながら、必要に応じて調整します。</p>
+        </li>
+      </ol>
+
+      <p class="calc__caution reveal">
+        金額の確定・お支払い・アカウントの作成は、いずれも入力内容をご確認いただいたうえで、
+        お客様の操作によって行われます。AIが自動で契約を確定させることはありません。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================== 4. 料金 ============================== -->
+  <!-- 料金の正規値は docs/reviews/tools/check-prices.js のCANONICALに定義している。
+       金額を変更する際は、そのファイルと index.html・pricing.html・本ページを必ず揃えること。 -->
+  <section class="section" id="price">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">通常料金</p>
+        <h2 class="section__title">Smart Labo Works ライト</h2>
+        <p class="section__lead">
+          プランは一つだけです。人数や使い方に応じて、アカウント数だけが変わります。
+        </p>
+      </div>
+
+      <div class="plan reveal">
+        <div class="plan__head">
+          <h3 class="plan__name">Smart Labo Works ライト</h3>
+          <p class="plan__lead">日常業務に必要な機能を、ひとまとめにしたプランです。</p>
+        </div>
+
+        <dl class="plan__prices">
+          <div class="plan__price">
+            <dt>初期設定費</dt>
+            <dd data-price="initial">10,000<small>円</small></dd>
+          </div>
+          <div class="plan__price plan__price--main">
+            <dt>月額基本料金</dt>
+            <dd data-price="monthly">20,000<small>円／月</small></dd>
+          </div>
+          <div class="plan__price">
+            <dt>追加アカウント</dt>
+            <dd data-price="additional">3,000<small>円／月・1人</small></dd>
+          </div>
+        </dl>
+
+        <div class="plan__foot">
+          <p class="plan__note">
+            <strong>表示価格はすべて税抜です。</strong>
+            月額基本料金には管理者1名分のアカウントが含まれます。2人目以降は追加アカウントとしてご案内します。
+            AI利用量や個別対応の内容により、別途ご案内する場合があります。
+          </p>
+          <a href="pricing.html" class="btn btn--secondary btn--lg">料金の詳細を見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 5. 課金ルール ============================== -->
+  <section class="section section--subtle" id="billing">
+    <div class="container">
+      <div class="section__head reveal">
+        <p class="eyebrow">課金ルール</p>
+        <h2 class="section__title">いつ、いくら請求されるのか。</h2>
+        <p class="section__lead">
+          お支払いのタイミングを、申し込みの前に確認できるようにしています。
+        </p>
+      </div>
+
+      <div class="included reveal">
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">利用開始月は日割り</h3>
+            <p class="included__note">利用開始日は申し込みとお支払いが完了した日です。その月の基本料金は、利用開始日から月末までの日数で計算します。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">月額料金は前払い</h3>
+            <p class="included__note">その月にご利用いただく分を、月のはじめにお支払いいただく方式です。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">翌々月以降は毎月1日に自動決済</h3>
+            <p class="included__note">ご登録いただいたクレジットカードから、毎月1日に当月分をお支払いいただきます。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">追加アカウントも同じサイクル</h3>
+            <p class="included__note">追加アカウントの料金も、基本料金と同じ請求サイクルでお支払いいただきます。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">支払い方法はクレジットカードのみ</h3>
+            <p class="included__note">オンラインでのお申し込みでは、クレジットカードのご登録が必要です。</p>
+          </div>
+        </div>
+
+        <div class="included__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <div>
+            <h3 class="included__name">金額は申込画面で確認できます</h3>
+            <p class="included__note">実際の初回のお支払い額と、次回のお支払い予定日は、お申し込みの画面に表示する予定です。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 6. 創業記念キャンペーン ============================== -->
+  <section class="section" id="campaign">
+    <div class="container">
+      <div class="section__head reveal">
+        <p class="eyebrow">創業記念キャンペーン</p>
+        <h2 class="section__title">創業記念の特典をご用意しました。</h2>
+      </div>
+
+      <div class="campaign reveal">
+        <ul class="campaign__list">
+          <li class="campaign__item">
+            <span class="campaign__label">初期設定費</span>
+            <span class="campaign__value">無料</span>
+          </li>
+          <li class="campaign__item">
+            <span class="campaign__label">基本料金</span>
+            <span class="campaign__value">1か月分無料</span>
+          </li>
+          <li class="campaign__item">
+            <span class="campaign__label">対象</span>
+            <span class="campaign__value">先着50社</span>
+          </li>
+        </ul>
+
+        <div class="campaign__example">
+          <p class="campaign__example-title">請求の例（8月20日に利用を開始した場合）</p>
+          <dl class="campaign__example-list">
+            <div>
+              <dt>8月20日〜8月31日</dt>
+              <dd>日割りの基本料金</dd>
+            </div>
+            <div>
+              <dt>9月分</dt>
+              <dd>創業記念キャンペーンにより基本料金が無料</dd>
+            </div>
+            <div>
+              <dt>10月1日以降</dt>
+              <dd>毎月1日に当月分を通常どおりお支払い</dd>
+            </div>
+          </dl>
+        </div>
+
+        <p class="campaign__note">
+          特典の内容は<strong>初期設定費無料と、基本料金1か月分無料</strong>です。追加アカウントの料金は無料の対象に含みません。
+          ご利用にはクレジットカードのご登録が必要です。適用には条件があり、募集枠または期間の終了をもって受付を終了します。
+          詳しい条件は、正式なお申し込み画面またはキャンペーン規約でご確認いただけるようにいたします。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 7. 2つの選択肢 ============================== -->
+  <section class="section section--subtle" id="choose">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <p class="eyebrow">2つの進め方</p>
+        <h2 class="section__title">今すぐ申し込む。<br>相談してから決める。</h2>
+        <p class="section__lead">
+          どちらを選んでも、ご利用いただける内容は同じです。
+        </p>
+      </div>
+
+      <div class="grid grid--2 reveal">
+
+        <div class="card">
+          <h3 class="h-3">今すぐ申し込む</h3>
+          <p>
+            内容が決まっている場合は、オンラインで会社情報の入力からお支払いまで進めていただける方法をご用意する予定です。
+            現在は準備中のため、先行してのご案内をご希望の方は無料相談からお知らせください。
+          </p>
+          <p>
+            <a href="contact.html?type=consult#form" class="btn btn--secondary">先行案内を希望する</a>
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 class="h-3">無料相談する</h3>
+          <p>
+            自社に合うかどうかを確認してから決めたい場合は、無料相談からお進みください。
+            オンラインでのヒアリング、画面のご案内、ご提案を経て、ご契約へ進みます。
+          </p>
+          <p>
+            <a href="contact.html?type=consult#form" class="btn btn--primary">無料相談する</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 8. 関連ページ ============================== -->
+  <section class="section" id="related">
+    <div class="container container--narrow">
+      <div class="section__head reveal">
+        <p class="eyebrow">関連ページ</p>
+        <h2 class="section__title">申し込みの前にご確認ください。</h2>
+      </div>
+
+      <div class="related reveal">
+        <a class="related__item" href="pricing.html">
+          <span class="related__label">料金</span>
+          <span class="related__text">基本料金に含まれる範囲と、利用人数別の計算例を掲載しています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="features.html">
+          <span class="related__label">機能</span>
+          <span class="related__text">できること、できないこと、確認が必要になる場面を説明しています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="index.html#faq">
+          <span class="related__label">よくある質問</span>
+          <span class="related__text">AIの扱い、情報の分離、対応環境など、サービス全体についての質問をまとめています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="privacy.html">
+          <span class="related__label">プライバシーポリシー</span>
+          <span class="related__text">個人情報の取り扱いについて定めています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="terms.html">
+          <span class="related__label">利用規約</span>
+          <span class="related__text">サービスのご利用条件を定めています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="related__item" href="contact.html">
+          <span class="related__label">無料相談</span>
+          <span class="related__text">ご質問・ご相談はこちらから承っています。</span>
+          <span class="related__go" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 9. 最終CTA ============================== -->
+  <section class="section section--inverse" id="cta">
+    <div class="container final-cta reveal">
+      <h2 class="final-cta__title">ご不明な点は、お気軽にお尋ねください。</h2>
+      <p class="final-cta__lead">
+        料金や課金のタイミング、自社に合うかどうかなど、判断に必要なことをご説明します。
+      </p>
+      <p class="final-cta__actions">
+        <a href="contact.html?type=consult#form" class="btn btn--on-inverse btn--lg">無料相談する</a>
+      </p>
+      <p class="final-cta__note">
+        無理な営業は行いません。導入前のご相談だけでも受け付けています。
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__inner">
+
+      <div class="site-footer__col">
+        <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+          <img class="logo__icon logo__icon--tile" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
+          <span class="logo__text">Smart Labo Works</span>
+        </a>
+        <p class="site-footer__brand-note">
+          会社を動かすAI。<br>
+          株式会社スマートラボ
+        </p>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>サービス</h4>
+        <a href="index.html#capabilities">できること</a>
+        <a href="index.html#features">機能</a>
+        <a href="index.html#screens">システム画面</a>
+        <a href="index.html#pricing">料金</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>導入</h4>
+        <a href="apply.html">お申し込み</a>
+        <a href="contact.html?type=docs#form">資料請求</a>
+        <a href="index.html#steps">導入の流れ</a>
+        <a href="index.html#faq">よくある質問</a>
+        <a href="contact.html">お問い合わせ</a>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>会社</h4>
+        <a href="company.html">会社概要</a>
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom site-footer__legal">
+      <p>&copy; 株式会社スマートラボ</p>
+      <p class="site-footer__legal-links">
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="terms.html">利用規約</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

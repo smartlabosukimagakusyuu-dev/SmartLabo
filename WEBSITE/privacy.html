@@ -4,16 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KKRD8BZR');</script>
-<!-- End Google Tag Manager -->
+<!-- アクセス解析タグ（GTM/GA4）は WEB-SALES-8L で撤去した。
+     再導入する場合の条件（送信項目・送信先・利用目的・保存期間・オプトアウトの確定）は
+     docs/website/ANALYTICS_REINTRODUCTION.md を参照。 -->
 
-<!-- Smart Labo Works — Website v3 / プライバシーポリシー(骨格のみ。本実装はWEB-V2-2以降)
-     website-v3/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
+<!-- Smart Labo Works — Website v3 / プライバシーポリシー(骨格のみ。本実装はWEB-V2-2以降) -->
 
 <title>プライバシーポリシー — Smart Labo Works</title>
 <meta name="description" content="株式会社スマートラボが、Smart Labo Worksのホームページを通じてお預かりする個人情報の取り扱いについて定めたプライバシーポリシーです。">
@@ -51,17 +46,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 </script>
 
-<!-- 計測タグは <head> 上部の Google Tag Manager に集約している。
-     GA4 は GTM 経由でのみ配信し、gtag.js は直接実装しない（二重計測の防止）。
-     コンテナID・測定IDはページソースから見える公開識別子であり秘密ではない。
-     APIキー・認証情報は引き続きこのリポジトリへコミットしない。 -->
 </head>
 <body>
 
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKRD8BZR"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip-link" href="#main">本文へスキップ</a>
 
@@ -115,16 +102,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ============================== 本文 ==============================
-       本文は Version1（WEBSITE/privacy.html）から一字も変更せず移植している。
-       変更したのは外枠のレイアウト（ヘッダー・フッター・パンくず・余白・
-       見出し・タイポグラフィ）だけ。法務文言は書き換えないこと。
-       移植の一致は docs/reviews/tools/check-legal.js で機械的に検証している。
-
-       例外は「6. Cookie・アクセス解析について」の1節のみ。
-       WEB-V3-5A-1（2026-08-08・代表承認）で、GA4／Google Tag Manager の
-       利用開示へ正式に改定した。この1節だけは Version1 との一致検査ではなく、
-       check-legal.js 内の承認済み文面（PRIVACY_SECTION6）との一致で検査する。
-       他の節は従来どおり Version1 との完全一致で凍結されている。
+       WEB-SALES-8L で正式化した（未確定表示と古い開示の撤去）。
+       本文を変更する場合は、末尾の legal-meta（最終更新日）を必ず更新すること。
        ============================================================== -->
   <section class="section">
     <div class="container container--narrow">
@@ -132,8 +111,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
         <div class="legal-notice">
-          <strong>本ページは専門家確認前のドラフトです。</strong>
-          本文は一般的なSaaS事業者向けの内容として作成したものであり、断定的な法的効力を保証するものではありません。弁護士等の専門家による確認・最終調整を経てください。会社の正式情報（代表者等）は<a href="company.html">会社概要ページ</a>を参照しており、未確定の項目（所在地・電話番号等）は同ページに掲載していません。
+          本ポリシーは、当社ホームページ（本サイト）およびお問い合わせフォームにおける個人情報の取扱いを定めるものです。Smart Labo Works Lite本体（サービス）における個人情報の取扱いは、同サービスのプライバシーポリシーによります。同サービスのプライバシーポリシーは、お支払いへ進む前の最終確認画面およびご契約後の設定画面でご確認いただけます。
         </div>
 
         <section>
@@ -150,8 +128,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p>当社は、お問い合わせフォーム（<a href="contact.html">contact.html</a>）を通じて、以下の情報をお預かりします。</p>
           <ul>
             <li>会社名、氏名、メールアドレス、電話番号</li>
-            <li>業種、社員数、ご相談種別、ご相談内容</li>
-            <li>Smart Labo Configurator（<a href="pricing.html">導入プランシミュレーター</a>）をご利用の場合、選択いただいた利用規模・基本プラン・利用モジュール・追加オプションの内容（これらはお問い合わせフォームへの入力を補助する目的でのみ利用し、氏名・連絡先とあわせてお預かりして初めて個人情報として扱われます）</li>
+            <li>お問い合わせ種別、利用予定人数、お問い合わせ本文</li>
           </ul>
         </section>
 
@@ -172,17 +149,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <section>
           <h2>5. 委託</h2>
-          <p>お問い合わせフォームの送信処理・メール配信等の一部業務を、外部の委託先（サーバー・メール配信サービス等）に委託する場合があります。委託先の選定にあたっては、適切な安全管理措置を講じている事業者を選定します。<strong>現時点で送信基盤（サーバー環境）は選定中であり、確定次第、本ページを更新します。</strong></p>
+          <p>お問い合わせフォームに入力された情報は、当社が管理するフォーム送信サーバー（form.smartlaboworks.com）で受け付け、当社が契約するレンタルサーバー事業者のメール送信基盤を通じて当社の受付窓口へ通知されます。当社は、これらの基盤の運用にあたり、通信の暗号化その他の適切な安全管理措置を講じ、委託先に対して必要かつ適切な監督を行います。</p>
         </section>
 
         <section>
           <h2>6. Cookie・アクセス解析について</h2>
-          <p>当社は、本サイトの利用状況の把握、サイトの改善およびお問い合わせ経路の分析を目的として、Google LLCが提供するGoogle Analytics 4（GA4）を利用しています。また、これらの計測タグの管理にGoogle Tag Managerを利用しています。</p>
-          <p>Google Analyticsでは、Cookie等を利用して、閲覧したページ、参照元、利用端末・ブラウザに関する情報等がGoogleへ送信される場合があります。</p>
-          <p>当社は、お問い合わせフォームに入力された氏名、会社名、メールアドレス、電話番号、お問い合わせ本文等を、Google Analyticsの計測イベントとして送信しません。お問い合わせ種別など、個人を直接特定しない情報のみをサイト改善のための計測に利用する場合があります。</p>
-          <p>Google Analyticsによる計測を希望しない場合は、ブラウザのCookie設定またはGoogleが提供する<a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Google Analyticsオプトアウトブラウザアドオン<span class="visually-hidden">（外部サイト・新しいタブで開きます）</span></a>をご利用いただけます。</p>
-          <p>Google Analyticsにおけるデータの取扱いについては、<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Googleのプライバシーポリシー<span class="visually-hidden">（外部サイト・新しいタブで開きます）</span></a>等をご確認ください。</p>
-          <p>なお、当社が将来、広告効果測定等のために新たな外部サービスを導入する場合は、必要に応じて本ポリシーを更新します。</p>
+          <p>本サイトは、現在、Google Analytics等のアクセス解析ツールおよび広告配信・効果測定のためのCookieを使用していません。お問い合わせフォームの安全性確保（CSRF対策等）に必要な仕組みを除き、本サイトが利用者のブラウザへ独自のCookieを保存することはありません。</p>
+          <p>当社が将来、アクセス解析等の外部サービスを導入する場合は、送信される情報・送信先・利用目的・保存期間およびオプトアウトの方法を確定したうえで、導入前に本ポリシーを更新してお知らせします。</p>
         </section>
 
         <section>
@@ -197,7 +170,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <section>
           <h2>9. 特定商取引法に基づく表記について</h2>
-          <p>Smart Labo Worksは法人向け（BtoB）のSaaS契約を前提としたサービスであり、一般的に特定商取引法上の「通信販売」表記が不要となる形態が多いと考えられますが、<strong>本ページ作成時点では該当性の最終判断を行っておらず、専門家確認が必要な未決定事項です。</strong>今後の契約形態・料金体系の確定にあわせて、要否を改めて整理し、必要な場合は別途表記ページを設けます。</p>
+          <p>販売事業者・販売価格・お支払い方法・解約の条件その他の販売条件を記載した「特定商取引法に基づく表記」は、Smart Labo Works Lite のお支払いへ進む前の最終確認画面およびご契約後の設定画面でご確認いただけます。</p>
         </section>
 
         <section>
@@ -205,7 +178,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p>本ポリシーに関するお問い合わせは、<a href="contact.html">お問い合わせフォーム</a>よりご連絡ください。</p>
         </section>
 
-        <p class="legal-meta">制定日：[CEO確認待ち]　最終更新日：2026-08-08（アクセス解析の利用開始に伴う改定）</p>
+        <p class="legal-meta">制定日：2026-08-11　最終更新日：2026-08-11（正式化・アクセス解析タグの撤去にともなう改定）</p>
 
       </div>
     </div>

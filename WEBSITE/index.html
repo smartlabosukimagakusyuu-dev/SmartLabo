@@ -4,13 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KKRD8BZR');</script>
-<!-- End Google Tag Manager -->
+<!-- アクセス解析タグ（GTM/GA4）は WEB-SALES-8L で撤去した。
+     再導入する場合の条件（送信項目・送信先・利用目的・保存期間・オプトアウトの確定）は
+     docs/website/ANALYTICS_REINTRODUCTION.md を参照。 -->
 
 <!-- ============================================================
      Smart Labo Works — Website v3 / トップページ
@@ -76,22 +72,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 
 <!-- ============================================================
-     計測タグは <head> 上部の Google Tag Manager に集約している。
-     GA4 は GTM 経由でのみ配信し、gtag.js は直接実装しない（二重計測の防止）。
-     問い合わせの成功計測は assets/js/contact-form.js から dataLayer へ
-     generate_lead を1回だけ送る。送るのは種別（lead_type）のみで、
-     氏名・会社名・メール・電話・本文は一切送らない。
-     開示内容は privacy.html「6. Cookie・アクセス解析について」と一致させること。
-     コンテナID・測定IDはページソースから見える公開識別子であり秘密ではない。
+     アクセス解析（GTM / GA4 / dataLayer）は WEB-SALES-8L で全ページから撤去した。
+     現在、本サイトはアクセス解析・広告計測のタグを一切読み込まない。
+     再導入する場合は、送信項目・送信先・利用目的・保存期間・オプトアウト手段を
+     確定し、privacy.html の開示とCookie同意の要否整理を済ませてから行うこと
+     （docs/website/ANALYTICS_REINTRODUCTION.md）。
      APIキー・認証情報は引き続きこのリポジトリへコミットしない。
      ============================================================ -->
 </head>
 <body>
 
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKRD8BZR"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip-link" href="#main">本文へスキップ</a>
 
@@ -1191,56 +1181,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
-  <!-- ========================= 11-2. 創業記念キャンペーン =========================
-       正式決定した販売条件(PROJECT_BIBLE/14_Sales_And_Billing_Policy.md)の掲載。
-       ・「初月無料」ではなく「基本料金1か月分無料」と書く(日割りの初月と
-         無料になる月がずれるため、初月無料は誤認を招く)。
-       ・追加アカウント料金を無料対象に含めるかは未確定。含めると読める表現をしない。
-       ・「先着50社」は表示するが、残数の自動減算・カウントダウンは実装しない
-         (実数の裏付けがないため)。
-       ・「予告なく終了」ではなく「募集枠または期間の終了により終了」と書く。
-       ============================================================================ -->
-  <section class="section" id="campaign">
-    <div class="container">
-
-      <div class="section__head section__head--center reveal">
-        <p class="eyebrow">創業記念キャンペーン</p>
-        <h2 class="section__title">創業記念の特典をご用意しました。</h2>
-        <p class="section__lead">
-          最初の導入を検討しやすいように、初期設定費と基本料金1か月分の特典を設けています。
-        </p>
-      </div>
-
-      <div class="campaign reveal">
-        <ul class="campaign__list">
-          <li class="campaign__item">
-            <span class="campaign__label">初期設定費</span>
-            <span class="campaign__value">無料</span>
-          </li>
-          <li class="campaign__item">
-            <span class="campaign__label">基本料金</span>
-            <span class="campaign__value">1か月分無料</span>
-          </li>
-          <li class="campaign__item">
-            <span class="campaign__label">対象</span>
-            <span class="campaign__value">先着50社</span>
-          </li>
-        </ul>
-
-        <div class="campaign__actions">
-          <a href="apply.html" class="btn btn--primary btn--lg">今すぐ申し込む</a>
-          <a href="contact.html?type=consult#form" class="btn btn--secondary btn--lg">無料相談する</a>
-        </div>
-
-        <p class="campaign__note">
-          特典の内容は<strong>初期設定費無料と、基本料金1か月分無料</strong>です。追加アカウントの料金は無料の対象に含みません。
-          ご利用にはクレジットカードのご登録が必要です。適用には条件があり、募集枠または期間の終了をもって受付を終了します。
-          詳しい条件は<a href="apply.html">お申し込みのご案内</a>をご覧ください。
-        </p>
-      </div>
-
-    </div>
-  </section>
+  <!-- 創業記念キャンペーンの節は WEB-SALES-8L で撤去した。
+       Lite本体の販売条件・特商法表記は「キャンペーン：実施していません。無料体験の提供もありません。」
+       であり、実施していない特典を掲載しない。 -->
 
   <!-- ============================= 12. 導入の流れ ============================= -->
   <section class="section section--subtle" id="steps">

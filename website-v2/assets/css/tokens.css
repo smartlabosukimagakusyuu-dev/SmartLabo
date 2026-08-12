@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Smart Labo Works — Website v2 / Design Tokens
+   --------------------------------------------------------------------------
+   出典(SSOT):
+     - BRAND/colors/palette.md
+     - PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md
+     - WEBSITE/css/style.css(v1の :root。値を継承し、名前だけ体系化)
+
+   ルール:
+     - 新しいブランドカラーをここで発明しない。追加が必要な場合は
+       07_Brand_Identity.md → palette.md を先に更新する(60_Editorial_Workflow.md)。
+     - Smart Blue #2563EB が唯一のブランドアクセント。
+       Light Blue / Accent Blue は Smart Blue Family の階調であり別色ではない。
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------
+     Brand color — palette.md と1対1で対応
+     ------------------------------------------------------------------ */
+  --c-navy: #0A1B3D;          /* Primary Navy  : 基調色・濃色セクション背景 */
+  --c-blue: #2563EB;          /* Smart Blue    : 唯一のブランドアクセント・CTA */
+  --c-blue-light: #60A5FA;    /* Light Blue    : ホバー・サブアクセント */
+  --c-blue-accent: #00D4FF;   /* Accent Blue   : グロー・可視化ハイライト(限定使用) */
+  --c-white: #FFFFFF;
+  --c-gray-050: #F3F6FA;      /* Light Gray    : セクション区切り・補助背景 */
+  --c-gray-500: #64748B;      /* Gray          : 非強調テキスト */
+  --c-gray-900: #1E293B;      /* Dark Gray     : White背景上の本文 */
+
+  /* Navy 階調(v1 style.css から継承。濃色セクションのグラデーション用) */
+  --c-navy-800: #0F2A56;
+  --c-navy-700: #163B72;
+  --c-navy-600: #1D4E93;
+
+  /* Smart Blue 階調(v1 style.css から継承) */
+  --c-blue-dark: #1D4ED8;
+
+  /* Border(v1 style.css から継承) */
+  --c-border: #E4E8F0;
+
+  /* ------------------------------------------------------------------
+     Semantic color — 実装ではこちらを参照する
+     ------------------------------------------------------------------ */
+  --bg-base: var(--c-white);
+  --bg-subtle: var(--c-gray-050);
+  --bg-inverse: var(--c-navy);
+
+  --text-primary: var(--c-gray-900);
+
+  /* 補助テキスト。ブランドの Gray #64748B をそのまま本文に使うと、
+     Light Gray 背景(#F3F6FA)の上で 4.39:1 となり WCAG AA(4.5:1)に届かない。
+     テキスト用途にだけ同系統で1段暗い値を割り当てる(白背景で5.4:1、
+     Light Gray 背景で5.0:1)。ブランドカラーの Gray 自体は変更しておらず、
+     アイコン・罫線など非テキスト用途では引き続き --c-gray-500 を使う。 */
+  --text-secondary: #5C6B82;
+  --text-on-inverse: var(--c-white);
+  --text-on-inverse-secondary: #C3D2F0;  /* v1 --text-on-navy-secondary を継承 */
+  --text-link: var(--c-blue);
+
+  --border-subtle: var(--c-border);
+  --focus-ring: var(--c-blue);
+  --focus-ring-on-inverse: var(--c-blue-accent);
+
+  /* ------------------------------------------------------------------
+     Spacing scale — 4px 基準
+     ------------------------------------------------------------------ */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;   /* v1 の .section { padding: 96px 0 } と一致 */
+  --sp-10: 128px;
+
+  /* セクション縦余白(モバイルで自動縮小) */
+  --section-y: var(--sp-9);
+  --gutter: var(--sp-6);   /* v1 .container の左右32pxと一致 */
+
+  /* ------------------------------------------------------------------
+     Layout
+     ------------------------------------------------------------------ */
+  --content-max: 1200px;   /* v1 .container max-width と一致 */
+  --content-narrow: 760px; /* 本文中心のページ(privacy/terms)用 */
+  --header-h: 64px;        /* 「高さは小さめ」の指示に合わせて低く保つ */
+
+  /* ------------------------------------------------------------------
+     Radius / Shadow — v1 から継承
+     ------------------------------------------------------------------ */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(10, 27, 61, 0.06);
+  --shadow-md: 0 4px 16px rgba(10, 27, 61, 0.08);
+  --shadow-lg: 0 16px 48px rgba(10, 27, 61, 0.12);
+  --shadow-blue: 0 8px 24px rgba(37, 99, 235, 0.24);
+
+  /* ------------------------------------------------------------------
+     Typography
+     ------------------------------------------------------------------ */
+  --font-sans: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", -apple-system,
+               BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+
+  --fs-display: clamp(32px, 5vw, 56px);   /* h1 / hero */
+  --fs-h2: clamp(26px, 3vw, 34px);        /* v1 .section__title と一致 */
+  --fs-h3: clamp(19px, 2vw, 22px);
+  --fs-h4: 17px;
+  --fs-body: 16px;
+  --fs-sm: 15px;
+  --fs-xs: 13px;
+
+  --lh-tight: 1.35;
+  --lh-body: 1.75;   /* v1 body と一致 */
+  --lh-loose: 1.9;   /* v1 .section__lead と一致 */
+
+  /* ------------------------------------------------------------------
+     Motion — v1 から継承
+     ------------------------------------------------------------------ */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 0.35s;
+  --dur-fast: 0.18s;
+
+  /* ------------------------------------------------------------------
+     Logo — 高さのみ指定し、幅は必ず auto(縦横比変更禁止)
+     ------------------------------------------------------------------ */
+  --logo-h-header: 32px;
+  --logo-h-footer: 34px;
+  --logo-h-hero: 56px;
+  --logo-icon-header: 32px;
+  --logo-icon-node: 40px;     /* 解決セクションの中央ノード用 */
+}
+
+/* ==========================================================================
+   Breakpoints(参照用の一覧。CSSカスタムプロパティは @media では使えないため
+   実際の @media は base.css / 各コンポーネントに直値で記述する)
+
+     --- 1080px 以下 : タブレット横 / 小型ノート
+     ---  860px 以下 : タブレット縦(ここでナビをドロワーへ切替)
+     ---  640px 以下 : スマートフォン
+     ---  520px 以下 : 小型スマートフォン
+
+   v1(WEBSITE/css/style.css)は 1100/1080/960/860/760/640/520 が混在していた。
+   v2 では上記4段に統一する。新しいブレークポイントを増やさないこと。
+   ========================================================================== */
+
+@media (max-width: 860px) {
+  :root {
+    --section-y: var(--sp-8);
+    --gutter: var(--sp-5);
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --section-y: var(--sp-7);
+    --gutter: var(--sp-4);
+    --logo-h-header: 26px;
+    --logo-icon-header: 28px;
+  }
+}

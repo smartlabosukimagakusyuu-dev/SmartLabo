@@ -4,13 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KKRD8BZR');</script>
-<!-- End Google Tag Manager -->
+<!-- アクセス解析タグ（GTM/GA4）は WEB-SALES-8L で撤去した。
+     再導入する場合の条件（送信項目・送信先・利用目的・保存期間・オプトアウトの確定）は
+     docs/website/ANALYTICS_REINTRODUCTION.md を参照。 -->
 
 <!-- ============================================================
      Smart Labo Works — Website v3 / お申し込み(WEB-V2-8で新設)
@@ -25,7 +21,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      ============================================================ -->
 
 <title>お申し込み｜Smart Labo Works</title>
-<meta name="description" content="Smart Labo Works のお申し込み案内。オンラインでの申し込みから利用開始までの流れ、初期設定費10,000円・月額基本料金20,000円・追加アカウント3,000円（すべて税抜）の料金、日割りと毎月1日の自動決済という課金ルール、創業記念キャンペーンの内容を掲載しています。">
+<meta name="description" content="Smart Labo Works のお申し込み案内。オンラインでの申し込みから利用開始までの流れ、初期設定費10,000円・月額基本料金20,000円・追加アカウント3,000円（すべて税別）の料金、日割りと毎月1日の自動決済という課金ルールを掲載しています。">
 <link rel="canonical" href="https://smartlaboworks.com/apply.html">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
@@ -34,7 +30,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
 <meta property="og:title" content="お申し込み｜Smart Labo Works">
-<meta property="og:description" content="オンラインでの申し込みから利用開始までの流れ、料金、課金ルール、創業記念キャンペーンのご案内です。">
+<meta property="og:description" content="オンラインでの申し込みから利用開始までの流れ、料金、課金ルールのご案内です。">
 <meta property="og:url" content="https://smartlaboworks.com/apply.html">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
@@ -44,7 +40,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="og:image:alt" content="Smart Labo Works — 会社を動かすAI。全社員に、AIという戦力を。">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="お申し込み｜Smart Labo Works">
-<meta name="twitter:description" content="オンラインでの申し込みから利用開始までの流れ、料金、課金ルール、創業記念キャンペーンのご案内です。">
+<meta name="twitter:description" content="オンラインでの申し込みから利用開始までの流れ、料金、課金ルールのご案内です。">
 <meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
 <meta name="twitter:image:alt" content="Smart Labo Works — 会社を動かすAI。全社員に、AIという戦力を。">
 
@@ -65,17 +61,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 </script>
 
-<!-- 計測タグは <head> 上部の Google Tag Manager に集約している。
-     GA4 は GTM 経由でのみ配信し、gtag.js は直接実装しない（二重計測の防止）。
-     コンテナID・測定IDはページソースから見える公開識別子であり秘密ではない。
-     APIキー・認証情報は引き続きこのリポジトリへコミットしない。 -->
 </head>
 <body>
 
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKRD8BZR"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip-link" href="#main">本文へスキップ</a>
 
@@ -183,38 +171,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <h3 class="step__title">利用人数・料金確認</h3>
           <p class="step__note">利用する人数を選び、月額と初回のお支払い内容を確認します。</p>
         </li>
+        <!-- キャンペーンコード・紹介コードの入力欄は提供していないため記載しない
+             （WEB-SALES-8L。Lite本体はキャンペーン・割引コードを実施していない） -->
         <li class="step">
           <span class="step__num" aria-hidden="true">3</span>
-          <h3 class="step__title">キャンペーンコード</h3>
-          <p class="step__note">お持ちの場合に入力します。特典の内容が画面に表示されます。</p>
+          <h3 class="step__title">規約同意</h3>
+          <p class="step__note">利用規約・プライバシーポリシー・特定商取引法に基づく表記・販売条件をご確認のうえ同意いただきます。</p>
         </li>
         <li class="step">
           <span class="step__num" aria-hidden="true">4</span>
-          <h3 class="step__title">紹介コード</h3>
-          <p class="step__note">ご紹介を受けた場合に入力します。キャンペーンコードとは別の欄です。</p>
-        </li>
-        <li class="step">
-          <span class="step__num" aria-hidden="true">5</span>
           <h3 class="step__title">クレジットカード</h3>
           <p class="step__note">お支払い方法はクレジットカードのみです。</p>
         </li>
         <li class="step">
+          <span class="step__num" aria-hidden="true">5</span>
+          <h3 class="step__title">アカウント利用開始</h3>
+          <p class="step__note">お支払いの確認後、会社アカウントで業務機能をご利用いただけます。</p>
+        </li>
+        <li class="step">
           <span class="step__num" aria-hidden="true">6</span>
-          <h3 class="step__title">規約同意</h3>
-          <p class="step__note">利用規約とプライバシーポリシーをご確認のうえ同意いただきます。</p>
-        </li>
-        <li class="step">
-          <span class="step__num" aria-hidden="true">7</span>
-          <h3 class="step__title">アカウント作成</h3>
-          <p class="step__note">お支払いの完了後、会社アカウントを作成します。</p>
-        </li>
-        <li class="step">
-          <span class="step__num" aria-hidden="true">8</span>
           <h3 class="step__title">AI初期設定</h3>
           <p class="step__note">最初のログイン後、会社に合わせた初期設定をご案内します。</p>
         </li>
         <li class="step">
-          <span class="step__num" aria-hidden="true">9</span>
+          <span class="step__num" aria-hidden="true">7</span>
           <h3 class="step__title">利用開始</h3>
           <p class="step__note">実際の業務で使いながら、必要に応じて調整します。</p>
         </li>
@@ -338,54 +318,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
-  <!-- ============================== 6. 創業記念キャンペーン ============================== -->
-  <section class="section" id="campaign">
-    <div class="container">
+  <!-- ============================== 6. 規約・販売条件のご確認 ==============================
+       WEB-SALES-8L-R（代表方針）：
+       Lite契約に関する法務文書（利用規約・プライバシーポリシー・特定商取引法に基づく表記）は、
+       Smart Labo Works Lite の「お支払いへ進む前の最終確認画面」から読める。
+       公開Websiteへ本文を複製せず、直接リンクも置かない（正本を二重管理しない）。
+       キャンペーンは実施していないため掲載しない。 -->
+  <section class="section" id="legal">
+    <div class="container container--narrow">
       <div class="section__head reveal">
-        <p class="eyebrow">創業記念キャンペーン</p>
-        <h2 class="section__title">創業記念の特典をご用意しました。</h2>
+        <p class="eyebrow">規約・販売条件</p>
+        <h2 class="section__title">規約・販売条件のご確認について</h2>
       </div>
-
-      <div class="campaign reveal">
-        <ul class="campaign__list">
-          <li class="campaign__item">
-            <span class="campaign__label">初期設定費</span>
-            <span class="campaign__value">無料</span>
-          </li>
-          <li class="campaign__item">
-            <span class="campaign__label">基本料金</span>
-            <span class="campaign__value">1か月分無料</span>
-          </li>
-          <li class="campaign__item">
-            <span class="campaign__label">対象</span>
-            <span class="campaign__value">先着50社</span>
-          </li>
-        </ul>
-
-        <div class="campaign__example">
-          <p class="campaign__example-title">請求の例（8月20日に利用を開始した場合）</p>
-          <dl class="campaign__example-list">
-            <div>
-              <dt>8月20日〜8月31日</dt>
-              <dd>日割りの基本料金</dd>
-            </div>
-            <div>
-              <dt>9月分</dt>
-              <dd>創業記念キャンペーンにより基本料金が無料</dd>
-            </div>
-            <div>
-              <dt>10月1日以降</dt>
-              <dd>毎月1日に当月分を通常どおりお支払い</dd>
-            </div>
-          </dl>
-        </div>
-
-        <p class="campaign__note">
-          特典の内容は<strong>初期設定費無料と、基本料金1か月分無料</strong>です。追加アカウントの料金は無料の対象に含みません。
-          ご利用にはクレジットカードのご登録が必要です。適用には条件があり、募集枠または期間の終了をもって受付を終了します。
-          詳しい条件は、正式なお申し込み画面またはキャンペーン規約でご確認いただけるようにいたします。
-        </p>
-      </div>
+      <p class="apply-status__body reveal">
+        正式なお申し込み内容、料金、利用規約、プライバシーポリシー、解約・返金条件および
+        特定商取引法に基づく表記は、お支払いへ進む前の最終確認画面でご確認いただけます。
+        内容をご確認いただき、すべての項目へ同意した場合にのみお支払い画面へ進みます。
+      </p>
+      <p class="calc__caution reveal">キャンペーン・無料体験は実施していません。表示価格はすべて税別で、これに消費税等（税率10％）を加えてご請求します。</p>
     </div>
   </section>
 

@@ -1380,7 +1380,7 @@
 
 .legal a { color: var(--text-link); text-decoration: underline; text-underline-offset: 2px; }
 
-/* 冒頭の注記（ドラフトである旨）。目立たせるが警告色は使わない */
+/* 冒頭の注記（適用範囲の案内）。目立たせるが警告色は使わない */
 .legal-notice {
   margin-bottom: var(--sp-8);
   padding: var(--sp-5);

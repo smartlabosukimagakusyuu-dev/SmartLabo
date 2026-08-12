@@ -9,6 +9,51 @@
 
 ---
 
+## 2026-07-28 — v8.1: SALES-0 Stripe対応 販売・契約・課金の詳細設計（15_Stripe_Sales_Billing_Design.md 新設）
+
+SALES-0「販売・契約・課金仕様（Stripe対応）正式設計」の代表決定を反映。**設計・SSOT更新のみで、コード実装・マイグレーション・Stripe操作は行っていない。**
+
+- **新設** [15_Stripe_Sales_Billing_Design.md](15_Stripe_Sales_Billing_Design.md)（v1.0）— Stripe実装の詳細設計の正本
+  - Stripeオブジェクト設計: Product 3種／Price 3種（税抜・改定は`_v2`新規作成）／1社=1Customer=1Subscription／`billing_cycle_anchor`=翌月1日JSTで「日割り→毎月1日前払い」を実現
+  - 申込は**Stripe Checkout（ホスト型）でカード情報非保持**（PCI DSS SAQ-A相当）
+  - キャンペーン: Coupon 100% off `applies_to: 基本料金Product` ＋ Promotion Code `max_redemptions: 50`（先着50社をStripe側で強制）。「翌月の基本料金だけ無料」はSubscription Schedule 3フェーズ案を推奨
+  - 契約7状態と状態遷移図（mermaid）／追加テーブル6種のDB設計（カード情報は自社DBに一切保存しない）
+  - 解約=当月末・日割り返金なし（第一案）／決済失敗=Smart Retries→猶予14日→停止→30日で自動解約（第一案）
+  - Webhook: コア6イベント＋追加提案4（charge.refunded / charge.dispute.created / payment_method.attached / invoice.upcoming）・署名検証・冪等処理・順序非保証前提
+- **更新** [14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)（v1.0 → v2.0）— 代表決定2点を確定反映
+  - 初回決済=**利用開始月の日割り分のみ**（「翌月分まとめて決済」を廃止）
+  - キャンペーン無料対象=**基本料金のみ・追加ユーザー（追加アカウント）料金は対象外**（未確定→確定）
+- **更新** [README.md](README.md) — 目次・構成に15番を追加、Version 8.0 → 8.1
+- **更新** [CURRENT_STATUS.md](CURRENT_STATUS.md) — SALES-0完了を反映
+
+法務追加確認16項目・代表判断事項12項目（日割り計算方式・税計算・解約/猶予日数・実装リポジトリ等）は15番の7章・9章に一覧化し、いずれも代表判断待ち。
+
+**変更者:** Claude Code（代表決定による・SALES-0）
+
+---
+
+## 2026-07-28 — v8.0: 販売モデルの正式制定（14_Sales_And_Billing_Policy.md 新設）
+
+WEB-V2-8「販売モデルSSOT化・2導線設計・創業記念キャンペーン反映」の代表決定を反映。
+
+- **新設** [14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)（v1.0）— 販売導線・確定金額・課金サイクル・キャンペーン・キャンペーンコード・紹介コードの**正本**
+  - ①無料相談／②今すぐ申し込む（セルフ申し込み）の2販売導線
+  - セルフ申し込みの正式採用・**支払いはクレジットカードのみ**
+  - 通常料金：初期設定費 10,000円／基本料金 20,000円・月（管理者1名込み）／追加アカウント 3,000円・月・1名（すべて税抜）
+  - 課金ルール：利用開始月は日割り・前払い・初回決済で翌月分もまとめて決済・翌々月以降は毎月1日に当月分を自動決済
+  - 創業記念キャンペーン：初期設定費無料／**基本料金1か月分無料**／先着50社／クレジットカード登録必須
+  - キャンペーンコードと紹介コードを**別概念**として管理。紹介コードによる割引は自動付与しない
+  - AI初期設定ウィザード・人間確認原則・未実装範囲・今後の実装ステップ（SALES-0〜6）
+- **更新** [12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)（v2.0 → v2.1）— 14番との優先関係の注記を追加。**思想部分（4要素構造）は変更していない。** 4要素構造と、単一プランを確定金額で販売するVersion2.0公式サイトの構成が一致していない点を未決事項として明記
+- **更新** [README.md](README.md) — 目次・フォルダ構成に14番を追加、Version 7.9 → 8.0
+- **更新** [CURRENT_STATUS.md](CURRENT_STATUS.md) — WEB-V2-8の実施内容を追記
+
+Web側の実装（`website-v2/apply.html` 新設、主CTA「今すぐ申し込む」／副CTA「無料相談する」への整理、創業記念キャンペーンの掲載）は `website-v2` ブランチに限定しており、本番の `WEBSITE/` および `master` は一切変更していない。決済・アカウント自動作成・キャンペーンDB・紹介コードDBはいずれも未実装。
+
+**変更者:** Claude Code（代表決定による）
+
+---
+
 ## 2026-07-16 — Smart Labo Platform v1.0 全体アーキテクチャ設計(CEO承認・正式採用)
 
 CEOより「Smart Labo Platform v1.0 全体アーキテクチャ設計」の追加指示があった。Smart Labo Works全体のシステム構成を、銀行・パートナー説明・採用資料・投資家説明・社内設計書のすべてで使える正式資料として一枚で理解できる形にまとめることが目的。「会社を動かすAI。」というコンセプトのもと、Smart Labo Worksが単なるAIチャットではなく企業全体を支援するAI Platformであることを伝える設計とした。**実装は行わず、設計資料のみを作成。**

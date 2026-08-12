@@ -4,16 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KKRD8BZR');</script>
-<!-- End Google Tag Manager -->
+<!-- アクセス解析タグ（GTM/GA4）は WEB-SALES-8L で撤去した。
+     再導入する場合の条件（送信項目・送信先・利用目的・保存期間・オプトアウトの確定）は
+     docs/website/ANALYTICS_REINTRODUCTION.md を参照。 -->
 
-<!-- Smart Labo Works — Website v3 / 会社情報(骨格のみ。本実装はWEB-V2-2以降)
-     website-v3/ 配下のためGitHub Pagesのデプロイ対象(WEBSITE/)に含まれない。 -->
+<!-- Smart Labo Works — Website v3 / 会社情報(骨格のみ。本実装はWEB-V2-2以降) -->
 
 <title>会社情報｜株式会社スマートラボ</title>
 <meta name="description" content="株式会社スマートラボの会社情報。AIで、企業が本来の仕事に集中できる世界をつくる。Mission・Vision・Value、Smart Labo Worksの開発の考え方、会社概要を掲載しています。">
@@ -51,17 +46,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 </script>
 
-<!-- 計測タグは <head> 上部の Google Tag Manager に集約している。
-     GA4 は GTM 経由でのみ配信し、gtag.js は直接実装しない（二重計測の防止）。
-     コンテナID・測定IDはページソースから見える公開識別子であり秘密ではない。
-     APIキー・認証情報は引き続きこのリポジトリへコミットしない。 -->
 </head>
 <body>
 
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKRD8BZR"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip-link" href="#main">本文へスキップ</a>
 
@@ -301,6 +288,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <dt>代表者</dt>
           <dd>代表取締役　小川 昌利</dd>
         </div>
+        <!-- 所在地・電話番号・受付時間は、この一般会社ページへ掲載しない
+             （WEB-SALES-8L-R の代表方針）。これらは Smart Labo Works Lite の
+             「特定商取引法に基づく表記」に記載し、お支払いへ進む前の最終確認画面と
+             ご契約後の設定画面で確認できるようにしている。 -->
         <div class="corp__row">
           <dt>資本金</dt>
           <dd>1,000,000円</dd>

@@ -182,30 +182,12 @@
 
   /* -------------------------------------------------- 成功時の計測 -- */
 
-  /**
-   * 問い合わせが「正式に受け付けられた」ときだけ dataLayer へ1回送る（WEB-V3-5A-2）。
-   *
-   *   ・呼び出すのは data.result === 'ok' の分岐だけ。ボタンを押した回数ではなく、
-   *     Contact API が受付に成功した件数を lead として数える。
-   *   ・送るのは種別（正式6種の列挙値）だけ。氏名・会社名・メールアドレス・
-   *     電話番号・お問い合わせ本文・IPハッシュ・CSRFトークン・レスポンス全文は
-   *     一切送らない。payload をそのまま渡す実装にしないこと。
-   *   ・privacy.html「6. Cookie・アクセス解析について」の開示内容と一致させること。
-   *   ・計測は送信処理より重要ではない。ここで例外が出てもフォームの完了処理が
-   *     止まらないよう、失敗しても黙って諦める。
+  /*
+   * アクセス解析（GTM/GA4/dataLayer）は WEB-SALES-8L で撤去した。
+   * 以前ここにあった generate_lead の送信（送るのは種別のみ）も削除している。
+   * 再導入する場合は docs/website/ANALYTICS_REINTRODUCTION.md の条件を満たし、
+   * privacy.html の開示・Cookie同意の要否整理を済ませてから行うこと。
    */
-  var LEAD_TYPES = ['docs', 'consult', 'demo', 'contact', 'partner', 'recruit'];
-
-  function pushLead(type) {
-    try {
-      // 想定外の値は送らない（サーバー側 allowlist と同じ6種だけ）
-      if (LEAD_TYPES.indexOf(type) < 0) return;
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'generate_lead', lead_type: type });
-    } catch (e) {
-      /* 計測できなくても送信完了の体験は変えない */
-    }
-  }
 
   /* ---------------------------------------------------------- 送信 -- */
 
@@ -246,7 +228,6 @@
       .then(function (data) {
         if (data.result === 'ok') {
           setStatus('ok', data.message || 'お問い合わせを受け付けました。');
-          pushLead(payload.type);
           // 成功の応答を受け取ってから初めて入力欄を消す
           form.reset();
           if (tsField) tsField.value = String(Date.now());

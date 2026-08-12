@@ -1,6 +1,6 @@
-# Smart Labo Works — Website v2
-# 本番切替(website-v2/ → WEBSITE/)後に有効になる内容。
-# v2はローカル開発中で公開されていないため、現時点でクローラに読まれることはない。
+# Smart Labo Works — Website（公開中）
+# WEB-SALES-8L: 旧コメント（「公開されていない」）は実態と不一致のため更新した。
+# 本ファイルは smartlaboworks.com で公開されている。
 
 User-agent: *
 Allow: /

@@ -1,4 +1,4 @@
-# CURRENT_STATUS
+﻿# CURRENT_STATUS
 
 **PROJECT_BIBLEの現在地 — ChatGPT / Claude Code / Codex 共通の同期ポイント**
 
@@ -9,7 +9,7 @@
 ## 5行サマリー(ChatGPTに共有する用)
 
 ```
-Project Bible Version：7.9
+Project Bible Version：8.3
 Brand Version：5.1
 Design Bible Version：2.3
 Homepage Version：v1.0.0（2026-07-16 CEO最終公開指示により正式公開版として確定。代表者名・設立年月・事業内容をCEOより取得し会社概要ページへ反映。所在地・電話番号は同日のCEO指示により会社概要ページの表から一時的に削除(「CEO確認待ち」表示ではなく非掲載)。問い合わせフォームは本番送信テスト未完了のため一時的に撤去し、info@smartlaboworks.comへのmailtoリンクへ差し替え。AIチャット実API接続・問い合わせフォーム本番稼働・Google Analytics・Search ConsoleはVersion1.1で対応する方針をCEOが確定）。**正式ドメイン`smartlaboworks.com`でGitHub Pagesへの切替・DNS移行(Aレコード4件・wwwのCNAME)・HTTPS強制がCEOご自身の作業により完了し、2026-07-16に公開確認済み**（`https://smartlaboworks.com/`で全9ページ200・404ページ正常・証明書エラーなし・会社概要ページの反映を実機確認）
@@ -30,7 +30,7 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 
 | 項目 | 値 |
 |---|---|
-| Project Bible Version | 7.9 |
+| Project Bible Version | 8.3 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
 | Homepage Version | **v1.0.0**（2026-07-16、CEO最終公開指示により正式公開版として確定。会社概要ページに代表者名・設立年月・事業内容を反映、所在地・電話番号はCEO指示により非掲載、問い合わせフォームはmailtoリンクへ一時差し替え）。**`https://smartlaboworks.com/`で正式公開中**（CEOご自身によるGitHub Pagesカスタムドメイン設定・DNS移行(Aレコード4件・wwwのCNAME)・HTTPS強制が完了し、2026-07-16に全9ページ200・404正常・証明書エラーなしを実機確認済み） |
@@ -40,7 +40,7 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 | Current Project | Company Setup → Homepage v1.0.0 正式公開 → **Smart Labo Platform v1.0 全体アーキテクチャ(2026-07-16 CEO承認・正式採用)** |
 | Current Task | **Smart Labo Platform全体アーキテクチャがCEO承認済み、Version1.0正式版として採用。** Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針、6レイヤー構成、Public AI(Smart Concierge AI)とCompany Brainの違い、Version1.0→2.0→3.0のロードマップを[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)(新設)と`smartlabo-platform/ARCHITECTURE.md`(新設)に記録済み。銀行提出用事業計画書Version1.4は2026-07-15のCEO指示「1のままで資料出力して」により選択肢1(代表者報酬を含まない試算のまま)で確定・提出用ファイルを出力済み([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf))。経営計画書Version1.0は旧解釈のまま未更新でv1.4との前提不整合が残存、CEO確認待ち |
 | Next Task | ①Smart Labo Platform：承認された全体アーキテクチャに基づき、`api.smartlaboworks.com`のDNS設定・本番デプロイ、ホームページ`chat.js`側の接続に着手(CEOの実施タイミング指示待ち)。②公開済みのホームページについて、Version1.1で[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の残りステップ(XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト)を実施し問い合わせフォームを本番稼働へ。Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成はCEOの明示的な指示を得てから実施。③銀行提出版v1.4は代表者報酬の扱いが確定したため、所在地・資本金・代表者略歴の記入(CEO記入待ち)のみ残課題。実際の銀行提出時はファイル名に「_submitted」を付与([DOCUMENT/FINANCE/README.md](../DOCUMENT/FINANCE/README.md)のVersion管理ルール) |
-| Last Update | 2026-07-16(Smart Labo Platform v1.0 全体アーキテクチャ、CEO承認・正式採用を反映) |
+| Last Update | 2026-08-10(WEB-SALES-6: 顧客自身による解約をLiteへ実装。即時解約ではなく請求期間終了時の解約予約とし、予約後も期間終了まで通常利用可・日割り返金なし・期間終了前なら取消可。Stripeへは cancel_at_period_end のみ送り、canceled への移行は署名付き subscription.deleted だけ。課金4経路へ既存 login_attempts を再利用したサーバー側レート制限を追加。migration 021 で解約予定日時を1列追加。Lite側feature branchのみ・本番変更0。WEB-SALES-6SはGo、本番公開はNo-Go継続) |
 | Maintainer | Masatoshi Ogawa |
 
 ---
@@ -729,6 +729,119 @@ CEO指定の①〜⑧すべてを作成した。
 
 ---
 
+## 公式サイトVersion2.0リニューアル進捗（`website-v2`ブランチ・未公開・WEB-V2-8まで完了）
+
+公式サイトをVersion1(公開中の`WEBSITE/`)からVersion2(`website-v2/`)へ作り直す作業を、`website-v2`ブランチ(ローカルのみ・未push)で進めている。**本番の`WEBSITE/`・`master`・GitHub Pagesのデプロイ経路には一切触れていない。** 各工程の一次情報は`docs/reviews/WEB_V2_<n>_*.md`。
+
+| 工程 | 内容 | コミット |
+|---|---|---|
+| WEB-V2-1〜7 | 監査・土台〜全8ページ実装・ブランド統一・問い合わせフォーム(XServer向けPHP) | `a102869`〜`b84bb2f` |
+| WEB-V2-8 | 販売モデルSSOT化・2導線設計・創業記念キャンペーン反映(2026-07-28) | `060727b` |
+| SALES-0 | 販売・契約・課金仕様(Stripe対応)正式設計(2026-07-28・設計のみ・コード実装なし) | `e8b3bc8` |
+| SALES-1 | セルフ申し込み・会社登録基盤(2026-07-29・入力と検証まで。決済/保存/アカウント作成は未実装) | `dcdf8aa` |
+| WEB-SALES-1 | WEB完結申込・契約・決済・顧客登録・利用者招待の現状監査＋正式設計(2026-08-09・調査と設計のみ。本番変更0・実装0・migration 0) | `6732b23` |
+| WEB-SALES-1R | 旧smartlabo-works SALES実装の読み取り専用監査＋Lite移植可否判定(2026-08-09・調査のみ。旧repo変更0・Lite変更0・本番変更0) | `42633f8` |
+| **WEB-SALES-1B〜5B** | **Liteでの販売基盤実装(2026-08-09・Lite側feature branchのみ。本番変更0)** | 本コミット |
+
+**WEB-V2-8の要点（代表決定 2026-07-28）:**
+- **[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を新設**し、販売導線・確定金額・課金サイクル・創業記念キャンペーン・キャンペーンコード・紹介コードの**正本**として制定（Project Bible Version 7.9→8.0）。[12_Pricing_Philosophy.md](12_Pricing_Philosophy.md)には優先関係の注記のみ追加
+- ①無料相談／②今すぐ申し込む(セルフ申し込み・クレジットカードのみ)の2販売導線を正式採用
+- 料金名称を「初期費用」→**「初期設定費」**へ統一(10,000円。基本料金20,000円／月・管理者1名込み、追加アカウント3,000円／月・1名、すべて税抜)
+- 課金ルール: 利用開始月は日割り・前払い・初回決済で翌月分もまとめて決済・翌々月以降は毎月1日に当月分を自動決済(日割り端数処理は決済実装工程で確定)
+- 創業記念キャンペーン: 初期設定費無料・**基本料金1か月分無料**(「初月無料」表記は禁止)・先着50社・クレジットカード登録必須。追加アカウントを無料対象に含めるかは**未確定**
+- Web実装: `website-v2/apply.html`(申込案内ページ・フォームなし・「オンライン申し込みは現在準備中」)を新設し、全9ページのCTAを主「今すぐ申し込む」／副「無料相談する」へ統一。トップページへキャンペーンセクションを追加
+- **未実装(意図的):** 決済・カード入力・契約処理・アカウント自動発行・AI初期設定ウィザード本体・キャンペーン/紹介コードDB・残数のリアルタイム表示・自動返信メール
+- 検証: `check-prices.js`(apply.html・キャンペーン表記・禁止表現の検査を追加)・`check-legal.js`ともに[OK]。Puppeteerで全9ページのリンク・h1・console error 0・375/768/1024/1440横スクロールなしを実測
+- **次工程(いずれも代表承認後):** SALES-1〜6。並行して問い合わせフォームの構成決定(案A/案B)・法務2ページの確定が引き続き必要(詳細は`docs/reviews/WEB_V2_8_SALES_MODEL_AND_CONVERSION.md`の「法務確認事項」)
+
+**SALES-0の要点（代表決定 2026-07-28・設計のみ）:**
+- **[15_Stripe_Sales_Billing_Design.md](15_Stripe_Sales_Billing_Design.md)を新設**（Project Bible Version 8.0→8.1）。Stripe実装の詳細設計の正本
+- 確定2点を[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)(v2.0)へ反映: ①初回決済=**利用開始月の日割り分のみ**(「翌月分まとめて決済」廃止) ②キャンペーン無料対象=**基本料金のみ・追加ユーザー対象外**(確定)
+- 設計の柱: Stripe Checkout(カード情報非保持)／1社=1Subscription・`billing_cycle_anchor`翌月1日JST／キャンペーンはCoupon(applies_to基本料金)+Promotion Code(max_redemptions 50)+Subscription Schedule 3フェーズ推奨／契約7状態・遷移図／追加テーブル6種／解約=当月末・返金なし(第一案)／失敗=Smart Retries→猶予14日→停止→30日自動解約(第一案)／Webhookコア6+提案4(署名検証・冪等・順序非保証)
+- **代表判断待ち12項目**(15番9章): 日割り計算方式・税計算方式・月途中の人数変更・名称統一(追加ユーザー/追加アカウント)・apply.html文言修正・先着判定基準・インボイス登録・実装リポジトリ・解約/返金・猶予日数・キャンペーン実装方式・請求書提供方法
+- **SALES-1着手の前提**(15番8章): 本設計の承認＋9章決定＋特商法/キャンペーン規約の整備方針＋Stripeアカウント開設(代表作業)＋実装先リポジトリ確定
+
+**WEB-SALES-1の要点（2026-08-09・調査と設計のみ／本番変更0）:**
+- 一次情報は[docs/reviews/WEB_SALES_1_CONTRACT_AUTOMATION_AUDIT.md](../docs/reviews/WEB_SALES_1_CONTRACT_AUTOMATION_AUDIT.md)。Website(`master` `1252347`／`origin/website-v3` `3ef57db`)とLite(`smartlabo-works-lite` `28e2c60`)を読み取りのみで実測
+- **判定: 条件付きGo。** 設計と「既存欠陥の修正工程(WEB-SALES-1B)」はGo、WEB-SALES-2以降の実装着手と本番公開はNo-Go
+- **最重要の発見:** 14番/15番が「実装済み」と記録するSALES-2/3/3Rの実体は**凍結リポジトリ`smartlabo-works`側**にあり、現行の正式コードベース`smartlabo-works-lite`には申込・招待・契約状態・決済・メールのサーバー実装が**1つも存在しない**(migration 001〜016のみ／routes・repositoriesに該当なし／`stripe`依存なし)。本工程では指示により旧リポジトリを一切参照していないため、移植可否は未確定
+- **仕様矛盾を検出:** 本工程の指示書は「決済成功後に会社作成」、14番v3.0/15番v2.0(2026-07-29代表決定)は「申込直後に環境作成→payment_required→決済でactive」。**環境先行方式(SSOT側)の採用を推奨**
+- **販売開始前に必須のNo-Go 3件(Lite既存欠陥):** ①会社・利用者を停止してもセッションが破棄されず最大8時間業務APIを使える ②契約人数上限が警告のみでサーバー強制されない ③ログイン試行制限が存在しない
+- **法務が最大のスケジュールリスク:** 特定商取引法に基づく表記ページが未作成、`terms.html`はサイト利用条件のみで契約期間・支払・解約・返金を定めていない、キャンペーン規約も未作成
+- 再利用可能と確認できたもの: signup-apiの受け付け判定・validation・料金サーバー再計算／contact-apiのCSRF・Origin完全一致・IP非保存rate limit・秘密値分離／Liteのセッション認証(scrypt)・`companyIdOf`によるテナント分離・company_id/user_idのサーバー生成・最後の管理者保護・監査ログ書き込み
+- 工程分割はWEB-SALES-1B〜8の9工程、概算41〜62日(旧実装を流用できる場合は25〜38日)。代表判断事項14件を同文書第21節に整理
+- **`website-v3`は本番`master`の最新7コミット(Company Brain SEO・アナリティクス)を取り込んでいない。** 公開切替前にマージが必要
+
+**WEB-SALES-1B〜4の要点（2026-08-09・すべてLiteのfeature branchのみ／本番変更0）:**
+- 実装はすべて正式製品 `smartlabo-works-lite`。SmartLabo(Website)は無変更、旧`smartlabo-works`も無変更（読み取り参照のみ・コードのコピー0）
+- **WEB-SALES-1B** `15d6be8` セキュリティ基盤。①停止・解約の即時反映（毎リクエストでDB確認・セッション破棄）②契約人数のサーバー側強制（BEGIN IMMEDIATEで同時追加も超えない）③ログイン試行制限（IP/メール/IP+メールの3軸・DB永続・生値を保存しない）④CSRF・Origin防御（許可Origin完全一致＋セッション結び付きトークン）。あわせて停止予定(suspend_scheduled)がログインできない既存不具合を修正
+- **WEB-SALES-2** `02b6c8f` Web申込〜会社環境自動作成。★メール認証が終わるまでcompanies/usersを作らない。応答からメール登録有無を判別できない共通応答。トークンはSHA-256のみ保存・GETでは消費しない。provisioningは1トランザクション。migration 018で`contract_status`と`signup_applications`を追加
+- **WEB-SALES-3** `97ec04e` 認証メール本送信。Node標準net/tlsのみでSMTP実装（依存追加なし）。設定不足でcaptureへ落とさない。送信結果を分類コードで記録。★contract_started_atを「支払い成立時に確定」へ是正
+- **WEB-SALES-3S** 実機疎通完了。XServer SMTP(465/暗黙TLS/AUTH LOGIN)で1通のみ送信し受理を確認。DMARC(p=none)反映済み・SPF/DKIM設定ありを確認。**認証リンク先は`https://lite.smartlaboworks.com`が正**（`app.smartlaboworks.com`は旧製品のミライエβ版であることを実測で判明・誤設定を未然に防止）
+- **WEB-SALES-4** `46b1ec2` Stripe決済・Webhook・契約状態管理。詳細は[docs/reviews/WEB_SALES_4_STRIPE_CONTRACTS.md](../docs/reviews/WEB_SALES_4_STRIPE_CONTRACTS.md)
+  - ★active化の根拠は**署名検証済みWebhookでの支払い成功のみ**。success_url到達は根拠にしない
+  - 料金は14番/15番の実測で確定（基本料金に管理者1名を含む→追加席=契約人数−1／1人20,000・3人26,000・5人32,000）。金額・数量・Price IDはすべてサーバー側決定
+  - `billing_cycle_anchor`に翌月1日0:00 JSTを渡し初回日割り・以後毎月1日。日割り額はStripeのprorationに委ね自前計算しない
+  - contract_started_atはCOALESCEで守り**初回の支払い成功時のみ**設定。再送で上書きしない
+  - 冪等性は`stripe_event_id`のUNIQUEで「記録できた側だけが処理」。並行4件でも処理1回・順序逆転はSTALE_EVENTで上書きしない
+  - metadataだけで会社を信用せずDBのStripe IDと突合（他社すり替え不可）
+  - 契約状態4種(payment_required/active/past_due/canceled)ごとの許可リスト。active前は利用者追加を禁止
+  - sk_live_はSTRIPE_LIVE_ENABLED無しなら起動停止。公式SDKは採用せずfetch+node:cryptoで実装（Liteの既存方針に合わせ依存を増やさない）
+  - テスト1077件成功・失敗0・skip1（実外部通信0件）
+- **WEB-SALES-4R** `128dbdf` 4Sの実機確認でCheckoutが拒否されたため最小修正。当該Stripeアカウントは**Managed Payments既定有効**で`payment_method_types`を受け付けないため、`managed_payments:{enabled:false}`を追加して**カード限定を維持**（旧repoがSALES-3Rで遭遇したのと同じ現象）。form-urlencodedを解析する回帰テスト24件を追加
+- **WEB-SALES-4S** Stripeテストモード実機E2E完了（決済1回のみ）。payment_required→Checkout→テスト決済→署名付きWebhook→active→contract_started_at初回設定→seat制御維持を実証。検証58項目すべて合格
+  - Checkout/Subscription/Customerとも二重作成なし・カード限定・test mode
+  - **初回請求28,480円＝初期設定費10,000円＋日割り18,480円**（請求アンカー=翌月1日0:00 JST。日割りはStripeが計算）
+  - Webhook 2件受信（checkout.session.completed=processed／invoice.paid=skipped）。**再送しても台帳・契約状態・契約開始日すべて不変**
+  - active後に業務API解放・4人目は409 SEAT_LIMIT_REACHEDで拒否
+  - Stripeテストデータ（Subscription/Customer）は後片付け済み。既存Price/Productは未変更
+- **WEB-SALES-5** `6acc7ac` 決済完了・キャンセル・契約状況の画面。詳細は[docs/reviews/WEB_SALES_5_BILLING_UI.md](../docs/reviews/WEB_SALES_5_BILLING_UI.md)
+  - `/billing/complete`・`/billing/cancelled` を新設。★URL到達を成功の根拠にせず必ずサーバーへ状態を問い合わせる。自動再確認は最大5回で打ち切り（無限ポーリングなし）・自動Checkout作成なし
+  - 契約状況は**`/settings`の既存「契約・ライセンス」セクションを拡張**（候補の`/settings/billing`は既存ルーティング規則を優先して不採用）
+  - 契約状況APIは**新設せず**`GET /api/contract/status`へ人数を追加。Stripe ID・Price ID・secret・メール一覧は返さない
+  - 決済操作は管理者のみ（一般利用者はサーバー側で403）。連打・二重決済を防止
+  - テスト1186件成功・失敗0・skip1
+- **WEB-SALES-5B** `99cda82` 契約状態に応じた画面制御。詳細は[docs/reviews/WEB_SALES_5B_CONTRACT_GATING.md](../docs/reviews/WEB_SALES_5B_CONTRACT_GATING.md)
+  - 支払い前・支払い失敗・解約後は業務メニューを出さず、直接URLも**許可リスト（`/`と`/settings`の完全一致）**でご案内へ戻す
+  - ★取得前・取得失敗をactive扱いにしない（業務メニューが一瞬見えない）。契約状態の問い合わせはContextの1か所へ集約
+  - 契約のご案内画面を新設（契約人数・月額見込み・初期設定費をサーバーの値で表示）。一般利用者には管理者への確認を案内
+  - サーバー側を一点是正：知らない契約状態のときにログアウトも自分の情報確認もできなくなっていたため、業務機能は閉じたまま出口だけ通すようにした
+  - 支払い待ちの利用者で発生していた402の連続が解消し、console error 0
+  - テスト1277件成功・失敗0・skip1（WEB-SALES-5C着手時に全16本を再実行して実測。従来記載の「1275」は集計誤りで、修正前の pass=1275/fail=2 と修正後の fail=0 を混ぜた値だった。正しくは既存14本1186＋contract-gating 91＝1277。テストの削除・skip追加・条件緩和は0）
+- **WEB-SALES-5C** `feature/web-sales-5c-customer-portal` Stripe Customer Portal基盤。詳細は[docs/reviews/WEB_SALES_5C_CUSTOMER_PORTAL.md](../docs/reviews/WEB_SALES_5C_CUSTOMER_PORTAL.md)
+  - `POST /api/billing/portal-session` を新設（引継ぎ候補の`/api/contract/portal-session`は既存規則—contract=参照GET／billing=Stripe手続きPOST—を優先して不採用）
+  - **許可**＝カード変更・請求書履歴／**禁止**＝解約・プラン変更・契約人数変更・割引コード・返金。契約人数や解約をPortalへ渡すと自社DBとStripeが食い違うため
+  - ★**Portal Configuration IDの明示を必須にした。** アカウント既定設定に依存すると、Stripe管理画面で解約を有効化しただけでコード無変更のまま利用者へ表示される（コードだけでは無効を保証できない）。IDが未設定なら画面のボタンは出ず、APIも503
+  - 対象は`active`と`past_due`の会社管理者・運営者のみ。`payment_required`はCheckout、`canceled`は非表示。判定はサーバーの1関数で行い画面側で組み立て直さない
+  - Customer IDはDBの自社の値のみ。ブラウザからCustomer/Configuration/return_urlを受け取らず、応答にも識別子・秘密値を返さない（`portalUrl`1つのみ・`Cache-Control: no-store`）
+  - ★**past_due→activeの復帰は署名付き`invoice.paid`のみ。** Portal作成・カード変更・`/settings`への復帰では状態を変えない。既存Webhookを調査した結果**不足なし**のため状態遷移は無変更
+  - 併せて表示不具合を1件是正：決済導線の失敗理由が`StatusMessage`の子要素で渡され描画されず、見出しだけが出ていた（WEB-SALES-5から存在）
+  - テスト1438件成功・失敗0・skip1（新規161件／既存の削除・skip追加・緩和0）。`npm run build`成功。実Stripe通信0・Portal実作成0・実決済0・実Webhook0・実メール0・本番DB接続0
+- **WEB-SALES-6** `f63fc8c` 解約予約・予約取消・課金操作のレート制限。詳細は[docs/reviews/WEB_SALES_6_CANCELLATION.md](../docs/reviews/WEB_SALES_6_CANCELLATION.md)
+  - 解約は**即時ではなく現在の請求期間の終了時**。予約後も期間終了までは通常利用でき、日割り返金・自動返金は行わない。期間終了前なら予約を取り消せる
+  - `POST`/`DELETE /api/billing/cancellation-schedule` を新設。**Stripeへ送るのは `cancel_at_period_end` ただ1つ**（即時解約・返金・Price・数量・按分に触れない）
+  - ★**canceled へ移すのは署名検証済みの `customer.subscription.deleted` だけ。** `subscription.updated` では解約予約と期間終了日時を記録するのみで契約状態は `active` のまま。`canceled_at` は初回のみ記録するよう是正
+  - migration 021 で `cancellation_scheduled_at` を**1列だけ**追加。予約の有無は日時のNULL判定で表し真偽値を持たない。`contract_end_at`（運営者の停止予定日・`status='active'`で空へ戻る）は再利用しない
+  - 課金4経路（Checkout・Portal・解約予約・予約取消）に**サーバー側レート制限**。既存 `login_attempts` を scope 分離で再利用し、会社10回／利用者5回／10分・429＋Retry-After。権限確認の後に置き、一般利用者の連打で管理者の枠を潰せないようにした
+  - 画面は `/settings` の既存セクションへ追加（新URLなし）。確認必須・解約予定日と返金なし・データ非削除を明示・連打1要求・反映確認は最大3回で打ち切り
+  - 契約状態の再取得で画面が作り直され、手続き直後に設定画面が初期タブへ戻る不具合を是正（ブラウザ実測で検出）
+  - テスト1645件成功・失敗0・skip1（新規206件／既存の削除・skip追加・緩和0）。`npm run build`成功。実Stripe通信0・実決済0・実Webhook0・実メール0・本番DB接続0
+- **本番公開はNo-Go継続**（特商法表記・利用規約の契約条項・キャンペーン規約が未整備／本番Webhook未登録／再契約・契約人数変更が未実装）
+
+**WEB-SALES-1Rの要点（2026-08-09・読み取り専用監査のみ／旧repo変更0）:**
+- 一次情報は[docs/reviews/WEB_SALES_1R_LEGACY_SALES_REUSE_AUDIT.md](../docs/reviews/WEB_SALES_1R_LEGACY_SALES_REUSE_AUDIT.md)。代表承認のもと旧`smartlabo-works`を読み取り専用で監査（`git archive`で一時展開して調査し、checkout・commit・pushは一切行わず、着手前後でbranch/HEAD/working treeが同一であることを確認）
+- **旧SALES実装は実在した。** SALES-2/3/3R/3S/4の5工程・SALES関連テスト98件・リポジトリ全体1313件。正本は`feature/sales-4-ai-setup` `c25fff4`（`main`/`develop`へ未マージ）
+- **★WEB-SALES-1の認識誤りを1件訂正:** 15番v4.0の「実Stripe疎通は未実施」は**その後のSALES-3Sで解消済み**。Stripeサンドボックスでテストカード決済→Stripe CLI経由の実Webhook受信→署名検証→`payment_required`→`active`→業務機能解放→再送冪等→署名不正400までを実機確認済み。**最大の技術的不確実性は既に解消されている**
+- **★保全リスク:** SALES系branchは**いずれもoriginへpushされておらず、当該PCのローカルbranchが唯一の写し**。保全のためのpushを代表判断事項#1として提起
+- **移植判定:** そのまま使えるファイルは0本。旧＝`node:http`素実装(server.js 5563行)、Lite＝Express 5＋17ルーター。実体は「設計・ロジック・テストケースの移植」。機能27項目のA〜D判定はA=13/B=7/C=1/D=6
+- **再利用禁止3件:** ①`tenant_users`（Liteの`users`と二重台帳になる）②旧認証（インメモリMapセッション＋環境変数テナントの二系統）③旧ロール（`admin`/`member`が完全未使用）。いずれもLite側の実装が優れている
+- **旧実装にも重大欠陥4件:** ①provisioningにトランザクションが無い ②契約人数上限の強制がゼロ ③招待メール送信ワーカーが存在しない（本番でセルフ申込しても管理者がログインできない）④`role`未使用で一般利用者が決済もAPIキー登録も実行できる
+- **新規検出のLite欠陥2件:** S9=状態変更リクエストのOrigin検証もCSRFトークンも無い（旧には3層の対策あり）／S10=単体テスト基盤が無く旧の98テストを活かせない
+- **再見積り: 楽観34日／標準48日／安全63日。** WEB-SALES-1の41〜62日に対し標準値での短縮は約3日。ただし**WEB-SALES-4(決済)は8〜12日→4〜8日**と明確に短縮
+- **判定: WEB-SALES-1BはGo（S9を範囲に追加）。WEB-SALES-2は条件付きGo**（解除条件4件のうち2件が本監査で解除。残るは申込フローの正式確定・実装場所の決定・WEB-SALES-1Bの完了）
+
+---
+
 ## ChatGPTとの同期ルール
 
 - 新しいChatGPTの会話を始める前に、必ずこのファイルの「5行サマリー」を確認・共有してください。
@@ -815,4 +928,24 @@ CEO指定の①〜⑧すべてを作成した。
 | **v7.2** | 2026-07-16 | Claude Code(CEO最終公開指示による) | **Homepage v1.0.0として正式公開版を確定。銀行口座開設・融資申込・会社実態の公開を目的とした「CEO最終公開指示」に基づき実施。** Project Bible Version 7.6→7.7に更新。①CEOより代表者名(小川昌利)・設立年月(2026年7月)の確認を得て、事業内容は既存`PRODUCT_REQUIREMENTS.md`の表現を元にした案で承認を得たうえで`js/company-info.js`へ反映(所在地・電話番号は引き続き未確定「CEO確認待ち」)。②[61_Release_Checklist.md](61_Release_Checklist.md)で「実ドメインでの送受信確認は未実施」と明記されていた問い合わせフォームについて、CEO指示「本番送信テストが完了していない場合は導線を一時的に外しメール問い合わせへ変更」に基づき、`contact.html`のフォームブロックを撤去し`info@smartlaboworks.com`へのmailtoリンクへ差し替え(`js/pages.js`は`if (!form) return;`のガードにより無変更でconsoleエラーなし動作を確認)。③CEOより「AIチャット実API接続・問い合わせフォーム本番稼働・Google Analytics・Search ConsoleはVersion1.1で実施する」との方針確定を得た(今回は追加開発なし、現状実装のまま公開)。④DNSを実測したところ、`smartlaboworks.com`/`www`/`form`のいずれも同一IP(Xserverの初期設置ページ)を指しており、GitHub Pages側のカスタムドメイン設定・DNS切替(A×4/CNAME)がまだ実施されていないことを確認。[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の記載どおりCEO(または担当者)による手動対応が引き続き必要である旨を明記。⑤全ページのリンク切れ・アセット参照切れなし、consoleエラーなしを再確認。**Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成は対外公開を伴う操作のため、今回のコミット・pushには含めていない(61_Release_Checklist.md 0章の方針どおり、CEOの別途明示的な承認を得てから実施)。** |
 | **v7.3** | 2026-07-16 | Claude Code(CEO指示による) | **GitHub Pages/DNS切替完了・所在地/電話番号を会社概要ページから削除。** Project Bible Version 7.7→7.8に更新。CEOがGitHub Pages設定(Custom domain保存)・Xserver DNS管理画面(apex Aレコード4件をGitHub Pages IP `185.199.108/109/110/111.153`へ、`www`をAレコードからCNAME `smartlabosukimagakusyuu-dev.github.io`へ)を実施する過程を対話形式で支援し、DNSチェック成功・HTTPS強制有効化までを確認。完了後`https://smartlaboworks.com/`へ実際にアクセスし、全9ページ200・存在しないURLで404・証明書エラーなし・会社概要ページの代表者名/設立年月/事業内容の正しい表示・お問い合わせページのmailtoリンク表示・consoleエラーなしを実機確認した。続けてCEOより「所在地と電話番号を削除してほしい」との指示があり、`company.html`の該当2行(`所在地`・`電話番号`)を削除。あわせて、削除後は参照先を失い宙に浮く形になった「『CEO確認待ち』と表示されている項目は…」という注記文もCEO承認を得て削除。所在地・電話番号は`js/company-info.js`側では`null`のまま保持しており、将来値が確定した際は表の行を復元すれば再表示できる |
 
-*最終更新: 2026-07-16*
+| **v7.4** | 2026-07-28 | Claude Code(代表決定による) | **WEB-V2-8「販売モデルSSOT化・2導線設計・創業記念キャンペーン反映」を実施。** Project Bible Version 7.9→8.0。新章[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)を販売導線・確定金額・課金サイクル・キャンペーン・キャンペーンコード・紹介コードの正本として新設。`website-v2`ブランチに`apply.html`(申込案内・フォームなし・準備中表記)を新設し、全9ページのCTAを主「今すぐ申し込む」／副「無料相談する」へ統一、トップページへ創業記念キャンペーン(初期設定費無料・基本料金1か月分無料・先着50社)を追加。料金名称を「初期設定費」へ統一。決済・アカウント自動発行・キャンペーンDB等は意図的に未実装。本セクション上部「公式サイトVersion2.0リニューアル進捗」を新設して詳細を記録。本番`WEBSITE/`・`master`は無変更 |
+
+| **v7.5** | 2026-07-28 | Claude Code(代表決定による・SALES-0) | **SALES-0「販売・契約・課金仕様(Stripe対応)正式設計」を実施（設計・SSOT更新のみ、コード実装なし）。** Project Bible Version 8.0→8.1。新章[15_Stripe_Sales_Billing_Design.md](15_Stripe_Sales_Billing_Design.md)を新設し、Stripeオブジェクト設計・Checkout申込フロー(カード情報非保持)・キャンペーンのSubscription Schedule 3フェーズ実装案・契約7状態と遷移図・追加テーブル6種のDB設計・解約/支払い失敗仕様の第一案・Webhook受信設計・法務追加確認16項目・SALES-1前提条件・代表判断12項目を制定。[14_Sales_And_Billing_Policy.md](14_Sales_And_Billing_Policy.md)(v2.0)へ確定2点を反映(初回決済=日割りのみ・キャンペーン無料対象=基本料金のみ)。website-v2のWeb表示は無変更(apply.htmlの「翌々月以降」文言修正はSALES-1で実施予定) |
+
+| **v7.6** | 2026-07-29 | Claude Code(代表指示による・SALES-1) | **SALES-1「セルフ申し込み・会社登録基盤」を実装。** `signup-api/`(PHP)を新設し `POST /api/signup` を実装。会社情報・管理者情報・契約内容の**サーバー側検証**と料金の再計算までを行い、**保存・メール送信・Stripe・アカウント作成はいずれも行わない**(応答に`persisted:false`を明示)。`website-v2/signup.html`(3ステップ)・`assets/js/signup.js`を新設。決済(SALES-2)が未実装で確認画面の先が無いため、signup.htmlは**noindex・sitemap未掲載・公開ページから未リンク**とし、`check-prices.js`に公開導線へ載っていないことを検査する節を追加した。テストはユニット56件・HTTP統合33件・料金整合・法務一致・Puppeteerによる4幅の実測(横スクロール0・h1各1・新規Console Error 0)がすべて成功。実装場所(PHP仮実装 or Nodeへ移設)は15番の代表判断9-8として未決のまま。詳細は`docs/reviews/SALES_1_SELF_SIGNUP_FOUNDATION.md` |
+
+| **v7.7** | 2026-08-09 | Claude Code(代表指示による・WEB-SALES-1) | **WEB-SALES-1「WEB完結申込・契約・決済・顧客登録・利用者招待 現状監査＋正式設計」を実施（調査・設計・SSOT更新のみ。製品コード変更0・本番変更0・migration 0・実装0）。** Website(`master` `1252347`／`origin/website-v3` `3ef57db`)とLite(`smartlabo-works-lite` `28e2c60`)を読み取りのみで実測し、[docs/reviews/WEB_SALES_1_CONTRACT_AUTOMATION_AUDIT.md](../docs/reviews/WEB_SALES_1_CONTRACT_AUTOMATION_AUDIT.md)へ記録。**判定は条件付きGo**（設計とWEB-SALES-1BはGo、WEB-SALES-2以降の実装着手と本番公開はNo-Go）。主な確定事項: ①14番/15番が実装済みと記録するSALES-2/3/3Rの実体は凍結リポジトリ`smartlabo-works`側にあり、現行の正式コードベース`smartlabo-works-lite`には申込・招待・契約状態・決済・メールのサーバー実装が存在しないこと（migration 001〜016のみ）を実測で確認 ②指示書と14番v3.0/15番v2.0で申込フローが矛盾しており、環境先行方式（SSOT側）の採用を推奨 ③販売開始前に必ず塞ぐべきLite既存欠陥3件（停止時のセッション非破棄・人数上限の非強制・ログイン試行制限の不在）を検出 ④特商法表記・キャンペーン規約・利用規約の契約条項がいずれも未整備で、これが最大のスケジュールリスクであること ⑤再利用可能な既存資産16件と新規実装が必要な機能20件の切り分け ⑥推奨データモデル8テーブル・契約状態遷移規則・決済方式候補比較・例外処理・E2E受入25項目・工程分割WEB-SALES-1B〜8（概算41〜62日）・代表判断事項14件。**旧リポジトリ`smartlabo-works`は指示どおり一切参照していない**（そのため移植可否は未確定・代表判断事項#1） |
+
+| **v7.8** | 2026-08-09 | Claude Code(代表承認による・WEB-SALES-1R) | **WEB-SALES-1R「旧smartlabo-works SALES実装 読み取り専用監査＋Lite移植可否判定」を実施（調査・SSOT更新のみ。実装0・移植0・製品修正0・本番変更0）。** 代表承認のもと旧リポジトリを読み取り専用で監査し、[docs/reviews/WEB_SALES_1R_LEGACY_SALES_REUSE_AUDIT.md](../docs/reviews/WEB_SALES_1R_LEGACY_SALES_REUSE_AUDIT.md)へ記録。`git archive`で一時ディレクトリへ展開して調査し、checkout・commit・push・stash・migration実行・npm install・サーバー起動・テスト実行はいずれも行わず、着手前後で旧repoのbranch/HEAD/working treeが同一であることを証拠として記録した。主な確定事項: ①旧SALES実装は実在（SALES-2/3/3R/3S/4の5工程、SALES関連テスト98件、全体1313件、正本は`c25fff4`で`main`/`develop`へ未マージ） ②**WEB-SALES-1の認識誤りを訂正 — 15番v4.0の「実Stripe疎通未実施」はSALES-3Sで解消済みで、Stripeサンドボックスでの決済〜実Webhook〜active化〜冪等〜署名不正400までを実機確認済み** ③SALES系branchがoriginへ未pushでローカルが唯一の写しという保全リスクを検出 ④そのまま使えるファイルは0本で、再利用の実体は設計・ロジック・テストケースの移植（旧=node:http素実装5563行 vs Lite=Express 5＋17ルーター） ⑤再利用禁止3件（`tenant_users`の二重台帳化・旧のインメモリセッションと環境変数テナント二系統・未使用のロールモデル） ⑥旧実装の重大欠陥4件（provisioningのトランザクション欠如・契約人数上限の強制ゼロ・招待メール送信ワーカー不在・role完全未使用） ⑦Lite側の新規欠陥2件を検出（S9=Origin検証とCSRFトークンの不在、S10=単体テスト基盤の不在） ⑧migration移行案11本と番号衝突なしの確認 ⑨再見積り 楽観34日/標準48日/安全63日（WEB-SALES-4のみ8〜12日→4〜8日と明確に短縮） ⑩代表判断事項9件。**判定: WEB-SALES-1BはGo（S9を範囲に追加）、WEB-SALES-2は条件付きGo（解除条件4件のうち2件が解除）、本番公開は法務3点未整備によりNo-Go継続** |
+
+| **v7.9** | 2026-08-09 | Claude Code(代表指示による・WEB-SALES-1B〜4) | **販売基盤を正式製品 `smartlabo-works-lite` へ実装（SmartLabo側は文書のみ更新。本番変更0）。** WEB-SALES-1B(セキュリティ基盤: 停止の即時反映・契約人数のサーバー側強制・ログイン試行制限・CSRF/Origin防御)、WEB-SALES-2(Web申込〜メール認証〜会社環境自動作成。★認証完了まで会社・利用者を作らない)、WEB-SALES-3(Node標準のみでSMTP実装・送信監査。★contract_started_atを支払い成立時確定へ是正)、WEB-SALES-3S(XServer SMTP実機疎通1通・**認証リンク先が`lite.smartlaboworks.com`であることを実測し、`app.smartlaboworks.com`＝旧製品ミライエβ版への誤誘導を未然に防止**)、WEB-SALES-4(Stripe決済・Webhook・契約状態管理)を実施。**WEB-SALES-4の要点**: ①active化の根拠を署名検証済みWebhookの支払い成功のみに限定（success_url到達は根拠にしない）②料金は14番/15番の実測で確定し金額・数量・Price IDをすべてサーバー側決定 ③`billing_cycle_anchor`=翌月1日0:00 JSTで初回日割り・以後毎月1日、日割り額はStripeのprorationに委ね自前計算しない ④contract_started_atはCOALESCEで初回支払い成功時のみ設定 ⑤`stripe_event_id`のUNIQUEによる冪等性（並行4件でも処理1回・順序逆転で上書きしない）⑥metadataだけで会社を信用せずDBのStripe IDと突合 ⑦契約4状態ごとの許可リストとactive前の利用者追加禁止 ⑧sk_live_はSTRIPE_LIVE_ENABLED無しで起動停止 ⑨公式SDKを採用せずfetch+node:cryptoで実装（依存を増やさないLiteの既存方針に合わせ、署名検証は改ざん・リプレイ・複数v1・鍵未設定まで検証）。記録=[docs/reviews/WEB_SALES_4_STRIPE_CONTRACTS.md](../docs/reviews/WEB_SALES_4_STRIPE_CONTRACTS.md)。テスト合計1077件成功・失敗0・skip1（実外部通信0件）。**判定: WEB-SALES-4S(Stripeテストモード実機E2E)はGo、本番公開はNo-Go継続（法務3点未整備・本番Webhook未登録・Price未作成・決済画面未実装）** |
+
+| **v8.0** | 2026-08-09 | Claude Code(代表指示による・WEB-SALES-4R/4S/5) | **Stripe決済の実機E2E完了と決済画面の実装（SmartLabo側は文書のみ。本番変更0）。** WEB-SALES-4RでManaged Payments既定有効へ対応しカード限定を維持、WEB-SALES-4Sでpayment_required→Checkout→テスト決済→署名付きWebhook→active→contract_started_at初回設定→seat制御維持を実機で実証（決済1回・初回請杒28,480円=初期設定費10,000円+日割り18,480円・再送しても契約開始日を上書きしない）。WEB-SALES-5で`/billing/complete`・`/billing/cancelled`を新設し、契約状況は`/settings`の既存セクションを拡張（候補の`/settings/billing`は既存ルーティング規則を優先し不採用）。記録=[docs/reviews/WEB_SALES_5_BILLING_UI.md](../docs/reviews/WEB_SALES_5_BILLING_UI.md)。テスト1186件成功・失敗0・skip1。**判定: WEB-SALES-5BはGo、本番公開はNo-Go継続（法務3点未整備・本番Webhook未登録・Customer Portal・契約人数変更・解約操作が未実装）** |
+
+| **v8.1** | 2026-08-09 | Claude Code(代表指示による・WEB-SALES-5B) | **契約状態に応じたナビゲーション・画面制御を実装（SmartLabo側は文書のみ。本番変更0）。** 支払い前の利用者にも業務メニューが並び、押すと402が返る状態を解消した。①業務メニューはactiveのときだけ表示 ②直接URLは許可リスト（`/`と`/settings`の完全一致）でご案内へ戻す（無限リダイレクトなし）③取得前・取得失敗をactive扱いにせずメニューも画面も出さない ④契約状態の問い合わせをContextの1か所へ集約 ⑤契約のご案内画面を新設（料金はサーバーのquoteをそのまま表示・一般利用者には管理者への確認を案内）⑥サーバー側を一点是正（知らない契約状態でログアウトすらできなかった問題を修正し、業務機能は閉じたまま出口だけ通す）。記録=[docs/reviews/WEB_SALES_5B_CONTRACT_GATING.md](../docs/reviews/WEB_SALES_5B_CONTRACT_GATING.md)。テスト**1277件**成功・失敗0・skip1（**旧記載の「1275」は集計誤りにつきv8.2で訂正**）。**判定: Customer Portal工程はGo、本番公開はNo-Go継続** |
+
+| **v8.2** | 2026-08-10 | Claude Code(代表指示による・WEB-SALES-5C) | **Stripe Customer Portal基盤を実装（SmartLabo側は文書のみ。本番変更0）。** 会社管理者が商談や当社への依頼なしにカード変更・請求書確認を行える入口を作った。①`POST /api/billing/portal-session`を新設（引継ぎ候補の`/api/contract/portal-session`は既存規則—contract=参照GET／billing=Stripe手続きPOST・会社管理者限定—を優先して不採用）②**許可＝カード変更・請求書履歴／禁止＝解約・プラン変更・契約人数変更・割引コード・返金**（Portalへ渡すと自社DBの`contract_status`/`license_count`とStripeが食い違うため）③★**Portal Configuration IDの明示を必須化** — アカウント既定設定に依存するとStripe管理画面で解約を有効にしただけでコード無変更のまま利用者へ表示されるため、コードだけでは無効を保証できないと判断しConfiguration ID方式を採用。未設定ならボタンは出ずAPIも503（既定へ落ちない）④対象は`active`/`past_due`の会社管理者・運営者のみで、判定はサーバーの1関数を契約状態API・契約ガード・サービス層の3層が共有 ⑤Customer IDはDBの自社の値のみ・ブラウザからCustomer/Configuration/return_urlを受け取らず・応答は`portalUrl`1つと`Cache-Control: no-store`・Stripeの生エラーとrequest IDを返さない ⑥return_urlはパス`/settings`完全一致で検証しオープンリダイレクトを作らない ⑦★**past_due→activeの復帰は署名付き`invoice.paid`のみ**（Portal作成・カード変更・`/settings`復帰では状態を変えない）。既存Webhookを調査し**不足なし**を確認したため状態遷移は無変更 ⑧画面は3連打でも要求1件・画面表示ではSession作成0・失敗時のみ再操作可 ⑨併せて決済導線の失敗理由が`StatusMessage`の子要素で渡され描画されない不具合（WEB-SALES-5から存在）を1か所是正。記録=[docs/reviews/WEB_SALES_5C_CUSTOMER_PORTAL.md](../docs/reviews/WEB_SALES_5C_CUSTOMER_PORTAL.md)。テスト1438件成功・失敗0・skip1（新規161件・既存の削除/skip追加/緩和0）。**なおWEB-SALES-5Bの「1275件」は集計誤り（修正前pass=1275/fail=2と修正後fail=0を混在）であり、着手前の全本再実行で1277件を実測し本版で訂正した。** **判定: WEB-SALES-5CS（Stripeテストモード実機確認）はGo、本番公開はNo-Go継続** |
+
+| **v8.3** | 2026-08-10 | Claude Code(代表指示による・WEB-SALES-6) | **顧客自身による解約（期間終了時解約）と課金操作のレート制限を実装（SmartLabo側は文書のみ。本番変更0）。** ①解約は**即時ではなく現在の請求期間の終了時**。予約後も期間終了まで通常利用でき、日割り返金・自動返金は行わず、期間終了前なら取り消せる ②`POST`/`DELETE /api/billing/cancellation-schedule` を新設し、**Stripeへ送るのは `cancel_at_period_end` ただ1つ**（即時解約・返金・Price・数量・按分に触れない。解約予定日はStripeが返した値が正本で自前計算しない）③★**canceled へ移すのは署名検証済みの `customer.subscription.deleted` だけ**。`subscription.updated` では解約予約と期間終了日時を記録するのみで契約状態は `active` のまま維持し、`status=active` を有効化の根拠にもしない ④`canceled_at` を初回のみ記録するよう更新式を是正（`COALESCE(canceled_at, ?)`）⑤migration 021 で `cancellation_scheduled_at` を**1列だけ**追加。予約の有無は日時のNULL判定で表して真偽値を二重に持たず、運営者の停止予定日である `contract_end_at`（`status='active'`で空へ戻される）は再利用しない ⑥課金4経路にサーバー側レート制限を追加。**既存 `login_attempts` を scope 分離で再利用**し新テーブルを作らず、キーは会社ID／会社ID＋利用者ID（IPは使わない）、会社10回・利用者5回・10分窓、429＋Retry-After。権限確認の後に置き、一般利用者の連打で管理者の枠を潰せない設計にした。時計を注入できるようにし、テストは待たずに窓明けを検証 ⑦画面は `/settings` の既存セクションへ追加（新URLなし）。押しただけでは実行せず、期間終了時解約・利用継続・返金なし・データ非削除・解約予定日を確認画面で明示。連打は1要求、反映確認は最大3回・2秒間隔で打ち切り ⑧契約状態の再取得のたびにレイアウトが画面を作り直し、手続き直後に設定画面が初期タブへ戻る不具合をブラウザ実測で検出し是正。記録=[docs/reviews/WEB_SALES_6_CANCELLATION.md](../docs/reviews/WEB_SALES_6_CANCELLATION.md)。テスト1645件成功・失敗0・skip1（新規206件・既存の削除/skip追加/緩和0・customer-portalは意味を保った1対1更新で161→162件）。**判定: WEB-SALES-6S（Stripeテストモードでの解約実機確認）はGo、本番公開はNo-Go継続（法務3点未整備・本番Webhook未登録・再契約/契約人数変更が未実装）** |
+
+*最終更新: 2026-08-10*
