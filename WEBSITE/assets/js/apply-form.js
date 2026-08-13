@@ -39,10 +39,11 @@
    * 本番APIの許可Originには公開サイトだけが登録されているため、
    * localhostから本番へ送ってもCORSで読めず、確認にならないため。
    */
+  var PROD_ENDPOINT = 'https://lite.smartlaboworks.com/api/public/signup';
   var isLocalPreview = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
   var endpoint = isLocalPreview
     ? '/api/public/signup'
-    : form.getAttribute('data-endpoint');
+    : (form.getAttribute('data-endpoint') || PROD_ENDPOINT);
 
   /* ------------------------------------------------ 入力チェックの定義 --
      サーバー側 validateApplication と同じ規則（キー名・上限・形式）。 */
@@ -58,10 +59,12 @@
     privacy: 'プライバシーポリシーへの同意'
   };
 
-  // 画面で使う上限。サーバー側の上限（SIGNUP_MAX_LICENSE_COUNT）はこれ以上の
-  // 値も受け得るが、フォームでは現実的な範囲に絞る。超過時はサーバーの
-  // メッセージをそのまま表示する。
-  var COUNT_MAX = 9999;
+  // 人数上限の正本は製品側の10,000
+  //（smartlabo-works-lite server/config.js SIGNUP_MAX_LICENSE_COUNT 既定値。
+  //  companyService.js の MAX_LICENSE=10000 とも一致）。
+  // 静的サイトからサーバー設定値は取得できないため同値をここへ持ち、
+  // 変更時は製品側と本ファイルと apply.html の max 属性を必ず揃える。
+  var COUNT_MAX = 10000;
 
   var EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var PHONE_PATTERN = /^[0-9+\-()\s]+$/;
@@ -218,6 +221,10 @@
   var GENERIC_FAIL = '送信できませんでした。時間をおいて再度お試しください。' +
     '解決しない場合は、お手数ですがお問い合わせフォームからご連絡ください。';
 
+  // 通信の待ち時間上限。超えたら中断して上の一般文言を出す（自動再送はしない）。
+  // 無期限に「送信しています…」のままにならないための守り。
+  var TIMEOUT_MS = 20000;
+
   /* ---------------------------------------------------------- 送信 -- */
 
   form.addEventListener('submit', function (e) {
@@ -232,13 +239,6 @@
     }
     clearErrors();
 
-    // 自動送信対策。人が入力しない欄が埋まっていたら、送信せず完了表示だけ返す
-    var honeypot = form.querySelector('[name="homepage"]');
-    if (honeypot && String(honeypot.value || '') !== '') {
-      showDone();
-      return;
-    }
-
     setSending(true);
     setStatus('busy', '送信しています…');
 
@@ -252,12 +252,18 @@
     var phone = val('phone');
     if (phone !== '') payload.phone = phone;
 
+    var controller = (typeof AbortController === 'function') ? new AbortController() : null;
+    var timeoutId = controller
+      ? setTimeout(function () { controller.abort(); }, TIMEOUT_MS)
+      : null;
+
     fetch(endpoint, {
       method: 'POST',
       // 許可ヘッダーは Content-Type のみ（製品側publicCorsの設定）。他は付けない
       headers: { 'Content-Type': 'application/json' },
       credentials: 'omit',
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller ? controller.signal : undefined
     })
       .then(function (res) {
         return res.json()
@@ -278,10 +284,11 @@
         setStatus('error', GENERIC_FAIL);
       })
       .catch(function () {
-        // 通信失敗。詳細はコンソールにも出さない（自動再送もしない）
+        // 通信失敗・タイムアウト。詳細はコンソールにも出さない（自動再送もしない）
         setStatus('error', GENERIC_FAIL);
       })
       .then(function () {
+        if (timeoutId) clearTimeout(timeoutId);
         setSending(false);
       });
   });

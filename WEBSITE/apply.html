@@ -225,8 +225,10 @@
           <label class="field__label" for="a-count">
             ご利用予定人数 <span class="field__req" aria-hidden="true">*</span>
           </label>
+          <!-- maxの正本は製品config.js SIGNUP_MAX_LICENSE_COUNT既定値=10000。
+               変更時は apply-form.js のCOUNT_MAXと必ず揃える -->
           <input class="field__input" type="number" id="a-count" name="licenseCount"
-                 min="1" max="9999" step="1" value="1" required inputmode="numeric"
+                 min="1" max="10000" step="1" value="1" required inputmode="numeric"
                  aria-describedby="a-count-hint a-count-error" aria-required="true">
           <p class="field__hint" id="a-count-hint">
             管理者を含む人数です。<span id="quoteLine">1名の場合の月額は 20,000円（税別）です。</span>
@@ -234,11 +236,9 @@
           <p class="field__error" id="a-count-error" data-error-for="licenseCount"></p>
         </div>
 
-        <!-- 自動送信対策（画面には表示しない。人は入力しない欄） -->
-        <div class="field" hidden aria-hidden="true">
-          <label for="a-homepage">ホームページ</label>
-          <input type="text" id="a-homepage" name="homepage" tabindex="-1" autocomplete="off">
-        </div>
+        <!-- 自動送信対策はAPI側のレート制限が正本（WEB-SALES-12レビューでhoneypotを撤去。
+             ブラウザの自動入力が隠し欄を埋めた場合に、送信していないのに完了表示を
+             出してしまう危険があるため） -->
 
         <!-- Websiteのプライバシーポリシーへの同意（事前選択なし） -->
         <div class="field field--check">

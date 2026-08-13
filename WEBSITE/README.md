@@ -37,9 +37,14 @@ Smart Labo Works の唯一の正式コードベースは、別リポジトリ
 - 送信先: Lite本体の公開申込API `POST https://lite.smartlaboworks.com/api/public/signup`（JSON専用）
 - フィールドは製品側 `signupService.validateApplication` と完全一致:
   `companyName`(必須≤100) / `representativeName`(必須≤50) / `email`(必須≤254) /
-  `phone`(任意≤30) / `licenseCount`(必須・整数1以上)
-- Websiteのプライバシーポリシー同意チェック（事前選択なし・API送信対象外）と
-  honeypot・二重送信防止・自動再送なし。カード情報はこのフォームでは扱わない
+  `phone`(任意≤30) / `licenseCount`(必須・整数1〜10,000)
+  ※人数上限の正本は製品 `config.js SIGNUP_MAX_LICENSE_COUNT` 既定値10,000
+  （`companyService.js MAX_LICENSE=10000` と同値）。変更時はWebsite側
+  （apply-form.jsのCOUNT_MAX・apply.htmlのmax属性）も必ず揃える
+- Websiteのプライバシーポリシー同意チェック（事前選択なし・API送信対象外）・
+  二重送信防止・通信タイムアウト20秒・自動再送なし。カード情報はこのフォームでは
+  扱わない。honeypotは統合前レビューで撤去（自動入力が隠し欄を埋めた際に
+  偽の完了表示を出す危険があるため。bot対策はAPI側レート制限が正本）
 - 実装: `assets/js/apply-form.js`（CORS許可ヘッダーはContent-Typeのみのため
   X-Requested-With等は付けない）。旧SALES-1の `assets/js/signup.js`
   （PHP API前提・パスワードをWebsiteで収集する廃止済み設計）は削除

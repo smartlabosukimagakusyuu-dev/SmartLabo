@@ -1,5 +1,16 @@
 # WEB-SALES-12 Websiteセルフ申込フォーム実装（実行前監査）
 
+> **統合前レビュー反映（2026-08-13・2nd commit）**
+> - licenseCount上限をAPI正本と完全一致の**10,000**へ修正（正本=製品config.js
+>   `SIGNUP_MAX_LICENSE_COUNT`既定値10,000。`companyService.js MAX_LICENSE=10000`とも一致。
+>   .env.exampleもコメントアウト=既定適用。本番.envでの上書き有無は値非表示の
+>   1行確認コマンドを完了報告に記載）
+> - honeypotを撤去（ブラウザ自動入力が隠し欄を埋めると「送信していないのに
+>   認証メール送信済み」と表示する危険。bot対策はAPI側レート制限が正本）
+> - 通信タイムアウト20秒を追加（無期限の送信中状態を防止。中断時は一般文言・
+>   自動再送なし）
+> - endpoint未設定時の本番URLフォールバック定数を追加
+
 - 日付: 2026-08-13
 - branch: `feature/web-sales-12-public-signup-form`（master未統合・GitHub Pages未公開）
 - 製品repo: `smartlabo-works-lite` master `6077f234b5eafd096317b54c5bcfd64afe34c141`（読み取りのみ・変更なし）
