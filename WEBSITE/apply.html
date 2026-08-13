@@ -113,7 +113,7 @@
       <div class="page-hero__inner">
         <h1 class="page-hero__title">Smart Labo Works<br>お申し込み</h1>
         <p class="page-hero__lead">
-          会社情報の入力から利用開始まで、オンラインで完結できる申し込み方法をご用意する予定です。
+          会社情報の入力から利用開始まで、オンラインで完結できます。
           ご相談してから決めたい場合は、無料相談からお進みください。
         </p>
         <p class="page-hero__meta">
@@ -124,27 +124,167 @@
     </div>
   </section>
 
-  <!-- ====================== 2. 申込機能の公開状態（差し替え箇所） ======================
-       ★ここが第8節でいう「公開時期に合わせて変えられる構造」の実体。
-         セルフ申し込みを公開する際は、このセクションの中身だけを
-         正式な申込画面への導線へ差し替える。他のセクションは変更不要。
-         「受付完了」「申し込み可能」など、実装済みに見える表現は使わないこと。
+  <!-- ====================== 2. 申込フォーム（WEB-SALES-12で公開） ======================
+       ・送信先は Lite 本体の公開申込API（POST /api/public/signup）。
+         フィールド名・文字数・人数の規則は製品側 signupService.validateApplication と
+         完全に一致させること（勝手に増減しない）。
+       ・このフォームの送信では契約は成立しない（メール認証→契約前確認→同意→
+         Stripe決済がすべて完了してはじめて契約成立。利用規約第2条）。
+       ・カード情報はStripeの画面で直接入力する。当フォームでは扱わない。
+       ・法務3文書の本文・所在地・電話番号はLite側の契約前確認画面で表示する。
+         このページへ複製しない（WEB-SALES-8Lの方針を維持）。
        ================================================================================ -->
   <section class="section" id="status">
     <div class="container container--narrow">
-      <div class="apply-status reveal">
-        <p class="apply-status__tag">オンライン申し込みの公開状態</p>
-        <h2 class="apply-status__title">オンライン申し込みは現在準備中です。</h2>
+      <div class="section__head reveal">
+        <p class="eyebrow">オンラインお申し込み</p>
+        <h2 class="section__title">お申し込みフォーム</h2>
+        <p class="section__lead">
+          Smart Labo Works ライトのお申し込みを受け付けています。
+          初期設定費 10,000円、月額基本料金 20,000円（管理者1名分を含む）、追加アカウント
+          1名につき月額3,000円。表示価格はすべて税別で、消費税等（税率10％）を加えてご請求します。
+          お支払いはクレジットカードのみ、無料体験・最低利用期間はありません。
+        </p>
+      </div>
+
+      <div class="apply-status reveal" id="applyNotice">
+        <p class="apply-status__tag">お申し込みの前に</p>
         <p class="apply-status__body">
-          下記の申し込みの流れ・料金・課金ルールは、いずれも正式に決定した内容です。
-          オンラインで申し込みを受け付ける画面のみ、現在準備を進めています。
-          先行してのご案内をご希望の方は、無料相談からお問い合わせください。
-          お申し込みの準備が整いましたら、あらためてご連絡いたします。
+          このフォームの送信では、契約の成立やお支払いは発生しません。送信後は
+          ①ご入力のメールアドレスへ届く認証メールのリンクからパスワードを設定 →
+          ②ログインして契約前の最終確認画面で料金・利用規約・プライバシーポリシー・
+          特定商取引法に基づく表記（会社所在地・電話番号・受付時間を含む）の全文を確認し、
+          3項目へ同意 → ③Stripeの決済画面でクレジットカードをご入力、の順に進みます。
+          3項目へ同意しない限りお支払い画面へは進みません。
+          クレジットカード情報はStripeの画面で直接ご入力いただくため、当フォームでは入力しません。
+          初回のお支払いは「初期設定費＋お申し込み日から月末までの基本料金の日割り」、
+          翌月以降は毎月1日に当月分をご請求します。
         </p>
-        <p class="apply-status__actions">
-          <a href="contact.html?type=consult#form" class="btn btn--primary btn--lg">無料相談する</a>
-          <a href="pricing.html" class="btn btn--secondary btn--lg">料金を見る</a>
+      </div>
+
+      <form class="cform reveal"
+            id="applyForm"
+            data-endpoint="https://lite.smartlaboworks.com/api/public/signup"
+            novalidate>
+
+        <p class="cform__required-note">
+          <span class="cform__req" aria-hidden="true">*</span> は必須項目です。
         </p>
+
+        <!-- 送信結果の通知。読み上げにも伝わるようにする -->
+        <p class="cform__status" id="formStatus" role="status" aria-live="polite"></p>
+
+        <!-- 会社名 -->
+        <div class="field">
+          <label class="field__label" for="a-company">
+            会社名 <span class="field__req" aria-hidden="true">*</span>
+          </label>
+          <input class="field__input" type="text" id="a-company" name="companyName"
+                 maxlength="100" autocomplete="organization" required
+                 aria-describedby="a-company-error" aria-required="true">
+          <p class="field__error" id="a-company-error" data-error-for="companyName"></p>
+        </div>
+
+        <!-- ご担当者名 -->
+        <div class="field">
+          <label class="field__label" for="a-name">
+            ご担当者名 <span class="field__req" aria-hidden="true">*</span>
+          </label>
+          <input class="field__input" type="text" id="a-name" name="representativeName"
+                 maxlength="50" autocomplete="name" required
+                 aria-describedby="a-name-hint a-name-error" aria-required="true">
+          <p class="field__hint" id="a-name-hint">この方が最初の管理者アカウントになります。</p>
+          <p class="field__error" id="a-name-error" data-error-for="representativeName"></p>
+        </div>
+
+        <!-- メールアドレス -->
+        <div class="field">
+          <label class="field__label" for="a-email">
+            メールアドレス <span class="field__req" aria-hidden="true">*</span>
+          </label>
+          <input class="field__input" type="email" id="a-email" name="email"
+                 maxlength="254" autocomplete="email" required inputmode="email"
+                 aria-describedby="a-email-hint a-email-error" aria-required="true">
+          <p class="field__hint" id="a-email-hint">初期登録のご案内（認証メール）をお送りします。受信できるアドレスをご入力ください。</p>
+          <p class="field__error" id="a-email-error" data-error-for="email"></p>
+        </div>
+
+        <!-- 電話番号（任意） -->
+        <div class="field">
+          <label class="field__label" for="a-phone">
+            電話番号 <span class="field__optional">任意</span>
+          </label>
+          <input class="field__input" type="tel" id="a-phone" name="phone"
+                 maxlength="30" autocomplete="tel" inputmode="tel"
+                 aria-describedby="a-phone-error">
+          <p class="field__error" id="a-phone-error" data-error-for="phone"></p>
+        </div>
+
+        <!-- ご利用予定人数 -->
+        <div class="field">
+          <label class="field__label" for="a-count">
+            ご利用予定人数 <span class="field__req" aria-hidden="true">*</span>
+          </label>
+          <input class="field__input" type="number" id="a-count" name="licenseCount"
+                 min="1" max="9999" step="1" value="1" required inputmode="numeric"
+                 aria-describedby="a-count-hint a-count-error" aria-required="true">
+          <p class="field__hint" id="a-count-hint">
+            管理者を含む人数です。<span id="quoteLine">1名の場合の月額は 20,000円（税別）です。</span>
+          </p>
+          <p class="field__error" id="a-count-error" data-error-for="licenseCount"></p>
+        </div>
+
+        <!-- 自動送信対策（画面には表示しない。人は入力しない欄） -->
+        <div class="field" hidden aria-hidden="true">
+          <label for="a-homepage">ホームページ</label>
+          <input type="text" id="a-homepage" name="homepage" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- Websiteのプライバシーポリシーへの同意（事前選択なし） -->
+        <div class="field field--check">
+          <input class="field__checkbox" type="checkbox" id="a-privacy" name="privacy" value="1"
+                 required aria-describedby="a-privacy-error">
+          <label class="field__check-label" for="a-privacy">
+            <a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意します
+            <span class="field__req" aria-hidden="true">*</span>
+            <span class="visually-hidden">必須</span>
+          </label>
+          <p class="field__error" id="a-privacy-error" data-error-for="privacy"></p>
+        </div>
+
+        <p class="cform__actions">
+          <button type="submit" class="btn btn--primary btn--lg" id="formSubmit">
+            申し込む（この時点では請求されません）
+          </button>
+        </p>
+      </form>
+
+      <noscript>
+        <div class="apply-status">
+          <p class="apply-status__body">
+            お申し込みフォームのご利用にはJavaScriptを有効にしてください。
+            有効にできない場合は、<a href="contact.html?type=consult#form">無料相談</a>からお申し込みの旨をお知らせください。
+          </p>
+        </div>
+      </noscript>
+
+      <!-- 申込完了の案内（送信成功時のみ表示する） -->
+      <div class="apply-status reveal" id="applyDone" hidden tabindex="-1">
+        <p class="apply-status__tag">お申し込みを受け付けました</p>
+        <h2 class="apply-status__title">認証メールをご確認ください。</h2>
+        <p class="apply-status__body">
+          ご入力のメールアドレス宛に、初期登録のご案内（認証メール）をお送りしました。
+          次の点をご確認のうえ、お手続きをお進めください。
+        </p>
+        <ul class="apply-status__body">
+          <li>受信箱に届いていない場合は、迷惑メールフォルダもご確認ください。</li>
+          <li>認証リンクの有効期限は送信から24時間です。期限が切れた場合は、お手数ですがもう一度お申し込みください。</li>
+          <li>メール内のリンクからパスワードを設定すると、管理者アカウントが作成されます。</li>
+          <li>ログイン後、契約前の最終確認画面で料金と利用規約・プライバシーポリシー・特定商取引法に基づく表記をご確認のうえ、3項目へ同意してください。</li>
+          <li>同意後、Stripeの決済画面でクレジットカードによるお支払いへ進みます。</li>
+          <li>同じお申し込みを何度も送信しないでください（メールが届くまで数分かかる場合があります）。</li>
+          <li>しばらく待ってもメールが届かない場合は、<a href="contact.html">お問い合わせ</a>からご連絡ください。</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -156,7 +296,7 @@
         <p class="eyebrow">申し込みの流れ</p>
         <h2 class="section__title">申し込みから利用開始まで。</h2>
         <p class="section__lead">
-          オンラインでのお申し込みでは、次の順に進んでいただく予定です。
+          オンラインでのお申し込みでは、次の順に進みます。
         </p>
       </div>
 
@@ -164,6 +304,7 @@
         <li class="step">
           <span class="step__num" aria-hidden="true">1</span>
           <h3 class="step__title">会社情報</h3>
+          <!-- 文言は上の申込フォーム公開に合わせWEB-SALES-12で「予定」を外している -->
           <p class="step__note">会社名・ご担当者・ご連絡先を入力します。</p>
         </li>
         <li class="step">
@@ -355,11 +496,11 @@
         <div class="card">
           <h3 class="h-3">今すぐ申し込む</h3>
           <p>
-            内容が決まっている場合は、オンラインで会社情報の入力からお支払いまで進めていただける方法をご用意する予定です。
-            現在は準備中のため、先行してのご案内をご希望の方は無料相談からお知らせください。
+            内容が決まっている場合は、このページのお申し込みフォームから、
+            会社情報の入力・メール認証・規約同意・お支払いまでオンラインで進めます。
           </p>
           <p>
-            <a href="contact.html?type=consult#form" class="btn btn--secondary">先行案内を希望する</a>
+            <a href="#status" class="btn btn--secondary">お申し込みフォームへ</a>
           </p>
         </div>
 
@@ -503,5 +644,6 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script src="assets/js/apply-form.js"></script>
 </body>
 </html>

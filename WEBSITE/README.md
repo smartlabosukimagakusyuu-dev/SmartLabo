@@ -29,6 +29,25 @@ Smart Labo Works の唯一の正式コードベースは、別リポジトリ
 
 ---
 
+## セルフ申込フォーム(2026-08-13 / WEB-SALES-12・feature branch・未公開)
+
+`apply.html` の「オンライン申し込みは現在準備中です」を、正式な申込フォームへ
+差し替えました（branch: `feature/web-sales-12-public-signup-form`。master未統合・未公開）。
+
+- 送信先: Lite本体の公開申込API `POST https://lite.smartlaboworks.com/api/public/signup`（JSON専用）
+- フィールドは製品側 `signupService.validateApplication` と完全一致:
+  `companyName`(必須≤100) / `representativeName`(必須≤50) / `email`(必須≤254) /
+  `phone`(任意≤30) / `licenseCount`(必須・整数1以上)
+- Websiteのプライバシーポリシー同意チェック（事前選択なし・API送信対象外）と
+  honeypot・二重送信防止・自動再送なし。カード情報はこのフォームでは扱わない
+- 実装: `assets/js/apply-form.js`（CORS許可ヘッダーはContent-Typeのみのため
+  X-Requested-With等は付けない）。旧SALES-1の `assets/js/signup.js`
+  （PHP API前提・パスワードをWebsiteで収集する廃止済み設計）は削除
+- 試験・監査の記録: `docs/reviews/WEB_SALES_12_PUBLIC_SIGNUP_FORM.md`
+  （販売開始状態と初回実顧客の監視手順も同文書に記載）
+
+---
+
 ## 公開状況(2026-07-16時点)
 
 **Homepage Version: v1.0.0（正式公開版）** — 2026-07-16、「銀行口座開設・融資申込・会社実態の公開」を目的としたCEO最終公開指示により、現状実装をそのまま正式公開版として確定しました。
