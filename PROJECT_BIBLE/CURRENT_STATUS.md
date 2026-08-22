@@ -26,6 +26,32 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 
 ---
 
+## Webサイト刷新 P32-2 Phase 0（2026-08-22 CEO承認、SmartLabo repo `docs/website/` 限定）
+
+**Phase 0（監査・実装差分確定）を正式完了した。現行Webコードは1行も変更していない。**
+
+| 項目 | 内容 |
+|---|---|
+| 正式Webリポジトリ | **本リポジトリ `SmartLabo`**（`WEBSITE/` を GitHub Pages が配信） |
+| 作業ブランチ | **`feature/website-renewal`**（master直コミット禁止・**本番承認までmasterへpushしない**） |
+| 現行Webコード変更 | **0**（`WEBSITE/` `contact-api/` `signup-api/` `.github/workflows/` すべて未変更） |
+| 本番変更 | **0**（公開サイトはGET確認のみ。POST・フォーム送信・DNS変更なし） |
+| Works | **維持**（`/` `features.html` `pricing.html` `apply.html` `company-brain.html` のURL・価格・申込機能を保護。Salonへ置換しない） |
+| 問い合わせtype | **変更0**（既存6種のみ：デモ=`demo`／各種相談=`consult`／資料請求=`docs`） |
+| GTM・GA4 | **再導入しない**。`privacy.html` の「現在使用していない」表示を維持。再導入は法務・Cookie同意要件を確認する**独立した将来工程** |
+| HP制作価格SSOT | **確定**：店舗ホームページ制作 **50,000円〜（税別）**／管理・保守 **月額5,000円〜（税別）**（`docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md`・STATUS APPROVED / VERSION 1） |
+| Salon掲載の上位SSOT | **Salonリポジトリの営業・商品SSOT**（`SALON_SALES_TERMS_SUMMARY_V1.md` / `SALON_PRICE_PLAN_v1.md`）。未提供機能を現在形で掲載しない |
+| Salon Standard 19,800円 | **掲載判断待ち＝公開しない**（創業メンバー14,800円との機能差・販売条件が未明文） |
+| 次工程 | **Phase 1（情報設計・共通基盤）**。★**Phase 1へは自動で進んでいない** |
+
+監査記録：`docs/website/SMART_LABO_WEBSITE_P32_2_PHASE0_AUDIT_AND_IMPLEMENTATION_PLAN.md`
+構想SSOT：`docs/website/SMART_LABO_WEBSITE_RENEWAL_SPEC_20260822.md`
+
+★`docs/**` の変更は `pages.yml` の `paths`（`WEBSITE/**` と `.github/workflows/pages.yml`）に
+含まれないため、**GitHub Pages のデプロイは発火しない**。
+
+---
+
 ## ステータス一覧
 
 | 項目 | 値 |
