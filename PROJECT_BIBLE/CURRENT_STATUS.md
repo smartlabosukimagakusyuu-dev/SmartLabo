@@ -26,6 +26,27 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 
 ---
 
+## Webサイト刷新 P32-3 Phase 1A（2026-08-22・会社TOPのローカルプロトタイプ）
+
+**会社TOP（`WEBSITE/index.html`）を刷新し、ローカルで閲覧できる状態にした。本番未反映。**
+
+| 項目 | 内容 |
+|---|---|
+| 作業ブランチ | `feature/website-renewal`（**master未変更・master未push**） |
+| 本番反映 | **なし**（GitHub Pagesは master の `WEBSITE/**` でのみ発火。本ブランチはデプロイされない） |
+| 実装 | 会社TOP 14セクション（ファーストビュー／価値3点／Salon／課題／導入前後／スマホ30秒入力／HP制作／再来店の循環／Works／AI導入・業務自動化／思想／導入の流れ／会社／最終CTA）＋新ヘッダー・フッター |
+| 新規CSS | `WEBSITE/assets/css/renewal.css`（`sl-` prefix・`.sl-page` スコープ。`tokens.css` 等の共有CSSは未変更） |
+| JavaScript | **新規追加なし**（既存 `assets/js/main.js` のモバイルメニュー等を再利用） |
+| 商品UI | 画像ではなくHTML/CSSで構成。「画面イメージ」と明示。実顧客データなし（架空名のみ） |
+| 掲載価格 | 店舗HP制作 50,000円〜（税別）／管理・保守 月額5,000円〜（税別）のみ。**Salon月額・Standard・Works価格はTOPに再掲していない** |
+| 暫定リンク | Salon LP・3分デモ・HP制作ページは未作成のため、CTAは `contact.html?type=demo` / `?type=consult` へ接続。「3分デモは現在準備中です」と明示 |
+| 未作成ページ | `/salon/`・`/salon/demo/`・`/website/salon/`（Phase 1B以降） |
+| 既存ページ | **変更0**（`features` `pricing` `apply` `company` `contact` `company-brain` `privacy` `terms` `product` `real-estate` `404` `robots` `sitemap` `CNAME` `contact-api` `signup-api` `pages.yml`） |
+| 状態 | **代表デザイン確認待ち**。細部調整は Salon LP・HP制作ページ・3分デモが揃ってから |
+| 次工程 | Phase 1B 以降。★**自動で進んでいない** |
+
+---
+
 ## Webサイト刷新 P32-2 Phase 0（2026-08-22 CEO承認、SmartLabo repo `docs/website/` 限定）
 
 **Phase 0（監査・実装差分確定）を正式完了した。現行Webコードは1行も変更していない。**

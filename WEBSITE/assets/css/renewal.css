@@ -1,0 +1,392 @@
+/* ==========================================================================
+   Smart Labo — Website 刷新 / renewal.css（P32-3 Phase 1A）
+   --------------------------------------------------------------------------
+   使いどころ:
+     会社TOP（index.html）でのみ読み込む。既存12ページのCSSには手を入れない。
+
+   ルール:
+     1. すべてのクラスに `sl-` prefix を付ける（既存 .btn / .container 等とは衝突させない）。
+     2. 既存の汎用クラス（.btn, .container, .section 等）を**上書きしない**。
+     3. 新しい色は tokens.css へ追加せず、このファイル内の `.sl-page` スコープに閉じる
+        （tokens.css には「新しいブランドカラーをここで発明しない」というルールがあるため）。
+     4. 外部フォント・外部CDN・依存を追加しない。フォントは既存 --font-sans を使う。
+     5. アニメーションは最小限。スクロール連動演出・カウントアップは入れない。
+   ========================================================================== */
+
+.sl-page {
+  /* Salon補助色（会社TOPが美容室サイトに見えないよう、背景と小さなアクセントに限定） */
+  --sl-ivory:   #FCFAF7;
+  --sl-greige:  #F4F1ED;
+  --sl-sage:    #B8C9C0;
+  --sl-beige:   #D8C6B8;
+  --sl-sage-dk: #4F7A68;
+
+  /* 既存トークンの別名（このファイル内でのみ使用） */
+  --sl-blue:      var(--c-blue);
+  --sl-blue-dk:   #153E75;
+  --sl-cyan:      #38BDF8;
+  --sl-blue-pale: #EFF6FF;
+  --sl-navy:      #172033;
+  --sl-gray:      #64748B;
+
+  --sl-radius:    14px;
+  --sl-radius-sm: 10px;
+  --sl-shadow:    0 1px 2px rgba(23, 32, 51, .06), 0 8px 24px rgba(23, 32, 51, .08);
+  --sl-shadow-sm: 0 1px 2px rgba(23, 32, 51, .06), 0 3px 10px rgba(23, 32, 51, .06);
+}
+
+/* ------------------------------------------------------------------ 共通 -- */
+
+.sl-section { padding: 72px 0; }
+.sl-section--tight { padding: 56px 0; }
+.sl-section--ivory { background: var(--sl-ivory); }
+.sl-section--greige { background: var(--sl-greige); }
+.sl-section--pale { background: var(--sl-blue-pale); }
+.sl-section--navy { background: var(--sl-navy); color: #fff; }
+
+.sl-eyebrow {
+  display: inline-block;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--sl-blue);
+  background: var(--sl-blue-pale);
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin: 0 0 14px;
+}
+.sl-section--navy .sl-eyebrow { color: #cfe0ff; background: rgba(255, 255, 255, .1); }
+
+.sl-h2 {
+  font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: .01em;
+  margin: 0 0 14px;
+}
+.sl-lead {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  margin: 0 0 28px;
+  max-width: 62ch;
+}
+.sl-section--navy .sl-lead { color: #c7d2e6; }
+
+.sl-note {
+  font-size: .82rem;
+  line-height: 1.8;
+  color: var(--sl-gray);
+  margin: 10px 0 0;
+}
+
+.sl-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.sl-actions .btn { min-height: 46px; }
+
+/* ------------------------------------------------------- ファーストビュー -- */
+
+.sl-hero {
+  background:
+    radial-gradient(1100px 460px at 82% -8%, rgba(56, 189, 248, .14), transparent 60%),
+    linear-gradient(180deg, var(--sl-blue-pale) 0%, #fff 78%);
+  padding: 56px 0 64px;
+  overflow: hidden;
+}
+.sl-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  gap: 44px;
+  align-items: center;
+}
+.sl-hero__title {
+  font-size: clamp(1.85rem, 1.1rem + 3vw, 3rem);
+  font-weight: 800;
+  line-height: 1.32;
+  letter-spacing: .01em;
+  margin: 0 0 18px;
+  color: var(--sl-navy);
+}
+.sl-hero__sub {
+  font-size: 1rem;
+  line-height: 1.95;
+  color: var(--text-secondary);
+  margin: 0 0 26px;
+  max-width: 46ch;
+}
+.sl-hero__links { margin-top: 14px; }
+.sl-hero__links a { font-size: .9rem; font-weight: 600; }
+
+/* ---------------------------------------------------------- 商品UIイメージ -- */
+
+.sl-ui { position: relative; padding-bottom: 34px; }
+
+.sl-ui__caption {
+  position: absolute;
+  top: 10px; right: 12px;
+  z-index: 3;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: #fff;
+  background: rgba(23, 32, 51, .72);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.sl-ui__app {
+  background: #fff;
+  border: 1px solid #e6ebf3;
+  border-radius: var(--sl-radius);
+  box-shadow: var(--sl-shadow);
+  overflow: hidden;
+}
+.sl-ui__bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px;
+  background: #f7f9fc;
+  border-bottom: 1px solid #eef2f8;
+}
+.sl-ui__dot { width: 8px; height: 8px; border-radius: 50%; background: #d8e0ec; }
+.sl-ui__barlabel { margin-left: 6px; font-size: .74rem; font-weight: 700; color: var(--sl-gray); }
+
+.sl-ui__body { padding: 16px 16px 20px; }
+.sl-ui__h { font-size: .95rem; font-weight: 800; margin: 0 0 12px; color: var(--sl-navy); }
+
+.sl-ui__list { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+.sl-ui__row {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #eef2f8;
+  border-radius: var(--sl-radius-sm);
+  background: #fff;
+}
+.sl-ui__time { font-size: .8rem; font-weight: 800; color: var(--sl-blue); }
+.sl-ui__name { font-size: .86rem; font-weight: 700; color: var(--sl-navy); }
+.sl-ui__meta { font-size: .74rem; color: var(--sl-gray); margin-top: 2px; }
+.sl-ui__tag {
+  font-size: .68rem; font-weight: 700; white-space: nowrap;
+  color: var(--sl-sage-dk); background: #eef4f1;
+  border-radius: 999px; padding: 3px 9px;
+}
+
+.sl-ui__panel {
+  border: 1px solid #dbe7ff;
+  background: var(--sl-blue-pale);
+  border-radius: var(--sl-radius-sm);
+  padding: 12px 14px;
+}
+.sl-ui__panel h3 { font-size: .8rem; font-weight: 800; color: var(--sl-blue-dk); margin: 0 0 8px; }
+.sl-ui__points { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sl-ui__points li { font-size: .8rem; line-height: 1.7; color: #24405f; padding-left: 14px; position: relative; }
+.sl-ui__points li::before {
+  content: ""; position: absolute; left: 0; top: .55em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--sl-cyan);
+}
+
+/* スマホ枠（PCでは管理画面へ重ねる／狭い幅では縦に並べる） */
+.sl-ui__phone {
+  width: 208px;
+  background: #fff;
+  border: 1px solid #e6ebf3;
+  border-radius: 20px;
+  box-shadow: var(--sl-shadow);
+  padding: 14px 13px 16px;
+  position: absolute;
+  right: -8px;
+  bottom: 0;
+  z-index: 2;
+}
+.sl-ui__phone h3 { font-size: .78rem; font-weight: 800; color: var(--sl-navy); margin: 0 0 8px; }
+.sl-ui__memo {
+  border: 1px solid #eef2f8;
+  border-radius: 8px;
+  background: #fbfcfe;
+  padding: 9px 10px;
+  font-size: .74rem;
+  line-height: 1.75;
+  color: #3b4a61;
+  margin: 0 0 10px;
+}
+.sl-ui__memo span { display: block; }
+.sl-ui__fakebtn {
+  display: block;
+  text-align: center;
+  font-size: .76rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--sl-blue);
+  border-radius: 8px;
+  padding: 9px 8px;
+}
+.sl-ui__hint { font-size: .68rem; color: var(--sl-gray); margin: 8px 0 0; line-height: 1.6; }
+
+/* --------------------------------------------------------------- 価値3点 -- */
+
+.sl-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.sl-card {
+  background: #fff;
+  border: 1px solid #e8edf5;
+  border-radius: var(--sl-radius);
+  padding: 22px 20px;
+  box-shadow: var(--sl-shadow-sm);
+}
+.sl-card__num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 8px;
+  font-size: .8rem; font-weight: 800;
+  color: var(--sl-blue); background: var(--sl-blue-pale);
+  margin-bottom: 12px;
+}
+.sl-card__title { font-size: 1.02rem; font-weight: 800; margin: 0 0 8px; color: var(--sl-navy); }
+.sl-card__text { font-size: .88rem; line-height: 1.85; color: var(--text-secondary); margin: 0; }
+
+/* ------------------------------------------------------------------ 流れ -- */
+
+.sl-flow { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.sl-flow li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: .86rem; font-weight: 700; color: var(--sl-navy);
+  background: #fff; border: 1px solid #e5ebf4;
+  border-radius: 999px; padding: 9px 16px;
+}
+.sl-flow li::after { content: "→"; color: var(--sl-blue); font-weight: 800; }
+.sl-flow li:last-child::after { content: ""; }
+
+/* ---------------------------------------------------------------- 2カラム -- */
+
+.sl-2col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.sl-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.sl-list li {
+  position: relative;
+  padding-left: 26px;
+  font-size: .92rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+}
+.sl-list li::before {
+  content: "";
+  position: absolute; left: 6px; top: .72em;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--sl-beige);
+}
+.sl-list--check li::before { background: var(--sl-sage-dk); }
+
+.sl-ba__head {
+  display: inline-block;
+  font-size: .76rem; font-weight: 800; letter-spacing: .06em;
+  border-radius: 999px; padding: 4px 12px; margin-bottom: 12px;
+}
+.sl-ba--before .sl-ba__head { color: #7a6a5c; background: #efe7df; }
+.sl-ba--after  .sl-ba__head { color: #fff;    background: var(--sl-sage-dk); }
+
+/* ------------------------------------------------------------------ 価格 -- */
+
+.sl-price {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  margin: 6px 0 4px;
+}
+.sl-price__num { font-size: 2rem; font-weight: 800; color: var(--sl-navy); letter-spacing: .01em; }
+.sl-price__unit { font-size: .95rem; font-weight: 700; color: var(--sl-navy); }
+.sl-price__tax { font-size: .8rem; font-weight: 600; color: var(--sl-gray); }
+
+/* ------------------------------------------------------------------ 循環 -- */
+
+.sl-loop { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.sl-loop li {
+  border: 1px solid #e5ebf4; background: #fff;
+  border-radius: var(--sl-radius-sm);
+  padding: 14px 12px;
+  font-size: .84rem; font-weight: 700; color: var(--sl-navy);
+  text-align: center;
+}
+.sl-loop li span { display: block; font-size: .7rem; font-weight: 700; color: var(--sl-blue); margin-bottom: 6px; }
+
+/* ------------------------------------------------------------- ステップ -- */
+
+.sl-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); counter-reset: slstep; }
+.sl-steps li {
+  border: 1px solid #e5ebf4; background: #fff; border-radius: var(--sl-radius-sm);
+  padding: 16px 16px 16px 52px; position: relative;
+  font-size: .9rem; line-height: 1.8; color: var(--sl-navy); font-weight: 700;
+}
+.sl-steps li::before {
+  counter-increment: slstep;
+  content: counter(slstep);
+  position: absolute; left: 16px; top: 15px;
+  width: 24px; height: 24px; border-radius: 7px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .76rem; font-weight: 800;
+  color: #fff; background: var(--sl-blue);
+}
+
+/* -------------------------------------------------------------- 最終CTA -- */
+
+.sl-final { text-align: center; }
+.sl-final .sl-h2 { color: #fff; }
+.sl-final .sl-lead { margin-left: auto; margin-right: auto; }
+.sl-final .sl-actions { justify-content: center; }
+
+/* --------------------------------------------------------- レスポンシブ -- */
+
+@media (max-width: 1080px) {
+  .sl-loop { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 960px) {
+  .sl-hero__inner { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .sl-values { grid-template-columns: minmax(0, 1fr); }
+  .sl-2col { grid-template-columns: minmax(0, 1fr); }
+  .sl-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* PCの単純縮小にしない：スマホ枠は重ねず、管理画面の下へ通常配置する */
+  .sl-ui { padding-bottom: 0; }
+  .sl-ui__phone {
+    position: static;
+    width: 100%;
+    max-width: 320px;
+    margin: 14px auto 0;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sl-section { padding: 52px 0; }
+  .sl-section--tight { padding: 40px 0; }
+  .sl-hero { padding: 40px 0 48px; }
+  .sl-loop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sl-steps { grid-template-columns: minmax(0, 1fr); }
+  .sl-flow li { font-size: .82rem; padding: 8px 13px; }
+
+  /* スマホではCTAを押しやすい幅に */
+  .sl-actions { gap: 10px; }
+  .sl-actions .btn { width: 100%; justify-content: center; }
+  .sl-hero__links { text-align: center; }
+}
+
+/* スマホではヘッダーのCTAもタップしやすい高さにする。
+   ★共有CSS（base/components）は変更せず、この会社TOP（.sl-page）だけへ適用する。 */
+@media (max-width: 640px) {
+  .sl-page .site-header__actions .btn { min-height: 44px; }
+}
+
+@media (max-width: 380px) {
+  .sl-ui__row { grid-template-columns: 42px minmax(0, 1fr); }
+  .sl-ui__tag { grid-column: 2; justify-self: start; }
+  .sl-loop { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* 動きを減らす設定を尊重する */
+@media (prefers-reduced-motion: reduce) {
+  .sl-page * { animation: none !important; transition: none !important; }
+}
