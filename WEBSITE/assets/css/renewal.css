@@ -214,7 +214,7 @@
 /* 接客準備の窓は右側にスマホ1台分の余地（約150px）を残す。
    スマホ枠が「前回の会話」の行末を隠さないよう、重なりは枠の縁だけにとどめる */
 .sl-hero__main {
-  width: min(100%, 450px);
+  width: min(100%, 440px);
 }
 .sl-hero__main .sl-window { position: relative; }
 .sl-hero__chip {
@@ -230,17 +230,23 @@
   padding: 3px 10px;
 }
 /* 位置は窓の幅（最大450px）を基準にする＝列幅が変わっても重なりは窓の縁30pxだけ */
+/* Phase 1D-R1: 168px → 184px（約+10%）。接客準備が主役のまま、スマホ画面と認識できる大きさにする */
 .sl-hero__phone {
   position: absolute;
-  left: calc(min(100%, 450px) - 30px);
+  left: calc(min(100%, 440px) - 30px);
   bottom: 0;
-  width: 168px;
+  width: 184px;
   z-index: 2;
 }
-@media (max-width: 1180px) and (min-width: 961px) {
-  .sl-hero__main { width: calc(100% - 126px); }
-  .sl-hero__phone { left: calc(100% - 126px - 30px); width: 150px; }
+@media (max-width: 1263px) and (min-width: 961px) {
+  .sl-hero__main { width: calc(100% - 150px); }
+  .sl-hero__phone { left: calc(100% - 180px); width: 168px; }
 }
+
+/* 固定ヘッダー（64px）の下に見出しが潜らないよう、アンカー先の余白を明示する
+   （base.css の scroll-padding-top と同じ値。ページ内リンク・戻るボタンの両方で効く） */
+.sl-page section[id],
+.sl-page span[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
 .sl-hero__phone .sl-phone { border-radius: 26px; padding: 7px; }
 .sl-hero__phone .sl-phone__screen { border-radius: 20px; }
 
@@ -416,15 +422,19 @@
 
 /* ------------------------------------------------------ AI整理（比較） -- */
 
+/* 見出しブロックは中央寄せ（節の上部に余白を多めに取り、固定ヘッダーの直下で詰まらないようにする）。
+   比較UI本体は左寄せのまま。2枚の幅は 1440px で約565px（上限680以内・画像内の主要文字が読める） */
+.sl-review { padding-top: 96px; }
+.sl-review .sl-lead { margin-bottom: 34px; }
 .sl-compare {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
-  gap: 18px;
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+  text-align: left;
 }
 .sl-compare__arrow {
   display: flex; align-items: center; justify-content: center;
-  padding-top: 180px;
   font-size: 1.5rem; font-weight: 800; color: var(--sl-blue);
 }
 .sl-compare__item { display: flex; flex-direction: column; gap: 12px; }
@@ -450,6 +460,7 @@
 .sl-points {
   list-style: none; margin: 28px 0 0; padding: 0;
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+  text-align: left;
 }
 .sl-points li {
   background: #fff; border: 1px solid #e8edf5; border-radius: var(--sl-radius-sm);
