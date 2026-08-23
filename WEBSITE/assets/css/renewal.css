@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Smart Labo — Website 刷新 / renewal.css（P32-3 Phase 1A）
+   Smart Labo — Website 刷新 / renewal.css（P32-3 Phase 1D）
    --------------------------------------------------------------------------
    使いどころ:
      会社TOP（index.html）でのみ読み込む。既存12ページのCSSには手を入れない。
@@ -11,12 +11,16 @@
         （tokens.css には「新しいブランドカラーをここで発明しない」というルールがあるため）。
      4. 外部フォント・外部CDN・依存を追加しない。フォントは既存 --font-sans を使う。
      5. アニメーションは最小限。スクロール連動演出・カウントアップは入れない。
+     6. Salon実画面（assets/images/salon/*.webp）は「表示上限幅」を超えて拡大しない
+        （memo/shop/booking ≦520px・ai-review ≦680px・briefing ≦680px）。
+        画像そのものには枠・影・注釈を焼き込まず、角丸・影・端末枠はすべてCSSで付ける。
    ========================================================================== */
 
 .sl-page {
   /* Salon補助色（会社TOPが美容室サイトに見えないよう、背景と小さなアクセントに限定） */
   --sl-ivory:   #FCFAF7;
   --sl-greige:  #F4F1ED;
+  --sl-warm:    #FAF6F0;
   --sl-sage:    #B8C9C0;
   --sl-beige:   #D8C6B8;
   --sl-sage-dk: #4F7A68;
@@ -24,8 +28,10 @@
   /* 既存トークンの別名（このファイル内でのみ使用） */
   --sl-blue:      var(--c-blue);
   --sl-blue-dk:   #153E75;
+  --sl-navy-deep: var(--c-navy);
   --sl-cyan:      #38BDF8;
   --sl-blue-pale: #EFF6FF;
+  --sl-blue-soft: #E6EEFB;
   --sl-navy:      #172033;
   --sl-gray:      #64748B;
 
@@ -33,16 +39,25 @@
   --sl-radius-sm: 10px;
   --sl-shadow:    0 1px 2px rgba(23, 32, 51, .06), 0 8px 24px rgba(23, 32, 51, .08);
   --sl-shadow-sm: 0 1px 2px rgba(23, 32, 51, .06), 0 3px 10px rgba(23, 32, 51, .06);
+  --sl-shadow-lg: 0 2px 4px rgba(23, 32, 51, .08), 0 24px 60px rgba(23, 32, 51, .18);
 }
 
 /* ------------------------------------------------------------------ 共通 -- */
 
-.sl-section { padding: 72px 0; }
+.sl-section { padding: 80px 0; }
 .sl-section--tight { padding: 56px 0; }
 .sl-section--ivory { background: var(--sl-ivory); }
 .sl-section--greige { background: var(--sl-greige); }
+.sl-section--warm { background: var(--sl-warm); }
 .sl-section--pale { background: var(--sl-blue-pale); }
+.sl-section--soft { background: var(--sl-blue-soft); }
 .sl-section--navy { background: var(--sl-navy); color: #fff; }
+.sl-section--deep {
+  background:
+    radial-gradient(900px 420px at 85% 0%, rgba(56, 189, 248, .16), transparent 60%),
+    linear-gradient(160deg, var(--sl-navy-deep) 0%, var(--sl-blue-dk) 100%);
+  color: #fff;
+}
 
 .sl-eyebrow {
   display: inline-block;
@@ -55,7 +70,8 @@
   padding: 5px 12px;
   margin: 0 0 14px;
 }
-.sl-section--navy .sl-eyebrow { color: #cfe0ff; background: rgba(255, 255, 255, .1); }
+.sl-section--navy .sl-eyebrow,
+.sl-section--deep .sl-eyebrow { color: #dbe8ff; background: rgba(255, 255, 255, .12); }
 
 .sl-h2 {
   font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.1rem);
@@ -63,15 +79,20 @@
   line-height: 1.4;
   letter-spacing: .01em;
   margin: 0 0 14px;
+  color: var(--sl-navy);
 }
+.sl-section--navy .sl-h2,
+.sl-section--deep .sl-h2 { color: #fff; }
+
 .sl-lead {
   font-size: 1rem;
   line-height: 1.9;
   color: var(--text-secondary);
   margin: 0 0 28px;
-  max-width: 62ch;
+  max-width: 38em;
 }
-.sl-section--navy .sl-lead { color: #c7d2e6; }
+.sl-section--navy .sl-lead,
+.sl-section--deep .sl-lead { color: #c7d2e6; }
 
 .sl-note {
   font-size: .82rem;
@@ -79,23 +100,89 @@
   color: var(--sl-gray);
   margin: 10px 0 0;
 }
+.sl-section--deep .sl-note,
+.sl-section--navy .sl-note { color: #b5c3dd; }
+
+/* 架空データ注記（読めるサイズを保つ） */
+.sl-demo-note {
+  font-size: .8rem;
+  line-height: 1.7;
+  color: var(--sl-gray);
+  margin: 12px 0 0;
+}
+.sl-section--deep .sl-demo-note { color: #b5c3dd; }
 
 .sl-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .sl-actions .btn { min-height: 46px; }
+
+/* 見出し＋リードを中央に寄せる節（課題・循環・料金） */
+.sl-center { text-align: center; }
+.sl-center .sl-lead { margin-left: auto; margin-right: auto; }
+.sl-center .sl-actions { justify-content: center; }
+
+/* ---------------------------------------------------- 実画面の枠（共通） -- */
+
+/* 画像は拡大しない。枠側で幅を制限する */
+.sl-media img { display: block; width: 100%; height: auto; }
+
+/* 管理画面風の窓（PCの実画面用） */
+.sl-window {
+  background: #fff;
+  border: 1px solid #e3e9f2;
+  border-radius: var(--sl-radius);
+  box-shadow: var(--sl-shadow);
+  overflow: hidden;
+}
+.sl-window__bar {
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 14px;
+  background: #f6f8fb;
+  border-bottom: 1px solid #eaeff6;
+}
+.sl-window__dot { width: 8px; height: 8px; border-radius: 50%; background: #d6deea; }
+.sl-window__title { margin-left: 6px; font-size: .72rem; font-weight: 700; color: var(--sl-gray); letter-spacing: .02em; }
+.sl-window--glow { box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 28px 70px rgba(2, 10, 40, .45); border-color: rgba(255, 255, 255, .18); }
+
+/* スマートフォン枠 */
+.sl-phone {
+  background: #111827;
+  border-radius: 30px;
+  padding: 9px;
+  box-shadow: var(--sl-shadow-lg);
+}
+.sl-phone__screen { border-radius: 22px; overflow: hidden; background: #fff; }
+
+/* 枠の下の小ラベル */
+.sl-media__label {
+  display: block;
+  margin: 12px 0 0;
+  font-size: .84rem;
+  font-weight: 700;
+  color: var(--sl-navy);
+  text-align: center;
+}
+.sl-media__label small { display: block; font-size: .76rem; font-weight: 500; color: var(--sl-gray); margin-top: 2px; }
+
+/* 画像ごとの表示上限幅（拡大ボケ防止） */
+.sl-media--memo,
+.sl-media--shop,
+.sl-media--booking { max-width: 520px; }
+.sl-media--review { max-width: 680px; }
+.sl-media--briefing { max-width: 660px; }
 
 /* ------------------------------------------------------- ファーストビュー -- */
 
 .sl-hero {
   background:
-    radial-gradient(1100px 460px at 82% -8%, rgba(56, 189, 248, .14), transparent 60%),
-    linear-gradient(180deg, var(--sl-blue-pale) 0%, #fff 78%);
-  padding: 56px 0 64px;
+    radial-gradient(1100px 460px at 82% -8%, rgba(56, 189, 248, .16), transparent 60%),
+    linear-gradient(180deg, var(--sl-blue-pale) 0%, #fff 82%);
+  padding: 56px 0 72px;
   overflow: hidden;
 }
 .sl-hero__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
-  gap: 44px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 48px;
   align-items: center;
 }
 .sl-hero__title {
@@ -111,16 +198,26 @@
   line-height: 1.95;
   color: var(--text-secondary);
   margin: 0 0 26px;
-  max-width: 46ch;
+  max-width: 30em;
 }
 .sl-hero__links { margin-top: 14px; }
 .sl-hero__links a { font-size: .9rem; font-weight: 600; }
 
-/* ---------------------------------------------------------- 商品UIイメージ -- */
-
-.sl-ui { position: relative; padding-bottom: 34px; }
-
-.sl-ui__caption {
+/* 右側：接客準備の実画面（主役）＋ 30秒メモのスマホ（重ね） */
+.sl-hero__visual {
+  position: relative;
+  max-width: 600px;
+  justify-self: end;
+  width: 100%;
+  padding: 0 0 56px;
+}
+/* 接客準備の窓は右側にスマホ1台分の余地（約150px）を残す。
+   スマホ枠が「前回の会話」の行末を隠さないよう、重なりは枠の縁だけにとどめる */
+.sl-hero__main {
+  width: min(100%, 450px);
+}
+.sl-hero__main .sl-window { position: relative; }
+.sl-hero__chip {
   position: absolute;
   top: 10px; right: 12px;
   z-index: 3;
@@ -132,140 +229,134 @@
   border-radius: 999px;
   padding: 3px 10px;
 }
-
-.sl-ui__app {
-  background: #fff;
-  border: 1px solid #e6ebf3;
-  border-radius: var(--sl-radius);
-  box-shadow: var(--sl-shadow);
-  overflow: hidden;
-}
-.sl-ui__bar {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 14px;
-  background: #f7f9fc;
-  border-bottom: 1px solid #eef2f8;
-}
-.sl-ui__dot { width: 8px; height: 8px; border-radius: 50%; background: #d8e0ec; }
-.sl-ui__barlabel { margin-left: 6px; font-size: .74rem; font-weight: 700; color: var(--sl-gray); }
-
-.sl-ui__body { padding: 16px 16px 20px; }
-.sl-ui__h { font-size: .95rem; font-weight: 800; margin: 0 0 12px; color: var(--sl-navy); }
-
-.sl-ui__list { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
-.sl-ui__row {
-  display: grid;
-  grid-template-columns: 46px minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #eef2f8;
-  border-radius: var(--sl-radius-sm);
-  background: #fff;
-}
-.sl-ui__time { font-size: .8rem; font-weight: 800; color: var(--sl-blue); }
-.sl-ui__name { font-size: .86rem; font-weight: 700; color: var(--sl-navy); }
-.sl-ui__meta { font-size: .74rem; color: var(--sl-gray); margin-top: 2px; }
-.sl-ui__tag {
-  font-size: .68rem; font-weight: 700; white-space: nowrap;
-  color: var(--sl-sage-dk); background: #eef4f1;
-  border-radius: 999px; padding: 3px 9px;
-}
-
-.sl-ui__panel {
-  border: 1px solid #dbe7ff;
-  background: var(--sl-blue-pale);
-  border-radius: var(--sl-radius-sm);
-  padding: 12px 14px;
-}
-.sl-ui__panel h3 { font-size: .8rem; font-weight: 800; color: var(--sl-blue-dk); margin: 0 0 8px; }
-.sl-ui__points { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.sl-ui__points li { font-size: .8rem; line-height: 1.7; color: #24405f; padding-left: 14px; position: relative; }
-.sl-ui__points li::before {
-  content: ""; position: absolute; left: 0; top: .55em;
-  width: 6px; height: 6px; border-radius: 50%; background: var(--sl-cyan);
-}
-
-/* スマホ枠（PCでは管理画面へ重ねる／狭い幅では縦に並べる） */
-.sl-ui__phone {
-  width: 208px;
-  background: #fff;
-  border: 1px solid #e6ebf3;
-  border-radius: 20px;
-  box-shadow: var(--sl-shadow);
-  padding: 14px 13px 16px;
+/* 位置は窓の幅（最大450px）を基準にする＝列幅が変わっても重なりは窓の縁30pxだけ */
+.sl-hero__phone {
   position: absolute;
-  right: -8px;
+  left: calc(min(100%, 450px) - 30px);
   bottom: 0;
+  width: 168px;
   z-index: 2;
 }
-.sl-ui__phone h3 { font-size: .78rem; font-weight: 800; color: var(--sl-navy); margin: 0 0 8px; }
-.sl-ui__memo {
-  border: 1px solid #eef2f8;
-  border-radius: 8px;
-  background: #fbfcfe;
-  padding: 9px 10px;
-  font-size: .74rem;
-  line-height: 1.75;
-  color: #3b4a61;
-  margin: 0 0 10px;
+@media (max-width: 1180px) and (min-width: 961px) {
+  .sl-hero__main { width: calc(100% - 126px); }
+  .sl-hero__phone { left: calc(100% - 126px - 30px); width: 150px; }
 }
-.sl-ui__memo span { display: block; }
-.sl-ui__fakebtn {
-  display: block;
-  text-align: center;
-  font-size: .76rem;
-  font-weight: 800;
-  color: #fff;
-  background: var(--sl-blue);
-  border-radius: 8px;
-  padding: 9px 8px;
+.sl-hero__phone .sl-phone { border-radius: 26px; padding: 7px; }
+.sl-hero__phone .sl-phone__screen { border-radius: 20px; }
+
+/* 実画面に付ける一言（窓の下） */
+.sl-hero__tags {
+  list-style: none; margin: 14px 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  max-width: 360px;
 }
-.sl-ui__hint { font-size: .68rem; color: var(--sl-gray); margin: 8px 0 0; line-height: 1.6; }
+.sl-hero__tags li {
+  font-size: .74rem; font-weight: 700; color: var(--sl-blue-dk);
+  background: #fff; border: 1px solid #dbe7ff; border-radius: 999px; padding: 4px 10px;
+}
 
-/* --------------------------------------------------------------- 価値3点 -- */
+/* --------------------------------------------------------------- 3ステップ -- */
 
-.sl-values {
+.sl-steps3 {
+  list-style: none; margin: 0; padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 0;
+  counter-reset: sl3;
 }
-.sl-card {
-  background: #fff;
-  border: 1px solid #e8edf5;
-  border-radius: var(--sl-radius);
-  padding: 22px 20px;
-  box-shadow: var(--sl-shadow-sm);
+.sl-steps3 li {
+  position: relative;
+  padding: 6px 36px 6px 0;
 }
-.sl-card__num {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px; border-radius: 8px;
+.sl-steps3 li + li { padding-left: 36px; border-left: 1px solid #e6ebf3; }
+.sl-steps3 li:last-child { padding-right: 0; }
+.sl-steps3__num {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--sl-blue);
+  letter-spacing: .02em;
+  margin: 0 0 12px;
+}
+.sl-steps3__title { font-size: 1.12rem; font-weight: 800; margin: 0 0 8px; color: var(--sl-navy); line-height: 1.5; }
+.sl-steps3__text { font-size: .9rem; line-height: 1.85; color: var(--text-secondary); margin: 0; }
+/* PCでは節の間に矢印を置く */
+.sl-steps3 li + li::before {
+  content: "→";
+  position: absolute; left: -9px; top: 4px;
+  width: 18px; height: 18px; line-height: 18px;
+  text-align: center;
   font-size: .8rem; font-weight: 800;
-  color: var(--sl-blue); background: var(--sl-blue-pale);
-  margin-bottom: 12px;
+  color: var(--sl-blue);
+  background: #fff;
 }
-.sl-card__title { font-size: 1.02rem; font-weight: 800; margin: 0 0 8px; color: var(--sl-navy); }
-.sl-card__text { font-size: .88rem; line-height: 1.85; color: var(--text-secondary); margin: 0; }
 
-/* ------------------------------------------------------------------ 流れ -- */
+/* ---------------------------------------------------------- 全体ストーリー -- */
 
-.sl-flow { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-.sl-flow li {
-  display: flex; align-items: center; gap: 10px;
-  font-size: .86rem; font-weight: 700; color: var(--sl-navy);
+.sl-chain {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 8px;
+}
+.sl-chain li {
+  display: flex; align-items: center; gap: 8px;
+  font-size: .88rem; font-weight: 700; color: var(--sl-navy);
   background: #fff; border: 1px solid #e5ebf4;
   border-radius: 999px; padding: 9px 16px;
+  box-shadow: var(--sl-shadow-sm);
 }
-.sl-flow li::after { content: "→"; color: var(--sl-blue); font-weight: 800; }
-.sl-flow li:last-child::after { content: ""; }
+.sl-chain li::after { content: "→"; color: var(--sl-blue); font-weight: 800; margin-left: 2px; }
+.sl-chain li:last-child::after { content: "↺"; }
+.sl-chain li[data-ai] { border-color: #cfe0d6; background: #f3f8f5; }
+.sl-chain li[data-ai]::before {
+  content: "AI"; font-size: .64rem; font-weight: 800; letter-spacing: .06em;
+  color: #fff; background: var(--sl-sage-dk); border-radius: 6px; padding: 2px 6px;
+}
+.sl-chain-note { font-size: .82rem; color: var(--sl-gray); margin: 14px 0 0; line-height: 1.8; }
+.sl-chain-note b { color: var(--sl-navy); }
 
-/* ---------------------------------------------------------------- 2カラム -- */
+/* ------------------------------------------------------------- 課題提起 -- */
+
+.sl-issues {
+  list-style: none; margin: 0 auto; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
+  max-width: 820px;
+  text-align: left;
+}
+.sl-issues li {
+  position: relative;
+  background: #fff; border: 1px solid #e8edf5; border-radius: var(--sl-radius-sm);
+  padding: 14px 16px 14px 42px;
+  font-size: .95rem; line-height: 1.75; font-weight: 600; color: var(--sl-navy);
+  box-shadow: var(--sl-shadow-sm);
+}
+.sl-issues li::before {
+  content: ""; position: absolute; left: 16px; top: 1.05em;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--sl-beige);
+}
+.sl-issues-bridge {
+  margin: 26px auto 0; max-width: 38em;
+  font-size: .95rem; line-height: 1.9; color: var(--text-secondary);
+}
+
+/* -------------------------------------------------------------- 2カラム -- */
 
 .sl-2col {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
+.sl-card {
+  background: #fff;
+  border: 1px solid #e8edf5;
+  border-radius: var(--sl-radius);
+  padding: 22px 22px;
+  box-shadow: var(--sl-shadow-sm);
+}
+.sl-card__title { font-size: 1.02rem; font-weight: 800; margin: 0 0 8px; color: var(--sl-navy); }
+.sl-card__text { font-size: .88rem; line-height: 1.85; color: var(--text-secondary); margin: 0; }
+
 .sl-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .sl-list li {
   position: relative;
@@ -281,54 +372,239 @@
   background: var(--sl-beige);
 }
 .sl-list--check li::before { background: var(--sl-sage-dk); }
+.sl-list--onblue li { color: #dbe4f3; }
+.sl-list--onblue li::before { background: var(--sl-cyan); }
 
+/* ---------------------------------------------------------- BEFORE/AFTER -- */
+
+.sl-ba {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 52px minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+.sl-ba__arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 800; color: var(--sl-blue);
+}
 .sl-ba__head {
   display: inline-block;
   font-size: .76rem; font-weight: 800; letter-spacing: .06em;
-  border-radius: 999px; padding: 4px 12px; margin-bottom: 12px;
+  border-radius: 999px; padding: 4px 12px; margin-bottom: 14px;
 }
+.sl-ba--before { background: #fbfaf8; }
 .sl-ba--before .sl-ba__head { color: #7a6a5c; background: #efe7df; }
-.sl-ba--after  .sl-ba__head { color: #fff;    background: var(--sl-sage-dk); }
+.sl-ba--after  { border-color: #cfe0d6; }
+.sl-ba--after  .sl-ba__head { color: #fff; background: var(--sl-sage-dk); }
+
+/* ------------------------------------------------ 実画面＋説明の2カラム -- */
+
+.sl-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+}
+.sl-split__copy .sl-h2 { margin-bottom: 14px; }
+.sl-split__copy .sl-lead { margin-bottom: 20px; }
+.sl-split__media { display: flex; flex-direction: column; align-items: center; }
+.sl-split--media-left .sl-split__media { order: -1; }
+.sl-split__media .sl-media { width: 100%; }
+
+/* 30秒メモ：スマホ枠の幅 */
+.sl-split .sl-media--memo { max-width: 400px; }
+
+/* ------------------------------------------------------ AI整理（比較） -- */
+
+.sl-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.sl-compare__arrow {
+  display: flex; align-items: center; justify-content: center;
+  padding-top: 180px;
+  font-size: 1.5rem; font-weight: 800; color: var(--sl-blue);
+}
+.sl-compare__item { display: flex; flex-direction: column; gap: 12px; }
+.sl-compare__tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  align-self: flex-start;
+  font-size: .82rem; font-weight: 800; color: var(--sl-navy);
+}
+.sl-compare__tag b {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 7px;
+  font-size: .76rem; color: #fff; background: var(--sl-blue);
+}
+.sl-compare__item--after .sl-compare__tag b { background: var(--sl-sage-dk); }
+.sl-compare__note {
+  margin: 0;
+  font-size: .84rem; line-height: 1.8; color: var(--text-secondary);
+  background: #fff; border: 1px solid #e8edf5; border-radius: var(--sl-radius-sm);
+  padding: 10px 14px;
+}
+.sl-compare__item--after .sl-compare__note { border-color: #cfe0d6; background: #f3f8f5; }
+
+.sl-points {
+  list-style: none; margin: 28px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+}
+.sl-points li {
+  background: #fff; border: 1px solid #e8edf5; border-radius: var(--sl-radius-sm);
+  padding: 14px 16px;
+  font-size: .86rem; line-height: 1.7; font-weight: 600; color: var(--sl-navy);
+}
+.sl-points li span { display: block; font-size: .7rem; font-weight: 800; color: var(--sl-blue); letter-spacing: .06em; margin-bottom: 6px; }
+
+/* ---------------------------------------------------------- 接客準備 -- */
+
+.sl-brief .sl-split { gap: 56px; }
+.sl-chips { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 10px; }
+.sl-chips li {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start;
+  font-size: .92rem; line-height: 1.75; color: #e6edf9;
+}
+.sl-chips b {
+  display: inline-block;
+  font-size: .74rem; font-weight: 800; letter-spacing: .06em;
+  color: var(--sl-navy-deep); background: #fff;
+  border-radius: 999px; padding: 4px 11px; margin-top: 3px; white-space: nowrap;
+}
+.sl-brief .sl-media--briefing { max-width: 620px; }
+
+/* ------------------------------------------------ 店舗ページ＋WEB予約 -- */
+
+.sl-phones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 320px));
+  justify-content: center;
+  gap: 36px 44px;
+  margin-top: 10px;
+}
+.sl-phones .sl-media { max-width: 320px; width: 100%; }
+.sl-phones .sl-media + .sl-media { margin-top: 44px; }
+.sl-public-points {
+  list-style: none; margin: 34px auto 0; padding: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+}
+.sl-public-points li {
+  font-size: .84rem; font-weight: 700; color: var(--sl-blue-dk);
+  background: #fff; border: 1px solid #d7e4fb; border-radius: 999px; padding: 7px 14px;
+}
+
+/* ------------------------------------------------------------------ 循環 -- */
+
+.sl-loop {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  counter-reset: slloop;
+}
+.sl-loop li {
+  position: relative;
+  border: 1px solid #e5ebf4; background: #fff;
+  border-radius: var(--sl-radius-sm);
+  padding: 14px 8px 14px;
+  font-size: .84rem; font-weight: 700; color: var(--sl-navy);
+  text-align: center;
+  box-shadow: var(--sl-shadow-sm);
+}
+.sl-loop li::before {
+  counter-increment: slloop;
+  content: "0" counter(slloop);
+  display: block; font-size: .7rem; font-weight: 800; color: var(--sl-blue); margin-bottom: 6px;
+}
+.sl-loop li + li::after {
+  content: "→";
+  position: absolute; left: -11px; top: 50%; transform: translateY(-50%);
+  width: 12px; text-align: center;
+  font-size: .8rem; font-weight: 800; color: var(--sl-blue);
+  background: transparent;
+}
+.sl-loop li[data-ai] { border-color: #cfe0d6; background: #f3f8f5; }
+.sl-loop__return {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border: 1px dashed #c9d6ea; border-radius: 999px;
+  font-size: .86rem; font-weight: 700; color: var(--sl-blue-dk);
+  background: #fff;
+}
+.sl-loop__return span { font-size: 1.1rem; }
 
 /* ------------------------------------------------------------------ 価格 -- */
 
+.sl-pricebox {
+  max-width: 820px; margin: 0 auto;
+  background: #fff; border: 1px solid #d9e5fb; border-radius: var(--sl-radius);
+  box-shadow: var(--sl-shadow);
+  padding: 30px 32px 28px;
+  text-align: left;
+}
+.sl-pricebox__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 20px; }
+.sl-pricebox__name { font-size: 1.15rem; font-weight: 800; color: var(--sl-navy); margin: 0; }
 .sl-price {
   display: inline-flex; align-items: baseline; gap: 6px;
   margin: 6px 0 4px;
 }
-.sl-price__num { font-size: 2rem; font-weight: 800; color: var(--sl-navy); letter-spacing: .01em; }
+.sl-price__num { font-size: 2.2rem; font-weight: 800; color: var(--sl-navy); letter-spacing: .01em; }
 .sl-price__unit { font-size: .95rem; font-weight: 700; color: var(--sl-navy); }
 .sl-price__tax { font-size: .8rem; font-weight: 600; color: var(--sl-gray); }
-
-/* ------------------------------------------------------------------ 循環 -- */
-
-.sl-loop { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.sl-loop li {
-  border: 1px solid #e5ebf4; background: #fff;
-  border-radius: var(--sl-radius-sm);
-  padding: 14px 12px;
-  font-size: .84rem; font-weight: 700; color: var(--sl-navy);
-  text-align: center;
+.sl-facts {
+  list-style: none; margin: 18px 0 0; padding: 18px 0 0;
+  border-top: 1px solid #e8edf5;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
 }
-.sl-loop li span { display: block; font-size: .7rem; font-weight: 700; color: var(--sl-blue); margin-bottom: 6px; }
+.sl-facts li { font-size: .9rem; color: var(--text-secondary); line-height: 1.7; }
+.sl-facts li b { display: block; font-size: 1.05rem; font-weight: 800; color: var(--sl-navy); }
+.sl-pricebox__inc {
+  margin: 18px 0 0; font-size: .9rem; line-height: 1.85; color: var(--text-secondary);
+}
+.sl-pricebox .sl-actions { margin-top: 22px; }
+
+/* ---------------------------------------------------------- HP制作（縮小）-- */
+
+.sl-web .sl-2col { gap: 16px; }
+.sl-web .sl-card { padding: 20px 20px 18px; }
+.sl-web .sl-price__num { font-size: 1.7rem; }
+.sl-web .sl-list li { font-size: .88rem; }
+
+/* ---------------------------------------------------------------- Works -- */
+
+.sl-works {
+  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 32px; align-items: center;
+}
+.sl-works__aside {
+  background: #fff; border: 1px solid #e8edf5; border-radius: var(--sl-radius);
+  padding: 20px 22px; box-shadow: var(--sl-shadow-sm);
+}
+.sl-works__aside h3 { font-size: .95rem; font-weight: 800; margin: 0 0 8px; color: var(--sl-navy); }
+.sl-works__aside p { margin: 0; font-size: .86rem; line-height: 1.8; color: var(--text-secondary); }
+.sl-works__aside .sl-actions { margin-top: 12px; }
 
 /* ------------------------------------------------------------- ステップ -- */
 
 .sl-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); counter-reset: slstep; }
 .sl-steps li {
   border: 1px solid #e5ebf4; background: #fff; border-radius: var(--sl-radius-sm);
-  padding: 16px 16px 16px 52px; position: relative;
+  padding: 14px 16px 14px 50px; position: relative;
   font-size: .9rem; line-height: 1.8; color: var(--sl-navy); font-weight: 700;
 }
 .sl-steps li::before {
   counter-increment: slstep;
   content: counter(slstep);
-  position: absolute; left: 16px; top: 15px;
+  position: absolute; left: 16px; top: 13px;
   width: 24px; height: 24px; border-radius: 7px;
   display: inline-flex; align-items: center; justify-content: center;
   font-size: .76rem; font-weight: 800;
   color: #fff; background: var(--sl-blue);
 }
+
+/* 2カラム内に置く場合は2列にして、項目名が不自然に折り返さないようにする */
+.sl-split .sl-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 /* -------------------------------------------------------------- 最終CTA -- */
 
@@ -340,33 +616,52 @@
 /* --------------------------------------------------------- レスポンシブ -- */
 
 @media (max-width: 1080px) {
-  .sl-loop { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sl-loop { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .sl-loop li + li::after { display: none; }
+  .sl-points { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 960px) {
-  .sl-hero__inner { grid-template-columns: minmax(0, 1fr); gap: 32px; }
-  .sl-values { grid-template-columns: minmax(0, 1fr); }
+  .sl-hero__inner { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .sl-hero__visual { justify-self: center; max-width: 560px; }
   .sl-2col { grid-template-columns: minmax(0, 1fr); }
+  .sl-split { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .sl-split--media-left .sl-split__media { order: 0; }
+  .sl-split .sl-media--memo { max-width: 360px; }
+  .sl-compare { grid-template-columns: minmax(0, 1fr); }
+  .sl-compare__arrow { padding: 0; transform: rotate(90deg); }
+  .sl-ba { grid-template-columns: minmax(0, 1fr); }
+  .sl-ba__arrow { transform: rotate(90deg); padding: 0; }
   .sl-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sl-works { grid-template-columns: minmax(0, 1fr); }
+  .sl-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 
-  /* PCの単純縮小にしない：スマホ枠は重ねず、管理画面の下へ通常配置する */
-  .sl-ui { padding-bottom: 0; }
-  .sl-ui__phone {
-    position: static;
-    width: 100%;
-    max-width: 320px;
-    margin: 14px auto 0;
-    border-radius: 16px;
-  }
+@media (max-width: 760px) {
+  .sl-steps3 { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .sl-steps3 li,
+  .sl-steps3 li + li { padding: 0 0 0 54px; border-left: none; }
+  .sl-steps3__num { position: absolute; left: 0; top: 0; font-size: 1.6rem; }
+  .sl-steps3 li + li::before { display: none; }
+  .sl-issues { grid-template-columns: minmax(0, 1fr); }
+  .sl-phones { grid-template-columns: minmax(0, 320px); }
+  .sl-phones .sl-media + .sl-media { margin-top: 0; }
 }
 
 @media (max-width: 640px) {
-  .sl-section { padding: 52px 0; }
+  .sl-section { padding: 56px 0; }
   .sl-section--tight { padding: 40px 0; }
   .sl-hero { padding: 40px 0 48px; }
+  .sl-hero__visual { padding-bottom: 0; }
+  .sl-hero__main { width: 100%; }
+  /* スマホでは重ねず、接客準備の画面だけを見せる（30秒メモは本文の節で大きく見せる） */
+  .sl-hero__phone { display: none; }
   .sl-loop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sl-steps { grid-template-columns: minmax(0, 1fr); }
-  .sl-flow li { font-size: .82rem; padding: 8px 13px; }
+  .sl-points { grid-template-columns: minmax(0, 1fr); }
+  .sl-facts { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .sl-pricebox { padding: 22px 18px 20px; }
+  .sl-chain li { font-size: .82rem; padding: 8px 13px; }
 
   /* スマホではCTAを押しやすい幅に */
   .sl-actions { gap: 10px; }
@@ -381,8 +676,6 @@
 }
 
 @media (max-width: 380px) {
-  .sl-ui__row { grid-template-columns: 42px minmax(0, 1fr); }
-  .sl-ui__tag { grid-column: 2; justify-self: start; }
   .sl-loop { grid-template-columns: minmax(0, 1fr); }
 }
 
