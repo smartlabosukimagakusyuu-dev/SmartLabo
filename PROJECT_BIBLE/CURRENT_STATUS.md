@@ -12,7 +12,7 @@
 Project Bible Version：8.3
 Brand Version：5.1
 Design Bible Version：2.3
-Homepage Version：v1.0.0（2026-07-16 CEO最終公開指示により正式公開版として確定。代表者名・設立年月・事業内容をCEOより取得し会社概要ページへ反映。所在地・電話番号は同日のCEO指示により会社概要ページの表から一時的に削除(「CEO確認待ち」表示ではなく非掲載)。問い合わせフォームは本番送信テスト未完了のため一時的に撤去し、info@smartlaboworks.comへのmailtoリンクへ差し替え。AIチャット実API接続・問い合わせフォーム本番稼働・Google Analytics・Search ConsoleはVersion1.1で対応する方針をCEOが確定）。**正式ドメイン`smartlaboworks.com`でGitHub Pagesへの切替・DNS移行(Aレコード4件・wwwのCNAME)・HTTPS強制がCEOご自身の作業により完了し、2026-07-16に公開確認済み**（`https://smartlaboworks.com/`で全9ページ200・404ページ正常・証明書エラーなし・会社概要ページの反映を実機確認）
+Homepage Version：**v2.0.0（2026-08-23 公開・会社TOP刷新＝Smart Labo Salon を主軸にした営業サイト化）**。P32-3（Phase 0〜1G）で `WEBSITE/index.html` を Salon実画面6枚・Heroスライダー・AI整理比較・接客準備・店舗ページ/WEB予約・料金（14,800円税別/初期0円/1店舗/最低6か月）・店舗HP制作（制作イメージ3種・50,000円〜/月額5,000円〜税別）・Works短縮で再構成し、新OGP（ogp-top-1200x630.png）・JSON-LD名称・privacy/terms表記・apply 375px overflow を修正。master `502768a` を GitHub Pages で公開、本番Smoke Test（全ページ200・72 page×viewport で横スクロール/console/404=0）済み。LINE連携は未実装・未掲載、デモ動画は未公開。旧 v1.0.0 の経緯（2026-07-16公開・所在地非掲載 等）は下記履歴のとおり
 Smart Labo Works：正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)。詳細Versionは同リポジトリの`PRODUCT_REQUIREMENTS.md`を参照
 Smart Labo Platform：新設リポジトリ`smartlabo-platform`(Node.js版、`api.smartlaboworks.com`予定)。Sprint1(Public AI Gateway)実装完了・ローカル動作確認済み(本番未デプロイ)。**全体アーキテクチャはCEO承認済み(2026-07-16)、Version1.0正式版として採用**([13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)参照)
 Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体アーキテクチャ設計」を受け、Smart Labo Works全体のシステム構成を銀行・パートナー・投資家・採用向けに正式記録し、同日CEO承認によりVersion1.0正式版として採用(詳細は下記「Smart Labo Platform v1.0 全体アーキテクチャ」参照)。銀行提出用事業計画書Version1.4は**CEO承認により選択肢1(代表者報酬を含まない試算のまま提出)で確定**([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf)、提出用ファイルとして出力済み)。経営計画書Version1.0は旧解釈のまま未更新で本書との前提不整合が残存、CEO確認待ち。代表者名(小川昌利)・設立年月(2026年7月)・事業内容はCEO確認済みで反映済み。所在地・資本金・代表者略歴は引き続き「CEO確認待ち」表示のまま
@@ -23,6 +23,23 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 2. **Smart Labo Worksの唯一の正式コードベースは別リポジトリ`smartlabo-works`(Node.js版)に確定した。** 本リポジトリ内の`WEBSITE/app.html`(GitHub Pages公開版)はSmart Labo Works正式製品ではなく、**デモサイト／マーケティング用プレビュー**として扱う。今後、本ファイルでは`WEBSITE/app.html`を「Smart Labo Works Version」として追跡しない(下記ステータス一覧を参照)。
 
 詳細は [11_Development_Principles.md](11_Development_Principles.md)「製品境界の定義」、[00_Foundation/08_SmartLaboWorks_Concept.md](00_Foundation/08_SmartLaboWorks_Concept.md)「唯一の正式コードベース」を参照。
+
+---
+
+## Webサイト刷新 P32-3 Phase 1G（2026-08-23 12:08 JST・会社TOP刷新版を本番公開）
+
+**`feature/website-renewal` を master へ fast-forward 統合（d3c6054 → `502768a`）し、GitHub Pages で `https://smartlaboworks.com/` に公開した。**
+
+| 項目 | 内容 |
+|---|---|
+| 公開commit | `502768a`（Phase 1F RELEASE CANDIDATE）。master HEAD = origin/master |
+| 公開内容 | 会社TOPの全面刷新（Salon実画面6枚・Heroスライダー4枚・3ステップ・Salonストーリー・課題・BEFORE/AFTER・30秒メモ・AI整理比較・接客準備（山場）・店舗ページ/WEB予約＋「お店で更新できる」・循環・Salon料金CTA・店舗HP制作（制作イメージ3種）・Works短縮・思想/導入の流れ・会社・最終CTA）／新OGP `ogp-top-1200x630.png`／JSON-LD名称／privacy・terms の title・適用範囲表記／apply.html 375px overflow 修正／旧アンカー `#brain` 受け皿 |
+| 本番確認 | 全ページ・CSS/JS・Salon画像6・HP例3・OGP → 200。12ページ×6幅=72巡回で横スクロール0・console 0・404 0。スライダー（自動/手動/キー/reduced-motion/no-JS）○。contact type事前選択○。フォーム実送信なし |
+| 掲載価格 | Salon 月額14,800円（税別）／初期費用0円／1店舗単位／最低契約期間6か月。店舗HP制作 50,000円〜（税別）／管理・保守 月額5,000円〜（税別）。Works は既存ページのまま |
+| 未掲載・未実施 | **LINE連携（未実装・Websiteに未掲載。設計は `docs/website/SMART_LABO_SALON_LINE_INTEGRATION_HANDOFF.md`）**／デモ動画（ボタン非表示・未公開）／company.html 所在地（意図的に非掲載・維持） |
+| 変更0 | Salon本体・contact-api・signup-api・Stripe・DNS |
+| 記録 | `docs/website/SMART_LABO_WEBSITE_P32_3_1G_RELEASE_RESULTS.md`（本番Smoke Test・OGP・rollback方針）／1A〜1F の結果docは同ディレクトリ |
+| 次工程 | **P33-LINE（Smart Labo Salon LINE INTEGRATION・Salon repo）**。★自動で着手しない |
 
 ---
 
@@ -80,14 +97,14 @@ Current Task：2026-07-16、CEO追加指示「Smart Labo Platform v1.0 全体ア
 | Project Bible Version | 8.3 |
 | Brand Version | 5.1 |
 | Design Bible Version | 2.3 |
-| Homepage Version | **v1.0.0**（2026-07-16、CEO最終公開指示により正式公開版として確定。会社概要ページに代表者名・設立年月・事業内容を反映、所在地・電話番号はCEO指示により非掲載、問い合わせフォームはmailtoリンクへ一時差し替え）。**`https://smartlaboworks.com/`で正式公開中**（CEOご自身によるGitHub Pagesカスタムドメイン設定・DNS移行(Aレコード4件・wwwのCNAME)・HTTPS強制が完了し、2026-07-16に全9ページ200・404正常・証明書エラーなしを実機確認済み） |
+| Homepage Version | **v2.0.0**（2026-08-23、P32-3 Phase 1G で会社TOPを Salon中心の営業サイトへ刷新して公開。master `502768a`・GitHub Pages 自動デプロイ・本番Smoke Test ○。Salon LINE連携は未実装・未掲載／デモ動画は未公開。詳細 [../docs/website/SMART_LABO_WEBSITE_P32_3_1G_RELEASE_RESULTS.md](../docs/website/SMART_LABO_WEBSITE_P32_3_1G_RELEASE_RESULTS.md)）。**`https://smartlaboworks.com/` で公開中**。v1.0.0（2026-07-16）の経緯は変更履歴を参照 |
 | デモサイト Version（`WEBSITE/app.html`） | **デモ v1.0（2026-07-07完成、2026-07-10にデモとして再位置づけ）。GitHub Pages公開中。全9ページ・デモデータ(顧客5件・契約7件・物件6件)。Smart Labo Works正式製品ではない** |
 | Smart Labo Works Version（正式コードベース） | 本ファイルでは追跡しない。**別リポジトリ`smartlabo-works`の`PRODUCT_REQUIREMENTS.md`／`PRODUCT_BOUNDARY.md`を参照** |
 | Smart Labo Platform Version（新設・共通基盤） | **Sprint1(Public AI Gateway)実装完了、ローカル動作確認済み(本番未デプロイ)。全体アーキテクチャはCEO承認済み(2026-07-16)、Version1.0正式版として採用。** 詳細は本ファイルの「Smart Labo Platform v1.0 全体アーキテクチャ」、および別リポジトリ`smartlabo-platform`の`ARCHITECTURE.md`・`README.md`、`smartlabo-works/PUBLIC_AI_GATEWAY_DESIGN.md`を参照 |
 | Current Project | Company Setup → Homepage v1.0.0 正式公開 → **Smart Labo Platform v1.0 全体アーキテクチャ(2026-07-16 CEO承認・正式採用)** |
 | Current Task | **Smart Labo Platform全体アーキテクチャがCEO承認済み、Version1.0正式版として採用。** Git構成を`smartlabo-website`/`smartlabo-works`/`smartlabo-platform`の3リポジトリへ統一する方針、6レイヤー構成、Public AI(Smart Concierge AI)とCompany Brainの違い、Version1.0→2.0→3.0のロードマップを[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md)(新設)と`smartlabo-platform/ARCHITECTURE.md`(新設)に記録済み。銀行提出用事業計画書Version1.4は2026-07-15のCEO指示「1のままで資料出力して」により選択肢1(代表者報酬を含まない試算のまま)で確定・提出用ファイルを出力済み([DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pptx)／[.pdf](../DOCUMENT/FINANCE/SmartLabo_BusinessPlan_v1.4.pdf))。経営計画書Version1.0は旧解釈のまま未更新でv1.4との前提不整合が残存、CEO確認待ち |
 | Next Task | ①Smart Labo Platform：承認された全体アーキテクチャに基づき、`api.smartlaboworks.com`のDNS設定・本番デプロイ、ホームページ`chat.js`側の接続に着手(CEOの実施タイミング指示待ち)。②公開済みのホームページについて、Version1.1で[62_CEO_Publish_Guide.md](62_CEO_Publish_Guide.md)の残りステップ(XServerアップロード→config.php設定→reCAPTCHA設定→送信テスト)を実施し問い合わせフォームを本番稼働へ。Gitタグ`homepage-v1.0.0`・GitHub Releaseの作成はCEOの明示的な指示を得てから実施。③銀行提出版v1.4は代表者報酬の扱いが確定したため、所在地・資本金・代表者略歴の記入(CEO記入待ち)のみ残課題。実際の銀行提出時はファイル名に「_submitted」を付与([DOCUMENT/FINANCE/README.md](../DOCUMENT/FINANCE/README.md)のVersion管理ルール) |
-| Last Update | 2026-08-10(WEB-SALES-6: 顧客自身による解約をLiteへ実装。即時解約ではなく請求期間終了時の解約予約とし、予約後も期間終了まで通常利用可・日割り返金なし・期間終了前なら取消可。Stripeへは cancel_at_period_end のみ送り、canceled への移行は署名付き subscription.deleted だけ。課金4経路へ既存 login_attempts を再利用したサーバー側レート制限を追加。migration 021 で解約予定日時を1列追加。Lite側feature branchのみ・本番変更0。WEB-SALES-6SはGo、本番公開はNo-Go継続) |
+| Last Update | 2026-08-23 12:08(P32-3 Phase 1G: Website 会社TOP刷新版を master へ fast-forward 統合（d3c6054→502768a）し GitHub Pages で本番公開。本番Smoke Test 全項目○・RELEASED。Salon LINE連携は設計ハンドオフのみ（未実装・未掲載）、デモ動画は未公開、Salon本体・contact-api・Stripe・DNS 変更0) |
 | Maintainer | Masatoshi Ogawa |
 
 ---

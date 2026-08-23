@@ -9,6 +9,21 @@
 
 ---
 
+## 2026-08-23 — Website v2.0.0: 会社TOP刷新版を本番公開（P32-3 Phase 1G）
+
+P32-3（Phase 0 監査 → 1A プロトタイプ → 1B 設計 → 1C 実画面素材 → 1D/1D-R1 実装 → 1E 公開前監査 → 1F 拡張・HOLD解消 → 1G 公開）を完了し、**`WEBSITE/index.html` を Smart Labo Salon 中心の営業サイトとして刷新・公開**した。
+
+- **公開** master `502768a`（`feature/website-renewal` を fast-forward）。GitHub Pages で `https://smartlaboworks.com/` に反映・本番Smoke Test ○
+- **TOP** Salon実画面6枚（隔離demo・架空データ・注記あり）、Heroスライダー（vanilla JS・a11y・reduced-motion）、AI整理比較、接客準備、店舗ページ/WEB予約＋店舗自身で更新、Salon料金（14,800円税別・初期0円・1店舗・最低6か月）、店舗HP制作（制作イメージ3種・50,000円〜／月額5,000円〜 税別）、Works短縮
+- **修正** 新OGP `ogp-top-1200x630.png`／JSON-LD Organization=株式会社スマートラボ・WebSite=Smart Labo／privacy・terms の title・適用範囲表記／apply.html 375px overflow／`#brain` 受け皿
+- **未掲載・未実施** Salon LINE連携（設計ハンドオフのみ: `docs/website/SMART_LABO_SALON_LINE_INTEGRATION_HANDOFF.md`）／デモ動画（器のみ・非表示）
+- **更新** [CURRENT_STATUS.md](CURRENT_STATUS.md)（Homepage Version v1.0.0 → **v2.0.0**・Phase 1G 節）
+- 記録: `docs/website/SMART_LABO_WEBSITE_P32_3_*.md`（1C-1／1C-2A／1C-2B／1D／1D-R1／1E／1F／1G）
+
+**変更者:** Claude Code（代表承認による・P32-3 Phase 1G）
+
+---
+
 ## 2026-07-28 — v8.1: SALES-0 Stripe対応 販売・契約・課金の詳細設計（15_Stripe_Sales_Billing_Design.md 新設）
 
 SALES-0「販売・契約・課金仕様（Stripe対応）正式設計」の代表決定を反映。**設計・SSOT更新のみで、コード実装・マイグレーション・Stripe操作は行っていない。**
