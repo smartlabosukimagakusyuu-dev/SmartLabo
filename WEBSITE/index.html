@@ -41,7 +41,7 @@
 <meta property="og:description" content="美容室向けAI顧客支援「Smart Labo Salon」、店舗ホームページ制作、法人向け「Smart Labo Works」。ホームページ制作から顧客管理・AI活用・業務自動化までをつなぎます。">
 <meta property="og:url" content="https://smartlaboworks.com/">
 <meta property="og:locale" content="ja_JP">
-<meta property="og:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
+<meta property="og:image" content="https://smartlaboworks.com/assets/images/ogp-top-1200x630.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
@@ -49,7 +49,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="株式会社スマートラボ｜AIで店舗・企業の仕事を楽に">
 <meta name="twitter:description" content="美容室向けAI顧客支援「Smart Labo Salon」、店舗ホームページ制作、法人向け「Smart Labo Works」。">
-<meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
+<meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-top-1200x630.png">
 <meta name="twitter:image:alt" content="Smart Labo — AIで、仕事を楽に。顧客との関係を、もっと強く。">
 
 <link rel="stylesheet" href="assets/css/tokens.css">
@@ -67,7 +67,8 @@
     {
       "@type": "Organization",
       "@id": "https://smartlaboworks.com/#organization",
-      "name": "Smart Labo Works",
+      "name": "株式会社スマートラボ",
+      "alternateName": "Smart Labo",
       "legalName": "株式会社スマートラボ",
       "url": "https://smartlaboworks.com/",
       "logo": "https://smartlaboworks.com/assets/brand/logo-primary.png"
@@ -75,7 +76,8 @@
     {
       "@type": "WebSite",
       "@id": "https://smartlaboworks.com/#website",
-      "name": "Smart Labo Works",
+      "name": "Smart Labo",
+      "alternateName": "株式会社スマートラボ 公式サイト",
       "url": "https://smartlaboworks.com/",
       "inLanguage": "ja",
       "publisher": { "@id": "https://smartlaboworks.com/#organization" }
@@ -147,38 +149,120 @@
         <p class="sl-hero__links"><a href="features.html">Smart Labo Works（法人向け）を見る</a></p>
       </div>
 
-      <!-- 実画面：接客準備（主役）＋ 30秒メモ（スマホ）。隔離demo環境の架空データのみ。 -->
-      <div class="sl-hero__visual">
-        <div class="sl-hero__main sl-media sl-media--briefing">
-          <div class="sl-window">
-            <span class="sl-hero__chip">実際の画面</span>
-            <div class="sl-window__bar" aria-hidden="true">
-              <span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span>
-              <span class="sl-window__title">Smart Labo Salon ／ 次回来店の接客準備</span>
+      <!-- 実画面スライダー（Phase 1F）：接客準備（初期表示）→ 30秒メモ → AI整理・スタッフ確認 → 店舗ページ/WEB予約。
+           隔離demo環境の架空データのみ。JS無効時・JS失敗時は1枚目だけが表示される。 -->
+      <div class="sl-hero__visual sl-slider" data-hero-slider role="region" aria-roledescription="カルーセル" aria-label="Smart Labo Salon の実際の画面">
+        <p class="sl-hero__chip">実際の画面</p>
+        <div class="sl-slider__stage" data-slide-stage>
+
+          <figure class="sl-slide sl-slide--brief is-active" data-slide aria-hidden="false">
+            <div class="sl-slide__body">
+              <div class="sl-media sl-media--briefing">
+                <div class="sl-window">
+                  <div class="sl-window__bar" aria-hidden="true">
+                    <span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span>
+                    <span class="sl-window__title">Smart Labo Salon ／ 次回来店の接客準備</span>
+                  </div>
+                  <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128"
+                       alt="確認済みの顧客記録から、前回のポイント・前回の会話・今回の提案候補をまとめた接客準備の画面"
+                       fetchpriority="high">
+                </div>
+              </div>
             </div>
-            <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128"
-                 alt="確認済みの顧客記録から、前回のポイント・前回の会話・今回の提案候補をまとめた接客準備の画面"
-                 fetchpriority="high">
-          </div>
-          <ul class="sl-hero__tags" aria-label="この画面でできること">
-            <li>前回のポイント</li>
-            <li>前回の会話</li>
-            <li>今回の提案候補</li>
-          </ul>
-        </div>
-        <div class="sl-hero__phone sl-media">
-          <div class="sl-phone">
-            <div class="sl-phone__screen">
-              <img src="assets/images/salon/salon-ui-memo-phone.webp" width="1040" height="1726"
-                   alt="接客後にスマートフォンから短いメモを入力するSmart Labo Salonの接客メモ画面">
+            <figcaption class="sl-slide__cap"><b>次回来店の接客準備</b><span>前回のポイント・前回の会話・今回の提案候補</span></figcaption>
+          </figure>
+
+          <figure class="sl-slide sl-slide--memo" data-slide hidden aria-hidden="true">
+            <div class="sl-slide__body">
+              <div class="sl-media sl-media--memo">
+                <div class="sl-phone">
+                  <div class="sl-phone__screen">
+                    <img src="assets/images/salon/salon-ui-memo-phone.webp" width="1040" height="1726" loading="lazy"
+                         alt="接客後にスマートフォンから短いメモを入力するSmart Labo Salonの接客メモ画面">
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+            <figcaption class="sl-slide__cap"><b>接客後、その場で短く記録</b><span>30秒メモ ― スマートフォンから入力</span></figcaption>
+          </figure>
+
+          <figure class="sl-slide sl-slide--review" data-slide hidden aria-hidden="true">
+            <div class="sl-slide__body">
+              <div class="sl-media sl-media--review">
+                <div class="sl-window">
+                  <div class="sl-window__bar" aria-hidden="true">
+                    <span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span>
+                    <span class="sl-window__title">来店 ／ 確認待ちのAI整理</span>
+                  </div>
+                  <img src="assets/images/salon/salon-ui-ai-review-unchecked.webp" width="1360" height="1581" loading="lazy"
+                       alt="AIが整理した項目のうち、登録しない項目のチェックを外している画面">
+                </div>
+              </div>
+            </div>
+            <figcaption class="sl-slide__cap"><b>AIが整理。残す内容は人が決める。</b><span>チェックを外した項目は登録されません</span></figcaption>
+          </figure>
+
+          <figure class="sl-slide sl-slide--public" data-slide hidden aria-hidden="true">
+            <div class="sl-slide__body">
+              <div class="sl-media sl-media--shop">
+                <div class="sl-phone"><div class="sl-phone__screen">
+                  <img src="assets/images/salon/salon-public-shop.webp" width="1040" height="1803" loading="lazy"
+                       alt="スマートフォンで表示した店舗ページ。店内写真と店舗名、WEB予約のボタンが並ぶ">
+                </div></div>
+              </div>
+              <div class="sl-media sl-media--booking">
+                <div class="sl-phone"><div class="sl-phone__screen">
+                  <img src="assets/images/salon/salon-public-booking.webp" width="1040" height="2052" loading="lazy"
+                       alt="店舗ページからのWEB予約画面。担当・日付・時間を選ぶ途中の状態">
+                </div></div>
+              </div>
+            </div>
+            <figcaption class="sl-slide__cap"><b>店舗ページからWEB予約まで。</b><span>24時間WEB予約受付</span></figcaption>
+          </figure>
+
         </div>
+
+        <div class="sl-slider__ctl">
+          <button type="button" class="sl-slider__btn" data-slide-prev aria-label="前の画面">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <div class="sl-slider__dots" role="group" aria-label="画面を選ぶ">
+            <button type="button" data-slide-to="0" class="is-active" aria-current="true" aria-label="1. 次回来店の接客準備"></button>
+            <button type="button" data-slide-to="1" aria-current="false" aria-label="2. 30秒メモ"></button>
+            <button type="button" data-slide-to="2" aria-current="false" aria-label="3. AI整理・スタッフ確認"></button>
+            <button type="button" data-slide-to="3" aria-current="false" aria-label="4. 店舗ページ・WEB予約"></button>
+          </div>
+          <button type="button" class="sl-slider__btn" data-slide-next aria-label="次の画面">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+
         <p class="sl-demo-note">※掲載画面はデモ用の架空データです。</p>
+
+        <!-- デモ動画（60〜90秒）の導線。動画が完成するまで hidden のまま（準備中ボタンは出さない）。
+             公開時: hidden を外し、下の <video data-src> に正式URLを入れる。 -->
+        <p class="sl-hero__video">
+          <button type="button" class="sl-video-btn" data-video-open hidden>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            60秒で見る Salon
+          </button>
+        </p>
       </div>
 
     </div>
   </section>
+
+  <!-- デモ動画モーダル（Phase 1F・器のみ）。<video data-src> が空の間は開かない。 -->
+  <dialog id="sl-video-dialog" class="sl-video-dialog" aria-labelledby="sl-video-title">
+    <div class="sl-video-dialog__head">
+      <p id="sl-video-title" class="sl-video-dialog__title">Smart Labo Salon ― 60秒で見る実際の操作</p>
+      <button type="button" class="sl-video-dialog__close" data-video-close aria-label="閉じる">×</button>
+    </div>
+    <div class="sl-video-dialog__body">
+      <video controls playsinline preload="none" width="1280" height="720" data-src=""></video>
+    </div>
+    <p class="sl-demo-note">※動画内の画面はデモ用の架空データです。</p>
+  </dialog>
 
   <!-- ============================== 03. 3ステップ ============================== -->
   <section class="sl-section sl-section--tight" aria-labelledby="values-title">
@@ -442,6 +526,24 @@
         <li>24時間WEB予約受付</li>
         <li>店舗側の予約へそのまま反映</li>
       </ul>
+
+      <!-- 店舗自身で更新できる（Phase 1F）。設定画面から店舗情報・写真・メニュー・スタッフを変更 → 公開ページへ反映（実機で確認済み） -->
+      <div class="sl-update reveal">
+        <div class="sl-update__copy">
+          <h3 class="sl-update__title">作って終わりじゃない。<br>お店で更新できる。</h3>
+          <p class="sl-update__text">
+            店舗情報・写真・メニュー・スタッフなど日常的な内容は、店舗の管理画面から変更でき、公開中の店舗ページにそのまま反映されます。
+            大きなデザイン変更や新しいページの追加、特別な制作はSmart Laboへご相談ください。
+          </p>
+        </div>
+        <ul class="sl-update__items" aria-label="店舗の管理画面から更新できる内容">
+          <li><b>店舗情報</b><span>紹介文・アクセス・営業時間</span></li>
+          <li><b>写真</b><span>店舗・メニュー・スタッフ</span></li>
+          <li><b>メニュー</b><span>名称・説明・所要時間・料金</span></li>
+          <li><b>スタッフ</b><span>紹介・担当メニュー</span></li>
+        </ul>
+      </div>
+
       <p class="sl-demo-note">※掲載画面はデモ用の架空データです。</p>
     </div>
   </section>
@@ -508,9 +610,38 @@
       <p class="sl-eyebrow">店舗ホームページ制作</p>
       <h2 class="sl-h2" id="web-title">新しいお客様との入口も、つくる。</h2>
       <p class="sl-lead">
-        集客媒体だけに頼らない、店舗の資産になるホームページ。
+        業種やお店の雰囲気に合わせて、つくります。集客媒体だけに頼らない、店舗の資産になるホームページ。
         Salonの店舗ページとは別に、独自ドメインでのホームページ制作も承ります。制作だけのご依頼も可能です。
       </p>
+
+      <!-- 制作イメージ3種（Phase 1F）。すべて架空の店舗・事務所。実在の制作実績ではない。 -->
+      <ul class="sl-samples" aria-label="ホームページ制作イメージ">
+        <li class="sl-sample reveal">
+          <div class="sl-window">
+            <div class="sl-window__bar" aria-hidden="true"><span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span></div>
+            <img src="assets/images/website/website-sample-salon.webp" width="1800" height="1125" loading="lazy"
+                 alt="美容室・サロン向けホームページの制作イメージ。店内写真を大きく使い、メニュー・スタッフ・WEB予約の導線を置いたデザイン例">
+          </div>
+          <p class="sl-sample__label"><b>A</b>美容室・サロン<span>写真中心・メニュー・スタッフ・WEB予約</span></p>
+        </li>
+        <li class="sl-sample reveal">
+          <div class="sl-window">
+            <div class="sl-window__bar" aria-hidden="true"><span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span></div>
+            <img src="assets/images/website/website-sample-wellness.webp" width="1800" height="1125" loading="lazy"
+                 alt="整体・パーソナルジム・エステ向けホームページの制作イメージ。お悩み・施術メニュー・料金・予約の導線を置いたデザイン例">
+          </div>
+          <p class="sl-sample__label"><b>B</b>整体・ジム・エステ<span>お悩み・サービス・料金・予約</span></p>
+        </li>
+        <li class="sl-sample reveal">
+          <div class="sl-window">
+            <div class="sl-window__bar" aria-hidden="true"><span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span></div>
+            <img src="assets/images/website/website-sample-corporate.webp" width="1800" height="1125" loading="lazy"
+                 alt="企業・士業向けホームページの制作イメージ。会社紹介・サービス・問い合わせの導線を置いたデザイン例">
+          </div>
+          <p class="sl-sample__label"><b>C</b>企業・士業<span>会社紹介・サービス・お問い合わせ</span></p>
+        </li>
+      </ul>
+      <p class="sl-note" style="margin:0 0 22px">掲載している画面は制作イメージです（架空の店舗・事務所）。実際の制作内容はご相談のうえ決めていきます。</p>
 
       <div class="sl-2col">
         <div class="sl-card reveal">
@@ -548,6 +679,9 @@
   </section>
 
   <!-- ============================== 14. Smart Labo Works ============================== -->
+  <!-- 旧TOPのアンカー(#brain：Company Brain節)から到達した場合の受け皿。
+       Company Brain は Works の機能（company-brain.html）であり、会社TOPでは Works 節へ着地させる。 -->
+  <span id="brain" class="visually-hidden" aria-hidden="true"></span>
   <section class="sl-section" id="works" aria-labelledby="works-title">
     <div class="container">
       <div class="sl-works">
@@ -687,5 +821,6 @@
 </footer>
 
 <script src="assets/js/main.js" defer></script>
+<script src="assets/js/top-hero.js" defer></script>
 </body>
 </html>

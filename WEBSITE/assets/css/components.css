@@ -1633,6 +1633,11 @@
 /* -------------------------------------------------------- 送信ボタン -- */
 
 .cform__actions { display: grid; justify-items: start; gap: var(--sp-3); margin-top: var(--sp-2); }
+/* 送信ボタンの文言が長い場合（apply.html「申し込む（この時点では請求されません）」）に、
+   .btn の nowrap がグリッド列の最小幅を押し広げて 375px で横スクロールが出ていた（P32-3 1E 監査）。
+   ボタン内では折り返しを許可し、列幅は親幅を超えないようにする。 */
+.cform { grid-template-columns: minmax(0, 1fr); }
+.cform__actions .btn { white-space: normal; text-align: center; max-width: 100%; }
 .cform__actions .btn[disabled] { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 .cform__note { font-size: var(--fs-xs); line-height: var(--lh-loose); color: var(--text-secondary); }
 
