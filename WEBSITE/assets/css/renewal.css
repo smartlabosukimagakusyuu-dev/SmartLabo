@@ -765,3 +765,305 @@
 @media (prefers-reduced-motion: reduce) {
   .sl-page * { animation: none !important; transition: none !important; }
 }
+
+
+/* ==========================================================================
+   WEB-V3-SALON-URGENT-2（P0一括実装）
+   ★ここで追加するものは全て `.sl-page`（会社TOP）スコープに閉じる。
+     共有CSS（base.css / components.css / tokens.css）は一切変更していない。
+   ========================================================================== */
+
+/* --- 1. スマホヘッダーの「文字が箱から溢れて重なる」事故を構造的に防ぐ ---------
+   根本原因は index.html の副CTAに site-header__sub が無く、
+   base.css の「1080px以下で副CTAを隠す」設計が効いていなかったこと（HTML側で修正済）。
+   ここはその再発防止。.btn は white-space:nowrap のため、flexで箱だけが縮むと
+   文字が箱の外へはみ出して隣の要素と重なる。CTAとトグルは縮ませず、
+   ロゴのワードマークだけが（万一のとき）省略記号で縮むようにしておく。 */
+.sl-page .site-header__inner { flex-wrap: nowrap; min-width: 0; }
+.sl-page .site-header__actions { flex: 0 0 auto; }
+.sl-page .site-header__actions .btn { flex: 0 0 auto; }
+.sl-page .nav-toggle { flex: 0 0 auto; }
+.sl-page .logo { flex: 0 1 auto; min-width: 0; }
+/* ドロワー専用の相談導線。デスクトップ幅ではヘッダーCTA・ヒーローCTAと重複し、
+   ナビが長くなってロゴを圧迫するため表示しない（ドロワー化する1080px以下でのみ出す） */
+@media (min-width: 1081px) {
+  .sl-page .site-nav__cta { display: none; }
+}
+.sl-page .logo__icon { flex: 0 0 auto; }
+.sl-page .logo__text { overflow: hidden; text-overflow: ellipsis; }
+
+/* --- 1b. H1の語中改行を防ぐ（「再来店」等が行またぎで千切れないように） ------- */
+.sl-page .sl-nb { display: inline-block; }
+
+/* --- 2. ファーストビューの副次導線（第3・第4）を2本並べる ------------------- */
+.sl-page .sl-hero__links { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+
+/* --- 3. Salonデモ（静止画ガイドツアー） -------------------------------------
+   1枚ずつ横並びの行として積む。グリッドで敷き詰めないので、
+   縦長のスマホ画面と横長のPC画面が混在してもカード高がずれない。 */
+.sl-tour__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 40px;
+}
+.sl-tour__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px 40px;
+  align-items: center;
+}
+/* 偶数番は画像を左・文章を右にして、上から下へ視線が蛇行するようにする */
+.sl-tour__item:nth-child(even) .sl-tour__text { order: 2; }
+
+.sl-tour__step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--sl-blue);
+}
+.sl-tour__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--sl-navy);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 800;
+}
+.sl-tour__title {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.6;
+  color: var(--sl-navy);
+}
+.sl-tour__desc {
+  margin: 0;
+  font-size: .92rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+}
+
+/* 枠は既存の .sl-window / .sl-phone をそのまま流用する。
+   画像の実寸比がばらばらでも、枠の最大幅で見た目の大きさをそろえる。 */
+.sl-tour__media { display: flex; justify-content: center; min-width: 0; }
+.sl-tour__media > * { width: min(100%, 470px); }
+.sl-tour__media--phone > * { width: min(100%, 210px); }
+.sl-tour__media img { display: block; width: 100%; height: auto; }
+
+/* --- 4. 運営（1行導線）。独立した会社sectionの置き換え --------------------- */
+.sl-operator {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 22px var(--gutter);
+  font-size: .84rem;
+  color: var(--sl-gray);
+}
+.sl-operator a { font-weight: 700; }
+
+/* --- 5. レスポンシブ ------------------------------------------------------- */
+@media (max-width: 860px) {
+  /* 1列。文章 → 画像 の順に読ませる（order指定を戻す） */
+  .sl-tour__item { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .sl-tour__item:nth-child(even) .sl-tour__text { order: 0; }
+  .sl-tour__list { gap: 34px; }
+  .sl-tour__media > * { width: min(100%, 420px); }
+  .sl-tour__media--phone > * { width: min(100%, 200px); }
+}
+
+@media (max-width: 640px) {
+  /* ヘッダーは「ロゴ＋主CTA＋ハンバーガー」の3点のみ。余白を詰めて確実に収める */
+  .sl-page .site-header__inner { gap: var(--sp-3); }
+  .sl-page .sl-hero__links { justify-content: center; }
+  .sl-tour__title { font-size: 1.02rem; }
+  .sl-tour__media--phone > * { width: min(100%, 190px); }
+}
+
+
+/* ==========================================================================
+   WEB-V3-SALON-URGENT-4（Salon専用ページ＋TOP要約）
+   ★すべて `.sl-page` 配下の新クラスのみ。共有CSSは変更しない。
+   ========================================================================== */
+
+/* --- salon.html ヒーロー: スライダー無しの静的1枚（sl-hero__visualの流用） --- */
+.sl-hero__visual--static { display: grid; gap: 10px; justify-items: center; }
+.sl-hero__visual--static .sl-media--briefing { width: min(100%, 470px); }
+.sl-hero__visual--static .sl-media--briefing img { display: block; width: 100%; height: auto; }
+.sl-hero__visual--static .sl-hero__chip { justify-self: start; }
+
+/* --- salon.html 機能7カード --- */
+.sl-featgrid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+}
+.sl-featgrid .sl-card { display: grid; gap: 6px; padding: 18px 18px 16px; }
+.sl-featgrid b { font-size: .95rem; font-weight: 800; color: var(--sl-navy); }
+.sl-featgrid span { font-size: .84rem; line-height: 1.75; color: var(--sl-gray); }
+
+/* --- salon.html 再来店施策 --- */
+.sl-revisit { max-width: 620px; padding: 20px 22px 18px; }
+.sl-revisit__head { margin: 0 0 10px; font-size: .95rem; font-weight: 800; color: var(--sl-navy); }
+/* LINE前提の注記は小さくしすぎない（代表判断: 正確な前提の明示） */
+.sl-note--line {
+  max-width: 620px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  font-size: .88rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  background: var(--sl-blue-pale);
+  border-radius: var(--sl-radius-sm);
+}
+
+/* --- salon.html 店舗更新8項目（既存 .sl-update__items の幅広版） --- */
+.sl-update__items--wide { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* --- TOP #demo 要約3枚 --- */
+.sl-demosum {
+  list-style: none; margin: 0 0 10px; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px;
+  align-items: end;
+}
+.sl-demosum li { margin: 0; display: grid; gap: 10px; justify-items: center; }
+.sl-demosum .sl-phone { width: min(100%, 170px); }
+.sl-demosum .sl-window { width: 100%; }
+.sl-demosum img { display: block; width: 100%; height: auto; }
+.sl-demosum__cap { margin: 0; display: grid; gap: 2px; text-align: center; }
+.sl-demosum__cap b { font-size: .9rem; font-weight: 800; color: var(--sl-navy); }
+.sl-demosum__cap span { font-size: .78rem; color: var(--sl-gray); }
+
+/* --- レスポンシブ --- */
+@media (max-width: 860px) {
+  .sl-featgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sl-update__items--wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sl-demosum { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+}
+@media (max-width: 640px) {
+  .sl-featgrid { grid-template-columns: minmax(0, 1fr); }
+  .sl-demosum { grid-template-columns: minmax(0, 1fr); }
+  .sl-demosum .sl-phone { width: min(100%, 190px); }
+  .sl-demosum .sl-window { width: min(100%, 340px); }
+  .sl-hero__visual--static { justify-items: center; }
+  .sl-update__items--wide { grid-template-columns: minmax(0, 1fr); }
+}
+
+
+/* ==========================================================================
+   WEB-V3-SALON-URGENT-4-R1（導入効果の変化カード）
+   ★salon.html #before-after 専用。共有CSSは変更しない。
+   ★階層: テーマ(navy) → 導入前(warm gray) → 矢印(Smart Blue) → 導入後(pale blue)
+           → 効果(最下部・最大・navy)。効果文を最も印象に残す。
+   ========================================================================== */
+
+.sl-change {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* 高さは固定しない。flex column ＋ 効果文の margin-top:auto で、
+   カードの高さが揃っても効果文だけが必ず最下部に来る。 */
+.sl-change__card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 22px 22px 20px;
+  background: var(--c-white);
+  border: 1px solid #E8E2DA;
+  border-radius: var(--sl-radius);
+  box-shadow: var(--sl-shadow-sm);
+}
+
+.sl-change__theme {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 0 14px;
+  font-size: .97rem;
+  font-weight: 800;
+  color: var(--sl-navy);
+}
+.sl-change__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--sl-blue-pale);
+  color: var(--sl-blue);
+}
+
+.sl-change__flow { display: grid; gap: 6px; margin: 0 0 16px; }
+
+.sl-change__before,
+.sl-change__after {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 12px 14px;
+  font-size: .89rem;
+  line-height: 1.75;
+  border-radius: var(--sl-radius-sm);
+}
+/* 導入前 = 淡いwarm gray／導入後 = 淡いblue */
+.sl-change__before { background: #F4F1ED; color: #7C7166; }
+.sl-change__after  { background: var(--sl-blue-pale); color: var(--sl-navy); font-weight: 600; }
+
+.sl-change__tag {
+  justify-self: start;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+.sl-change__before .sl-change__tag { background: #E5DDD3; color: #7C7166; }
+.sl-change__after  .sl-change__tag { background: var(--sl-blue); color: var(--c-white); }
+
+/* 変化のアクセントは Smart Blue */
+.sl-change__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--sl-blue);
+}
+
+/* 効果 = カード内で最も大きく、最下部 */
+.sl-change__effect {
+  margin: auto 0 0;
+  padding-top: 15px;
+  border-top: 1px solid #EFEAE3;
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.65;
+  color: var(--sl-navy);
+}
+
+@media (max-width: 860px) {
+  /* スマホ・タブレット縦は1列。カード冒頭から効果まで一続きに読める */
+  .sl-change { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
+@media (max-width: 640px) {
+  .sl-change__card { padding: 20px 18px 18px; }
+  .sl-change__effect { font-size: 1.02rem; }
+}

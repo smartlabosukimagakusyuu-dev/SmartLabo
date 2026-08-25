@@ -11,7 +11,7 @@
 <!-- Smart Labo Works — Website v3 / お問い合わせ(骨格のみ。本実装はWEB-V2-2以降) -->
 
 <title>お問い合わせ — Smart Labo Works</title>
-<meta name="description" content="Smart Labo Worksへのお問い合わせ。資料請求・無料相談・デモ依頼・一般お問い合わせ・パートナー相談・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<meta name="description" content="Smart Labo Worksへのお問い合わせ。資料請求・無料相談・一般お問い合わせ・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <link rel="canonical" href="https://smartlaboworks.com/contact.html">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
@@ -20,12 +20,12 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo Works">
 <meta property="og:title" content="お問い合わせ — Smart Labo Works">
-<meta property="og:description" content="Smart Labo Worksへのお問い合わせ。資料請求・無料相談・デモ依頼・一般お問い合わせ・パートナー相談・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<meta property="og:description" content="Smart Labo Worksへのお問い合わせ。資料請求・無料相談・一般お問い合わせ・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <meta property="og:url" content="https://smartlaboworks.com/contact.html">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="お問い合わせ — Smart Labo Works">
-<meta name="twitter:description" content="Smart Labo Worksへのお問い合わせ。資料請求・無料相談・デモ依頼・一般お問い合わせ・パートナー相談・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
+<meta name="twitter:description" content="Smart Labo Worksへのお問い合わせ。資料請求・無料相談・一般お問い合わせ・採用のご連絡を受け付けています。お問い合わせから利用開始までの流れとよくある質問を掲載しています。">
 <meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-1200x630.png">
 
 
@@ -136,26 +136,10 @@
 
         <article class="topic">
           <span class="topic__icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 11l2.5 2.5L16 8"/></svg>
-          </span>
-          <h3 class="topic__title"><a href="?type=demo#form">デモ依頼</a></h3>
-          <p class="topic__body">実際の画面をお見せしながら、できること・できないことをご説明します。</p>
-        </article>
-
-        <article class="topic">
-          <span class="topic__icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.7.7-.7 1.1v.5"/><path d="M12 17h.01"/></svg>
           </span>
           <h3 class="topic__title"><a href="?type=contact#form">一般お問い合わせ</a></h3>
           <p class="topic__body">上記に当てはまらないご質問やご意見も承っています。</p>
-        </article>
-
-        <article class="topic">
-          <span class="topic__icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2"/><circle cx="9.5" cy="8" r="3"/><path d="M21 20v-2a3 3 0 0 0-2.3-2.9M16.5 5.2a3 3 0 0 1 0 5.6"/></svg>
-          </span>
-          <h3 class="topic__title"><a href="?type=partner#form">パートナー・代理店相談</a></h3>
-          <p class="topic__body">販売・紹介などの協業に関するご相談を承っています。</p>
         </article>
 
         <article class="topic">
@@ -303,16 +287,16 @@
           </label>
           <select class="field__input field__select" id="f-type" name="type" required
                   aria-describedby="f-type-error">
-            <!-- WEB-V3-4: 正式6種別。value は contact-api の SLW_TYPES と1対1で対応し、
-                 URLパラメータ ?type= もこの値を使う。片方だけ変更すると送信が
-                 422で弾かれるため、必ずAPI側と同時に更新すること。
-                 旧値（intro / price / feature / fit / other）は使用しない。 -->
+            <!-- WEB-V3-SALON-URGENT-4-R1: 画面に出す種別を4件へ整理した。
+                 value は contact-api の SLW_TYPES の部分集合であり、追加はしていない
+                 （APIのallowlistは変更していない＝送信は従来どおり通る）。
+                 ★demo（デモ依頼）と partner（パートナー・代理店相談）は画面から削除した。
+                   旧URL ?type=demo / ?type=partner は contact-form.js が
+                   consult / contact へ読み替える（削除したoptionは復活させない）。 -->
             <option value="">選択してください</option>
             <option value="docs">資料請求</option>
             <option value="consult">無料相談</option>
-            <option value="demo">デモ依頼</option>
             <option value="contact">一般お問い合わせ</option>
-            <option value="partner">パートナー・代理店相談</option>
             <option value="recruit">採用について</option>
           </select>
           <p class="field__error" id="f-type-error" data-error-for="type"></p>
@@ -335,6 +319,84 @@
           </select>
           <p class="field__error" id="f-headcount-error" data-error-for="headcount"></p>
         </div>
+
+        <!-- Salon相談の機能選択（WEB-V3-SALON-URGENT-4） ==============================
+             ★Salon相談（?topic=salon）のときだけ JS が表示する。
+               type=consult だけでは表示しない（HP制作・Worksの無料相談と区別するため）。
+             ★checkbox に name を付けない＝送信payloadへ新しいfieldは一切増えない
+               （選択内容は contact-form.js が message 本文の先頭へ整形して入れる）。
+             ★「現在利用できる機能」と「今後追加してほしい機能」を明確に分離する。
+               AIチャット・誕生日/曜日・時間帯の絞り込みは未実装のため後者にのみ置く。 -->
+        <!-- ★display:none を明示する理由: components.css の `.field { display: grid }` が
+             UAの `[hidden] { display: none }` より優先されるため、hidden属性だけでは消えない。
+             JS無効時もSalon以外の相談で出さないよう、既定は非表示にしておく。
+             表示/非表示の切り替えは contact-form.js が行う。 -->
+        <fieldset class="field" id="interests" data-interests hidden
+                  style="display:none;border:0;padding:0;margin:0;min-width:0">
+          <legend class="field__label" style="padding:0">
+            気になる機能（複数選択できます） <span class="field__optional">任意</span>
+          </legend>
+
+          <div data-interest-group="now">
+            <p class="field__hint" style="margin:4px 0 6px;font-weight:700">【現在利用できる機能】</p>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-booking" data-interest="予約・来店管理">
+              <label class="field__check-label" for="f-int-booking">予約・来店管理</label>
+            </div>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-karte" data-interest="顧客情報・電子カルテ">
+              <label class="field__check-label" for="f-int-karte">顧客情報・電子カルテ</label>
+            </div>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-memo" data-interest="接客メモとAI整理">
+              <label class="field__check-label" for="f-int-memo">接客メモとAI整理</label>
+            </div>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-brief" data-interest="次回来店前の接客準備">
+              <label class="field__check-label" for="f-int-brief">次回来店前の接客準備</label>
+            </div>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-line" data-interest="LINEの対象を絞ったご案内"
+                     aria-describedby="f-int-line-note">
+              <label class="field__check-label" for="f-int-line">LINEの対象を絞ったご案内</label>
+            </div>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-revisit" data-interest="再来店のご案内"
+                     aria-describedby="f-int-line-note">
+              <label class="field__check-label" for="f-int-revisit">再来店のご案内</label>
+            </div>
+            <p class="field__hint" id="f-int-line-note" style="margin:0 0 6px">
+              ※LINEでのご案内には、店舗のLINE公式アカウントのご契約・設定が必要です。
+            </p>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-shopweb" data-interest="店舗ホームページ・WEB予約">
+              <label class="field__check-label" for="f-int-shopweb">店舗ホームページ・WEB予約</label>
+            </div>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-update" data-interest="写真・メニュー等の店舗更新">
+              <label class="field__check-label" for="f-int-update">写真・メニュー等の店舗更新</label>
+            </div>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-int-owner" data-interest="オーナー向け管理">
+              <label class="field__check-label" for="f-int-owner">オーナー向け管理</label>
+            </div>
+          </div>
+
+          <div data-interest-group="future" style="margin-top:10px">
+            <p class="field__hint" style="margin:4px 0 6px;font-weight:700">【今後追加してほしい機能】</p>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-fut-aichat" data-interest="AIチャット">
+              <label class="field__check-label" for="f-fut-aichat">AIチャット</label>
+            </div>
+            <div class="field field--check" style="margin:0">
+              <input class="field__checkbox" type="checkbox" id="f-fut-filter" data-interest="誕生日・曜日・時間帯などでの絞り込み">
+              <label class="field__check-label" for="f-fut-filter">誕生日・曜日・時間帯などでの絞り込み</label>
+            </div>
+            <p class="field__hint" style="margin:0">
+              ※こちらは現在開発中・検討中の項目です。ご要望として承ります。
+            </p>
+          </div>
+        </fieldset>
 
         <!-- お問い合わせ内容 -->
         <div class="field">

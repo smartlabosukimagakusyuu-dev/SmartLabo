@@ -12,6 +12,9 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://smartlaboworks.com/salon.html</loc>
+  </url>
+  <url>
     <loc>https://smartlaboworks.com/features.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

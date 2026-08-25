@@ -100,17 +100,23 @@
     </a>
 
     <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
+      <!-- ↓2件はスマホドロワー用の相談導線。デスクトップではヘッダーCTA・ヒーローCTAと
+           重複しナビ幅がロゴを圧迫するため、1081px以上では表示しない（renewal.css） -->
+      <a class="site-nav__cta" href="salon.html">Smart Labo Salonを詳しく見る</a>
       <a href="#salon">Salon</a>
       <a href="#website">ホームページ制作</a>
       <a href="features.html">Smart Labo Works</a>
       <a href="company.html">会社情報</a>
       <a href="contact.html">お問い合わせ</a>
+      <a class="site-nav__cta" href="contact.html?type=consult&amp;topic=salon#interests">Salonについて無料相談</a>
     </nav>
 
     <div class="site-header__actions">
-      <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm">無料相談する</a>
-      <a href="contact.html?type=demo#form" class="btn btn--primary btn--sm">
-        <span class="btn__label-full">Salonについて相談する</span><span class="btn__label-short">相談する</span>
+      <!-- site-header__sub: 1080px以下で非表示にする既存設計（base.css）。
+           他9ページは付与済みで、このTOPだけ欠落していたためスマホで重なっていた。 -->
+      <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--sm">
+        <span class="btn__label-full">Salonについて相談する</span><span class="btn__label-short">無料相談</span>
       </a>
     </div>
 
@@ -131,22 +137,26 @@
     <div class="container sl-hero__inner">
 
       <div class="sl-hero__copy">
-        <p class="sl-eyebrow">美容室からはじまる、接客業のAI支援</p>
-        <h1 class="sl-hero__title" id="hero-title">AIで、仕事を楽に。<br>顧客との関係を、もっと強く。</h1>
+        <p class="sl-eyebrow">美容室・サロンのための顧客支援</p>
+        <h1 class="sl-hero__title" id="hero-title"><span class="sl-nb">予約・</span><span class="sl-nb">顧客カルテ・</span><span class="sl-nb">再来店を、</span><br>ひとつに。</h1>
         <p class="sl-hero__sub">
-          Smart Laboは、ホームページ制作、顧客管理、AI活用、業務自動化をつなぎ、
-          店舗・企業の仕事が実際に変わる仕組みをつくります。
-          いまは美容室向けの <strong>Smart Labo Salon</strong> を中心に、
-          接客後の短いメモを次回の来店につなげています。
+          接客メモから、次に来ていただく理由をつくる。<br>
+          <strong>Smart Labo Salon</strong>は、予約・来店・顧客管理・LINE再来店支援を
+          ひとつにつなぐ店舗運営サービスです。
         </p>
 
+        <!-- TOPは営業入口。詳細はsalon.htmlへ（URGENT-4の役割分担） -->
         <div class="sl-actions">
-          <a href="contact.html?type=demo#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
-          <a href="contact.html?type=consult#form" class="btn btn--secondary btn--lg">店舗ホームページ制作を相談する</a>
+          <a href="salon.html" class="btn btn--primary btn--lg">Smart Labo Salonを詳しく見る</a>
+          <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--secondary btn--lg">気になる機能を選んで相談する</a>
         </div>
-        <p class="sl-note">ご相談いただいた方には、実際の画面をご覧いただきながらご説明します。</p>
+        <p class="sl-note">実際の画面をご覧いただきながらご説明します。</p>
 
-        <p class="sl-hero__links"><a href="features.html">Smart Labo Works（法人向け）を見る</a></p>
+        <p class="sl-hero__links">
+          <a href="salon.html#before-after">導入すると変わることを見る</a>
+          <a href="#website">店舗ホームページ制作を見る</a>
+          <a href="features.html">Smart Labo Works（法人向け）を見る</a>
+        </p>
       </div>
 
       <!-- 実画面スライダー（Phase 1F）：接客準備（初期表示）→ 30秒メモ → AI整理・スタッフ確認 → 店舗ページ/WEB予約。
@@ -264,6 +274,53 @@
     <p class="sl-demo-note">※動画内の画面はデモ用の架空データです。</p>
   </dialog>
 
+  <!-- ============================== 02-B. Salonデモ（要約） ==============================
+       ★6ステップの全編は salon.html#screens へ移設した（URGENT-4）。
+         TOPは要約3枚だけを置き、#demo アンカーは受け皿として維持する。
+         画像は assets/images/salon/ の既存アセットを参照のみ（複製しない）。 -->
+  <section class="sl-section sl-section--ivory" id="demo" aria-labelledby="demo-title">
+    <div class="container">
+      <p class="sl-eyebrow">実際の画面</p>
+      <h2 class="sl-h2" id="demo-title">実際の画面で、3分で分かります。</h2>
+      <p class="sl-lead">
+        接客メモ、AIの整理、次回の接客準備まで。利用の流れは実際の画面のままご覧いただけます。
+      </p>
+
+      <ul class="sl-demosum">
+        <li class="reveal">
+          <div class="sl-phone"><div class="sl-phone__screen">
+            <img src="assets/images/salon/salon-ui-memo-phone.webp" width="1040" height="1726" loading="lazy" decoding="async"
+                 alt="接客後にスマートフォンから短いメモを入力するSmart Labo Salonの接客メモ画面">
+          </div></div>
+          <p class="sl-demosum__cap"><b>1. 接客後、30秒のメモ</b><span>スマートフォンから短く残す</span></p>
+        </li>
+        <li class="reveal">
+          <div class="sl-window">
+            <div class="sl-window__bar" aria-hidden="true"><span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span></div>
+            <img src="assets/images/salon/salon-ui-ai-review.webp" width="1360" height="1581" loading="lazy" decoding="async"
+                 alt="スタッフが内容を確認し、登録する項目だけにチェックを付けた状態のAI整理画面">
+          </div>
+          <p class="sl-demosum__cap"><b>2. AIが整理、人が確認</b><span>残す内容はスタッフが決める</span></p>
+        </li>
+        <li class="reveal">
+          <div class="sl-window">
+            <div class="sl-window__bar" aria-hidden="true"><span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span></div>
+            <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128" loading="lazy" decoding="async"
+                 alt="確認済みの顧客記録から、前回のポイント・前回の会話・今回の提案候補をまとめた接客準備の画面">
+          </div>
+          <p class="sl-demosum__cap"><b>3. 次回来店前の接客準備</b><span>前回のポイントがそろっている</span></p>
+        </li>
+      </ul>
+
+      <p class="sl-demo-note">※掲載画面はデモ用の架空データです。</p>
+
+      <div class="sl-actions" style="margin-top:24px">
+        <a href="salon.html#screens" class="btn btn--primary">利用の流れをすべて見る</a>
+        <a href="salon.html#before-after" class="btn btn--secondary">導入すると変わることを見る</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================== 03. 3ステップ ============================== -->
   <section class="sl-section sl-section--tight" aria-labelledby="values-title">
     <div class="container">
@@ -315,23 +372,8 @@
     </div>
   </section>
 
-  <!-- ============================== 05. 課題提起 ============================== -->
-  <section class="sl-section sl-center" aria-labelledby="issue-title">
-    <div class="container">
-      <h2 class="sl-h2" id="issue-title">顧客カルテが、<br>「記録するだけ」になっていませんか？</h2>
-      <p class="sl-lead">美容室のオーナー・スタッフの方から、よくうかがう内容です。</p>
-      <ul class="sl-issues reveal">
-        <li>接客の内容を、あとで思い出せない</li>
-        <li>スタッフごとに、記録の書き方が違う</li>
-        <li>来店前に、長いカルテを読み返す時間がない</li>
-        <li>次の提案が、担当者の記憶頼りになっている</li>
-      </ul>
-      <p class="sl-issues-bridge">
-        Smart Labo Salon は、この4つを「短いメモ」「AIの整理」「次回来店の接客準備」で変えます。
-        導入前と導入後で、日々の進め方がどう変わるかをご覧ください。
-      </p>
-    </div>
-  </section>
+  <!-- ============================== 05. 課題提起 ==============================
+       URGENT-4で削除（BEFORE/AFTERと重複するため圧縮。詳細な導入前後は salon.html#before-after）。 -->
 
   <!-- ============================== 06. BEFORE / AFTER ============================== -->
   <span id="features" class="visually-hidden" aria-hidden="true"></span>
@@ -361,6 +403,10 @@
             <li>前回の会話や、次回の提案に活かす</li>
           </ul>
         </div>
+      </div>
+
+      <div class="sl-actions" style="margin-top:24px">
+        <a href="salon.html#before-after" class="btn btn--secondary">導入前後の違いを詳しく見る</a>
       </div>
     </div>
   </section>
@@ -470,7 +516,7 @@
             <li><b>今回の提案候補</b><span>前回「次回は」と残した内容が、提案の候補として出てきます。</span></li>
           </ul>
           <div class="sl-actions">
-            <a href="contact.html?type=demo#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
+            <a href="contact.html?type=consult&amp;topic=salon#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
           </div>
           <p class="sl-demo-note">※掲載画面はデモ用の架空データです。</p>
         </div>
@@ -597,7 +643,7 @@
           次回来店の接客準備、AI投稿案・AIキャンペーン案、初期設定支援と操作説明（標準1回）を含みます。
         </p>
         <div class="sl-actions">
-          <a href="contact.html?type=demo#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
+          <a href="contact.html?type=consult&amp;topic=salon#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
         </div>
         <p class="sl-note">実際の画面を見ながらご説明します。ご契約前に、含まれる内容と条件をご確認いただけます。</p>
       </div>
@@ -627,8 +673,8 @@
         <li class="sl-sample reveal">
           <div class="sl-window">
             <div class="sl-window__bar" aria-hidden="true"><span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span></div>
-            <img src="assets/images/website/website-sample-wellness.webp" width="1800" height="1125" loading="lazy"
-                 alt="整体・パーソナルジム・エステ向けホームページの制作イメージ。お悩み・施術メニュー・料金・予約の導線を置いたデザイン例">
+            <img src="assets/images/website/website-sample-wellness-v2.webp" width="1800" height="1125" loading="lazy"
+                 alt="整体・パーソナルジム・エステ向けホームページの制作イメージ。施術風景の写真を大きく使い、コンセプト・施術メニュー・初回体験予約の導線を置いたデザイン例">
           </div>
           <p class="sl-sample__label"><b>B</b>整体・ジム・エステ<span>お悩み・サービス・料金・予約</span></p>
         </li>
@@ -673,7 +719,7 @@
       </div>
 
       <div class="sl-actions" style="margin-top:24px">
-        <a href="contact.html?type=consult#form" class="btn btn--secondary">店舗ホームページ制作を相談する</a>
+        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--secondary">店舗ホームページ制作を相談する</a>
       </div>
     </div>
   </section>
@@ -704,7 +750,7 @@
             Smart Labo Salon・Works・ホームページ制作の周辺業務を中心に、今の進め方に合わせてご相談を承ります。
           </p>
           <div class="sl-actions">
-            <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm">AI活用について相談する</a>
+            <a href="contact.html?type=consult&amp;topic=works#form" class="btn btn--secondary btn--sm">AI活用について相談する</a>
           </div>
         </div>
       </div>
@@ -739,21 +785,11 @@
     </div>
   </section>
 
-  <!-- ============================== 16. 会社 ============================== -->
+  <!-- ============================== 16. 会社（圧縮） ==============================
+       独立した大きな「運営／株式会社スマートラボ」節は廃止し、最終CTA直下の1行導線へ集約した。
+       会社情報そのものは company.html とフッター「会社・お問い合わせ」に維持している。
+       旧アンカー #faq の受け皿は他ページからの参照が壊れないようここへ残す。 -->
   <span id="faq" class="visually-hidden" aria-hidden="true"></span>
-  <section class="sl-section" aria-labelledby="company-title">
-    <div class="container container--narrow">
-      <p class="sl-eyebrow">運営</p>
-      <h2 class="sl-h2" id="company-title">株式会社スマートラボ</h2>
-      <p class="sl-lead">
-        会社の情報、事業内容、お問い合わせ窓口は会社情報ページに掲載しています。
-      </p>
-      <div class="sl-actions">
-        <a href="company.html" class="btn btn--secondary">会社情報を見る</a>
-        <a href="contact.html" class="btn btn--secondary">お問い合わせ</a>
-      </div>
-    </div>
-  </section>
 
   <!-- ============================== 17. 最終CTA ============================== -->
   <section class="sl-section sl-section--navy sl-final" aria-labelledby="final-title">
@@ -764,12 +800,17 @@
         Smart Labo Works のうち、合うものをご提案します。
       </p>
       <div class="sl-actions">
-        <a href="contact.html?type=demo#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
-        <a href="contact.html?type=consult#form" class="btn btn--on-inverse btn--lg">店舗ホームページ制作を相談する</a>
+        <a href="contact.html?type=consult&amp;topic=salon#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
+        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--on-inverse btn--lg">店舗ホームページ制作を相談する</a>
       </div>
       <p class="sl-note">実際の画面をご覧いただきながらご説明します。<a href="features.html" style="color:#cfe0ff">Smart Labo Worksを見る</a></p>
     </div>
   </section>
+
+  <!-- ============================== 17-B. 運営（1行導線） ============================== -->
+  <p class="sl-operator">
+    運営：株式会社スマートラボ<a href="company.html">会社情報を見る</a>
+  </p>
 
 </main>
 
@@ -794,7 +835,7 @@
         <h4>店舗向け</h4>
         <a href="index.html#salon">Smart Labo Salon</a>
         <a href="index.html#website">店舗ホームページ制作</a>
-        <a href="contact.html?type=demo#form">Salonについて相談する</a>
+        <a href="contact.html?type=consult&amp;topic=salon#form">Salonについて相談する</a>
       </div>
 
       <div class="site-footer__col">

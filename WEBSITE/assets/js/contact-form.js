@@ -54,12 +54,231 @@
   // 資料請求などの導線から ?type=docs 付きで開かれた場合、種別をあらかじめ
   // 選んでおく。フォームに存在しない値は無視する。JSが動かなくても、
   // 利用者が自分で選べばよいだけなので機能は損なわれない。
+  /**
+   * 旧URLの読み替え（WEB-V3-SALON-URGENT-4-R1）。
+   * 画面の種別を4件（docs / consult / contact / recruit）へ整理したため、
+   * 既に外部へ共有された可能性のある旧URLが「選択なし」で着地しないようにする。
+   *   ?type=demo    → consult（無料相談）  ※Salon相談の正式URLは type=consult&topic=salon
+   *   ?type=partner → contact（一般お問い合わせ）
+   * ★読み替え先は必ず「画面に存在するoption」。削除したoptionは復活させない
+   *   （下の querySelector による存在確認でも二重に守っている）。
+   * ★contact-api 側の許可値（SLW_TYPES）は変更していない。
+   */
+  var LEGACY_TYPES = { demo: 'consult', partner: 'contact' };
+
   if ('URLSearchParams' in window) {
     var typeParam = new URLSearchParams(location.search).get('type');
     var typeSelect = document.getElementById('f-type');
+    if (typeParam && Object.prototype.hasOwnProperty.call(LEGACY_TYPES, typeParam)) {
+      typeParam = LEGACY_TYPES[typeParam];
+    }
     if (typeParam && typeSelect && /^[a-z0-9_-]+$/.test(typeParam) &&
         typeSelect.querySelector('option[value="' + typeParam + '"]')) {
       typeSelect.value = typeParam;
+    }
+  }
+
+  /* ------------------------------ 相談内容の識別(WEB-V3-SALON-URGENT-2) -- */
+
+  /**
+   * どの商品についての相談かを、問い合わせ本文の先頭1行で識別できるようにする。
+   *
+   * 背景: サーバー側(contact-api)の検証は許可された項目だけを組み直してメールを
+   * 作るため、hidden項目を足しても黙って捨てられ、件名にも本文にも現れない。
+   * 種別(type)は「資料請求／無料相談／一般お問い合わせ…」という問い合わせの"種類"であって
+   * 商品名ではないため、Salon相談とWorks相談が同じ「無料相談」として届いてしまう。
+   *
+   * そこで、API・PHP・XServerを一切変更せずに識別する方法として、
+   * 本文(message)の先頭へ識別行を入れておく。利用者が消すことも書き換えることも
+   * できる、あくまで下書きの補助である。
+   */
+  var TOPIC_LINES = {
+    salon:   '【ご相談内容】Smart Labo Salon',
+    website: '【ご相談内容】店舗ホームページ制作',
+    works:   '【ご相談内容】Smart Labo Works'
+  };
+
+  if ('URLSearchParams' in window) {
+    var topicParam = new URLSearchParams(location.search).get('topic');
+    var messageEl = document.getElementById('f-message');
+
+    // 未知のtopicは無視する（TOPIC_LINES に無いキーは何もしない）。
+    // hasOwnProperty で照合し、'toString' などの継承プロパティを拾わないようにする。
+    if (topicParam && messageEl &&
+        Object.prototype.hasOwnProperty.call(TOPIC_LINES, topicParam)) {
+      var line = TOPIC_LINES[topicParam];
+      var current = messageEl.value;
+
+      // 同じ識別行が既にあるなら二重に入れない。
+      // （戻る操作やブラウザの入力復元で再実行されても増えない）
+      var NL = String.fromCharCode(10);
+      var already = current.split(NL).some(function (row) {
+        return row.trim() === line;
+      });
+
+      if (!already) {
+        // 既に入力がある場合も内容は壊さず、先頭へ差し込むだけにする。
+        // textContent/value への代入のみで、innerHTML は使わない（XSSを作らない）。
+        messageEl.value = (current === '') ? line + NL + NL
+                                          : line + NL + NL + current;
+      }
+    }
+  }
+
+  /* --------------------- 機能選択fieldset（WEB-V3-SALON-URGENT-4 / R2） -- */
+
+  /**
+   * Salon相談のときだけ「気になる機能」fieldsetを表示する。
+   *
+   * 表示条件（R2で確定）: ?topic=salon 「かつ」種別が consult（無料相談）。
+   *   ・topic だけで判定すると、Salonの相談画面から「採用について」等へ
+   *     種別を変えても機能一覧が残り、Salon相談として誤って届く恐れがある。
+   *   ・type だけで判定すると、店舗ホームページ制作(topic=website)や
+   *     Works(topic=works)の無料相談にもSalonの機能一覧が出てしまう。
+   *   両方を満たすときだけ表示する。
+   *
+   * 正式URL: contact.html?type=consult&topic=salon#interests
+   * 旧URL   : contact.html?type=demo&topic=salon#interests
+   *           （demo → consult へ読み替え済みのため、そのまま表示される）
+   *
+   * ★checkboxにはnameが無いので、表示/非表示に関わらずFormDataへは一切入らない。
+   * ★選択状態は画面上そのまま残す（種別を戻せば元の選択で再開できる）。
+   *   ただし条件を満たさない間は composeInterests が本文へ一切反映しない。
+   */
+  var interestsFieldset = document.getElementById('interests');
+
+  /** URLで指定された相談内容（topic）。ページを開いた時点で固定する */
+  var urlTopic = null;
+  if ('URLSearchParams' in window) {
+    urlTopic = new URLSearchParams(location.search).get('topic');
+  }
+  var isSalonTopic = urlTopic === 'salon';
+
+  /** いま「Salonの無料相談」として扱ってよい状態か */
+  function isSalonConsult() {
+    if (!isSalonTopic) return false;
+    var typeEl = document.getElementById('f-type');
+    return !!typeEl && typeEl.value === 'consult';
+  }
+
+  /** fieldset内の選択済みラベルを、グループ名（now / future）ごとに集める */
+  function collectInterests(group) {
+    if (!interestsFieldset) return [];
+    var box = interestsFieldset.querySelector('[data-interest-group="' + group + '"]');
+    if (!box) return [];
+    var out = [];
+    box.querySelectorAll('input[type="checkbox"][data-interest]').forEach(function (cb) {
+      // data-interest の無い/空のものは無視する（未知値を拾わない）
+      var label = cb.getAttribute('data-interest');
+      if (cb.checked && label) out.push(label);
+    });
+    return out;
+  }
+
+  var INTEREST_MARK = '【気になる機能】';
+  var FUTURE_MARK = '【今後の希望】';
+  var CONSULT_MARK = '【ご相談内容】';
+
+  /**
+   * Salon相談の識別ブロックを message の先頭に組み立て直す。
+   *
+   * ・?topic=salon のページでのみ動く。他のtopic（website / works）や
+   *   topic無しのページでは何もしない（従来の挙動を変えない）。
+   * ・Salon相談として成立している間だけ、
+   *     【ご相談内容】Smart Labo Salon
+   *     【気になる機能】…
+   *     【今後の希望】…
+   *   を先頭に置く。
+   * ・成立していない間（採用について等へ変更した状態）は、上の3種の行を
+   *   すべて取り除く。Salon相談として誤って届くことを構造的に防ぐ。
+   * ・自由記述はどちらの場合も保持する。
+   * ・毎回「取り除いてから組み立て直す」ため、何度実行しても重複しない。
+   *
+   * 種別変更時と送信直前の両方で呼ぶ。
+   *   - 種別変更時にも整えるのは、fetchが使えない環境では送信ハンドラが
+   *     何もせず通常POSTになるため。画面の内容＝送られる内容にしておく。
+   *   - 送信直前にも呼ぶことで、最終的な選択状態が必ず反映される。
+   * 結果は textarea へ書き戻し、そのあと既存の validateLocally が走るので、
+   * 3000字超過は既存のエラー表示で止まる。
+   */
+  function composeInterests() {
+    if (!isSalonTopic) return;
+    var messageEl2 = document.getElementById('f-message');
+    if (!messageEl2) return;
+
+    var active = isSalonConsult();
+    var nowSel = active ? collectInterests('now') : [];
+    var futSel = active ? collectInterests('future') : [];
+
+    var NL2 = String.fromCharCode(10);
+    var salonLine = TOPIC_LINES.salon;
+
+    // 先頭の識別ブロック（【…】行と空行の連なり）を読み飛ばし、本文の開始位置を探す
+    var lines = messageEl2.value.split(NL2);
+    var i = 0;
+    while (i < lines.length) {
+      var t = lines[i].trim();
+      if (t === '') { i++; continue; }
+      if (t === salonLine ||
+          t.indexOf(INTEREST_MARK) === 0 ||
+          t.indexOf(FUTURE_MARK) === 0) { i++; continue; }
+      break;
+    }
+
+    // 本文（自由記述）。本文中に紛れ込んだ整形行も取り除く（重複を残さない保険）
+    var body = lines.slice(i).filter(function (row) {
+      var t2 = row.trim();
+      return t2 !== salonLine &&
+             t2.indexOf(INTEREST_MARK) !== 0 &&
+             t2.indexOf(FUTURE_MARK) !== 0;
+    }).join(NL2);
+
+    var header = [];
+    if (active) {
+      header.push(salonLine);
+      if (nowSel.length > 0) header.push(INTEREST_MARK + nowSel.join('／'));
+      if (futSel.length > 0) header.push(FUTURE_MARK + futSel.join('／'));
+    }
+
+    var next;
+    if (header.length === 0) {
+      next = body;
+    } else if (body.trim() === '') {
+      next = header.join(NL2) + NL2 + NL2;
+    } else {
+      next = header.join(NL2) + NL2 + NL2 + body;
+    }
+
+    // 値への代入のみ（innerHTMLは使わない）
+    messageEl2.value = next;
+  }
+
+  /**
+   * fieldsetの表示を切り替える。
+   * ★hidden属性だけでは消えない: components.css の `.field { display: grid }`（著者スタイル）が
+   *   UAの `[hidden] { display: none }` より優先されるため。
+   *   支援技術向けに hidden属性を、実際の描画のために inline style を、両方そろえる。
+   */
+  function setInterestsVisible(show) {
+    if (!interestsFieldset) return;
+    interestsFieldset.hidden = !show;
+    interestsFieldset.style.display = show ? '' : 'none';
+  }
+
+  /** 表示状態と本文を、いまの種別に合わせてそろえる */
+  function syncInterests() {
+    setInterestsVisible(isSalonConsult());
+    composeInterests();
+  }
+
+  if (interestsFieldset) {
+    // 読み込み時は表示状態だけを整える（本文は上の topic 初期化が済ませている）
+    setInterestsVisible(isSalonConsult());
+
+    var typeSelectForInterests = document.getElementById('f-type');
+    if (typeSelectForInterests) {
+      // 種別を変えたら、その場で表示と本文の両方をそろえる
+      typeSelectForInterests.addEventListener('change', syncInterests);
     }
   }
 
@@ -197,6 +416,9 @@
 
     e.preventDefault();
     if (sending) return;
+
+    // 機能選択を message へ整形してから検証する（3000字超過は既存エラーで止まる）
+    composeInterests();
 
     var errors = validateLocally();
     if (Object.keys(errors).length > 0) {
