@@ -82,9 +82,10 @@
     </nav>
 
     <div class="site-header__actions">
-      <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <!-- 汎用の「無料相談」はWorks/HP制作の相談と誤認されるため、Salonページには置かない -->
+      <a href="#screens" class="btn btn--secondary btn--sm site-header__sub">実際の画面を見る</a>
       <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--sm">
-        <span class="btn__label-full">Salonについて相談する</span><span class="btn__label-short">無料相談</span>
+        <span class="btn__label-full">Salonについて無料相談</span><span class="btn__label-short">無料相談</span>
       </a>
     </div>
 
@@ -440,13 +441,21 @@
       </p>
       <div class="sl-actions">
         <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">気になる機能を選んで相談する</a>
-        <a href="contact.html?type=consult&amp;topic=salon#form" class="btn btn--on-inverse btn--lg">Salonについて無料相談</a>
+        <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--on-inverse btn--lg">Salonについて無料相談</a>
       </div>
       <p class="sl-note">月額14,800円（税別）・初期費用0円。<a href="index.html#salon-price" style="color:#cfe0ff">料金の詳細を見る</a></p>
     </div>
   </section>
 
-  <!-- ============================== 09. 運営（1行導線） ============================== -->
+  <!-- ============================== 09. その他のサービス（弱い導線・ROUTING-CLARITY-1） ====
+       ★Salonの主CTAより目立たせない。ボタンにせずテキストリンクに留める。 -->
+  <p class="sl-othersvc">
+    <span class="sl-othersvc__label">その他のサービス</span>
+    <a href="index.html#website">店舗ホームページ制作</a>
+    <a href="features.html">Smart Labo Works（法人向け）</a>
+  </p>
+
+  <!-- ============================== 10. 運営（1行導線） ============================== -->
   <p class="sl-operator">
     運営：株式会社スマートラボ<a href="company.html">会社情報を見る</a>
   </p>
@@ -474,7 +483,7 @@
         <h4>店舗向け</h4>
         <a href="index.html#salon">Smart Labo Salon</a>
         <a href="index.html#website">店舗ホームページ制作</a>
-        <a href="contact.html?type=consult&amp;topic=salon#form">Salonについて相談する</a>
+        <a href="contact.html?type=consult&amp;topic=salon#interests">Salonについて無料相談</a>
       </div>
 
       <div class="site-footer__col">

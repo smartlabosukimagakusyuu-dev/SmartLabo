@@ -102,6 +102,7 @@
     <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
       <!-- ↓2件はスマホドロワー用の相談導線。デスクトップではヘッダーCTA・ヒーローCTAと
            重複しナビ幅がロゴを圧迫するため、1081px以上では表示しない（renewal.css） -->
+      <a class="site-nav__cta" href="#services">サービスを選ぶ</a>
       <a class="site-nav__cta" href="salon.html">Smart Labo Salonを詳しく見る</a>
       <a href="#salon">Salon</a>
       <a href="#website">ホームページ制作</a>
@@ -114,9 +115,9 @@
     <div class="site-header__actions">
       <!-- site-header__sub: 1080px以下で非表示にする既存設計（base.css）。
            他9ページは付与済みで、このTOPだけ欠落していたためスマホで重なっていた。 -->
-      <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
+      <a href="#services" class="btn btn--secondary btn--sm site-header__sub">サービスを見る</a>
       <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--sm">
-        <span class="btn__label-full">Salonについて相談する</span><span class="btn__label-short">無料相談</span>
+        <span class="btn__label-full">Salonについて無料相談</span><span class="btn__label-short">無料相談</span>
       </a>
     </div>
 
@@ -148,12 +149,12 @@
         <!-- TOPは営業入口。詳細はsalon.htmlへ（URGENT-4の役割分担） -->
         <div class="sl-actions">
           <a href="salon.html" class="btn btn--primary btn--lg">Smart Labo Salonを詳しく見る</a>
-          <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--secondary btn--lg">気になる機能を選んで相談する</a>
+          <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--secondary btn--lg">Salonについて無料相談</a>
         </div>
         <p class="sl-note">実際の画面をご覧いただきながらご説明します。</p>
 
+        <!-- ヒーローはSalonの入口。他商品は主CTAと競合させず、弱いテキストリンクに留める -->
         <p class="sl-hero__links">
-          <a href="salon.html#before-after">導入すると変わることを見る</a>
           <a href="#website">店舗ホームページ制作を見る</a>
           <a href="features.html">Smart Labo Works（法人向け）を見る</a>
         </p>
@@ -273,6 +274,38 @@
     </div>
     <p class="sl-demo-note">※動画内の画面はデモ用の架空データです。</p>
   </dialog>
+
+  <!-- ============================== 02-A. サービスを選ぶ（ROUTING-CLARITY-1） ==============
+       ★3商品の入口をここで1度だけ提示する。各カードは「説明 → その商品の案内先」だけを持ち、
+         相談導線は各商品ページ側に置く（ここで相談先を混在させない）。 -->
+  <section class="sl-section sl-section--tight" id="services" aria-labelledby="services-title">
+    <div class="container">
+      <p class="sl-eyebrow">サービス</p>
+      <h2 class="sl-h2" id="services-title">Smart Laboのサービス</h2>
+      <p class="sl-lead">店舗運営・集客・法人業務。目的に合わせて、3つのサービスをご用意しています。</p>
+
+      <ul class="sl-svc">
+        <li class="sl-svc__card reveal">
+          <p class="sl-svc__tag">店舗向け</p>
+          <h3 class="sl-svc__title">Smart Labo Salon</h3>
+          <p class="sl-svc__desc">予約・顧客カルテ・接客メモ・再来店支援</p>
+          <p class="sl-svc__cta"><a href="salon.html" class="btn btn--primary btn--sm">Salonを詳しく見る</a></p>
+        </li>
+        <li class="sl-svc__card reveal">
+          <p class="sl-svc__tag">店舗向け</p>
+          <h3 class="sl-svc__title">店舗ホームページ制作</h3>
+          <p class="sl-svc__desc">店舗の魅力・メニュー・予約導線が伝わるホームページ制作</p>
+          <p class="sl-svc__cta"><a href="#website" class="btn btn--secondary btn--sm">ホームページ制作を見る</a></p>
+        </li>
+        <li class="sl-svc__card reveal">
+          <p class="sl-svc__tag">法人向け</p>
+          <h3 class="sl-svc__title">Smart Labo Works</h3>
+          <p class="sl-svc__desc">法人向けAI・業務支援</p>
+          <p class="sl-svc__cta"><a href="features.html" class="btn btn--secondary btn--sm">Worksを詳しく見る</a></p>
+        </li>
+      </ul>
+    </div>
+  </section>
 
   <!-- ============================== 02-B. Salonデモ（要約） ==============================
        ★6ステップの全編は salon.html#screens へ移設した（URGENT-4）。
@@ -516,7 +549,7 @@
             <li><b>今回の提案候補</b><span>前回「次回は」と残した内容が、提案の候補として出てきます。</span></li>
           </ul>
           <div class="sl-actions">
-            <a href="contact.html?type=consult&amp;topic=salon#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
+            <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">Salonについて無料相談</a>
           </div>
           <p class="sl-demo-note">※掲載画面はデモ用の架空データです。</p>
         </div>
@@ -643,7 +676,7 @@
           次回来店の接客準備、AI投稿案・AIキャンペーン案、初期設定支援と操作説明（標準1回）を含みます。
         </p>
         <div class="sl-actions">
-          <a href="contact.html?type=consult&amp;topic=salon#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
+          <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">Salonについて無料相談</a>
         </div>
         <p class="sl-note">実際の画面を見ながらご説明します。ご契約前に、含まれる内容と条件をご確認いただけます。</p>
       </div>
@@ -719,7 +752,7 @@
       </div>
 
       <div class="sl-actions" style="margin-top:24px">
-        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--secondary">店舗ホームページ制作を相談する</a>
+        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--secondary">ホームページ制作を相談する</a>
       </div>
     </div>
   </section>
@@ -750,7 +783,7 @@
             Smart Labo Salon・Works・ホームページ制作の周辺業務を中心に、今の進め方に合わせてご相談を承ります。
           </p>
           <div class="sl-actions">
-            <a href="contact.html?type=consult&amp;topic=works#form" class="btn btn--secondary btn--sm">AI活用について相談する</a>
+            <a href="contact.html?type=consult&amp;topic=works#form" class="btn btn--secondary btn--sm">Worksについて無料相談</a>
           </div>
         </div>
       </div>
@@ -800,8 +833,8 @@
         Smart Labo Works のうち、合うものをご提案します。
       </p>
       <div class="sl-actions">
-        <a href="contact.html?type=consult&amp;topic=salon#form" class="btn btn--primary btn--lg">Salonについて相談する</a>
-        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--on-inverse btn--lg">店舗ホームページ制作を相談する</a>
+        <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">Salonについて無料相談</a>
+        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--on-inverse btn--lg">ホームページ制作を相談する</a>
       </div>
       <p class="sl-note">実際の画面をご覧いただきながらご説明します。<a href="features.html" style="color:#cfe0ff">Smart Labo Worksを見る</a></p>
     </div>
@@ -835,7 +868,7 @@
         <h4>店舗向け</h4>
         <a href="index.html#salon">Smart Labo Salon</a>
         <a href="index.html#website">店舗ホームページ制作</a>
-        <a href="contact.html?type=consult&amp;topic=salon#form">Salonについて相談する</a>
+        <a href="contact.html?type=consult&amp;topic=salon#interests">Salonについて無料相談</a>
       </div>
 
       <div class="site-footer__col">

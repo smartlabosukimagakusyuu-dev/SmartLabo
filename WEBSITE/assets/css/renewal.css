@@ -1067,3 +1067,77 @@
   .sl-change__card { padding: 20px 18px 18px; }
   .sl-change__effect { font-size: 1.02rem; }
 }
+
+
+/* ==========================================================================
+   WEB-V3-ROUTING-CLARITY-1（商品別導線の明確化）
+   ★index.html / salon.html だけで使う。共有CSSは変更しない。
+   ========================================================================== */
+
+/* --- TOP: サービスを選ぶ（3区分） ----------------------------------------- */
+.sl-svc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.sl-svc__card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 22px 20px 20px;
+  background: var(--c-white);
+  border: 1px solid #E4E9F2;
+  border-radius: var(--sl-radius);
+  box-shadow: var(--sl-shadow-sm);
+}
+.sl-svc__tag {
+  align-self: start;
+  margin: 0 0 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: var(--sl-blue);
+  background: var(--sl-blue-pale);
+}
+.sl-svc__title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--sl-navy);
+}
+.sl-svc__desc {
+  margin: 0 0 18px;
+  font-size: .88rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+}
+/* CTAはカード下端にそろえる（高さは固定しない） */
+.sl-svc__cta { margin: auto 0 0; }
+.sl-svc__cta .btn { width: 100%; justify-content: center; }
+
+/* --- salon.html: その他のサービス（Salon主CTAより弱く） -------------------- */
+.sl-othersvc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px 18px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 20px var(--gutter) 0;
+  font-size: .82rem;
+  color: var(--sl-gray);
+  border-top: 1px solid var(--border-subtle);
+}
+.sl-othersvc__label { font-weight: 700; color: var(--sl-navy); }
+.sl-othersvc a { font-weight: 600; }
+
+@media (max-width: 860px) {
+  .sl-svc { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}

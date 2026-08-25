@@ -125,6 +125,48 @@
     }
   }
 
+  /* ------------------ 遷移元商品の識別表示（WEB-V3-ROUTING-CLARITY-1） -- */
+
+  /**
+   * どの商品の相談として来たのかを、フォーム直前に控えめに示す。
+   * ★topicが無い場合は何も表示しない（商品を勝手に選ばない）。
+   * ★textContentへの代入のみ。innerHTMLは使わない。
+   * ★送信payloadには影響しない（表示だけ）。本文の識別行は従来どおり
+   *   TOPIC_LINES / composeInterests が担当する。
+   */
+  var TOPIC_BANNERS = {
+    salon: {
+      title: 'Smart Labo Salonのご相談',
+      note: '予約・顧客管理・接客メモ・再来店支援など、気になる内容を選んでご相談いただけます。'
+    },
+    website: {
+      title: '店舗ホームページ制作のご相談',
+      note: '新規制作・リニューアル・更新方法などについてご相談いただけます。'
+    },
+    works: {
+      title: 'Smart Labo Worksのご相談',
+      note: '法人向けAI活用・業務支援についてご相談いただけます。'
+    }
+  };
+
+  (function showTopicBanner() {
+    var box = document.getElementById('topic-banner');
+    if (!box || !('URLSearchParams' in window)) return;
+    var t = new URLSearchParams(location.search).get('topic');
+    if (!t || !Object.prototype.hasOwnProperty.call(TOPIC_BANNERS, t)) return;
+
+    var titleEl = document.getElementById('topic-banner-title');
+    var noteEl = document.getElementById('topic-banner-note');
+    if (!titleEl || !noteEl) return;
+
+    titleEl.textContent = TOPIC_BANNERS[t].title;
+    noteEl.textContent = TOPIC_BANNERS[t].note;
+
+    // hidden属性だけでは消えない/出ない場合に備え、displayも明示する
+    box.hidden = false;
+    box.style.display = 'block';
+  })();
+
   /* --------------------- 機能選択fieldset（WEB-V3-SALON-URGENT-4 / R2） -- */
 
   /**

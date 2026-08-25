@@ -224,6 +224,17 @@
             data-token-endpoint="https://form.smartlaboworks.com/csrf-token.php"
             novalidate>
 
+        <!-- 遷移元の商品を示す控えめな識別表示（WEB-V3-ROUTING-CLARITY-1）。
+             ?topic= に応じて contact-form.js が文言を入れて表示する。
+             topicが無い場合は表示しない（商品を勝手に選ばない）。
+             ★textContentへの代入のみ。innerHTMLは使わない。
+             ★<p>の内側に置くとブラウザが<p>を自動で閉じてしまうため、必ず<p>の外に置く。 -->
+        <div id="topic-banner" hidden
+             style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:10px;background:#EFF6FF;border:1px solid #DBEAFE">
+          <p id="topic-banner-title" style="margin:0 0 4px;font-size:15px;font-weight:700;color:#172033"></p>
+          <p id="topic-banner-note" style="margin:0;font-size:13px;line-height:1.8;color:#64748B"></p>
+        </div>
+
         <p class="cform__required-note">
           <span class="cform__req" aria-hidden="true">*</span> は必須項目です。
         </p>
