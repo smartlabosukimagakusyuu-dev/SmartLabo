@@ -2,11 +2,12 @@
 
 ```text
 STATUS      : APPROVED / IMPLEMENTATION NOT STARTED
-VERSION     : v1.0
+VERSION     : v1.1（R1）
 DATE        : 2026-08-26
-工程        : HP-ONBOARDING-4A
+工程        : HP-ONBOARDING-4A ／ HP-ONBOARDING-4A-R1（AI Sales 分離・Operations 境界確定）
 対象        : intake.smartlaboworks.com（店舗向けHP導入フォーム）
-構成        : HP-ONBOARDING-3 の **案C**（受付を Website側へ分離・AI Sales は内部管理）
+構成        : HP-ONBOARDING-3 の **案C**（受付を Website側へ分離）
+契約後管理  : 内部専用 **Smart Labo Operations**（社内管理上の仮称・未実装）
 実装予定先  : SmartLabo リポジトリ `intake-api/`（本工程では作成しない）
 保存先      : XServer 上のドキュメントルート**外** `private/intake.sqlite`
 上位文書    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md（v1.2 R2・入力項目のSSOT）
@@ -30,37 +31,93 @@ DATE        : 2026-08-26
 | 2 | 顧客向け画面と受付APIは **intake.smartlaboworks.com** に分離する |
 | 3 | 実装は SmartLabo リポジトリ内の `intake-api/` を予定する |
 | 4 | 保存先は XServer 上のドキュメントルート**外** `private/intake.sqlite` |
-| 5 | **AI Sales を外部公開しない** |
-| 6 | Phase 1 では intake から AI Sales へ**自動接続しない** |
-| 7 | Phase 1 の AI Sales 反映は Smart Labo が**手動で行う** |
+| 5 | 契約後のHP制作管理は**内部専用「Smart Labo Operations」**が担当する（社内管理上の仮称・未実装） |
+| 6 | **HP Intake と Smart Labo Operations は責任を分離する** |
+| 7 | **HP Intake から他システムへ、手動・自動を問わず連携しない**（書き出しデータの取込は OPS-4 で扱う） |
 | 8 | 写真本体は **Smart Labo 所有の Google Drive** で受領する |
 | 9 | **1店舗1フォルダ**とし、**店舗の指定メールアドレスだけに共有**する |
 | 10 | **「リンクを知っている全員」への共有は禁止** |
 | 11 | Google Drive URL は Smart Labo 側で設定し、**店舗の自由入力欄を作らない** |
 | 12 | **Stripe情報・カード情報・公開承認を intake DB へ保存しない** |
 
+### 0.1 HP-ONBOARDING-4A-R1 で確定した事項
+
+| # | 決定 |
+|---|---|
+| 1 | **AI Sales は HP制作・契約後導入管理に使用しない** |
+| 2 | **intake から AI Sales へ、手動・自動を問わず連携しない** |
+| 3 | **AI Sales に Stripe参照情報・公開承認・権利同意・HP進捗を保存しない** |
+| 4 | **AI Sales リポジトリは本工程および今後のHP工程で変更しない** |
+| 5 | AI Sales は**営業支援専用**として独立させる |
+| 6 | AI Sales の将来の商品化は**別ロードマップ・別工程**で扱う |
+| 7 | 現在の社内営業DBを**将来の商品版へ持ち込まない** |
+| 8 | HP契約後管理は内部専用 **Smart Labo Operations** が担当する |
+| 9 | Smart Labo Operations は**顧客向けの商品名ではなく社内管理上の仮称** |
+| 10 | **HP Intake と Operations は責任を分離する** |
+
+> ★v1.0 に存在した「AI Sales を契約後管理の保存先・連携先とする記述」は、
+> 本 R1 で**すべて撤回**した。撤回後の保存先は Smart Labo Operations である。
+
 ---
 
 ## 1. システム境界
 
-5つの系が持つ情報と、**持ってはいけない情報**を確定する。
+各系が持つ情報と、**持ってはいけない情報**を確定する。
 
 | 系 | 役割 | 保持してよい情報 | **保持してはいけない情報** |
 |---|---|---|---|
-| **customer-facing intake**<br>（intake.smartlaboworks.com） | 店舗が入力する画面と受付API。token でのみ到達できる | 案件識別（case_number）／店舗の入力回答（§3）／token の**hash**／状態／提出履歴のメタ／監査イベント／Drive フォルダURL（**暗号化**） | カード情報／Stripe の一切／公開承認／秘密値（§8）／token 平文／AI Sales の営業データ |
+| **HP Intake**<br>（intake.smartlaboworks.com） | 店舗が入力する画面と受付API。token でのみ到達できる | 店舗入力（§3）／メニュー・スタッフ・デザイン／写真メタ情報／素材利用確認／token の**hash**／提出・修正状態／Drive フォルダへの安全な参照（**暗号化**）／案件識別（case_number）／監査イベント | **Stripe参照情報／入金状態／契約金額／公開承認／カード情報／営業履歴**／秘密値（§8）／token 平文 |
 | **Smart Labo 管理**<br>（intake-api の管理画面） | 案件作成・token 発行/失効・確認・不足連絡・データ書き出し・Drive URL 登録 | intake DB への読み書き／Drive URL の登録・表示／書き出しファイルの生成 | 店舗の Google アカウント資格情報／カード情報／店舗の各種パスワード |
 | **Google Drive**<br>（Smart Labo 所有） | **写真本体のみ**を受領する場所 | 画像ファイルの実体／フォルダ構造 | 回答データ／token／契約情報／請求情報／個人情報を含む文書（写真以外を置かない） |
-| **AI Sales**<br>（社内ローカル・port 3200） | 導入案件の進捗管理（onboardings）・**公開承認の正式記録** | 案件進捗（hp_progress 等）／公開承認（hp_approved_at）／将来の Stripe 参照ID／法的同意の証跡 | 店舗の入力回答本体／token／Drive URL／**外部からの直接アクセス（公開しない）** |
-| **Stripe** | 請求書・決済・入金状態 | 請求書／決済／入金状態／未払い／返金・取消／領収記録／月額課金／カード情報（Stripe内のみ） | intake の回答／公開承認／制作進捗 |
+| **Smart Labo Operations**<br>（内部専用・**未実装**・社内管理上の仮称） | 契約後のHP制作管理。**公開承認・請求参照・同意証跡の正式記録** | 契約店舗／契約プラン／HP契約内容／見積額／**Stripe customer ID**／**Stripe invoice ID**／請求日／入金確認日／追加請求状態／着手可能日／HP制作進捗／不足項目／確認URL／修正回数／**店舗による公開承認**／公開日／保守開始日／**権利・同意証跡の要点**／保持期限・削除実施日 | **カード番号／有効期限／セキュリティコード／Stripe秘密鍵**／店舗の入力回答本体／token／営業履歴 |
+| **Stripe** | 請求書・決済・入金 | 請求書／決済／入金／返金・取消／サブスクリプション／カード情報（Stripe内のみ） | intake の回答／公開承認／制作進捗 |
+| **AI Sales**<br>（社内ローカル・営業支援専用） | 見込み客／営業活動／DM・営業文面／商談前の営業支援 | 上記の営業支援に関する情報のみ | **HP制作・契約後導入管理の一切**（Stripe参照情報／公開承認／権利同意／HP進捗） |
 
 ### 1.1 系の間で越えてはならない線
 
-1. **intake → AI Sales の自動接続を作らない**（Phase 1）。反映は人が手で行う。
-2. **AI Sales → intake の呼び出しも作らない**（一方向すら Phase 1 では実装しない）。
-3. **Stripe の情報は intake に一切入れない。** 参照IDも入れない（§8）。
-4. **公開承認は intake に持たせない。** 正式記録は AI Sales の `onboardings.hp_approved_at`。
+1. **HP Intake は他システムへ直接接続しない。** DB接続・API呼び出しのいずれも作らない。
+2. **Smart Labo Operations から HP Intake を呼び出さない。**
+   Operations への取り込みは、**検証済みの書き出しデータを人が取り込む**方式から始める（OPS-4）。
+3. **Stripe の情報は HP Intake に一切入れない。** 参照IDも入れない（§8）。
+4. **公開承認は HP Intake に持たせない。** 正式記録は **Smart Labo Operations**。
 5. **Google Drive には写真以外を置かない。** 回答データの保管先にしない。
-6. **AI Sales は公開ネットワークへ出さない。** 本設計は AI Sales を到達可能にしない。
+6. **AI Sales は営業支援専用であり、HP Intake および Smart Labo Operations とは連携しない。**
+   AI Sales を HP制作・契約後導入管理の保存先にも連携先にもしない。
+7. **AI Sales リポジトリを HP工程で変更しない。**
+
+### 1.2 Smart Labo Operations の位置づけ
+
+| 項目 | 内容 |
+|---|---|
+| 性質 | **内部専用**。顧客向けの商品名ではなく、**社内管理上の仮称** |
+| 現状 | **未実装**。要件・データモデルは OPS-1 で確定する |
+| 役割 | 契約後のHP制作管理。契約・請求参照・進捗・公開承認・同意証跡の**正式記録** |
+| 保持しない | カード番号／有効期限／セキュリティコード／Stripe秘密鍵／店舗の入力回答本体／token |
+| Intake との関係 | **責任を分離する。** Intake は「店舗が入力したもの」、Operations は「当社が管理するもの」 |
+
+### 1.3 Operations 未実装時の Phase 1 運用
+
+Smart Labo Operations の完成前に契約が発生した場合、
+**代表が案件ごとの標準管理票で手動管理する。**
+
+管理票が持つ項目:
+契約内容／Stripe請求書参照／入金確認／着手可能日／修正回数／
+公開承認／公開日／保守開始日／同意証跡の要点
+
+| # | 遵守事項 |
+|---|---|
+| 1 | **この管理票を GitHub へ保存しない**（リポジトリに入れない） |
+| 2 | **intake の自由記述欄へ押し込まない**（`promotion.*` や `rights.note` を代用しない） |
+| 3 | **AI Sales へ入力しない** |
+| 4 | 管理票は代表が管理する。Operations 完成後に、その内容を Operations へ移す |
+
+### 1.4 AI Sales の位置づけ（境界のみ）
+
+**AI Sales は営業支援専用であり、HP Intake および Smart Labo Operations とは連携しない。**
+
+- 扱う範囲: 見込み客／営業活動／DM・営業文面／商談前の営業支援
+- **契約成立後のHP制作管理へは連携しない**
+- 本書および今後のHP工程で **AI Sales リポジトリを変更しない**
 
 ---
 
@@ -508,7 +565,8 @@ DATE        : 2026-08-26
 
 > ★`rights_json` は**すべて内部**。生成HPへ1項目も渡さない。
 > ★これは**同意の証跡**であり、§9.4 のとおり回答削除後も
-> AI Sales 側（案件記録）へ移して継続保持する。
+> **Smart Labo Operations 側**へ移して継続保持する
+> （Operations 完成前は §1.3 の標準管理票）。
 
 ### 3.12 Smart Labo 入力と店舗入力の分離
 
@@ -517,7 +575,7 @@ DATE        : 2026-08-26
 | **店舗が入力** | §3.1〜§3.11 のうち「必須／任意／条件付き」の項目 | `intake_answers` |
 | **Smart Labo が入力** | `web_links.salon_booking_url`（W-05）／`privacy.destination`（PR-03）／`privacy.storage`（PR-04）／`privacy.external_services[]`（PR-07）／`privacy.consent_checkbox`（PR-09）／`image_metadata[].alt` の補完（IMG-05） | `intake_answers`（管理画面から） |
 | **Smart Labo が案件に持つ** | `case_number` / `contract_type` / `status` / Drive URL / 期限 | `intake_cases` |
-| **intake に持たない** | C-01〜C-16（契約・請求・Stripe参照）／公開承認 | **AI Sales 側**（人が手入力） |
+| **intake に持たない** | C-01〜C-16（契約・請求・Stripe参照）／公開承認 | **Smart Labo Operations 側**（未実装の間は §1.3 の標準管理票） |
 
 画面上でも、店舗入力欄と Smart Labo 設定欄は**同じ画面に混在させない**（4C で分ける）。
 
@@ -676,7 +734,7 @@ draft ──submit──> submitted ──┬── request_revision ──> nee
 ### 5.4 公開承認は含めない
 
 - **公開承認をこの状態遷移へ含めない。**
-- 公開承認の正式記録は **AI Sales の `onboardings.hp_approved_at`**（および §18.3 の公開条件）。
+- 公開承認の正式記録は **Smart Labo Operations**（および仕様書 §18.3 の公開条件）。
 - intake の `reviewed` は「**入力内容の確認が済んだ**」という意味であり、公開の可否ではない。
 - 誤解を避けるため、画面文言に「公開」「承認して公開」という語を使わない（4C/4D で徹底）。
 
@@ -826,15 +884,15 @@ UPDATE intake_answers
 | 9 | **DNS・サーバーのパスワード** | レジストラのログイン情報・SSH鍵・FTPも含む |
 | 10 | **APIキー** | |
 | 11 | **秘密鍵**（証明書の秘密部分を含む） | |
-| 12 | **公開承認** | 正式記録は AI Sales `onboardings.hp_approved_at`（§5.4） |
+| 12 | **公開承認** | 正式記録は **Smart Labo Operations**（§5.4） |
 | 13 | **Stripe customer ID** | 参照IDであっても intake には置かない |
 | 14 | **Stripe invoice ID** | 同上 |
 | 15 | **Stripe 入金状態** | 同上 |
 
-> ★**Stripe 参照情報は将来 AI Sales 側で持つ。**
-> HP-ONBOARDING-3 の監査で、`onboardings` に該当列（請求日／入金確認日／
-> Stripe参照ID／追加請求の状態）が**存在しない**ことを確認済み。
-> 追加するか否かは Phase 2 の別工程で判断する（本書では決めない）。
+> ★**Stripe 参照情報（customer ID / invoice ID / 請求日 / 入金確認日 / 追加請求状態）は、
+> Smart Labo Operations 側でのみ保持する。**
+> Operations のデータモデルは **OPS-1** で確定し、手動記録の運用は **OPS-3** で扱う。
+> **AI Sales には保存しない。** Operations 完成前は §1.3 の標準管理票で代表が管理する。
 
 **誤って秘密値が送信された場合**（仕様書 §10.3 と同じ扱い）
 1. その値を他所へ転記・引用・保存しない
@@ -870,7 +928,7 @@ UPDATE intake_answers
 | # | 手順 |
 |---|---|
 | 1 | `retention_delete_due`（= `closed_at` + 6か月）に達した案件を管理画面で一覧表示する |
-| 2 | 削除前に **§9.4 の継続保持対象が AI Sales 側へ移されていること**を確認する |
+| 2 | 削除前に **§9.4 の継続保持対象が Smart Labo Operations 側（未実装の間は §1.3 の標準管理票）へ移されていること**を確認する |
 | 3 | `intake_answers` の行を削除し、`intake_cases.deleted_at` に**削除実施日**を記録する |
 | 4 | `intake_tokens` の当該案件行を削除する |
 | 5 | Drive の当該フォルダを削除し、削除実施日を案件記録へ残す |
@@ -884,12 +942,13 @@ UPDATE intake_answers
 
 ### 9.4 削除後も残す情報（継続保持）
 
-回答本文の削除後も、次は**AI Sales 側（案件記録）へ移して保持**する。
+回答本文の削除後も、次は **Smart Labo Operations 側へ移して保持**する
+（Operations 完成前は §1.3 の標準管理票）。**AI Sales へは保存しない。**
 
 - 法的同意の証跡（`rights.confirmations[]` の code / agreed / agreed_at / agreed_by）
 - スタッフ本人の掲載同意（S-13 / S-14）
 - 被写体の掲載同意（IMG-04）
-- 公開承認（`onboardings.hp_approved_at`）
+- 公開承認
 - 素材権利台帳の要点（枚数・提供者区分・権利確認の有無）
 
 > ★intake 側には `intake_cases` の識別情報（case_number / 状態 / 日付）と
@@ -1010,7 +1069,7 @@ Strict-Transport-Security: max-age=31536000
 | 同意記録の内容 | HTTPステータス |
 
 - ログ出力の共通関数で `/f/[A-Za-z0-9_-]{43}` と既知の秘密値パターンを
-  `[REDACTED]` へ置換する（AI Sales の logger と同じ考え方）。
+  `[REDACTED]` へ置換する（マスクは出力の直前に一箇所で行い、実装ごとに散らさない）。
 - 通知メールにも**案件番号のみ**を書く。本文・個人情報・Drive URL を入れない。
 
 ### 10.8 管理画面
@@ -1042,7 +1101,7 @@ Strict-Transport-Security: max-age=31536000
 
 | # | 機能 | 理由 |
 |---|---|---|
-| 1 | AI Sales 自動同期 | 正式判断6・7（Phase 1 は手動） |
+| 1 | Smart Labo Operations との自動同期 | Operations は未実装。取込は **OPS-4** で扱う（検証済みの書き出しデータの取込から開始） |
 | 2 | Stripe API | §8。intake は Stripe と通信しない |
 | 3 | webhook | 同上 |
 | 4 | 自動請求 | 価格SSOT §12-6（未確定・未実装） |
@@ -1051,7 +1110,7 @@ Strict-Transport-Security: max-age=31536000
 | 7 | **画像アップロード** | 写真本体は Drive（正式判断8）。`$_FILES` を扱わない |
 | 8 | LINE 連携 | 範囲外 |
 | 9 | Google Drive API | 正式判断・§7.1-11（人の操作で行う） |
-| 10 | 店舗による公開承認 | 公開承認は AI Sales 側（§5.4） |
+| 10 | 店舗による公開承認 | 公開承認は **Smart Labo Operations 側**（§5.4） |
 | 11 | 複数 Smart Labo 管理者の権限管理 | 認証方式が未確定（§12-1）。Phase 1 は単一運用 |
 
 ---
@@ -1090,15 +1149,61 @@ Strict-Transport-Security: max-age=31536000
 | 写真の権利・同意 | 仕様書 §12.4〜§12.6 | §3.10・§9.4（削除後も同意証跡を継続保持） |
 | ビフォーアフター | 仕様書 §8.2.2（標準では使用しない） | `image_metadata[].role` に該当区分を設けない |
 | 確認用URL | 仕様書 §18.1（noindex は認証ではない） | §4.8 で同一原則。noindex を認証の代替にしない |
-| 公開承認 | 仕様書 §18.3 / AI Sales `onboardings` | §5.4・§8 で intake から除外 |
+| 公開承認 | 仕様書 §18.3 | §5.4・§8 で intake から除外し、**Smart Labo Operations** を正式記録先とする |
 | Stripe | 価格SSOT §12-5（お金は Stripe、管理は案件管理） | §1・§8 で intake から完全に分離 |
 | 画像受領 | 仕様書 §12.7（クラウド共有フォルダ・1店舗1フォルダ） | §7 で Google Drive として具体化 |
 | 5営業日の起算 | 仕様書 §1（着手可能日） | 本書は起算日を定義しない（仕様書に従う） |
 
 ---
 
-## 14. 変更履歴
+## 14. 今後の工程順序（正式）
+
+HP-ONBOARDING-4A-R1 で次の順序へ変更した。
+
+| 工程 | 内容 | 対象 |
+|---|---|---|
+| **4A-R1** | AI Sales 分離・Operations 境界確定（**本工程**・docs-only） | SmartLabo repo |
+| **4B** | HP Intake 受付API・token 骨組み | SmartLabo repo `intake-api/` |
+| **4C** | 店舗入力画面 | 同上 |
+| **4D** | HP Intake 確認画面・書き出し | 同上 |
+| **4E** | セキュリティテスト | 同上 |
+| **4F** | 架空店舗による通し確認 | 同上 |
+| **OPS-1** | Smart Labo Operations 要件・データモデル | 別途（未確定） |
+| **OPS-2** | Operations 管理画面 | 同上 |
+| **OPS-3** | Stripe参照・請求状態の**手動記録** | 同上 |
+| **OPS-4** | Intake から Operations への安全な取込 | 同上 |
+
+**OPS-4 の方式（確定）**
+- **直接DB接続ではなく、検証済みの書き出しデータの取込から開始する。**
+- Operations から Intake の DB・API を直接読みに行かない。
+
+**Stripe API・webhook による自動化は、さらに後工程とする。**
+（価格SSOT §12-6 のとおり、現時点で未確定・未実装）
+
+★**AI Sales はこの工程順序のどこにも登場しない。**
+  AI Sales リポジトリは本工程および今後のHP工程で変更しない。
+
+---
+
+## 15. AI Sales の商品化境界（参考節）
+
+本書の設計判断には影響しないが、境界を誤解しないために記録する。
+
+| # | 記録 |
+|---|---|
+| 1 | 現在の AI Sales は**社内用プロトタイプ**である |
+| 2 | **そのまま外部販売しない** |
+| 3 | 商品化は**別工程**で扱う |
+| 4 | 商品版には **認証・企業別データ分離・権限・契約・課金・セキュリティ・バックアップ**が必要 |
+| 5 | **Smart Labo の実営業データを商品版へ含めない** |
+| 6 | HP Intake・Smart Labo Operations とは**別商品・別データ**である |
+| 7 | **本HP工程では AI Sales の商品化へ着手しない** |
+
+---
+
+## 16. 変更履歴
 
 | VERSION | 日付 | 内容 |
 |---|---|---|
 | **v1.0** | 2026-08-26 | 制定（HP-ONBOARDING-4A）。システム境界5系／SQLite 5テーブル（intake_cases・intake_tokens・intake_answers・intake_submission_history・intake_audit_events）／JSON 11カテゴリのデータパス・型・上限・公開内部区分・HTML出力処理・空値／token 規則（random_bytes(32)・base64url 43文字・SHA-256 hash のみ保存・14日・1案件1本・失効・同一エラー文言・漏えい経路と対策）／状態遷移6状態と操作許可表／途中保存と楽観ロック／Google Drive 運用／保存禁止15種／保持削除バックアップ／セキュリティ／Phase 1 境界／未確定9件 を確定 |
+| **v1.1（R1）** | 2026-08-26 | 改定（HP-ONBOARDING-4A-R1・代表承認）。**AI Sales を保存先・連携先とする記述をすべて撤回**し、契約後管理先を内部専用 **Smart Labo Operations**（社内管理上の仮称・未実装）へ置き換えた。§0.1 に R1 の正式決定10件を追加。§1 の系を **HP Intake / Smart Labo 管理 / Google Drive / Smart Labo Operations / Stripe / AI Sales** へ再定義し、AI Sales は**営業支援専用・連携しない**という境界説明のみに限定。§1.1 の越えてはならない線を7条へ。§1.2 Operations の位置づけ／§1.3 Operations 未実装時の標準管理票運用（GitHubへ保存しない・intake自由記述へ押し込まない・AI Salesへ入力しない）／§1.4 AI Sales の位置づけ を新設。§3.11・§3.12・§5.4・§8・§9.3・§9.4・§10.7・§11.2・§13 の該当記述を Operations へ是正。**§14 今後の工程順序**（4B〜4F → OPS-1〜OPS-4。OPS-4 は検証済み書き出しデータの取込から開始）と **§15 AI Sales の商品化境界**（参考節）を新設。旧 §14 変更履歴を **§16** へ繰り下げ。**intake 5テーブル・JSON 11分類・token 規則・状態遷移・途中保存・Drive 運用・保持削除・セキュリティ要件は一切変更していない。** |
