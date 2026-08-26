@@ -54,23 +54,29 @@
 
 <header class="site-header" id="siteHeader">
   <div class="container site-header__inner">
-    <a href="index.html" class="logo" aria-label="Smart Labo Works ホーム">
+    <!-- 問い合わせ画面は3商品共通の窓口。ヘッダーに商品名を出すと
+         Salon/HP制作の相談でもWorksの画面に見えるため、社名だけにする。
+         ロゴ画像は共通のまま。他ページの表記は変更しない。 -->
+    <a href="index.html" class="logo" aria-label="Smart Labo ホーム">
       <img class="logo__icon" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
-      <span class="logo__text">Smart Labo Works</span>
+      <span class="logo__text">Smart Labo</span>
     </a>
 
+    <!-- 問い合わせは3商品共通の窓口。Works固有の項目（Company Brain／機能／料金／FAQ）を
+         並べるとSalon・HP制作の相談でもWorksの商品ページに見えるため、
+         会社共通の「商品を選ぶ」構成にする。★このページのナビだけを変更する。 -->
     <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
-      <a href="index.html#brain">Company Brain</a>
-      <a href="features.html">機能</a>
-      <a href="pricing.html">料金</a>
+      <a href="salon.html">Salon</a>
+      <a href="index.html#website">ホームページ制作</a>
+      <a href="features.html">Smart Labo Works</a>
       <a href="company.html">会社情報</a>
-      <a href="index.html#faq">FAQ</a>
-      <a href="contact.html">お問い合わせ</a>
+      <a href="contact.html" aria-current="page">お問い合わせ</a>
     </nav>
 
     <div class="site-header__actions">
       <a href="contact.html?type=consult#form" class="btn btn--secondary btn--sm site-header__sub">無料相談する</a>
-      <a href="apply.html" class="btn btn--primary btn--sm"><span class="btn__label-full">今すぐ申し込む</span><span class="btn__label-short">申し込む</span></a>
+      <!-- 問い合わせ画面なので申込導線ではなく、このページのフォームへ着地させる -->
+      <a href="#form" class="btn btn--primary btn--sm">相談する</a>
     </div>
 
     <button class="nav-toggle" type="button" data-nav-toggle
@@ -313,10 +319,13 @@
           <p class="field__error" id="f-type-error" data-error-for="type"></p>
         </div>
 
-        <!-- 利用予定人数（任意） -->
-        <div class="field">
+        <!-- 利用予定人数（任意）
+             ★topicに応じて contact-form.js が「ラベル文言の差し替え」または
+               「項目ごと非表示」を行う。select・option・name・送信仕様は変更しない。
+               非表示にする場合は値を '' に戻す（'' はAPIの許可値＝「未回答」）。 -->
+        <div class="field" id="headcount-field" data-headcount-field>
           <label class="field__label" for="f-headcount">
-            利用予定人数 <span class="field__optional">任意</span>
+            <span data-headcount-label>利用予定人数</span> <span class="field__optional">任意</span>
           </label>
           <select class="field__input field__select" id="f-headcount" name="headcount"
                   aria-describedby="f-headcount-error">

@@ -1141,3 +1141,150 @@
 @media (max-width: 860px) {
   .sl-svc { grid-template-columns: minmax(0, 1fr); gap: 14px; }
 }
+
+
+/* ==========================================================================
+   WEB-V3-ROUTING-CLARITY-4-R1（料金プラン：通常価格／創業メンバーの分離）
+   ★salon.html #pricing と index.html の価格節だけで使う。共有CSSは変更しない。
+   ★高さは固定しない（文字切れを作らない）。打ち消し線は使わない。
+   ========================================================================== */
+
+.sl-plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.sl-plan {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 24px 24px;
+  border-radius: var(--sl-radius);
+  background: var(--c-white);
+}
+/* 通常価格：基準として明確に読めるが、創業メンバーより弱い */
+.sl-plan--std {
+  border: 1px solid #E2E6EC;
+  background: #FAFBFC;
+  box-shadow: none;
+}
+/* 創業メンバー：今回の主提案。枠と価格で強調し、全面塗りにはしない */
+.sl-plan--founder {
+  border: 2px solid var(--sl-blue);
+  box-shadow: var(--sl-shadow);
+}
+
+.sl-plan__label {
+  align-self: start;
+  margin: 0 0 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: var(--sl-gray);
+  background: #ECEFF3;
+}
+.sl-plan__badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
+.sl-plan__badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: var(--c-white);
+  background: var(--sl-blue);
+}
+.sl-plan__badge--soft { color: var(--sl-blue); background: var(--sl-blue-pale); }
+
+.sl-plan__name {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--sl-navy);
+}
+.sl-plan__price {
+  line-height: 1.45;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px;
+  margin: 0 0 2px;
+  color: var(--sl-navy);
+}
+/* line-heightを1.35にするのは、大きな数字の字面が行ボックスからはみ出さないようにするため
+   （clipはされないが、計測上の高さ差をなくして「文字切れ0」を機械的に検証できるようにする） */
+.sl-plan__num { font-size: 2.1rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.35; }
+.sl-plan--std .sl-plan__num { font-size: 1.8rem; color: var(--text-secondary); }
+.sl-plan__unit { font-size: .92rem; font-weight: 700; }
+.sl-plan__tax { font-size: .78rem; color: var(--sl-gray); }
+.sl-plan__sub { margin: 0 0 16px; font-size: .82rem; color: var(--sl-gray); }
+
+.sl-plan__list { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 8px; }
+.sl-plan__list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #EDF0F4;
+  font-size: .86rem;
+}
+.sl-plan__list span { color: var(--sl-gray); }
+.sl-plan__list b { font-weight: 800; color: var(--sl-navy); text-align: right; }
+
+.sl-plan__note {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border-radius: var(--sl-radius-sm);
+  background: var(--sl-blue-pale);
+  font-size: .8rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+/* CTAはカード下端へそろえる（高さ固定はしない） */
+.sl-plan__cta { margin: auto 0 0; }
+.sl-plan__cta .btn { width: 100%; justify-content: center; }
+
+/* HP制作費の分離注記 */
+.sl-plannote {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border: 1px solid #E2E6EC;
+  border-radius: var(--sl-radius);
+  background: var(--c-white);
+}
+.sl-plannote__title { margin: 0 0 8px; font-size: .95rem; font-weight: 800; color: var(--sl-navy); }
+.sl-plannote__body { margin: 0; font-size: .86rem; line-height: 1.9; color: var(--text-secondary); }
+
+/* TOPの価格ボックス：限定プラン名と通常価格の併記 */
+.sl-pricebox__plan {
+  margin: 6px 0 0;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--sl-blue);
+}
+.sl-pricebox__std {
+  margin: 14px 0 0;
+  padding: 11px 14px;
+  border-radius: var(--sl-radius-sm);
+  background: #F1F4F8;
+  font-size: .8rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 860px) {
+  .sl-plans { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
+@media (max-width: 640px) {
+  .sl-plan { padding: 22px 18px 20px; }
+  .sl-plan__num { font-size: 1.9rem; }
+  .sl-plan--std .sl-plan__num { font-size: 1.65rem; }
+  /* 狭い幅では項目名と値を縦積みにして、金額の文字切れを作らない */
+  .sl-plan__list li { justify-content: flex-start; }
+  .sl-plan__list b { text-align: left; }
+}

@@ -167,6 +167,45 @@
     box.style.display = 'block';
   })();
 
+  /* ------------------ 人数項目の商品別出し分け（WEB-V3-ROUTING-CLARITY-4） -- */
+
+  /**
+   * 「利用予定人数」は商品によって意味が変わるため、topicに応じて出し分ける。
+   *   topic=salon   … ラベルを「店舗スタッフ数」へ（人数課金と誤解させない）
+   *   topic=website … 項目ごと非表示（ホームページ制作に人数は不要）
+   *   topic=works   … 既存のまま「利用予定人数」
+   *   topicなし     … 既存のまま「利用予定人数」
+   *
+   * ★selectのname・option・値・送信仕様は一切変更しない（APIへの追加fieldなし）。
+   * ★非表示にするときは値を '' に戻す。'' はAPI側の許可値（＝「未回答」）なので、
+   *   隠れた選択が本文へ混入することも、422で弾かれることもない。
+   * ★hidden属性だけでは消えない（components.css の .field { display: grid } が
+   *   UAの [hidden] より優先される）。displayも明示する。
+   */
+  var HEADCOUNT_LABELS = { salon: '店舗スタッフ数', works: '利用予定人数' };
+
+  (function setupHeadcount() {
+    var field = document.getElementById('headcount-field');
+    var select = document.getElementById('f-headcount');
+    if (!field || !select || !('URLSearchParams' in window)) return;
+
+    var t = new URLSearchParams(location.search).get('topic');
+
+    if (t === 'website') {
+      // 値を初期化してから隠す（隠れた入力が送信内容へ混ざらないようにする）
+      select.value = '';
+      field.hidden = true;
+      field.style.display = 'none';
+      return;
+    }
+
+    var labelEl = field.querySelector('[data-headcount-label]');
+    if (labelEl && t && Object.prototype.hasOwnProperty.call(HEADCOUNT_LABELS, t)) {
+      // textContentへの代入のみ（innerHTMLは使わない）
+      labelEl.textContent = HEADCOUNT_LABELS[t];
+    }
+  })();
+
   /* --------------------- 機能選択fieldset（WEB-V3-SALON-URGENT-4 / R2） -- */
 
   /**

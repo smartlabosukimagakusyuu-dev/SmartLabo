@@ -431,6 +431,74 @@
     </div>
   </section>
 
+  <!-- ============================== 07-B. 料金プラン（ROUTING-CLARITY-4-R1） ==============
+       ★通常価格(Standard)と創業メンバープランを「別カード」で表示する。
+         限定価格が通常価格に見えないよう、Standardを基準として明示する。
+       ★打ち消し線による二重価格表示はしない。割引率も出さない。
+       ★店舗ホームページ制作費は Salon初期費用とは別であることを下部で明記する。 -->
+  <section class="sl-section sl-section--greige" id="pricing" aria-labelledby="pricing-title">
+    <div class="container">
+      <p class="sl-eyebrow">料金</p>
+      <h2 class="sl-h2" id="pricing-title">料金プラン</h2>
+      <p class="sl-lead">
+        通常プランに加え、先行導入にご協力いただける先着20店舗限定の創業メンバープランをご用意しています。
+      </p>
+
+      <div class="sl-plans">
+
+        <!-- 通常価格（基準として明確に読めるが、創業メンバーより弱い） -->
+        <div class="sl-plan sl-plan--std reveal">
+          <p class="sl-plan__label">通常価格</p>
+          <h3 class="sl-plan__name">Standard</h3>
+          <p class="sl-plan__price">
+            <span class="sl-plan__unit">月額</span><span class="sl-plan__num">19,800</span><span class="sl-plan__unit">円</span><span class="sl-plan__tax">（税別）</span>
+          </p>
+          <p class="sl-plan__sub">税込 21,780円</p>
+          <ul class="sl-plan__list">
+            <li><span>初期費用</span><b>30,000円（税別）</b></li>
+            <li><span>年間一括</span><b>198,000円（税別）</b></li>
+            <li><span>年間一括の目安</span><b>月払い10か月分相当</b></li>
+          </ul>
+          <p class="sl-plan__cta">
+            <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--secondary">料金について相談する</a>
+          </p>
+        </div>
+
+        <!-- 創業メンバー（今回の主提案・Smart Blueで強調。全面塗りにはしない） -->
+        <div class="sl-plan sl-plan--founder reveal">
+          <p class="sl-plan__badges">
+            <span class="sl-plan__badge">先着20店舗限定</span><span class="sl-plan__badge sl-plan__badge--soft">先行導入</span>
+          </p>
+          <h3 class="sl-plan__name">創業メンバープラン</h3>
+          <p class="sl-plan__price">
+            <span class="sl-plan__unit">月額</span><span class="sl-plan__num">14,800</span><span class="sl-plan__unit">円</span><span class="sl-plan__tax">（税別）</span>
+          </p>
+          <p class="sl-plan__sub">税込 16,280円</p>
+          <ul class="sl-plan__list">
+            <li><span>初期費用</span><b>0円</b></li>
+            <li><span>年間一括</span><b>148,000円（税別）</b></li>
+            <li><span>年間一括の目安</span><b>月払い10か月分相当</b></li>
+            <li><span>価格保証</span><b>24か月間</b></li>
+          </ul>
+          <p class="sl-plan__note">25か月目以降は、その時点のStandard通常価格へ移行します。</p>
+          <p class="sl-plan__cta">
+            <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary">創業メンバープランについて相談する</a>
+          </p>
+        </div>
+
+      </div>
+
+      <!-- HP制作費は Salon料金に含まれない -->
+      <div class="sl-plannote reveal">
+        <h3 class="sl-plannote__title">店舗ホームページ制作について</h3>
+        <p class="sl-plannote__body">
+          店舗ホームページ制作は、Salonの初期費用とは別で、50,000円〜（税別）です。
+          標準範囲を超えるページ構成・機能・個別デザイン等は、別途お見積りとなります。
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================== 08. 相談CTA ============================== -->
   <section class="sl-section sl-section--navy sl-final" aria-labelledby="salon-cta-title">
     <div class="container container--narrow">
@@ -443,7 +511,11 @@
         <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">気になる機能を選んで相談する</a>
         <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--on-inverse btn--lg">Salonについて無料相談</a>
       </div>
-      <p class="sl-note">月額14,800円（税別）・初期費用0円。<a href="index.html#salon-price" style="color:#cfe0ff">料金の詳細を見る</a></p>
+      <p class="sl-note">
+        先着20店舗限定・創業メンバープラン 月額14,800円（税別）／初期費用0円。
+        通常価格は月額19,800円（税別）・初期費用30,000円（税別）です。
+        <a href="#pricing" style="color:#cfe0ff">料金の詳細を見る</a>
+      </p>
     </div>
   </section>
 
