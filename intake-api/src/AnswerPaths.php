@@ -9,9 +9,10 @@
  *   'basic'             … 分類そのもの（その分類ぜんぶを見直してほしい）
  *   'basic.legal_name'  … 分類 + 項目
  *
- * ★この一覧は画面側の定義（public/assets/lib/schema.js）から機械的に生成した。
- *   両者が食い違っていないことは tests/test-revision.php で検査している。
- *   **手で書き換えない。** §3 を変えたときは schema.js を直してから作り直す。
+ * ★この一覧は画面側の定義（public/assets/lib/schema.js）から機械的に生成している。
+ *   実体は AnswerSchema::PATHS（生成物）。**手で書き換えない。**
+ *   §3 を変えたときは schema.js を直してから作り直す:
+ *     node intake-api/dev/generate-answer-schema.mjs
  */
 declare(strict_types=1);
 
@@ -19,45 +20,17 @@ namespace SmartLabo\Intake;
 
 final class AnswerPaths
 {
-    /** @var list<string> */
-    public const ALL = [
-        'basic', 'basic.legal_name', 'basic.display_name', 'basic.operator_name',
-        'basic.corporate_name', 'basic.postal_code', 'basic.address', 'basic.address_visibility',
-        'basic.public_phone', 'basic.internal_contact.phone', 'basic.internal_contact.email',
-        'basic.access_text', 'basic.parking', 'basic.service_area', 'basic.description',
-        'basic.opened_year', 'basic.payment_methods', 'basic.booking_methods', 'basic.booking_note',
-        'business_hours', 'business_hours.weekly', 'business_hours.closed_note',
-        'business_hours.irregular_notice', 'business_hours.note', 'menus', 'menus.name',
-        'menus.category', 'menus.price_type', 'menus.price_inc_tax', 'menus.price_ex_tax',
-        'menus.tax_type', 'menus.duration_minutes', 'menus.description', 'menus.note', 'menus.target',
-        'menus.published', 'menus.bookable', 'menus.first_time_only', 'menus.limited_period',
-        'menus.period_start', 'menus.period_end', 'menus.cancel_policy', 'staff', 'staff.display_name',
-        'staff.real_name', 'staff.role', 'staff.career', 'staff.qualifications', 'staff.specialty',
-        'staff.menu_names', 'staff.bio', 'staff.photo_ref', 'staff.nominatable', 'staff.published',
-        'staff.consent_agreed', 'staff.consent_date', 'promotion', 'promotion.strengths',
-        'promotion.customer_profile', 'promotion.problems', 'promotion.recommended_menus',
-        'promotion.difference', 'promotion.concept', 'promotion.owner_message',
-        'promotion.founding_story', 'promotion.service_values', 'promotion.exclusions',
-        'promotion.forbidden_expressions', 'promotion.competitors', 'promotion.achievements',
-        'promotion.achievements_evidence', 'promotion.testimonials',
-        'promotion.testimonials_permitted', 'promotion.testimonials_permitted_date', 'design',
-        'design.template', 'design.preferred_colors', 'design.avoid_colors', 'design.tone',
-        'design.reference_sites', 'design.reference_likes', 'design.avoid_design', 'design.logo',
-        'design.font_preference', 'design.emphasis', 'design.hero_message', 'web_links',
-        'web_links.current_site', 'web_links.existing_domain', 'web_links.desired_domain',
-        'web_links.external_booking_url', 'web_links.line_add_url', 'web_links.instagram',
-        'web_links.other_sns', 'web_links.google_business', 'web_links.contact_methods',
-        'web_links.public_email', 'web_links.map_display', 'web_links.current_server',
-        'web_links.domain_registrar', 'web_links.existing_mail', 'contact_form',
-        'contact_form.enabled', 'contact_form.topics', 'contact_form.internal_to', 'privacy',
-        'privacy.collected_data', 'privacy.purpose', 'privacy.retention', 'privacy.third_party',
-        'privacy.contact_window', 'privacy.marketing_use', 'image_metadata',
-        'image_metadata.file_name', 'image_metadata.role', 'image_metadata.provider',
-        'image_metadata.rights_confirmed', 'image_metadata.person_consent',
-        'image_metadata.person_consent_date', 'image_metadata.alt', 'image_metadata.published',
-        'image_metadata.placement', 'image_metadata.expires_on', 'image_metadata.ai_generated',
-        'image_metadata.note', 'rights', 'rights.confirmations', 'rights.agreed_by', 'rights.note',
-    ];
+    /**
+     * §3 の正式なデータパス129件。
+     *
+     * ★実体は **生成物** `AnswerSchema::PATHS`（`dev/generate-answer-schema.mjs` が
+     *   `public/assets/lib/schema.js` から作る）。ここへ書き写さない。
+     *   v1.8（4F-R1）より前は、この定数へ一覧を貼り付けていた。
+     *   同じものを2か所に置くと、いつか片方だけが古くなる。
+     *
+     * @var list<string>
+     */
+    public const ALL = AnswerSchema::PATHS;
 
     public static function isValid(string $path): bool
     {

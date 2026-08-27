@@ -111,6 +111,12 @@ final class ExportService
     {
         $answers = $this->answers->get($caseId);
 
+        // ★DB の値をそのまま信用しない（SSOT v1.8 §11.3-6）。
+        //   `AnswerService::get()` でも絞り込んでいるが、書き出しは**外へ出る唯一の口**なので
+        //   ここでもう一度かける。片方が緩んでも、もう片方が止める。
+        //   ★未知キーがあっても落とさない。正式な値だけを出す。
+        $answers['sections'] = AnswerValidator::filter($answers['sections']);
+
         $out = [
             'export_schema_version' => self::EXPORT_SCHEMA_VERSION,
             'source'                => self::SOURCE,
@@ -128,7 +134,8 @@ final class ExportService
 
         $out['answer_schema_version'] = (int)$answers['schema_version'];
 
-        // JSON 11分類。★分類名は Migrator::ANSWER_SECTIONS のものだけ
+        // JSON 11分類。★分類名は Migrator::ANSWER_SECTIONS のものだけ。
+        //   中身のキーは AnswerValidator::filter() が §3 の正式パスへ絞ってある
         $sections = [];
         foreach (Migrator::ANSWER_SECTIONS as $section) {
             $sections[$section] = $answers['sections'][$section] ?? null;

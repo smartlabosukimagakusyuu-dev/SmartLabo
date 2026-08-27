@@ -70,6 +70,12 @@ final class AnswerService
             $sections[$section] = is_array($decoded) ? $decoded : [];
         }
 
+        // ★保存済みの値を無条件に信用しない（SSOT v1.8 §3.0-9 / §11.3）。
+        //   4F-R1 より前に入った未知キーが残っていても、ここから先へは出さない。
+        //   店舗の復元・管理画面・書き出しは、すべてこの戻り値を使う。
+        //   ★未知キーがあるだけで落とさない。正式な値はそのまま返す。
+        $sections = AnswerValidator::filter($sections);
+
         return [
             'version'        => (int)$row['version'],
             'schema_version' => (int)$row['schema_version'],
@@ -88,6 +94,15 @@ final class AnswerService
         if ($sections === []) {
             return ['ok' => false, 'error' => 'bad_request'];
         }
+
+        // ★正式構造（§3 の11分類・129パス）に無いキーが1つでもあれば、
+        //   **要求そのものを拒否**する。黙って捨てて保存しない（SSOT v1.8 §3.0-9）。
+        //   トランザクションへ入る前に判定するので、DBは1バイトも変わらない。
+        //   ★どのキーが不正だったかは返さない（内部の一覧を推測させない）。
+        if (AnswerValidator::check($sections)['ok'] !== true) {
+            return ['ok' => false, 'error' => 'bad_request'];
+        }
+
         foreach ($sections as $name => $value) {
             if (!in_array($name, Migrator::ANSWER_SECTIONS, true)) {
                 return ['ok' => false, 'error' => 'bad_request']; // 未知キーは拒否

@@ -1,8 +1,8 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F-R1）
 
 ```text
 STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.7**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.8**
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -346,6 +346,43 @@ rate limit 一覧・書き出しの allowlist / denylist・本番前の残存課
 - 検査で追加した自動テスト: `tests/test-security.php` ／ `tests/test-security-static.php`
 - 仕様は SSOT が正。検査レポートは SSOT を上書きしない
 
+### 回答の正式構造（4F-R1・SSOT v1.8 §3.0.1）
+
+**正は `public/assets/lib/schema.js`。** PHP 側は生成物である。
+
+```bash
+node intake-api/dev/generate-answer-schema.mjs
+```
+
+- §3 を変えるときは **schema.js を直してから作り直す**
+- `src/AnswerSchema.php` は**生成物**。手で書き換えない（次の生成で消える）
+- `AnswerPaths::ALL` は `AnswerSchema::PATHS` を指すだけ。一覧を書き写さない
+- 一致（11分類・129パス・配列要素の許可キー・型）と**生成の冪等性**は
+  `tests/test-answer-schema.php` が固定している
+- 外部ライブラリを増やさない（Node の標準機能だけで生成する）
+
+**受け取るとき（`POST /answers/save`）**
+
+未知キーが**1件でも**あれば、**その要求の全体を 400 で拒否**する。
+
+- 分類名だけでなく、**分類の中身のキー**も見る（入れ子・配列要素の中まで）
+- 未知キーだけを黙って捨てて保存しない
+- 正常な値が混ざっていても、**正常な分だけの部分保存をしない**
+- 型（`scalar` / `bool` / `list` / `object` / `objects`）が違えば拒否
+- 判定は**保存トランザクションより前**。DBも `version` も監査も動かない
+- 未知キーの**名前も値も**、応答・ログ・監査へ出さない
+- `__proto__` / `constructor` / `prototype` は「一覧に無いキー」として落ちる
+  （特別扱いの分岐を書かない。書けば、書き忘れた名前が残る）
+
+**出すとき（`GET /case`・管理画面・書き出し）**
+
+4F-R1 より前に入った未知キーが DB に残っていても、**出さない**。
+
+- `AnswerService::get()` で絞るので、店舗の復元・管理詳細・書き出しに一度に効く
+- 書き出しは**外へ出る唯一の口**なので、`ExportService` でも**もう一度**絞る
+- 未知キーが**あるだけで画面や書き出しを失敗させない**。正式値だけを出す
+- **自動清掃はしない。** 既存行は読むだけで、書き換えない
+
 ### 保持期限と削除（4F-PRE・SSOT v1.7 §9）
 
 **誰が何を持つか**
@@ -412,5 +449,6 @@ H リンク再発行／I 確定／J 保持期限／K closed 後の拒否／L 保
 | 5 | 管理 session 清掃の自動化 | Phase 1 は保守画面からの明示操作（SSOT §2.7-10） |
 | 6 | `expose_php` が実機で効くか | **4H で確認**。ローカルの PHP 内蔵サーバーでは<br>`.user.ini`（`PHP_INI_SYSTEM`）も `.htaccess`（Apache）も適用されないため、<br>**この2つの対策はローカルでは検証できない**（4F で実測） |
 | 7 | 本番バックアップの世代・削除方針 | **4G**。確定するまで `backup_policy_confirmed` を true にしない |
-| 8 | 分類の中の**未知キー**が書き出しへ通る | **4F で発見（P3）**。`POST /answers/save` は分類名（11種）を検査するが、<br>分類の**中身のキーは検査しない**。未知キーはそのまま保存され、<br>「検証済み JSON」にも出る。認証済み店舗が自分の案件へ入れた値であり、<br>HTML はエスケープ済み・JSON も符号化済みのため**漏えいにはならない**が、<br>SSOT §11.3 の allowlist 方針とは緩い。**取込側（OPS-4）を作る前に判断する** |
-| 9 | 補助ボタンの高さが 40px | **4F で発見（P3）**。主導線（前へ／次へ）は 48px を満たす。<br>「追加」「保存する」「入力を終了する」は 40px で、<br>WCAG 2.5.8（24px）は満たすが 4F の目標値 48px には届かない |
+| ~~8~~ | ~~分類の中の**未知キー**が書き出しへ通る~~ | **4F-R1 で是正**（SSOT v1.8 §3.0.1）。<br>保存は**要求全体を拒否**、読み出し・書き出しは**出力しない** |
+| ~~9~~ | ~~補助ボタンの高さが 40px~~ | **4F-R1 で是正**（SSOT v1.8 §10.10）。店舗・管理とも 48px |
+| 10 | 既存DBに残った未知キーの**清掃機能** | **作らない**（SSOT v1.8 §3.0.1）。読み出しで除くだけで、既存行は触らない。<br>必要になったら本書を改定してから作る |

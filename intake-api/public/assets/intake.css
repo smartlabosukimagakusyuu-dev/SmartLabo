@@ -290,10 +290,12 @@ textarea:focus {
   content: "! ";
 }
 
+/* ★label を含む行そのものが操作対象。48px を確保する（4F-R1） */
 .checkline {
   display: flex;
   gap: var(--sp-3);
   align-items: flex-start;
+  min-height: 48px;
   padding: var(--sp-3);
   border: 1px solid var(--c-line-soft);
   border-radius: var(--radius-sm);
@@ -403,12 +405,16 @@ textarea:focus {
   display: flex;
   align-items: center;
   gap: var(--sp-1);
+  /* ★「定休」の label も押して切り替える操作対象。48px を確保する（4F-R1） */
+  min-height: 48px;
+  padding: 0 var(--sp-2);
   font-size: 0.85rem;
+  cursor: pointer;
 }
 
 .weekly__closed input {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   accent-color: var(--c-blue);
 }
 
@@ -458,29 +464,35 @@ textarea:focus {
   color: var(--c-blue-dark);
 }
 
+/*
+ * ★補助のボタンも 48px を下回らせない（SSOT v1.8 §10.10 / 4F-R1）。
+ *   見た目の軽さは**色と文字の大きさ**で出す。押せる面積は削らない。
+ *   高さを `height` で固定しない。文字を拡大しても切れないようにするため、
+ *   `min-height` ＋ 上下 padding で確保する。
+ */
 .btn--quiet {
   border-color: transparent;
   color: var(--c-gray);
-  min-height: 40px;
-  padding: 8px 12px;
+  padding: 12px 16px;
 }
 
 .btn--danger-quiet {
   border-color: var(--c-line);
   color: var(--c-err);
-  min-height: 40px;
-  padding: 8px 12px;
+  padding: 12px 16px;
   font-size: 0.85rem;
 }
 
-.btn:disabled {
+/* ★色だけで無効を示さない。カーソルと不透明度に加え、
+   画面側で `aria-disabled` と文言（「保存中」等）でも伝える */
+.btn:disabled,
+.btn[aria-disabled='true'] {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
 .btn--small {
-  min-height: 40px;
-  padding: 8px 12px;
+  padding: 12px 16px;
   font-size: 0.85rem;
 }
 

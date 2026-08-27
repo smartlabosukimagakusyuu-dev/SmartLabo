@@ -17,6 +17,7 @@
  *   D Drive 完了申告            J retention（既定フラグ false）
  *   E 確認・提出                K closed 後の全面拒否
  *   F 管理確認・export          L maintenance
+ *                               M 回答の正式構造（4F-R1）
  *
  * ★J の「削除が成功すること」の確認は dev/retention-walkthrough.php が担当する
  *   （別の使い捨てDBで、override したときだけ動く）。ここでは
@@ -877,12 +878,103 @@ $check('管理詳細は最小メタデータだけ。操作リンク0件',
     && !str_contains($cDetail, E2E_MARKER) && !str_contains($cDetail, E2E_EMAIL)
     && !str_contains($cDetail, 'drive.google.com'));
 
+/* ================================================================ M */
+
+$head('M. 回答の正式構造（4F-R1 / SSOT v1.8 §3.0.1）');
+
+$mkClock = new E2eClock();
+[$w, $baseSchema] = $makeEnv('schema', $mkClock, false);
+
+$wNumber = 'HP-202608-0011';
+$wId     = $w->cases->create($wNumber, E2E_SHOP . ' ' . E2E_MARKER);
+$wToken  = $w->tokens->issue($wId);
+$wStart  = $w->app->handle($json('POST', '/session/start', ['token' => $wToken]));
+$wShop   = [Config::COOKIE_NAME => (string)$wStart->cookies[0]['value']];
+
+// 正常な11分類を保存する
+$wSave = $w->app->handle($json('POST', '/answers/save', ['version' => 1, 'sections' => $sections], $wShop));
+$check('正式な11分類を保存できる', $wSave->status === 200 && (int)$wSave->body['version'] === 2);
+
+// 未知キーを混ぜて送る
+$UNK   = 'E2EUNKNOWNKEY0001';
+$mixed = $sections;
+$mixed['basic'][$UNK]    = '不正値' . $UNK;
+$mixed['menus'][0][$UNK] = '不正値' . $UNK;
+$beforeSave = $w->answers->get($wId);
+
+$wBad      = $w->app->handle($json('POST', '/answers/save', ['version' => 2, 'sections' => $mixed], $wShop));
+$afterSave = $w->answers->get($wId);
+
+$check('未知キー混入は 400・固定エラーコードで拒否される',
+    $wBad->status === 400 && ($wBad->body['error'] ?? '') === 'bad_request');
+$check('未知キー名も値も応答に出ない', !str_contains($wBad->json(), $UNK));
+$check('正常値も含めて1バイトも保存されない（部分保存なし・version も動かない）',
+    $beforeSave['version'] === $afterSave['version']
+    && $beforeSave['sections'] === $afterSave['sections']);
+
+// 直して再保存 → 復元 → 提出
+$fixedSections = $sections;
+$fixedSections['basic']['legal_name'] = E2E_SHOP . ' ' . E2E_MARKER . '（修正版）';
+$wFix  = $w->app->handle($json('POST', '/answers/save', ['version' => 2, 'sections' => $fixedSections], $wShop));
+$wCase = $w->app->handle($shopGet('/case', $wShop));
+$check('直して再保存でき、復元にも反映される',
+    $wFix->status === 200
+    && $wCase->body['sections']['basic']['legal_name'] === E2E_SHOP . ' ' . E2E_MARKER . '（修正版）');
+
+$wSubmit = $w->app->handle($json('POST', '/submit', ['submission_id' => $uuid4()], $wShop));
+$check('提出できる', $wSubmit->status === 200 && (string)$w->cases->find($wId)['status'] === 'submitted');
+
+// ★4F-R1 より前に入った未知キーの再現（保存 API を通さず直接埋め込む）
+$rawJson = static function (Kernel $kern, int $id, string $col): array {
+    $stmt = $kern->db->pdo()->prepare('SELECT ' . $col . '_json AS j FROM intake_answers WHERE intake_case_id = :i');
+    $stmt->execute([':i' => $id]);
+    $decoded = json_decode((string)$stmt->fetchColumn(), true);
+
+    return is_array($decoded) ? $decoded : [];
+};
+$legacyBasic       = $rawJson($w, $wId, 'basic');
+$legacyBasic[$UNK] = '不正値' . $UNK;
+$legacyMenus       = $rawJson($w, $wId, 'menus');
+$legacyMenus[0][$UNK] = '不正値' . $UNK;
+$w->db->pdo()->prepare('UPDATE intake_answers SET basic_json = :b, menus_json = :m WHERE intake_case_id = :i')
+    ->execute([
+        ':b' => json_encode($legacyBasic, JSON_UNESCAPED_UNICODE),
+        ':m' => json_encode($legacyMenus, JSON_UNESCAPED_UNICODE),
+        ':i' => $wId,
+    ]);
+$check('既存DBへ未知キーを直接入れた（検査の前提が成立している）',
+    array_key_exists($UNK, $rawJson($w, $wId, 'basic')));
+
+$wLogin = $w->app->handle($adminPost('/admin/login', ['admin_id' => E2E_ADMIN_ID, 'password' => E2E_ADMIN_PW]));
+$wAdmin = [Config::ADMIN_COOKIE_NAME => (string)$wLogin->cookies[0]['value']];
+
+$restore    = $w->app->handle($shopGet('/case', $wShop));
+$detailW    = $w->app->handle($adminGet('/admin/case', $wAdmin, ['case' => $wNumber]));
+$exportW    = $w->app->handle($adminGet('/admin/export', $wAdmin, ['case' => $wNumber]));
+$exportBody = (string)$exportW->rawBody;
+
+$check('店舗の復元に未知キーが出ない（落ちもしない）',
+    $restore->status === 200 && !str_contains($restore->json(), $UNK));
+$check('管理詳細に未知キーが出ない（500 にならない）',
+    $detailW->status === 200 && !str_contains((string)$detailW->rawBody, $UNK));
+$check('書き出しに未知キーが出ない',
+    $exportW->status === 200 && !str_contains($exportBody, $UNK));
+$check('正式な値は残っている（検査が空振りでない）',
+    str_contains($exportBody, E2E_MARKER)
+    && $restore->body['sections']['menus'][0]['name'] === 'カット');
+$check('書き出しの SHA-256 が本文と一致する',
+    hash('sha256', $exportBody) === ($exportW->headers['X-Intake-Export-Sha256'] ?? ''));
+$check('未知キーを自動で消したり移したりしない（DBはそのまま）',
+    array_key_exists($UNK, $rawJson($w, $wId, 'basic')));
+$check('未知キーの名前も値もログへ出ない',
+    !str_contains($log($baseSchema), $UNK) && str_contains($log($baseSchema), $wNumber));
+
 /* ================================================================ 後始末 */
 
 $head('後始末');
 
 $dbFiles = [];
-foreach ([$baseMain, $baseMaint, $baseClosed] as $b) {
+foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema] as $b) {
     $dbFiles[$b] = (string)file_get_contents($b . '/intake.sqlite');
 }
 $check('削除済みDBの生ファイルに架空 PII が残っていない',
@@ -892,7 +984,7 @@ $check('削除済みDBの生ファイルに架空 PII が残っていない',
     && str_contains($dbFiles[$baseClosed], $cNumber));
 
 $leak = [];
-foreach ([$baseMain, $baseMaint, $baseClosed] as $b) {
+foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema] as $b) {
     foreach ([E2E_MARKER, E2E_EMAIL, E2E_TEL, E2E_REVISION, 'drive.google.com',
               $token, $token2, $sid, $cToken, E2E_ADMIN_PW] as $needle) {
         if ($needle !== '' && str_contains($log($b), $needle)) {
@@ -900,7 +992,7 @@ foreach ([$baseMain, $baseMaint, $baseClosed] as $b) {
         }
     }
 }
-$check('3つのログに PII・token・session・パスワードが1つも出ていない'
+$check('4つのログに PII・token・session・パスワードが1つも出ていない'
     . ($leak === [] ? '' : '（残: ' . implode(',', $leak) . '）'), $leak === []);
 $check('ログは空ではない（検査が空振りしていない）',
     str_contains($log($baseMain), 'export_generated') && str_contains($log($baseMain), $number));
@@ -908,7 +1000,8 @@ $check('ログは空ではない（検査が空振りしていない）',
 $k->db->close();
 $m->db->close();
 $c->db->close();
-unset($k, $m, $c, $dbFiles, $ins, $stmt);
+$w->db->close();
+unset($k, $m, $c, $w, $dbFiles, $ins, $stmt);
 gc_collect_cycles();
 
 $left = [];
@@ -925,7 +1018,7 @@ foreach ($roots as $b) {
         $left[] = $b;
     }
 }
-$check('使い捨てDBを3つとも削除した' . ($left === [] ? '' : '（残: ' . implode(',', $left) . '）'), $left === []);
+$check('使い捨てDBを4つとも削除した' . ($left === [] ? '' : '（残: ' . implode(',', $left) . '）'), $left === []);
 
 echo "\n" . str_repeat('=', 66) . "\n";
 printf("  %d 項目 / NG %d 件\n", $step, count($bad));

@@ -251,8 +251,9 @@ input:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 10px 18px;
+  /* ★管理画面も店舗画面と同じ基準（48px）にそろえる（SSOT v1.8 §10.10 / 4F-R1） */
+  min-height: 48px;
+  padding: 12px 18px;
   font-family: inherit;
   font-size: 0.9rem;
   font-weight: 700;
@@ -282,8 +283,15 @@ input:focus {
 .btn--quiet {
   border-color: transparent;
   color: var(--c-gray);
-  min-height: 38px;
+  /* ★高さは削らない。軽さは色と文字の大きさで出す */
   font-size: 0.85rem;
+}
+
+/* ★色だけで無効を示さない */
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .inline {
@@ -405,4 +413,55 @@ code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.95rem;
   user-select: all;
+}
+
+/* ------------------------------------------------ 操作領域（4F-R1） */
+
+/*
+ * ★label を含む行そのものが操作対象。48px を確保する（SSOT v1.8 §10.10）。
+ *   修正依頼の項目選択で使う。高さを固定せず min-height ＋ padding で取り、
+ *   文字を拡大しても切れないようにする。
+ */
+.checkline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.checkline:hover {
+  background: var(--c-bg);
+}
+
+.checkline input {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  accent-color: var(--c-blue);
+}
+
+.checkline__text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.checks .checkline {
+  flex: 1 1 46%;
+  min-width: 200px;
+}
+
+/* 320px 幅でも横へはみ出さない */
+@media (max-width: 480px) {
+  .checks .checkline {
+    flex: 1 1 100%;
+  }
 }
