@@ -85,14 +85,18 @@ final class TokenService
 
         $result = $this->db->transaction(function (\PDO $pdo) use ($caseId, $plain, $now, $allowedStatuses): array {
             // 1. 状態の再確認。判定してから実行するまでの間に変わっていたら止める
-            $stmt = $pdo->prepare('SELECT status FROM intake_cases WHERE id = :id');
+            $stmt = $pdo->prepare('SELECT status, deleted_at FROM intake_cases WHERE id = :id');
             $stmt->execute([':id' => $caseId]);
-            $status = $stmt->fetchColumn();
+            $case = $stmt->fetch();
 
-            if ($status === false) {
+            if ($case === false) {
                 return ['ok' => false, 'error' => 'not_found'];
             }
-            if (!in_array((string)$status, $allowedStatuses, true)) {
+            // ★保持期限で削除済みの案件へ新しいリンクを配らない（SSOT v1.7 §9.3）
+            if ($case['deleted_at'] !== null) {
+                return ['ok' => false, 'error' => 'already_deleted'];
+            }
+            if (!in_array((string)$case['status'], $allowedStatuses, true)) {
                 return ['ok' => false, 'error' => 'invalid_status'];
             }
 

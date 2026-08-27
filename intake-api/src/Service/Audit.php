@@ -24,6 +24,10 @@ final class Audit
         'drive_upload_confirmed', 'case_status_changed', 'admin_login', 'admin_logout',
         // 4D-R2（SSOT v1.6 §2.5 / §4.4.1）
         'token_reissued',
+        // 4F（SSOT v1.7 §2.5 / §9.3）
+        // ★`answers_deleted` は v1.7 で `retention_purged` へ統合した。
+        //   語彙としては残す（過去DBの行を読めなくしないため）が、新規には記録しない。
+        'retention_due_set', 'retention_purged', 'audit_purged', 'admin_sessions_purged',
     ];
 
     public function __construct(

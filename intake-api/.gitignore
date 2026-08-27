@@ -4,6 +4,9 @@ dev/php.ini
 # ローカル確認用の使い捨てDB・ログ・レート制限（架空データのみ。追跡しない）
 dev/.preview/
 
+# 保持削除の通し確認が作る使い捨てDB。正常終了すれば消えるが、途中で落ちたときの保険
+dev/.walkthrough-*/
+
 # 実設定（HMAC鍵・暗号鍵・受信先）。サーバーにのみ置き、Gitへは入れない。
 private/intake-config.php
 

@@ -39,6 +39,13 @@ final class Db
         $this->pdo->exec('PRAGMA foreign_keys = ON');
         $this->pdo->exec('PRAGMA journal_mode = DELETE');
         $this->pdo->exec('PRAGMA busy_timeout = 5000');
+        // ★削除した内容をファイル上にも残さない（4F）。
+        //   SQLite は既定では削除した行の中身をページ上に置いたままにする。
+        //   DELETE で消したはずの回答・修正メッセージ・暗号文が、
+        //   DBファイルを直接読めば見えてしまう（4F の実測で確認した）。
+        //   保持期限による削除を「物理削除」と呼ぶ以上、ここは必須である。
+        //   SQLite 3.6.x 以降で使えるため本番 3.26.0 でも有効（SSOT §2.0.1 / §9.3）。
+        $this->pdo->exec('PRAGMA secure_delete = ON');
 
         if ($path !== ':memory:') {
             @chmod($path, 0600);
@@ -77,6 +84,12 @@ final class Db
     public function journalMode(): string
     {
         return strtolower((string)$this->pdo->query('PRAGMA journal_mode')->fetchColumn());
+    }
+
+    /** 削除した内容をページ上に残さない設定になっているか（SSOT v1.7 §9.3） */
+    public function secureDelete(): bool
+    {
+        return (int)$this->pdo->query('PRAGMA secure_delete')->fetchColumn() === 1;
     }
 
     /** @return array{integrity:string,foreign_key_violations:int} */

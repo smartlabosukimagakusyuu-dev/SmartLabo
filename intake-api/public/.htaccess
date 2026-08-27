@@ -6,6 +6,18 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# ------------------------------------------------------------------
+# 誤配置時の防御（4F / P3-3）
+# ★公開領域には該当ファイルを**置かない**のが第一。ここはその保険である。
+#   運用ミス・移行作業・エディタの一時ファイルで紛れ込んだ場合に読ませない。
+# ------------------------------------------------------------------
+
+# ドットで始まる**ディレクトリ・ファイル**（.git / .env / .svn / .idea など）を拒否する。
+# ★`.well-known` だけは除外する。SSL証明書の更新（ACME）で必要になるため、
+#   ここを塞ぐと証明書の自動更新が止まる。
+RewriteCond %{REQUEST_URI} (^|/)\.(?!well-known(/|$))
+RewriteRule ^ - [F,L]
+
 # 店舗向けの画面（4C）。拡張子を出さずに配る
 RewriteRule ^start/?$ start.html [L]
 RewriteRule ^form/?$  form.html  [L]
@@ -18,8 +30,29 @@ RewriteRule ^ index.php [L]
 # ディレクトリ一覧を出さない
 Options -Indexes
 
+# ドットファイルそのもの（.htaccess / .user.ini / .env など）。
+# ★RewriteRule と二重に塞ぐ。mod_rewrite が無効化された環境でも残るようにする。
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# DB・ログ・バックアップ・退避ファイル・秘密鍵・証明書・設定ファイル
+<FilesMatch "\.(sqlite|sqlite3|db|sql|log|bak|backup|old|orig|save|swp|swo|tmp|dist|inc|sh|ini|conf|cnf|yml|yaml|toml|env|pem|key|crt|cer|der|csr|p12|pfx|jks|asc|gpg|ppk)$">
+    Require all denied
+</FilesMatch>
+
+# エディタの退避ファイル（末尾チルダ）
+<FilesMatch "~$">
+    Require all denied
+</FilesMatch>
+
 # 設定ファイルは公開領域の外に置くが、誤配置時の保険として拒否する
 <FilesMatch "(intake-config|\.example)\.php$">
+    Require all denied
+</FilesMatch>
+
+# Composer は導入していない。関連ファイルが公開領域に出ること自体が誤配置である
+<FilesMatch "^(composer\.(json|lock|phar)|package(-lock)?\.json|Dockerfile|Makefile)$">
     Require all denied
 </FilesMatch>
 
@@ -36,8 +69,13 @@ Options -Indexes
     Header always set Strict-Transport-Security "max-age=31536000"
 
     # 外部CDN・外部フォント・外部通信を許さない。自分自身だけ
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
+    # ★img-src に data: を許さない（この画面群は画像もアイコンも使わない。4F で確認）
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
 
     # 検索結果へ出さない（SSOT §4.8）
     Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+
+    # PHP の版を知らせない（4F / P3-1）。
+    # ★`expose_php = Off`（.user.ini）が共用サーバーで効かない場合の二重の備え。
+    Header always unset X-Powered-By
 </IfModule>

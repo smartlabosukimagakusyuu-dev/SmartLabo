@@ -68,4 +68,13 @@ function previewPutEnv(): void
     // 内部確認画面（使い捨て。hash はその場で作るので Git に残らない）
     putenv('INTAKE_ADMIN_ID=' . PREVIEW_ADMIN_ID);
     putenv('INTAKE_ADMIN_PASSWORD_HASH=' . previewAdminHash());
+
+    // ------------------------------------------------------------------
+    // 保持期限による削除（SSOT v1.7 §9.8）
+    //
+    // ★**ローカル確認だけ**の override である。使い捨てDB（dev/.preview/）にしか効かない。
+    // ★本番では両方 false のまま。`backup_policy_confirmed` は 4G の後に代表が設定する。
+    // ------------------------------------------------------------------
+    putenv('INTAKE_RETENTION_ACTIONS_ENABLED=1');
+    putenv('INTAKE_BACKUP_POLICY_CONFIRMED=1');
 }

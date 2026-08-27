@@ -74,7 +74,27 @@ final class Config
          * ★平文パスワードをここへ入れてはならない。
          */
         public readonly ?string $adminPasswordHash = null,
+        /**
+         * 保持期限による削除操作を有効にしてよいか（SSOT v1.7 §9.8-1）。
+         * ★既定は **false**。設定していない環境では削除経路そのものを動かさない。
+         */
+        public readonly bool $retentionActionsEnabled = false,
+        /**
+         * 本番バックアップの世代・削除方針が確定済みか（SSOT v1.7 §9.8-2）。
+         * ★既定は **false**。4G でバックアップ方針を確定するまで削除を通さない。
+         *   古いバックアップから消したはずの回答が復活する運用を作らないため。
+         */
+        public readonly bool $backupPolicyConfirmed = false,
     ) {
+    }
+
+    /**
+     * 破壊的な保持削除を実行してよいか（SSOT v1.7 §9.8）。
+     * ★2つのフラグが**両方**真のときだけ。どちらか欠ければ実行しない（fail closed）。
+     */
+    public function retentionEnabled(): bool
+    {
+        return $this->retentionActionsEnabled && $this->backupPolicyConfirmed;
     }
 
     /** 管理画面を動かしてよいか。★資格情報が揃っていなければ動かさない */
@@ -149,7 +169,28 @@ final class Config
             requireHttps: $requireHttps,
             adminId: self::nonEmptyOrNull($pick('admin_id', 'INTAKE_ADMIN_ID')),
             adminPasswordHash: self::validAdminHashOrNull($pick('admin_password_hash', 'INTAKE_ADMIN_PASSWORD_HASH')),
+            retentionActionsEnabled: self::explicitTrue($pick('retention_actions_enabled', 'INTAKE_RETENTION_ACTIONS_ENABLED')),
+            backupPolicyConfirmed: self::explicitTrue($pick('backup_policy_confirmed', 'INTAKE_BACKUP_POLICY_CONFIRMED')),
         );
+    }
+
+    /**
+     * 破壊的操作のフラグを読む。
+     *
+     * ★`(bool)` へ丸めない。環境変数は必ず文字列で来るため、`"false"` も `"0"` も
+     *   `"off"` も PHP では真になりうる。**明示的に真と書いたときだけ真**にする。
+     *   迷ったら実行しない側へ倒す（fail closed）。
+     */
+    private static function explicitTrue(mixed $value): bool
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+        if (is_int($value)) {
+            return $value === 1;
+        }
+
+        return is_string($value) && in_array(strtolower(trim($value)), ['1', 'true', 'yes', 'on'], true);
     }
 
     private static function nonEmptyOrNull(mixed $value): ?string

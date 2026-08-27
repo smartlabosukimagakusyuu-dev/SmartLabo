@@ -1,15 +1,16 @@
 # 店舗向けHP導入フォーム データモデル・token設計 v1
 
 ```text
-STATUS      : APPROVED / 4D-R1 実装済み（受付API・店舗入力画面・内部確認画面・運用フロー）
-VERSION     : v1.6（R6）
-DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.6 改定）
+STATUS      : APPROVED / 4F-PRE 実装済み（受付API・店舗入力画面・内部確認画面・運用フロー・保持削除）
+VERSION     : v1.7（R7）
+DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.7 改定）
 工程        : HP-ONBOARDING-4A ／ -4A-R1（AI Sales 分離・Operations 境界確定）
               ／ -4B-PRE（XServer 実行環境の実測）／ -4A-R2（実測反映）
               ／ -4B（受付API 実装）／ -4B-R1（提出の冪等化）
               ／ -4C（店舗入力画面）／ -4D（内部確認・書き出し）
               ／ -4D-R1（修正依頼・案件作成・Drive 案内）
-              ／ **-4D-R2（ご案内リンクの再発行・本改定）**
+              ／ -4D-R2（ご案内リンクの再発行）／ -4E（セキュリティ総合検査）
+              ／ **-4F-PRE（本番前hardening・保持削除ライフサイクル・本改定）**
 本番環境    : XServer 共用（PHP 8.3.33 / **SQLite 3.26.0** / pdo_sqlite・OpenSSL・mbstring 有効）
               ★実測日 2026-08-27。**VACUUM INTO は使用不可**（§2.0.1・§9.6）
 対象        : intake.smartlaboworks.com（店舗向けHP導入フォーム）
@@ -210,7 +211,8 @@ Smart Labo Operations の完成前に契約が発生した場合、
 
 `UPSERT`（ON CONFLICT DO UPDATE, 3.24）／窓関数（3.25）／部分索引（3.8）／
 `ALTER TABLE ... RENAME COLUMN`（3.25）／`PRAGMA foreign_keys`／
-**`PRAGMA integrity_check`**／**`PRAGMA foreign_key_check`**（3.7.16 以前・§9.7）
+**`PRAGMA integrity_check`**／**`PRAGMA foreign_key_check`**（3.7.16 以前・§9.7）／
+**`PRAGMA secure_delete`**（3.6.x 以降・**v1.7 で採用**・§9.3-5）
 
 **SQL側の JSON 関数（`json_extract` 等）は使用しない**
 - 本書の JSON 列は **TEXT として保存し、PHP 側でパースする**設計である（§2.3）。
@@ -353,7 +355,7 @@ Smart Labo Operations の完成前に契約が発生した場合、
 |---|---|---|---|
 | `id` | INTEGER PK AUTOINCREMENT | — | |
 | `intake_case_id` | INTEGER REFERENCES intake_cases(id) | 可 | token 不一致時など、案件を特定できない場合は NULL |
-| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加）<br>／ **`token_reissued`**（v1.6 で追加。§4.4.1） |
+| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加）<br>／ **`token_reissued`**（v1.6 で追加。§4.4.1）<br>／ **`retention_due_set` / `retention_purged` / `audit_purged` / `admin_sessions_purged`**（v1.7 で追加。§9.3） |
 | `result_code` | TEXT NOT NULL | 不可 | `ok` / `invalid` / `expired` / `revoked` / `not_found` / `rate_limited` / `conflict` |
 | `ip_hmac` | TEXT | 可 | **HMAC-SHA256(IP, ip_hash_secret) の先頭32文字**。生IPを保存しない |
 | `created_at` | TEXT NOT NULL | 不可 | |
@@ -381,6 +383,18 @@ Smart Labo Operations の完成前に契約が発生した場合、
 
 > ★初回発行は従来どおり `token_issued`。**再発行は `token_reissued`** で区別する。
 > 「何回配り直したか」が監査から読めるようにするためである。
+
+**v1.7 で追加した4種（4F-PRE）**
+
+| event_type | いつ | `intake_case_id` | 備考 |
+|---|---|---|---|
+| `retention_due_set` | 削除予定日を**登録・変更**したとき | 案件 | **日付そのものは書かない**（案件行が持つ。二重に持たない）。<br>同じ日付の再送では追加しない（冪等）。変更は毎回1件残す |
+| `retention_purged` | 保持期限による**機密情報の削除**を実行したとき | 案件 | `result_code` は `ok` のみ（失敗は全ロールバックのため記録が残らない）。<br>**削除した値も、消した件数の内訳も書かない**（§9.3-3） |
+| `audit_purged` | 13か月を過ぎた**監査ログを削除**したとき | **NULL** | 削除件数が0のときは記録しない。<br>★この行**自身も13か月後に削除対象**になる（保持が循環しない） |
+| `admin_sessions_purged` | 期限切れの**管理 session を削除**したとき | **NULL** | 削除件数が0のときは記録しない。**session hash を書かない** |
+
+> ★v1.6 まで語彙にあった **`answers_deleted` は、v1.7 で `retention_purged` へ統合**した。
+> 語彙としては残す（過去DBの行を読めなくしないため）が、**新規には記録しない**。
 
 > ★管理者の操作は**案件に紐づくものだけ** `intake_case_id` を持つ。
 > ログイン・ログアウトは案件と無関係なので NULL にする。
@@ -469,6 +483,8 @@ Smart Labo 内部の管理画面用。**§2.6 の `intake_sessions`（店舗向�
 | 7 | 権限は**代表1種類のみ**。ロール列を作らない（§11.2-11） |
 | 8 | 「ログイン状態を保持する」機能を作らない |
 | 9 | session ID / CSRF token を**ログへ出さない**（§10.7） |
+| 10 | **期限切れ・失効済みの行を残し続けない**（v1.7 で追加）。保守画面から**明示操作**で物理削除する。<br>いま有効な session は1件も消さない（実行した本人が締め出されない）。<br>一度に消す件数に上限を設け、**長いロックを作らない**。<br>削除して残すのは**件数だけ**（hash をログにも監査にも出さない）。<br>★案件の保持期限（§9.1）とは**無関係**。破壊的操作のフラグ（§9.8）も要求しない |
+| 11 | **自動 cron を作らない**（v1.7）。自動化するときは本書を改定してから行う |
 
 > ★店舗向け（§2.6）と同じ設計を意図的に踏襲している。
 > 「hash のみ保存」「idle と絶対の二重期限」「Cookie 属性」を**別実装で作り分けない**ため。
@@ -508,6 +524,7 @@ Smart Labo 内部の管理画面用。**§2.6 の `intake_sessions`（店舗向�
 | 8 | **店舗の再提出が成功した時点**で、その案件の `open` をすべて `resolved` にする |
 | 9 | 店舗へ返してよいのは **`open` の依頼だけ**（`request_number` / `requested_paths` / `message` / `created_at`） |
 | 10 | **管理者を識別する列を作らない。** Phase 1 は代表1名（§10.8）であり、<br>誰が出したかは自明。個人IDを増やさない |
+| 11 | **保持期間は回答本文と同じ**（v1.7 で確定・§9.1）。案件の削除時に `open` / `resolved` を問わず<br>**行ごと物理削除**する。`message` と `requested_paths_json` を残さない。<br>★理由: この表は「どこを直してほしいか」＝**回答の内容そのもの**を指しており、<br>　回答だけ消して依頼が残れば、そこから内容が読めてしまう |
 
 > ★`created_by_admin_session_id` のような列は**作らない**。
 > 管理 session の識別子は秘密値であり、**残す理由が無い**（§2.7-9）。
@@ -1066,6 +1083,30 @@ draft ──submit──> submitted ──┬── request_revision ──> nee
 | `locked` | `closed` | Smart Labo |
 | 任意 | `closed` | Smart Labo（中止案件） |
 
+**`reviewed` → `locked`（確定）の規則（v1.7 で確定・4F-PRE で実装）**
+
+`locked` の意味は「**店舗入力を確定し、通常編集を終了した**」であり、**削除ではない**。
+
+| # | 規則 |
+|---|---|
+| 1 | **`reviewed` からのみ**確定できる。他の状態からは行かない |
+| 2 | 管理画面の **POST のみ**。CSRF・Origin 検査・管理 session を必須とする |
+| 3 | 確認画面を出し、**案件番号の再入力（完全一致）**を求める |
+| 4 | 実行時、その案件の **token をすべて失効**させる |
+| 5 | 実行時、その案件の **店舗 session をすべて失効**させる |
+| 6 | 状態変更・履歴・token 失効・session 失効を**同一トランザクション**で行う。<br>★「確定したのに古いリンクがまだ生きている」状態を1瞬も作らない |
+| 7 | 監査へ残す（`case_status_changed` / `token_revoked` / `session_revoked`） |
+| 8 | **冪等**。すでに `locked` なら何もせず成功（履歴も監査も増やさない） |
+| 9 | **回答・提出履歴・修正依頼・Drive 情報を削除しない**（削除は §9.3 の別操作） |
+| 10 | `locked` から `needs_revision` へ**戻さない**（`REVISABLE` に入れない） |
+| 11 | `locked` から token を**再発行しない**（`REISSUABLE` に入れない） |
+
+**`closed` の扱い（v1.7 で確定）**
+
+- **`closed` への通常操作を管理画面に作らない。**
+- `closed` は **§9.3 の機密情報削除が完了した時点で設定**される（`deleted_at` と同時）。
+- 中止案件を `closed` にする経路は、必要になった時点で本書を改定してから作る。
+
 **`reviewed` → `needs_revision` を許す理由（v1.5・代表判断）**
 
 | # | 内容 |
@@ -1086,6 +1127,10 @@ draft ──submit──> submitted ──┬── request_revision ──> nee
 | `reviewed` | ○（読み取りのみ） | × | × | ○ | ○ | active |
 | `locked` | ×（URL失効） | × | × | ○ | ○ | **expired / revoked** |
 | `closed` | × | × | × | ○（§9.4 の残余のみ） | × | revoked |
+
+> ★v1.7: **削除済み**（`deleted_at` が非 NULL）の案件では、`closed` の列に関わらず
+> 書き出し・token 発行・再発行・session 発行・状態変更を**すべて拒否**する（§9.3-4）。
+> 管理画面の詳細も **§9.4-2 の最小メタデータだけ**を出す。
 
 ### 5.3 token の状態
 
@@ -1389,16 +1434,45 @@ HP-202608-0001/          ← 最上位。**案件番号のみ**。店舗名を�
 
 ## 9. 保持・削除・バックアップ
 
-### 9.1 保持期間
+### 9.0 責任境界（v1.7 で確定・4F-PRE）
 
-| 対象 | 保持期間 | 起算 |
+保持と削除でいちばん事故が起きやすいのは、**「いつ消してよいか」を誰が決めるか**が
+曖昧なままになることである。v1.7 で次のとおり確定する。
+
+| # | 規則 |
+|---|---|
+| 1 | **公開日を HP Intake へ保存しない** |
+| 2 | **公開承認を HP Intake へ保存しない** |
+| 3 | 公開日・公開承認は **Smart Labo Operations の責任**である（§5.4） |
+| 4 | Operations 未完成の間は、**代表の標準管理票を正**とする（§1.3） |
+| 5 | 「公開後6か月」の削除予定日は、**Operations または標準管理票の側で計算**する |
+| 6 | HP Intake が持つのは **`retention_delete_due` の1列だけ**。人が**手動で登録**する |
+| 7 | **`retention_delete_due` から公開日を逆算しない**（逆算できる書き方をしない） |
+| 8 | Intake と Operations を**直接DB接続しない**。OPS-4 までは §11.3 の検証済み書き出しと手動登録を使う |
+| 9 | **自動削除しない**。cron・起動時処理・バッチを作らない |
+| 10 | Phase 1 の削除は**管理者による明示的な操作のみ** |
+| 11 | **Google Drive の実ファイル削除は HP Intake の責任外**（§7.1）。Intake から Drive API を呼ばない |
+| 12 | Drive の削除実施日は、**標準管理票または Operations 側**で管理する |
+| 13 | **AI Sales へ保持情報を移さない**（§1.4） |
+
+> ★「削除予定日だけを持つ」ことには理由がある。公開日を持てば、そこから
+> 「6か月後」を Intake が計算することになり、**公開判断の責任が Intake へ滑り込む**。
+> Intake は受付システムであって、公開工程の記録装置ではない。
+
+### 9.1 保持期間（v1.7 で確定）
+
+| 対象 | 保持期間 | 削除の仕方 |
 |---|---|---|
-| `intake_answers`（回答本文） | **公開完了後6か月** | `intake_cases.closed_at` |
-| `intake_cases`（案件メタ） | 同上（削除後は §9.4 の残余のみ） | 同上 |
-| `intake_tokens` | 公開完了時または編集期限終了時に**失効**。行は §9.3 の削除時まで残す | — |
-| `intake_submission_history` | 案件削除まで（件数のみで本文を持たないため） | — |
-| `intake_audit_events` | **13か月**（不正アクセス調査に足る期間） | `created_at` |
-| Drive の写真本体 | 案件ごとに保持期間と削除予定日を記録（§7.1-9） | 公開完了 |
+| `intake_answers`（回答本文） | `retention_delete_due` まで | 期限到来後、**明示操作で物理削除** |
+| `intake_tokens` | 案件の確定時に失効。行は削除時まで残す | 案件削除時に**物理削除** |
+| `intake_sessions`（店舗） | 同上 | 案件削除時に**物理削除** |
+| `intake_revision_requests` | **回答と同じ期限**（v1.7 で確定） | `open` / `resolved` を問わず案件削除時に**物理削除**。<br>`message` と `requested_paths_json` を残さない |
+| `intake_submission_history` | 回答と同じ期限 | 案件削除時に**物理削除**。`submission_id` も残さない |
+| Drive URL・共有先メール（暗号文） | 回答と同じ期限 | 案件削除時に **NULL 化**。**復号できる参照を残さない** |
+| `intake_cases`（案件メタ） | 削除後も §9.4 の最小メタデータのみ残す | 行は消さない（allowlist で作り直す） |
+| `intake_audit_events` | **13か月**（`created_at` 起算） | 期限到来後、**明示操作で物理削除**。HMAC化IP も同時に消える |
+| `intake_admin_sessions` | 案件の保持期間とは**無関係** | 期限切れ・失効済みを保守操作で物理削除（§2.7-8） |
+| Drive の写真本体 | 案件ごとに記録（§7.1-9） | **Intake の責任外**（§9.0-11） |
 
 ### 9.2 token の失効タイミング
 
@@ -1408,27 +1482,110 @@ HP-202608-0001/          ← 最上位。**案件番号のみ**。店舗名を�
 - 再発行した時（旧 token と**関連する店舗 session** を即時失効。§4.4.1）
 - 漏えい・誤送信が判明した時（即時）
 
-### 9.3 削除の実施
+### 9.3 削除の実施（v1.7 で全面改定・4F-PRE で実装）
+
+**9.3-1 削除予定日の登録**
+
+| # | 規則 |
+|---|---|
+| 1 | 登録できるのは **`reviewed` / `locked`** の案件だけ。運用としては**確定（`locked`）後に登録**する |
+| 2 | 形式は **`YYYY-MM-DD`** の**実在する日付**のみ。`strtotime()` の寛容な解釈に頼らない |
+| 3 | 過去日も登録できるが、**警告を出す**（即時に削除可能な状態になるため） |
+| 4 | 同じ日付の再送は**冪等**（監査を増やさない）。別の日付への**変更は許すが、必ず監査へ残す** |
+| 5 | **取り消し（NULL へ戻す）経路は作らない**。誤入力は「別の日付への変更」で直す |
+| 6 | **公開日・公開承認・契約金額・Stripe 情報の入力欄を作らない**（§9.0） |
+| 7 | POST のみ。CSRF・Origin 検査・管理 session を必須とする |
+| 8 | ログへ書くのは**案件番号と結果だけ**。日付そのものを書かない |
+| 9 | 管理画面に一覧を持つ。区分は **未設定 / 30日以内 / 期限到来 / 期限超過 / 削除済み** |
+| 10 | 一覧に出してよいのは**案件番号・状態・日付・区分だけ**。回答本文・店舗名・Drive 情報を出さない |
+
+**9.3-2 削除の実行条件（すべて満たすときだけ・fail closed）**
+
+| # | 条件 |
+|---|---|
+| 1 | `retention_actions_enabled` が真（§9.8） |
+| 2 | `backup_policy_confirmed` が真（§9.8） |
+| 3 | 管理者として認証済み |
+| 4 | 案件の状態が **`locked`** |
+| 5 | `retention_delete_due` が登録済み |
+| 6 | `retention_delete_due` ≦ サーバー日付 |
+| 7 | `deleted_at` がまだ無い |
+| 8 | 確認入力が **`DELETE <案件番号>`** と完全一致（前後の空白のみ落とす） |
+
+> ★1つでも欠ければ実行しない。**「たぶん大丈夫」で通す経路を作らない。**
+
+**9.3-3 削除の手順（同一トランザクション）**
 
 | # | 手順 |
 |---|---|
-| 1 | `retention_delete_due`（= `closed_at` + 6か月）に達した案件を管理画面で一覧表示する |
-| 2 | 削除前に **§9.4 の継続保持対象が Smart Labo Operations 側（未実装の間は §1.3 の標準管理票）へ移されていること**を確認する |
-| 3 | `intake_answers` の行を削除し、`intake_cases.deleted_at` に**削除実施日**を記録する |
-| 4 | `intake_tokens` の当該案件行を削除する |
-| 5 | Drive の当該フォルダを削除し、削除実施日を案件記録へ残す |
-| 6 | 監査ログに `answers_deleted` / `ok` を記録する（**削除した値は書かない**） |
-| 7 | 削除は**自動実行しない**。Phase 1 は人が確認してから実行する |
+| 1 | 条件（9.3-2）を**トランザクションの中でもう一度**確認する |
+| 2 | `intake_sessions` の当該案件行を削除する（`intake_tokens` を参照しているため先に消す） |
+| 3 | `intake_tokens` の当該案件行を削除する |
+| 4 | `intake_answers` の当該案件行を削除する |
+| 5 | `intake_revision_requests` の当該案件行を削除する |
+| 6 | `intake_submission_history` の当該案件行を削除する |
+| 7 | `drive_folder_url_enc` / `drive_shared_email_enc` / `drive_folder_label` を NULL にする |
+| 8 | `current_step` / `expires_at` を NULL にする |
+| 9 | `shop_display_name` を固定文字列へ置き換える（NOT NULL のため） |
+| 10 | `status` を `closed` にする（`closed_at` が空なら記録する） |
+| 11 | `deleted_at` にサーバー時刻を記録する |
+| 12 | 監査へ **`retention_purged` / `ok`** を1件だけ記録する（**削除した値も件数の内訳も書かない**） |
 
-**削除要請時の処理**（保持期間内でも）
+**失敗したとき**
+
+- **全件ロールバック**する。部分削除を残さない
+- 外部へは固定文言のみ。例外の内容・SQL・表名・パスを出さない
+- PII をログへ出さない
+
+**9.3-4 削除後の禁止事項**
+
+削除済み（`deleted_at` が非 NULL）の案件では、次を**すべて拒否**する。
+
+| # | 拒否する操作 |
+|---|---|
+| 1 | 検証済み JSON の書き出し（§11.3） |
+| 2 | token の発行・再発行（§4.4.1） |
+| 3 | 店舗 session の発行 |
+| 4 | 回答の取得・保存・提出・Drive 完了申告 |
+| 5 | 修正依頼 |
+| 6 | 状態を戻すこと（`closed` から動かさない） |
+| 7 | 削除予定日の登録・変更 |
+| 8 | 二度目の削除（**安全に拒否**する。`deleted_at` を上書きしない・監査を増やさない） |
+
+> ★管理画面の詳細は、削除済み案件では **§9.4 の最小メタデータだけ**を出す。
+> 操作ボタンそのものを出さない。
+
+**9.3-5 削除した内容をファイル上に残さない**
+
+SQLite は既定では、削除した行の中身を**ページ上に残したまま**にする。
+`DELETE` しただけでは、DBファイルを直接読むと回答本文・修正メッセージ・
+暗号文が読めてしまう（**4F の実測で確認した**）。
+
+| # | 規則 |
+|---|---|
+| 1 | 接続ごとに **`PRAGMA secure_delete = ON`** を設定する（SQLite 3.6.x 以降・本番 3.26.0 で利用可） |
+| 2 | 「物理削除」と呼ぶ以上、ここは**必須**である。アプリ側の DELETE だけに依存しない |
+| 3 | `VACUUM INTO` は使わない（§2.0.1）。`secure_delete` で足りるため VACUUM を運用に組み込まない |
+
+**9.3-6 削除要請時の処理**（保持期間内でも）
+
 - 店舗または本人（スタッフ・被写体）から削除要請があった場合、
-  上記 3〜6 を**保持期間を待たずに実施**する。
-- 要請日・要請者の別（店舗／本人）・実施日を案件記録へ残す（**要請内容の本文は残さない**）。
+  **削除予定日を要請日以前へ変更**したうえで 9.3-3 を実施する。
+- 要請日・要請者の別（店舗／本人）・実施日は、**標準管理票または Operations 側**へ残す
+  （**要請内容の本文は残さない**）。
+- ★Intake 側に「要請理由」を書く欄を作らない。作れば、そこが新しい PII 置き場になる。
+
+**9.3-7 自動実行しない**
+
+- cron・起動時処理・バッチを作らない。
+- 削除は**人が確認してから**、管理画面の確認 → 完全一致入力 → 実行の順で行う。
+- 監査ログの13か月削除も同様に**明示操作**とする。
 
 ### 9.4 削除後も残す情報（継続保持）
 
-回答本文の削除後も、次は **Smart Labo Operations 側へ移して保持**する
-（Operations 完成前は §1.3 の標準管理票）。**AI Sales へは保存しない。**
+**9.4-1 Operations 側（未実装の間は §1.3 の標準管理票）へ移して保持する**
+
+回答本文の削除後も、次は移して保持する。**AI Sales へは保存しない。**
 
 - 法的同意の証跡（`rights.confirmations[]` の code / agreed / agreed_at / agreed_by）
 - スタッフ本人の掲載同意（S-13 / S-14）
@@ -1436,8 +1593,28 @@ HP-202608-0001/          ← 最上位。**案件番号のみ**。店舗名を�
 - 公開承認
 - 素材権利台帳の要点（枚数・提供者区分・権利確認の有無）
 
-> ★intake 側には `intake_cases` の識別情報（case_number / 状態 / 日付）と
-> `intake_audit_events` のみが残る。**回答本文・氏名・連絡先は残さない。**
+> ★削除の**前に**移し終えていることを確認する（確認画面に明記する）。
+> Operations へは接続しないため、確認は**人による申告**である。
+
+**9.4-2 intake 側に残る最小メタデータ（allowlist）**
+
+`intake_cases` に残してよいのは次だけである。**すべて PII を含まない。**
+
+| 残す列 | 理由 |
+|---|---|
+| `id` | 主キー |
+| `case_number` | 案件の識別。標準管理票との突合に要る |
+| `contract_type` | `salon` / `standalone` のみ。個人を特定しない |
+| `status`（= `closed`） | 終了済みであることを示す |
+| `submitted_at` / `locked_at` / `closed_at` / `drive_upload_confirmed_at` | 日付のみ |
+| `retention_delete_due` / `deleted_at` | 保持と削除の記録 |
+| `schema_version` / `created_at` / `updated_at` | 版と時刻 |
+
+`intake_audit_events` は残る（本文も PII も持たないため）。**13か月で削除される。**
+
+> ★**列を追加したら、必ずこの分類に入れる。** 実装側は
+> 「残す・NULL にする・置き換える」のどれにも入っていない列があれば
+> テストで落ちるようにしてある（4F）。分類の漏れを人の注意力に頼らない。
 
 ### 9.5 バックアップ
 
@@ -1494,6 +1671,26 @@ PRAGMA foreign_key_check;  -- 期待値: 0行
   直前の正常なバックアップを保持したまま、原因を調査する。
 - 確認結果（日付 / integrity_check / foreign_key_check の件数）を運用記録へ残す。
 
+### 9.8 破壊的操作のフラグ（v1.7 で新設・4F-PRE で実装）
+
+削除は**取り消せない**。設定が整う前に動いてしまう経路を作らないため、
+2つのフラグが**両方とも真**のときにだけ削除を通す。
+
+| 設定 | 既定 | 意味 |
+|---|---|---|
+| `retention_actions_enabled` | **false** | 保持期限による削除操作を有効にしてよいか |
+| `backup_policy_confirmed` | **false** | 本番バックアップの**世代・削除方針が確定済み**か（4G で確定する） |
+
+| # | 規則 |
+|---|---|
+| 1 | **既定は両方 false。** 設定していない環境では削除経路そのものを動かさない |
+| 2 | 片方でも false なら、確認画面も実行も **403**（fail closed）。ボタンも出さない |
+| 3 | 値は**明示的に真と書いたときだけ真**にする。環境変数は文字列で来るため、<br>`"false"` / `"0"` / `"off"` を `(bool)` で丸めない |
+| 4 | 実値を Git へ入れない。`private/intake-config.php` または環境変数で与える |
+| 5 | ローカル確認では override してよい（使い捨てDBのみ） |
+| 6 | **`backup_policy_confirmed` を 4G より前に真にしない。**<br>古いバックアップが残っている間は、消したはずの回答が**そこから復元できてしまう** |
+| 7 | 管理 session の清掃（§2.7-8）は破壊的でないため、このフラグを要求しない（認証は要る） |
+
 ---
 
 ## 10. セキュリティ
@@ -1534,8 +1731,9 @@ PRAGMA foreign_key_check;  -- 期待値: 0行
 
 ```text
 Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self';
-                         img-src 'self' data:; connect-src 'self';
-                         form-action 'self'; frame-ancestors 'none'; base-uri 'none'
+                         img-src 'self'; font-src 'self'; connect-src 'self';
+                         form-action 'self'; frame-ancestors 'none'; base-uri 'none';
+                         object-src 'none'
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
 Referrer-Policy: no-referrer
@@ -1544,9 +1742,37 @@ Pragma: no-cache
 Strict-Transport-Security: max-age=31536000
 ```
 
+**CSP の規則（v1.7 で確定・4F-PRE / 4E の P3-2）**
+
+| # | 規則 |
+|---|---|
+| 1 | **API（PHP）側と静的ファイル（`.htaccess`）側で、CSP を完全に同一の文字列にする**。<br>画面と API で守りが違うと、どちらが本当の方針なのか読めなくなる |
+| 2 | **`object-src 'none'`** を明示する（プラグイン埋め込みの経路を作らない） |
+| 3 | **`font-src 'self'`** を明示する（`default-src` で足りるが、外部フォント禁止の意思を文字にする） |
+| 4 | **`img-src` に `data:` を許さない**（v1.7 で変更）。この画面群は**画像もアイコンも使わない**。<br>使う必要が生じたら、本書を改定してから許可する |
+| 5 | `unsafe-inline` / `unsafe-eval` / ワイルドカードを**使わない** |
+| 6 | インラインスクリプト・インラインスタイルを書かない（4C で `style="..."` を排除済み） |
+
 - **HTTPS を強制**する（HTTP は 301 で HTTPS へ）。HTTPS 判定は `$_SERVER` の実測値による（§0.2）。
 - **CORS ヘッダーを出さない**（他オリジンから使えない構成にする）。
 - Cookie は **Secure / HttpOnly / SameSite=Strict**（§2.6・§4.7）。
+
+**公開領域の誤配置対策（v1.7 で確定・4E の P3-3）**
+
+`public/.htaccess` で次を拒否する。**公開領域に置かないことが第一**であり、これはその保険である。
+
+| # | 拒否対象 |
+|---|---|
+| 1 | ドットで始まるファイル・ディレクトリ（`.git` / `.env` / `.svn` / `.htaccess` / `.user.ini` など） |
+| 2 | ★ただし **`.well-known` だけは除外**する。塞ぐと **SSL 証明書の自動更新（ACME）が止まる** |
+| 3 | DB・ログ・退避（`.sqlite` / `.db` / `.sql` / `.log` / `.bak` / `.backup` / `.old` / `.orig` / `.save` / `.swp` / 末尾 `~`） |
+| 4 | 秘密鍵・証明書（`.pem` / `.key` / `.crt` / `.cer` / `.der` / `.csr` / `.p12` / `.pfx` / `.jks` / `.asc` / `.gpg` / `.ppk`） |
+| 5 | 設定（`.ini` / `.conf` / `.cnf` / `.yml` / `.yaml` / `.toml` / `.env` / `intake-config.php` / `*.example.php`） |
+| 6 | Composer 等（`composer.json` / `composer.lock` / `composer.phar` / `package.json` / `Dockerfile` / `Makefile`）<br>★Composer は導入していない。公開領域に出ること自体が誤配置である |
+| 7 | ディレクトリ一覧（`Options -Indexes`） |
+
+> ★拒否規則は**フロントコントローラへの rewrite より前**に置く。後ろだと `index.php` へ吸われる。
+> ★`mod_rewrite` と `FilesMatch` の**二重**で塞ぐ（片方が無効化された環境でも残す）。
 
 ### 10.4.1 PHP 設定（本番配置の必須要件）
 
@@ -1557,6 +1783,7 @@ display_errors         = Off
 display_startup_errors = Off
 log_errors             = On
 error_log              = <public_html の外のパス>
+expose_php             = Off
 ```
 
 | # | 規則 |
@@ -1567,6 +1794,9 @@ error_log              = <public_html の外のパス>
 | 4 | 設定経路は **`.user.ini`**（既存 form サブドメインで運用実績あり）または<br>XServer サーバーパネルの php.ini 設定 |
 | 5 | `.user.ini` は即時反映されない（`user_ini.cache_ttl` 既定300秒）。**反映を待って確認する** |
 | 6 | **4H の配置チェックリストに含め、確認できるまで公開しない**（§11.1） |
+| 7 | **`expose_php = Off`**（v1.7 で追加・4E の P3-1）。既定 On のままだと<br>`X-Powered-By: PHP/8.3.xx` が出て、**版まで含めて外部へ知らせる**。<br>攻撃者に版固有の既知不具合を選ばせない |
+| 8 | ★`expose_php` は **`PHP_INI_SYSTEM`** である。共用サーバーでは `.user.ini` から**効かないことがある**。<br>**XServer 実機での効き確認は 4H で行う**（4F-PRE では設定の追加までとする） |
+| 9 | 効かない場合に備え、`.htaccess` に **`Header always unset X-Powered-By`** を併記する（二重の備え） |
 
 > ★参考記録: `smartlaboworks.com` 側は **2026-08-27 に代表が
 > `display_errors` を ON → OFF へ変更済み**（`display_startup_errors` は OFF を維持）。
@@ -1804,7 +2034,7 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 
 **データモデル上の矛盾は残していない。以下は運用値と実装手段の未確定である。**
 
-### 12.1 R2 / R3 / R4 / R5 / R6 で確定した事項（未確定から外したもの）
+### 12.1 R2 / R3 / R4 / R5 / R6 / R7 で確定した事項（未確定から外したもの）
 
 | 旧# | 事項 | 確定内容 | 反映先 |
 |---|---|---|---|
@@ -1813,6 +2043,12 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 | 7 | メール送信方式 | **mail() を採用**（Phase 1）。内容は案件番号・提出日時・イベント種別のみ | §0.2 |
 | 8 | rate limit 値・自動保存間隔 | **確定**（無効token 10分5回／保存 10分60回／提出 10分5回／自動保存30秒） | §0.2 |
 | — | token 初回交換方式 | **`/start#<token>` → POST → Cookie 方式を正式採用** | §4.2・§4.7・§2.6 |
+| — | 保持・削除の責任境界（R7） | **公開日・公開承認を Intake へ保存しない。Intake は `retention_delete_due` だけを手動で持つ** | §9.0 |
+| — | `intake_revision_requests` の保持期間（R7） | **回答本文と同じ**。案件削除時に `open` / `resolved` を問わず物理削除 | §2.8-11・§9.1 |
+| — | `locked` の運用（R7） | **`reviewed` からのみ・確認画面＋案件番号再入力・token と店舗 session を同一トランザクションで失効** | §5.1 |
+| — | `closed` の設定契機（R7） | **通常操作を作らない。機密情報の削除完了時に設定する** | §5.1・§9.3-3 |
+| — | 破壊的操作のフラグ（R7） | **`retention_actions_enabled` と `backup_policy_confirmed` が両方真のときだけ削除を通す**（既定 false） | §9.8 |
+| — | 削除内容のファイル残留（R7） | **`PRAGMA secure_delete = ON`** を接続ごとに設定する | §9.3-5・§2.0.1 |
 | — | display_errors | **本番の必須要件として明文化**（Off / log_errors On / error_log は public_html 外） | §10.4.1・§10.6 |
 | **3（R3）** | Google Drive のフォルダ命名規則 | **最上位は案件番号のみ**／固定サブフォルダ4つ<br>（`01_images` / `02_logo` / `03_documents` / `04_references`）<br>店舗名・氏名・電話番号・住所・メールを**フォルダ名へ入れない** | §7.1 |
 | **—（R3）** | 提出の冪等化 | **`submission_id`（UUID v4）を `/submit` の必須入力**とし、<br>`intake_submission_history` へ保存・部分一意索引で重複を防ぐ | §2.4・§6.4 |
@@ -1835,13 +2071,16 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 | ~~1~~ | ~~**管理画面の認証方式**~~ | **R4 で確定**（§10.8・§2.7・§12.1）。番号は参照の互換のため空けてある | ~~4D 着手前~~ |
 | 2 | **intake.smartlaboworks.com のサブドメイン・SSL 設定** | 到達性そのもの。現状は未設定（ワイルドカードDNSで到達するのみ・証明書は `*.xserver.jp`） | 4H（代表作業） |
 | ~~3~~ | ~~**Google Drive の実フォルダ命名規則**~~ | **R3 で確定**（§7.1・§12.1）。番号は参照の互換のため空けてある | ~~4C 着手前~~ |
-| 4 | **本番バックアップ先の具体パス** | §9.5。domain root が書込可であることは実測済み（§0.2） | 4G |
+| 4 | **本番バックアップ先の具体パス・世代・削除方針** | §9.5。domain root が書込可であることは実測済み（§0.2）。<br>★**確定するまで `backup_policy_confirmed` を真にしない**（§9.8-6）。<br>　古い世代が残っている間は、削除したはずの回答がそこから復元できてしまう | 4G |
 | 5 | **mail() の実送信確認** | 関数・sendmail 設定の存在までを実測。**実送信は未確認** | 4H（宛先は当社 info@ のみ） |
 | 6 | **1案件あたりの配列上限値** | §3 に**設計既定値**（menus 60 / staff 30 / images 60 等）を置いた。<br>運用実績で調整する余地を残す | 4B（既定値のまま進めてよい） |
 | 7 | **ローカル開発環境の php.ini** | ローカルは `php.ini` 未読込のため pdo_sqlite / openssl / mbstring が無効。<br>DLL は同梱済みで、有効化すれば解決する | 4B 冒頭（代表判断は不要） |
 | ~~8~~ | ~~**`needs_revision` の理由の伝え方**~~ | **R5 で確定**（§2.8 `intake_revision_requests`）。番号は参照の互換のため空けてある | ~~4E 以降~~ |
 | ~~9~~ | ~~**店舗画面への Drive リンク表示**~~ | **R5 で確定**（§2.1 `drive_shared_email_enc`・§7.3）。番号は参照の互換のため空けてある | ~~4E 以降~~ |
 | ~~10~~ | ~~**`reviewed` から `needs_revision` へ戻せない**~~ | **R5 で案B を採用し確定**（§5.1）。番号は参照の互換のため空けてある | ~~代表判断~~ |
+| 11 | **`expose_php = Off` が XServer の `.user.ini` から効くか** | `PHP_INI_SYSTEM` のため共用サーバーでは効かないことがある。<br>`.htaccess` の `Header always unset X-Powered-By` を併記して備えてある（§10.4.1-8） | 4H（実機確認） |
+| 12 | **中止案件を `closed` にする経路** | 現状 `closed` は削除完了時にしか設定されない。<br>途中で中止した案件の扱いは運用が固まってから決める | 4G 以降 |
+| 13 | **管理 session 清掃の自動化** | Phase 1 は保守画面からの明示操作（§2.7-10）。<br>cron 化するなら本書を改定してから行う | 4G 以降 |
 
 **`reviewed` → `needs_revision`（R5・代表判断で「案B」を採用）**
 
@@ -1945,3 +2184,4 @@ HP-ONBOARDING-4A-R1 で次の順序へ変更した。
 | **v1.4（R4）** | 2026-08-27 | 改定（HP-ONBOARDING-4D・代表承認）。**管理画面の認証方式を確定**し、§12.2-1 を未確定から外した。**§10.8 を全面改定**（資格情報は `private/intake-config.php` の管理者ID＋`password_hash()` の hash のみ・**Argon2id 優先**・実値をGitへ入れない・**未設定なら fail closed**・IDの存在有無で応答も時間も変えない／session は idle 30分・絶対8時間・**ログイン成功時に再生成**／ログイン防御は **HMAC化IP で10分5回**・固定文言・`admin_login` へIDもパスワードも記録しない／CSRF は `random_bytes(32)` を **server 側 session へ hash で保持**し `hash_equals()` で照合・URLとログへ出さない・Origin 検査を併用・**GET で状態を変えない**）。**§2.7 `intake_admin_sessions` を新設**（6表 → **7表**。店舗の §2.6 とは別表・平文列を作らない・`csrf_hash` を同居させる・ロール列を作らない）。旧 §2.7 を **§2.8** へ繰り下げ、**アカウント表と修正理由テーブルを「作らない」判断**として記録。**§2.5 へ監査イベント4種を追加**（`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`。ログイン系は `intake_case_id` を NULL とし、**入力された管理者IDを記録しない**）。**§11.3 検証済み書き出しを新設**（allowlist 方式・含める11キーと**含めない16種**を明記・`Content-Disposition: attachment`・`no-store`・書き出し直前の再検証・未提出案件を出さない・一時ファイルを公開領域へ作らない・`X-Intake-Export-Sha256` は**独自ヘッダーとして README へ明記**）。**§10.9 対応ブラウザを新設**（現行 Chrome / Edge / Firefox / Safari。**`Sec-Fetch-Site` 非対応はサポート対象外**。`Referrer-Policy: no-referrer` のため「Referer で通る」前提に依存しないことを明記し、**4C 報告の当該説明を訂正**。`GET /case` の受理は **4E で再検証**。**POST の Origin 検査は変更しない**）。§11.2-11 を「代表1名」へ具体化。§12.2 へ **-8（修正理由の伝え方）** と **-9（店舗画面への Drive リンク表示）** を新規の未確定として追加。**JSON 11分類・§3 の全データパス・token 規則・状態遷移6状態・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは一切変更していない。** |
 | **v1.5（R5）** | 2026-08-27 | 改定（HP-ONBOARDING-4D-R1・代表承認）。**§5.1 の遷移表へ `reviewed` → `needs_revision` を追加**（4D で提示した案B を代表が採用。`locked` / `closed` より前まで戻せる／戻したら `reviewed` へは**店舗の再提出**を経る／監査・履歴・修正依頼を必ず残す／DBの直接操作を運用にしないための判断）。**§2.8 `intake_revision_requests` を新設**（7表 → **8表**。`request_number` / `requested_paths_json` / `message` / `status` / `created_at` / `resolved_at`。**§3 の正式パス129件のみ許可**・未知パスを含む要求は丸ごと拒否・重複は正規化・`message` は1000文字まで・**本文をログと監査へ出さない**・複数回保持・過去を削除も上書きもしない・**状態変更と同一トランザクション**・**店舗の再提出成功で `open` を `resolved` へ**・店舗へ返すのは `open` のみ・**管理者を識別する列を作らない**）。v1.4 §2.8 の「修正依頼の理由テーブルを作らない」判断を**撤回**し、旧 §2.8 を **§2.9** へ繰り下げ。**§2.1 へ `drive_shared_email_enc` を追加**（AES-256-GCM。§7.2 の案内文「このフォルダは○○にのみ共有しています」を正確に書くため。**平文保存禁止／書き出し・監査・ログへ出さない／一覧へ出さない／認証済み店舗の `GET /case` にだけ返してよい**）。**§7.3 へ Drive URL の受け入れ条件8項目**（https のみ・**Google Drive の正式ホストのみ**・userinfo 禁止・短縮URL拒否・ポート禁止・制御文字禁止・query/fragment は保持可・500文字まで）と**共有先メールの扱い6項目**を新設。**§10.8 の Fetch Metadata の記述を訂正**（「偽装できない」→「**Forbidden request header でありブラウザ内 JavaScript からは設定できない**が、**curl 等の非ブラウザからは任意に構成できる**」。`cross-site` / `none` / 欠落はすべて拒否。**CSRF token は常に必須**で、多層防御を維持する）。**§11.3 へ `revision_requests` を追加**（`request_number` / `requested_paths` / `status` / `created_at` / `resolved_at` のみ。**`message` 本文と `id` は含めない**。理由も明記）。除外一覧へ **Drive 共有先メール**と **`revision_requests.message`** を追加。**案件作成と token 初回発行を管理画面から行える**ようにし、CLI を運用にしない方針を確定（token 平文は作成直後に1回だけ表示・再表示機能を作らない）。§12.1 へ R5 の確定5件、§12.2-8・-9・-10 を確定済みへ。**JSON 11分類・§3 の全データパス・token 規則・6状態そのもの・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。** |
 | **v1.6（R6）** | 2026-08-27 | 改定（HP-ONBOARDING-4D-R2・代表承認）。**§4.4.1 ご案内リンクの再発行を新設**。平文は発行直後に1回しか出さないため、受け取れなかった場合の**唯一の回復手段が再発行**であることを明記し、**「以前の token を復元する」機能は作らない**と確定した（復元できるということは、どこかに平文が残っているということである）。再発行してよいのは **`draft` / `needs_revision` のみ**とし、`submitted` / `reviewed` / `locked` / `closed` / 未知状態は**すべて拒否**（修正が要る場合は**先に §5.1 の `needs_revision` へ**遷移させてから再発行する）。手順6段を**同一トランザクション**で行うことを明記（①状態をトランザクション内で再確認 ②有効 token をすべて失効 ③その token から出た**店舗 session をすべて失効** ④`random_bytes(32)` で新 token ⑤**SHA-256 hash のみ**保存・期限は発行から14日 ⑥監査 `token_reissued` を1件）。守ること6項目を明記（**回答・`version`・提出履歴・修正依頼・Drive 情報を消さない**／新しい平文は**成功画面で1回だけ**・戻る/再読込で再表示しない／**ログ・監査・DBの平文列・管理 session・URL・Cookie へ出さない**／実行前に**案件番号の再入力を求め完全一致のみ実行**／**POST のみ**で CSRF・Origin 検査・管理 session 必須／**案件単位＋HMAC化IP で 10分5回**）。通信断時の扱いも明記（DB上は成功しており**旧 token はすでに無効**。もう一度再発行してよく、直前の新 token も失効し監査が1件増える。回答は維持）。**§2.5 へ `token_reissued` を追加**（初回の `token_issued` と区別し、「何回配り直したか」を監査から読めるようにする。**token 平文も hash も書かない**）。§9.2 の失効タイミングへ「再発行時は**関連する店舗 session も**即時失効」を追記。§12.1 へ R6 の確定1件。**JSON 11分類・§3 の全データパス・token の生成規則（`random_bytes(32)`／base64url 43文字／hash のみ保存／14日／1案件1本）・6状態そのもの・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマの変更も無い（8表のまま）。** |
+| **v1.7（R7）** | 2026-08-27 | 改定（HP-ONBOARDING-4F-PRE・代表承認）。**保持・削除の責任境界を確定**した。**§9.0 を新設**し、13条を明記（**公開日を Intake へ保存しない**／**公開承認を Intake へ保存しない**／公開日・公開承認は **Smart Labo Operations の責任**、未完成の間は §1.3 の標準管理票を正とする／「公開後6か月」の削除予定日は **Operations または標準管理票の側で計算**する／Intake が持つのは **`retention_delete_due` の1列だけ**で**人が手動登録**する／**`retention_delete_due` から公開日を逆算しない**／Intake と Operations を**直接DB接続しない**・OPS-4 までは §11.3 の検証済み書き出しと手動登録／**自動削除しない**（cron・起動時処理・バッチを作らない）／Phase 1 は**管理者の明示操作のみ**／**Google Drive の実ファイル削除は Intake の責任外**／Drive 削除実施日は標準管理票または Operations 側で管理／**AI Sales へ保持情報を移さない**）。判断の理由も明記した（公開日を持てば「6か月後」を Intake が計算することになり、**公開判断の責任が Intake へ滑り込む**）。**§9.1 保持期間を全面改定**（回答本文・token・店舗 session・**修正依頼**・提出履歴・**Drive URL と共有先メールの暗号文**・案件メタ・監査13か月・管理 session を1表に整理）。**§2.8-11 で `intake_revision_requests` の保持期間を確定**（**回答本文と同じ**。案件削除時に `open` / `resolved` を問わず物理削除し、`message` と `requested_paths_json` を残さない。理由: この表は「どこを直してほしいか」＝**回答の内容そのもの**を指しており、回答だけ消して依頼が残れば内容が読めてしまう）。**§9.3 削除の実施を全面改定**し、7節へ分割した（**9.3-1 削除予定日の登録**＝`reviewed` / `locked` のみ・`YYYY-MM-DD` の実在日のみ・過去日は警告・同日再送は冪等・変更は監査へ・**取り消し経路を作らない**・**公開日/公開承認/契約金額/Stripe の入力欄を作らない**・POST＋CSRF＋Origin＋管理session・**日付をログへ書かない**・一覧の区分5種・**一覧に回答本文/店舗名/Drive 情報を出さない**／**9.3-2 実行条件8件**を fail closed で列挙／**9.3-3 手順12段を同一トランザクション**・失敗時は全ロールバック／**9.3-4 削除後の禁止8件**／**9.3-5 `PRAGMA secure_delete = ON`**／**9.3-6 削除要請時**は削除予定日を要請日以前へ変更して実施し、要請理由の欄を Intake へ作らない／**9.3-7 自動実行しない**）。**§9.4 を 9.4-1（Operations へ移す継続保持）と 9.4-2（intake に残る最小メタデータの allowlist）へ分割**し、残す列を1つずつ理由つきで確定した。**§9.8 破壊的操作のフラグを新設**（`retention_actions_enabled` / `backup_policy_confirmed`。**既定はどちらも false**・片方でも false なら 403 でボタンも出さない・**`(bool)` で丸めず「明示的に真」だけを真とする**・実値を Git へ入れない・**4G より前に `backup_policy_confirmed` を真にしない**）。**§5.1 へ `locked`（確定）の規則11条を新設**（`reviewed` からのみ／POST＋CSRF＋Origin＋管理session／**確認画面と案件番号の再入力**／**token と店舗 session を同一トランザクションで失効**／監査3種／冪等／**回答・履歴・修正依頼・Drive 情報を削除しない**／`needs_revision` へ戻さない／再発行しない）。あわせて **`closed` は機密情報の削除完了時に設定する**ものとし、**通常操作を管理画面に作らない**と確定した。**§5.2 へ削除済み案件の全面拒否**を追記。**§2.5 へ監査4種を追加**（`retention_due_set` / `retention_purged` / `audit_purged` / `admin_sessions_purged`。**日付も件数の内訳も値も書かない**・`audit_purged` の行**自身も13か月後に削除対象**になるため保持が循環しない）。v1.6 までの **`answers_deleted` を `retention_purged` へ統合**（語彙は残すが新規記録しない）。**§2.7-10 / -11 へ管理 session の清掃**を追加（期限切れ・失効済みのみ物理削除・**有効な session は1件も消さない**・件数上限あり・**hash をログにも監査にも出さない**・案件の保持期限とは無関係・§9.8 のフラグを要求しない・**自動 cron を作らない**）。**§10.4 の CSP を改定**（4E の P3-2。**API 側と静的側で完全に同一の文字列**にする・**`object-src 'none'` と `font-src 'self'` を明示**・**`img-src` の `data:` を撤回**〔この画面群は画像もアイコンも使わない〕・`unsafe-inline` / `unsafe-eval` / ワイルドカード禁止）。**§10.4 へ公開領域の誤配置対策**を新設（4E の P3-3。ドットファイル／DB・ログ・退避／秘密鍵・証明書／設定／Composer 関連を拒否。**`.well-known` だけは除外**〔塞ぐと SSL 証明書の自動更新が止まる〕。**拒否規則をフロントコントローラより前**に置き、`mod_rewrite` と `FilesMatch` の**二重**で塞ぐ）。**§10.4.1 へ `expose_php = Off` を追加**（4E の P3-1。`PHP_INI_SYSTEM` のため共用サーバーでは `.user.ini` から効かないことがあり、**実機確認は 4H**。`.htaccess` の `Header always unset X-Powered-By` を併記）。**§2.0.1 の「使用してよい」へ `PRAGMA secure_delete` を追加**。§12.1 へ R7 の確定6件、§12.2 へ未確定 -11（`expose_php` の実機での効き）・-12（中止案件を `closed` にする経路）・-13（管理 session 清掃の自動化）を追加し、-4 を「世代・削除方針の確定まで `backup_policy_confirmed` を真にしない」へ具体化。**JSON 11分類・§3 の全データパス129件・token の生成規則・6状態そのもの・楽観ロック・`submission_id` の冪等化・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマの変更も無い（8表・`PRAGMA user_version` は 4 のまま）。** |

@@ -266,6 +266,11 @@ final class CaseService
             return ['ok' => false, 'error' => 'not_found', 'changed' => false];
         }
 
+        if (($case['deleted_at'] ?? null) !== null) {
+            // ★保持期限で削除済みの案件は状態を動かさない（SSOT v1.7 §9.3）
+            return ['ok' => false, 'error' => 'already_deleted', 'changed' => false];
+        }
+
         $current = (string)$case['status'];
         if ($current === $next) {
             // 同じ操作の再送。成功扱いにして、記録は増やさない
@@ -306,6 +311,87 @@ final class CaseService
     }
 
     /**
+     * 管理画面から `reviewed` → `locked` へ確定させる（SSOT v1.7 §5.1 / §6）。
+     *
+     * 意味は「**店舗入力を確定し、通常編集を終了した**」であり、削除ではない。
+     * 回答・提出履歴・修正依頼・Drive 情報には一切触れない。
+     *
+     * ★状態変更・履歴・token 失効・session 失効を**同一トランザクション**で行う。
+     *   「確定したのに古いリンクがまだ生きている」状態を1瞬も作らない。
+     *   そのため TokenService / SessionService の（自前でトランザクションを開く）
+     *   メソッドは使わず、ここで直接 UPDATE する。
+     * ★`reviewed` からのみ。`locked` からは needs_revision へも戻さず、再発行もしない
+     *   （`REVISABLE` / `REISSUABLE` のどちらにも `locked` を入れない）。
+     * ★冪等。すでに `locked` なら何もせず成功を返す（履歴も監査も増やさない）。
+     *
+     * @return array{ok:bool,error?:string,changed:bool}
+     */
+    public function adminLock(int $caseId): array
+    {
+        $case = $this->find($caseId);
+        if ($case === null) {
+            return ['ok' => false, 'error' => 'not_found', 'changed' => false];
+        }
+        if (($case['deleted_at'] ?? null) !== null) {
+            return ['ok' => false, 'error' => 'already_deleted', 'changed' => false];
+        }
+
+        $current = (string)$case['status'];
+        if ($current === 'locked') {
+            return ['ok' => true, 'changed' => false];
+        }
+        if (!in_array('locked', self::TRANSITIONS[$current] ?? [], true)) {
+            return ['ok' => false, 'error' => 'invalid_transition', 'changed' => false];
+        }
+
+        $now = $this->clock->iso();
+
+        try {
+            return $this->db->transaction(function (\PDO $pdo) use ($caseId, $current, $now): array {
+                $stmt = $pdo->prepare(
+                    'UPDATE intake_cases SET status = :next, locked_at = :now, updated_at = :now
+                      WHERE id = :id AND status = :current'
+                );
+                $stmt->execute([':next' => 'locked', ':now' => $now, ':id' => $caseId, ':current' => $current]);
+                if ($stmt->rowCount() === 0) {
+                    return ['ok' => false, 'error' => 'conflict', 'changed' => false];
+                }
+
+                // 店舗 session → token の順に失効させる（SSOT §5.2 / §9.2）
+                $pdo->prepare(
+                    'UPDATE intake_sessions SET revoked_at = :now
+                      WHERE intake_case_id = :id AND revoked_at IS NULL'
+                )->execute([':now' => $now, ':id' => $caseId]);
+
+                $pdo->prepare(
+                    'UPDATE intake_tokens SET revoked_at = :now
+                      WHERE intake_case_id = :id AND revoked_at IS NULL'
+                )->execute([':now' => $now, ':id' => $caseId]);
+
+                $pdo->prepare(
+                    'INSERT INTO intake_submission_history
+                        (intake_case_id, event_type, schema_version, submitted_at, result_code)
+                     VALUES (:id, :event, :schema_version, :now, :ok)'
+                )->execute([
+                    ':id'             => $caseId,
+                    ':event'          => 'locked',
+                    ':schema_version' => Migrator::ANSWER_SCHEMA_VERSION,
+                    ':now'            => $now,
+                    ':ok'             => 'ok',
+                ]);
+
+                $this->audit->record($caseId, 'case_status_changed', 'ok');
+                $this->audit->record($caseId, 'token_revoked', 'locked');
+                $this->audit->record($caseId, 'session_revoked', 'ok');
+
+                return ['ok' => true, 'changed' => true];
+            });
+        } catch (\PDOException $e) {
+            return ['ok' => false, 'error' => 'conflict', 'changed' => false];
+        }
+    }
+
+    /**
      * 修正依頼を出して `needs_revision` へ差し戻す（SSOT v1.5 §2.8-7 / §5.1）。
      *
      * ★**状態変更と依頼の作成を同一トランザクション**で行う。
@@ -324,6 +410,10 @@ final class CaseService
         $case = $this->find($caseId);
         if ($case === null) {
             return ['ok' => false, 'error' => 'not_found'];
+        }
+
+        if (($case['deleted_at'] ?? null) !== null) {
+            return ['ok' => false, 'error' => 'already_deleted'];
         }
 
         $current = (string)$case['status'];

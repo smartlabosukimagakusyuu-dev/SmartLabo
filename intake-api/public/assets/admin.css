@@ -341,3 +341,68 @@ input:focus {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------------------------------------------------------------- 保持期限（4F） */
+
+.badge--locked {
+  background: var(--c-blue-pale);
+  border-color: #bfdbfe;
+  color: var(--c-navy);
+}
+
+.badge--closed,
+.badge--deleted {
+  color: var(--c-gray);
+}
+
+.badge--overdue,
+.badge--due {
+  background: var(--c-err-bg);
+  border-color: #fbd5d1;
+  color: var(--c-err);
+}
+
+.badge--soon {
+  background: var(--c-warn-bg);
+  border-color: #fde68a;
+  color: var(--c-warn);
+}
+
+.badge--later {
+  background: var(--c-ok-bg);
+  border-color: #a7f3d0;
+  color: var(--c-ok);
+}
+
+.badge--unset {
+  color: var(--c-gray);
+}
+
+/* ★元に戻せない操作。他のボタンと見分けがつく色にする（色だけに頼らず文言でも示す） */
+.btn--danger {
+  background: var(--c-err);
+  border-color: var(--c-err);
+  color: var(--c-white);
+}
+
+.btn--danger:hover {
+  background: #9a1f11;
+  border-color: #9a1f11;
+}
+
+.subform {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--c-line-soft);
+}
+
+code {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95rem;
+  user-select: all;
+}

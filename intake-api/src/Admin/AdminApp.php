@@ -15,6 +15,15 @@
  *   POST /admin/create        案件作成 ＋ ご案内リンクの発行
  *   GET  /admin/reissue       ご案内リンク再発行の確認（4D-R2）
  *   POST /admin/reissue/send  再発行の実行（旧token・店舗sessionを失効）
+ *   GET  /admin/lock          入力確定（locked）の確認（4F）
+ *   POST /admin/lock/send     確定の実行（token・店舗sessionを失効）
+ *   GET  /admin/retention     保持期限の一覧（4F）
+ *   POST /admin/retention/due 削除予定日の登録・変更
+ *   GET  /admin/purge         機密情報の削除の確認（4F）
+ *   POST /admin/purge/send    削除の実行（★元に戻せない）
+ *   GET  /admin/maintenance   監査13か月削除・管理session清掃の件数表示（4F）
+ *   POST /admin/maintenance/audit    監査の13か月削除
+ *   POST /admin/maintenance/sessions 期限切れ管理sessionの削除
  *   GET  /admin/export   検証済み JSON のダウンロード
  *
  * 守ること:
@@ -38,6 +47,7 @@ use SmartLabo\Intake\Service\Audit;
 use SmartLabo\Intake\Service\CaseService;
 use SmartLabo\Intake\Service\ExportService;
 use SmartLabo\Intake\Service\RateLimiter;
+use SmartLabo\Intake\Service\RetentionService;
 use SmartLabo\Intake\Service\RevisionRequestService;
 use SmartLabo\Intake\Service\TokenService;
 use SmartLabo\Intake\Support\Logger;
@@ -61,6 +71,7 @@ final class AdminApp
         private readonly ExportService $export,
         private readonly RevisionRequestService $revisions,
         private readonly TokenService $tokens,
+        private readonly RetentionService $retention,
         private readonly Audit $audit,
         private readonly Logger $logger,
     ) {
@@ -94,6 +105,15 @@ final class AdminApp
             '/admin/create' => $this->createCase($req),
             '/admin/reissue'      => $this->reissueForm($req),
             '/admin/reissue/send' => $this->doReissue($req),
+            '/admin/lock'         => $this->lockForm($req),
+            '/admin/lock/send'    => $this->doLock($req),
+            '/admin/retention'    => $this->retentionList($req),
+            '/admin/retention/due' => $this->setRetentionDue($req),
+            '/admin/purge'        => $this->purgeForm($req),
+            '/admin/purge/send'   => $this->doPurge($req),
+            '/admin/maintenance'  => $this->maintenance($req),
+            '/admin/maintenance/audit'    => $this->purgeAudit($req),
+            '/admin/maintenance/sessions' => $this->purgeAdminSessions($req),
             default         => Response::html(
                 View::page('表示できません', View::notice('error', self::MSG_NOT_FOUND), false),
                 404
@@ -220,7 +240,7 @@ final class AdminApp
             . '<p class="lead">回答の中身はこの画面に出しません。詳細画面でご確認ください。</p>'
             . '<div class="actions"><a class="btn btn--primary" href="/admin/new">新しいHP制作案件</a></div>'
             . '<div class="tablewrap"><table class="table">'
-            . '<thead><tr><th>案件番号</th><th>状態</th><th>提出日時</th><th>素材</th><th>更新日時</th><th>保持期限</th></tr></thead>'
+            . '<thead><tr><th>案件番号</th><th>状態</th><th>提出日時</th><th>素材</th><th>更新日時</th><th>削除予定日</th></tr></thead>'
             . '<tbody>' . $items . '</tbody></table></div>'
             . '</section>'
             . '<div class="endrow">'
@@ -258,20 +278,21 @@ final class AdminApp
             'http_status' => 200,
         ]);
 
+        $notice = self::detailNotice((string)($req->query['msg'] ?? ''));
+
+        // ★保持期限で削除済みの案件は、最小メタデータだけを出す（SSOT v1.7 §9.4）。
+        //   回答行そのものが無いので、評価も表示も行わない。
+        if ($case['deleted_at'] !== null) {
+            return Response::html(View::page('案件詳細',
+                $notice
+                . View::deletedCase($case)
+                . '<div class="endrow">'
+                . View::actionForm('/admin/logout', $csrf, [], 'ログアウト', 'btn--quiet')
+                . '</div>'));
+        }
+
         $evaluation = $this->answers->evaluate($caseId);
         $answers    = $this->answers->get($caseId);
-
-        $notice = '';
-        $flash  = (string)($req->query['msg'] ?? '');
-        if ($flash === 'reviewed') {
-            $notice = View::notice('ok', '確認済みにしました。');
-        } elseif ($flash === 'revision') {
-            $notice = View::notice('ok', '修正依頼中にしました。店舗が再入力できます。');
-        } elseif ($flash === 'conflict') {
-            $notice = View::notice('warn', self::MSG_CONFLICT);
-        } elseif ($flash === 'invalid') {
-            $notice = View::notice('warn', 'その操作はこの状態では行えません。');
-        }
 
         $body = $notice
             . $this->summarySection($case, $evaluation, $csrf, $status)
@@ -284,6 +305,25 @@ final class AdminApp
             . '</div>';
 
         return Response::html(View::page('案件詳細', $body));
+    }
+
+    /** 案件詳細のお知らせ。★固定文言だけ。query の値をそのまま描かない */
+    private static function detailNotice(string $flash): string
+    {
+        return match ($flash) {
+            'reviewed'    => View::notice('ok', '確認済みにしました。'),
+            'revision'    => View::notice('ok', '修正依頼中にしました。店舗が再入力できます。'),
+            'locked'      => View::notice('ok', '入力を確定しました。店舗のご案内リンクは使えなくなりました。'),
+            'due'         => View::notice('ok', '削除予定日を登録しました。'),
+            'due_past'    => View::notice('warn', '削除予定日を登録しました。'
+                . '★入力された日付は過去です。この案件はすぐに削除できる状態になります。'),
+            'due_invalid' => View::notice('warn', '削除予定日を登録できませんでした。'
+                . 'YYYY-MM-DD の実在する日付を、確定済み以降の案件にご入力ください。'),
+            'purged'      => View::notice('ok', '機密情報を削除しました。この操作は元に戻せません。'),
+            'conflict'    => View::notice('warn', self::MSG_CONFLICT),
+            'invalid'     => View::notice('warn', 'その操作はこの状態では行えません。'),
+            default       => '',
+        };
     }
 
     /** @param array<string,mixed> $case */
@@ -318,6 +358,18 @@ final class AdminApp
             $actions .= '<a class="btn btn--outline" href="/admin/reissue?case='
                 . rawurlencode($number) . '">店舗入力リンクを再発行</a>';
         }
+        // ★確定（locked）は reviewed からのみ（SSOT v1.7 §5.1）
+        if ($status === 'reviewed') {
+            $actions .= '<a class="btn btn--outline" href="/admin/lock?case='
+                . rawurlencode($number) . '">入力を確定する</a>';
+        }
+        // ★削除は「確定済み・削除予定日到来・フラグ2つとも真」のときだけ出す。
+        //   条件を満たさないボタンを置かないこと自体が、運用手順の説明になる。
+        if ($this->config->retentionEnabled()
+            && $this->retention->canPurge($case)['ok'] === true) {
+            $actions .= '<a class="btn btn--danger" href="/admin/purge?case='
+                . rawurlencode($number) . '">機密情報を削除する</a>';
+        }
 
         // 書き出しは提出済み以降かつ必須充足のときだけ出す
         $exportable = in_array($status, ExportService::EXPORTABLE, true) && $complete;
@@ -333,11 +385,15 @@ final class AdminApp
             . View::row('素材アップロード申告', $case['drive_upload_confirmed_at'] === null
                 ? '<span class="muted">未申告</span>'
                 : '<span class="ok">' . View::esc($case['drive_upload_confirmed_at']) . '</span>')
-            . View::row('保持期限', View::orDash($case['retention_delete_due']))
+            . View::row('削除予定日', View::orDash($case['retention_delete_due']))
             . View::row('必須項目', $complete
                 ? '<span class="ok">すべて充足</span>'
                 : '<span class="ng">' . View::esc(count($evaluation['missing'])) . ' 件不足</span>')
             . '<div class="actions">' . $actions . $exportHtml . '</div>'
+            . (in_array($status, RetentionService::DUE_SETTABLE, true)
+                ? View::retentionDueForm($number, $case['retention_delete_due'] === null
+                    ? '' : (string)$case['retention_delete_due'], $csrf)
+                : '')
             . '</section>';
     }
 
@@ -923,6 +979,339 @@ final class AdminApp
         ));
     }
 
+    /* ------------------------------------------------ 入力確定（locked） */
+
+    /**
+     * 確定の確認画面（GET）。★ここでは何も変えない。
+     */
+    private function lockForm(Request $req, string $message = ''): Response
+    {
+        [$session, $fail] = $this->requireSession($req, 'GET');
+        if ($fail !== null) {
+            return $fail;
+        }
+
+        $case = $this->cases->findByNumber((string)($req->query['case'] ?? ''));
+        if ($case === null || $case['deleted_at'] !== null) {
+            return $this->notFound();
+        }
+        if ((string)$case['status'] !== 'reviewed') {
+            return Response::html(
+                View::page('確定できません', View::notice(
+                    'warn',
+                    'この案件は、いまの状態では確定できません。先に「確認済みにする」を行ってください。'
+                )),
+                409
+            );
+        }
+
+        $csrf   = $this->auth->rotateCsrf((int)$session['id']);
+        $notice = $message === '' ? '' : View::notice('error', $message);
+
+        return Response::html(View::page(
+            '入力を確定する',
+            $notice . View::lockForm((string)$case['case_number'], $csrf),
+        ), $message === '' ? 200 : 400);
+    }
+
+    /**
+     * 確定を実行する（POST）。
+     * ★状態変更・履歴・token 失効・店舗 session 失効は CaseService が同一トランザクションで行う。
+     */
+    private function doLock(Request $req): Response
+    {
+        [$session, $fail] = $this->requirePostSession($req);
+        if ($fail !== null) {
+            return $fail;
+        }
+        // ★CSRF を作り直す。ブラウザの再送・戻る→再送信を通さない
+        $this->auth->rotateCsrf((int)$session['id']);
+
+        $form   = $req->formFields();
+        $number = (string)($form['case'] ?? '');
+        $case   = $this->cases->findByNumber($number);
+        if ($case === null) {
+            return $this->notFound();
+        }
+
+        // 誤操作防止: 案件番号の再入力が完全一致すること
+        if (!hash_equals($number, (string)($form['confirm_case'] ?? ''))) {
+            return $this->lockForm(
+                $this->sameOriginGet('/admin/lock', ['case' => $number], $req),
+                '案件番号が一致しません。もう一度ご確認ください。'
+            );
+        }
+
+        $result = $this->cases->adminLock((int)$case['id']);
+
+        $this->logger->info('case_status_changed', [
+            'case_number' => $number,
+            'result_code' => $result['ok'] === true ? 'ok' : (string)($result['error'] ?? 'invalid'),
+            'http_status' => 303,
+        ]);
+
+        $msg = match (true) {
+            $result['ok'] === true                  => 'locked',
+            ($result['error'] ?? '') === 'conflict' => 'conflict',
+            default                                 => 'invalid',
+        };
+
+        return Response::redirect('/admin/case?case=' . rawurlencode($number) . '&msg=' . $msg);
+    }
+
+    /* ------------------------------------------------ 保持期限 */
+
+    /** 保持期限の一覧（GET）。★回答本文・店舗名・Drive 情報を出さない */
+    private function retentionList(Request $req): Response
+    {
+        [$session, $fail] = $this->requireSession($req, 'GET');
+        if ($fail !== null) {
+            return $fail;
+        }
+
+        $csrf = $this->auth->rotateCsrf((int)$session['id']);
+        $this->audit->record(null, 'admin_viewed', 'ok');
+
+        return Response::html(View::page('保持期限', View::retentionList(
+            $this->retention->listForRetention(),
+            $this->retention->today(),
+            $this->config->retentionEnabled(),
+            $csrf,
+        )));
+    }
+
+    /**
+     * 削除予定日を登録・変更する（POST）。
+     *
+     * ★公開日も公開承認も受け取らない。受け取るのは削除予定日1つだけ（SSOT v1.7 §9.3-1）。
+     */
+    private function setRetentionDue(Request $req): Response
+    {
+        [$session, $fail] = $this->requirePostSession($req);
+        if ($fail !== null) {
+            return $fail;
+        }
+        unset($session);
+
+        $form   = $req->formFields();
+        $number = (string)($form['case'] ?? '');
+        $case   = $this->cases->findByNumber($number);
+        if ($case === null) {
+            return $this->notFound();
+        }
+
+        $result = $this->retention->setDeleteDue((int)$case['id'], (string)($form['due'] ?? ''));
+
+        // ★日付そのものはログへ出さない。案件番号と結果だけ
+        $this->logger->info('retention_due_set', [
+            'case_number' => $number,
+            'result_code' => $result['ok'] === true ? 'ok' : (string)($result['error'] ?? 'invalid'),
+            'http_status' => 303,
+        ]);
+
+        $msg = match (true) {
+            $result['ok'] === true && ($result['past'] ?? false) === true => 'due_past',
+            $result['ok'] === true                                        => 'due',
+            default                                                       => 'due_invalid',
+        };
+
+        return Response::redirect('/admin/case?case=' . rawurlencode($number) . '&msg=' . $msg);
+    }
+
+    /* ------------------------------------------------ 機密情報の削除 */
+
+    /**
+     * 削除の確認画面（GET）。★ここでは何も変えない。
+     *
+     * ★フラグが揃っていなければ、確認画面そのものを出さない（fail closed）。
+     */
+    private function purgeForm(Request $req, string $message = ''): Response
+    {
+        [$session, $fail] = $this->requireSession($req, 'GET');
+        if ($fail !== null) {
+            return $fail;
+        }
+        if (!$this->config->retentionEnabled()) {
+            return $this->retentionDisabled();
+        }
+
+        $case = $this->cases->findByNumber((string)($req->query['case'] ?? ''));
+        if ($case === null) {
+            return $this->notFound();
+        }
+
+        $gate = $this->retention->canPurge($case);
+        if ($gate['ok'] !== true) {
+            return Response::html(
+                View::page('削除できません', View::notice('warn', match ((string)$gate['error']) {
+                    'already_deleted' => 'この案件の機密情報は、すでに削除済みです。',
+                    'invalid_status'  => 'この案件は「確定」ではありません。先に入力を確定してください。',
+                    'due_not_set'     => '削除予定日が登録されていません。先に削除予定日をご登録ください。',
+                    default           => '削除予定日にまだ達していません。',
+                })),
+                409
+            );
+        }
+
+        $csrf   = $this->auth->rotateCsrf((int)$session['id']);
+        $notice = $message === '' ? '' : View::notice('error', $message);
+
+        return Response::html(View::page('機密情報の削除', $notice . View::purgeForm(
+            (string)$case['case_number'],
+            (string)$case['retention_delete_due'],
+            $csrf,
+        )), $message === '' ? 200 : 400);
+    }
+
+    /**
+     * 削除を実行する（POST）。★元に戻せない。
+     *
+     * 条件はすべて RetentionService 側でもう一度検査し、
+     * 削除は同一トランザクションで行う（途中で落ちたら全部戻る）。
+     */
+    private function doPurge(Request $req): Response
+    {
+        [$session, $fail] = $this->requirePostSession($req);
+        if ($fail !== null) {
+            return $fail;
+        }
+        if (!$this->config->retentionEnabled()) {
+            return $this->retentionDisabled();
+        }
+        $this->auth->rotateCsrf((int)$session['id']);
+
+        $form   = $req->formFields();
+        $number = (string)($form['case'] ?? '');
+        $case   = $this->cases->findByNumber($number);
+        if ($case === null) {
+            return $this->notFound();
+        }
+
+        $result = $this->retention->purgeCase(
+            (int)$case['id'],
+            $number,
+            (string)($form['confirm'] ?? ''),
+        );
+
+        if ($result['ok'] !== true) {
+            // ★入力された確認文をログにも画面にも出さない
+            $this->logger->warn('retention_purged', [
+                'case_number' => $number,
+                'result_code' => (string)($result['error'] ?? 'invalid'),
+                'http_status' => 409,
+            ]);
+
+            if ((string)($result['error'] ?? '') === 'confirm_mismatch') {
+                return $this->purgeForm(
+                    $this->sameOriginGet('/admin/purge', ['case' => $number], $req),
+                    '確認の入力が一致しません。表示されているとおりにご入力ください。'
+                );
+            }
+
+            return Response::html(
+                View::page('削除できません', View::notice(
+                    'warn',
+                    'この案件は、いまの状態では削除できません。最新の内容をご確認ください。'
+                )),
+                409
+            );
+        }
+
+        // ★件数の内訳もログへ出さない。案件番号と結果だけ
+        $this->logger->info('retention_purged', [
+            'case_number' => $number,
+            'result_code' => 'ok',
+            'http_status' => 303,
+        ]);
+
+        return Response::redirect('/admin/case?case=' . rawurlencode($number) . '&msg=purged');
+    }
+
+    /* ------------------------------------------------ 保守（監査・管理session） */
+
+    /** 件数だけを出す（GET）。★監査の中身も session hash も出さない */
+    private function maintenance(Request $req, string $flash = ''): Response
+    {
+        [$session, $fail] = $this->requireSession($req, 'GET');
+        if ($fail !== null) {
+            return $fail;
+        }
+
+        $csrf = $this->auth->rotateCsrf((int)$session['id']);
+
+        return Response::html(View::page('保守', View::maintenance(
+            $this->retention->countAuditDue(),
+            $this->retention->auditCutoff(),
+            $this->retention->countAdminSessionsDue(),
+            $this->config->retentionEnabled(),
+            $csrf,
+            $flash,
+        )));
+    }
+
+    /** 監査の13か月削除（POST）。★flag が揃っていなければ実行しない */
+    private function purgeAudit(Request $req): Response
+    {
+        [$session, $fail] = $this->requirePostSession($req);
+        if ($fail !== null) {
+            return $fail;
+        }
+        if (!$this->config->retentionEnabled()) {
+            return $this->retentionDisabled();
+        }
+        $this->auth->rotateCsrf((int)$session['id']);
+
+        $result = $this->retention->purgeAudit();
+
+        $this->logger->info('audit_purged', [
+            'result_code' => 'ok',
+            'http_status' => 200,
+        ]);
+
+        return $this->maintenance(
+            $this->sameOriginGet('/admin/maintenance', [], $req),
+            '監査ログを ' . (int)$result['deleted'] . ' 件削除しました。'
+        );
+    }
+
+    /**
+     * 期限切れ・失効済みの管理 session を削除する（POST）。
+     * ★いま有効な session は消さない（実行した本人が締め出されない）。
+     */
+    private function purgeAdminSessions(Request $req): Response
+    {
+        [$session, $fail] = $this->requirePostSession($req);
+        if ($fail !== null) {
+            return $fail;
+        }
+        $this->auth->rotateCsrf((int)$session['id']);
+
+        $result = $this->retention->purgeAdminSessions();
+
+        $this->logger->info('admin_sessions_purged', [
+            'result_code' => 'ok',
+            'http_status' => 200,
+        ]);
+
+        return $this->maintenance(
+            $this->sameOriginGet('/admin/maintenance', [], $req),
+            '期限切れの管理セッションを ' . (int)$result['deleted'] . ' 件削除しました。'
+        );
+    }
+
+    /** 破壊的操作が無効化されているときの固定応答（SSOT v1.7 §9.8） */
+    private function retentionDisabled(): Response
+    {
+        return Response::html(
+            View::page('この操作は無効です', View::notice(
+                'warn',
+                '保持期限による削除は、この環境では有効になっていません。'
+                . 'バックアップ方針の確定後に設定してください。'
+            )),
+            403
+        );
+    }
+
     /* ------------------------------------------------------------ 書き出し */
 
     private function downloadExport(Request $req): Response
@@ -1001,6 +1390,53 @@ final class AdminApp
         $this->auth->touch((int)$session['id']);
 
         return [$session, null];
+    }
+
+    /**
+     * 状態を変える POST の共通前段（4F で追加）。
+     *
+     *   POST であること → Origin / Fetch Metadata → 管理 session → CSRF → touch
+     *
+     * ★この順序を各所で書き写すと、いつか1つ抜ける。1か所に集める。
+     * ★CSRF の作り直し（＝二重送信の歯止め）は**呼び出し側**で行う。
+     *   作り直すかどうかは操作ごとの判断だからである。
+     *
+     * @return array{0:array<string,mixed>,1:?Response}
+     */
+    private function requirePostSession(Request $req): array
+    {
+        if ($req->method !== 'POST' || !$this->guard->adminPostAllowed($req)) {
+            return [[], $this->forbidden()];
+        }
+
+        $session = $this->auth->verify($req->cookie(Config::ADMIN_COOKIE_NAME));
+        if ($session === null) {
+            return [[], Response::redirect('/admin/login')];
+        }
+        if (!$this->auth->csrfMatches($session, $this->csrfFrom($req))) {
+            return [[], $this->forbidden()];
+        }
+        $this->auth->touch((int)$session['id']);
+
+        return [$session, null];
+    }
+
+    /**
+     * POST の失敗を GET 画面として描き直すための擬似リクエスト。
+     * ★Cookie と HTTPS 判定だけを引き継ぐ。body は引き継がない。
+     *
+     * @param array<string,string> $query
+     */
+    private function sameOriginGet(string $path, array $query, Request $req): Request
+    {
+        return new Request(
+            method: 'GET',
+            path: $path,
+            headers: ['Sec-Fetch-Site' => 'same-origin'],
+            cookies: $req->cookies,
+            isHttps: $req->isHttps,
+            query: $query,
+        );
     }
 
     private function csrfFrom(Request $req): ?string

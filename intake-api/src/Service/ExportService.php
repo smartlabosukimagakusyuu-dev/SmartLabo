@@ -65,6 +65,13 @@ final class ExportService
             return ['ok' => false, 'error' => 'not_found'];
         }
 
+        // ★保持期限で削除済みの案件は書き出さない（SSOT v1.7 §9.3）。
+        //   状態は `closed`（＝EXPORTABLE に含まれる）になっているため、
+        //   状態だけの判定では通ってしまう。ここで明示的に止める。
+        if (($case['deleted_at'] ?? null) !== null) {
+            return ['ok' => false, 'error' => 'deleted'];
+        }
+
         $status = (string)$case['status'];
         if (!in_array($status, self::EXPORTABLE, true)) {
             // 未提出（draft / needs_revision）は書き出さない

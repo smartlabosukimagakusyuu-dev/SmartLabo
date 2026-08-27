@@ -15,6 +15,7 @@ use SmartLabo\Intake\Service\Audit;
 use SmartLabo\Intake\Service\CaseService;
 use SmartLabo\Intake\Service\ExportService;
 use SmartLabo\Intake\Service\RateLimiter;
+use SmartLabo\Intake\Service\RetentionService;
 use SmartLabo\Intake\Service\RevisionRequestService;
 use SmartLabo\Intake\Service\SessionService;
 use SmartLabo\Intake\Service\TokenService;
@@ -34,6 +35,7 @@ final class Kernel
     public readonly CaseService $cases;
     public readonly AnswerService $answers;
     public readonly RevisionRequestService $revisions;
+    public readonly RetentionService $retention;
     public readonly AdminAuth $adminAuth;
     public readonly ExportService $export;
     public readonly AdminApp $admin;
@@ -62,6 +64,7 @@ final class Kernel
         );
         $this->answers     = new AnswerService($this->db, $this->clock, $this->audit);
         $this->revisions   = new RevisionRequestService($this->db, $this->clock);
+        $this->retention   = new RetentionService($this->db, $this->clock, $this->audit);
 
         $guard = new Guard($config);
 
@@ -78,6 +81,7 @@ final class Kernel
             $this->export,
             $this->revisions,
             $this->tokens,
+            $this->retention,
             $this->audit,
             $this->logger,
         );

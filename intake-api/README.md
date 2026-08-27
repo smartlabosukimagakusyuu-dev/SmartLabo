@@ -1,8 +1,8 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4D-R2）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F-PRE）
 
 ```text
-STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.6**
+STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除）。**本番未配置**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.7**
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -163,6 +163,15 @@ php -c intake-api/dev/php.ini -S 127.0.0.1:8788 -t intake-api/public intake-api/
 | GET | `/admin/reissue?case=…` | ご案内リンク再発行の確認（4D-R2） |
 | POST | `/admin/reissue/send` | 再発行の実行（旧token・店舗sessionを失効。4D-R2） |
 | GET | `/admin/export?case=…` | 検証済み JSON のダウンロード |
+| GET | `/admin/lock?case=…` | 入力確定（`locked`）の確認（4F） |
+| POST | `/admin/lock/send` | 確定の実行（token・店舗sessionを失効。4F） |
+| GET | `/admin/retention` | 保持期限の一覧（4F） |
+| POST | `/admin/retention/due` | 削除予定日の登録・変更（4F） |
+| GET | `/admin/purge?case=…` | 機密情報の削除の確認（4F） |
+| POST | `/admin/purge/send` | 削除の実行（**元に戻せない**。4F） |
+| GET | `/admin/maintenance` | 監査13か月削除・管理session清掃の件数（4F） |
+| POST | `/admin/maintenance/audit` | 監査の13か月削除（4F） |
+| POST | `/admin/maintenance/sessions` | 期限切れ管理sessionの削除（4F） |
 
 - 代表1名のみ。資格情報は `private/intake-config.php`（**hash だけ**。§6）
 - **未設定なら管理画面ごと 404**（fail closed）。店舗向けAPIはそのまま動く
@@ -209,7 +218,10 @@ X-Intake-Export-Sha256: <本文の SHA-256>
 1. `intake.smartlaboworks.com` のサブドメイン追加
 2. 無料SSLの発行・有効化
 3. **`.user.ini` の設定**（`display_errors=Off` / `display_startup_errors=Off` /
-   `log_errors=On` / `error_log` は **public_html の外**）
+   `log_errors=On` / `error_log` は **public_html の外** / **`expose_php=Off`**）
+   - ★`expose_php` は `PHP_INI_SYSTEM` のため、共用サーバーでは `.user.ini` から
+     **効かないことがある**。`X-Powered-By` が消えたかを**実機で確認**する。
+     消えない場合は `.htaccess` の `Header always unset X-Powered-By` が受け止める
 4. `private/` をドキュメントルートの**1つ上**へ配置（権限 700 / 設定ファイル 600）
 5. `private/intake-config.php` を作成し、**別々に生成した**鍵を設定する
    ```bash
@@ -225,6 +237,11 @@ X-Intake-Export-Sha256: <本文の SHA-256>
      管理画面は動かない（fail closed）
    - **実パスワード・実 hash を Git へ入れない**
 7. `mail()` の実送信テスト（宛先は当社 info@ のみ）
+8. **保持期限による削除は、既定のまま（無効）で配置する**（SSOT v1.7 §9.8）
+   - `retention_actions_enabled` と `backup_policy_confirmed` は**既定 false**
+   - **`backup_policy_confirmed` を 4G より前に true にしない。**
+     バックアップの世代・削除方針が決まる前に削除すると、
+     古い世代から**消したはずの回答が復元できてしまう**
 
 ## 7. 最終提出の冪等化（4B-R1 で実装済み）
 
@@ -329,9 +346,48 @@ rate limit 一覧・書き出しの allowlist / denylist・本番前の残存課
 - 検査で追加した自動テスト: `tests/test-security.php` ／ `tests/test-security-static.php`
 - 仕様は SSOT が正。検査レポートは SSOT を上書きしない
 
-### 残っている宿題（4E 以降）
+### 保持期限と削除（4F-PRE・SSOT v1.7 §9）
+
+**誰が何を持つか**
+
+- 公開日も公開承認も **HP Intake へ保存しない**。Operations（未完成の間は標準管理票）の責任
+- Intake が持つのは **`retention_delete_due` の1列だけ**。人が**手動で登録**する
+- **そこから公開日を逆算しない**
+- **Google Drive の実ファイル削除は Intake の責任外**。Drive API へ接続しない
+
+**削除の流れ**
+
+`reviewed` → 確定（`locked`）→ 削除予定日の登録 → 期限到来 →
+確認画面 → `DELETE <案件番号>` の完全一致入力 → 実行
+
+- **自動実行しない。** cron・起動時処理・バッチを作らない
+- 実行には **`retention_actions_enabled` と `backup_policy_confirmed` が両方 true**
+  （**既定はどちらも false**。片方でも欠ければボタンも出さない）
+- 5表（店舗session / token / 回答 / 修正依頼 / 提出履歴）を**行ごと物理削除**
+- Drive URL と共有先メールの**暗号文を NULL 化**（復号できる参照を残さない）
+- 案件行に残るのは**案件番号・状態・日付だけ**（SSOT §9.4-2 の allowlist）
+- すべて**同一トランザクション**。途中で失敗したら**全部戻る**
+- **`PRAGMA secure_delete = ON`**。DELETE だけでは内容が DB ファイルのページ上に残る
+- 削除済み案件は **書き出し・token 発行・再発行・session 発行・状態変更をすべて拒否**
+
+**通し確認（使い捨てDBだけで動く）**
+
+```bash
+php -c intake-api/dev/php.ini intake-api/dev/retention-walkthrough.php
+```
+
+案件作成から削除・監査清掃・session 清掃までの20段を確かめる。
+毎回新しい使い捨てDBを作り、**終わったら消す**。
+`dev/.preview/` を含む**既存DBへは一切接続しない**。
+
+### 残っている宿題（4F-PRE 以降）
 
 | # | 事項 | いまの扱い |
 |---|---|---|
-| 1 | `GET /case` の `Sec-Fetch-Site` 受理 | **4E でセキュリティ再検証**（SSOT §10.9-4） |
-| 2 | `locked` / `closed` への遷移 | 画面から行わない（誤操作の影響が大きいため） |
+| ~~1~~ | ~~`GET /case` の `Sec-Fetch-Site` 受理~~ | **4E で再検証済み**（P0/P1/P2 なし） |
+| ~~2~~ | ~~`locked` への遷移~~ | **4F-PRE で実装**（確認画面＋案件番号再入力。SSOT §5.1） |
+| 3 | `closed` への通常遷移 | **作らない**。`closed` は削除完了時に設定される（SSOT §9.3-3） |
+| 4 | 中止案件を `closed` にする経路 | 未定（SSOT §12.2-12）。運用が固まってから決める |
+| 5 | 管理 session 清掃の自動化 | Phase 1 は保守画面からの明示操作（SSOT §2.7-10） |
+| 6 | `expose_php` が実機で効くか | **4H で確認**（`.htaccess` 側の受け止めあり） |
+| 7 | 本番バックアップの世代・削除方針 | **4G**。確定するまで `backup_policy_confirmed` を true にしない |

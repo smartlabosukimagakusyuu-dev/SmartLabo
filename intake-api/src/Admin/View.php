@@ -52,7 +52,9 @@ final class View
     public static function page(string $title, string $body, bool $withNav = true): string
     {
         $nav = $withNav
-            ? '<nav class="nav"><a href="/admin/">案件一覧</a></nav>'
+            ? '<nav class="nav"><a href="/admin/">案件一覧</a>'
+            . '<a href="/admin/retention">保持期限</a>'
+            . '<a href="/admin/maintenance">保守</a></nav>'
             : '';
 
         return '<!DOCTYPE html>'
@@ -249,6 +251,269 @@ final class View
             . '<div class="actions">'
             . '<button type="submit" class="btn btn--primary">案件を作成してご案内リンクを発行する</button>'
             . '</div></form></section>';
+    }
+
+    /* ------------------------------------------------ 入力確定（4F） */
+
+    /**
+     * 確定（`reviewed` → `locked`）の確認画面（SSOT v1.7 §5.1）。
+     * ★何が起きるかを先に全部見せる。押してから気づく画面にしない。
+     */
+    public static function lockForm(string $caseNumber, string $csrf): string
+    {
+        return '<section class="card">'
+            . '<h1 class="card__title">入力を確定する</h1>'
+            . self::row('案件番号', self::esc($caseNumber))
+            . '<div class="notice notice--warn">'
+            . '<p class="notice__title">確定すると、次のことが起こります</p>'
+            . '<ul class="list">'
+            . '<li><strong>店舗のご案内リンクが使えなくなります。</strong>'
+            . 'いま開いている入力画面も、その場で使えなくなります。</li>'
+            . '<li><strong>修正依頼へ戻せなくなります。</strong>'
+            . 'ご案内リンクの再発行もできなくなります。</li>'
+            . '<li><strong>入力済みの内容は消えません。</strong>'
+            . '確定は「入力を締め切る」という意味であり、削除ではありません。</li>'
+            . '<li>確定後に削除予定日を登録すると、期限到来後に機密情報を削除できるようになります。</li>'
+            . '</ul></div>'
+            . '<form method="post" action="/admin/lock/send" autocomplete="off">'
+            . '<input type="hidden" name="csrf_token" value="' . self::esc($csrf) . '">'
+            . '<input type="hidden" name="case" value="' . self::esc($caseNumber) . '">'
+            . '<div class="field">'
+            . '<label class="field__label" for="confirm-case">確認のため、案件番号をご入力ください</label>'
+            . '<input id="confirm-case" name="confirm_case" type="text" autocomplete="off" '
+            . 'spellcheck="false" required placeholder="' . self::esc($caseNumber) . '">'
+            . '</div>'
+            . '<div class="actions">'
+            . '<button type="submit" class="btn btn--primary">入力を確定する</button>'
+            . '<a class="btn btn--outline" href="/admin/case?case=' . rawurlencode($caseNumber) . '">やめる</a>'
+            . '</div></form></section>';
+    }
+
+    /* ------------------------------------------------ 保持期限（4F） */
+
+    /**
+     * 削除予定日の登録（SSOT v1.7 §9.3-1）。
+     *
+     * ★受け取るのは削除予定日**だけ**。公開日・公開承認・契約情報の欄を作らない。
+     *   それらは Smart Labo Operations（未完成の間は標準管理票）の責任である。
+     */
+    public static function retentionDueForm(string $caseNumber, string $current, string $csrf): string
+    {
+        return '<form method="post" action="/admin/retention/due" class="subform" autocomplete="off">'
+            . '<input type="hidden" name="csrf_token" value="' . self::esc($csrf) . '">'
+            . '<input type="hidden" name="case" value="' . self::esc($caseNumber) . '">'
+            . '<div class="field">'
+            . '<label class="field__label" for="due">削除予定日（YYYY-MM-DD）</label>'
+            . '<input id="due" name="due" type="date" required value="' . self::esc($current) . '">'
+            . '<p class="lead">公開完了から6か月後の日付を、標準管理票または Operations 側で計算して'
+            . 'ここへ転記してください。<strong>公開日はこの画面に入力しないでください。</strong></p>'
+            . '</div>'
+            . '<div class="actions">'
+            . '<button type="submit" class="btn btn--outline">削除予定日を登録する</button>'
+            . '</div></form>';
+    }
+
+    /**
+     * 保持期限の一覧（SSOT v1.7 §9.3-1）。
+     * ★案件番号・状態・日付・区分だけ。回答本文・店舗名・Drive 情報を出さない。
+     *
+     * @param list<array<string,mixed>> $rows
+     */
+    public static function retentionList(array $rows, string $today, bool $enabled, string $csrf): string
+    {
+        $counts = ['overdue' => 0, 'due' => 0, 'soon' => 0, 'later' => 0, 'unset' => 0, 'deleted' => 0];
+        $items  = '';
+
+        foreach ($rows as $row) {
+            $bucket = (string)$row['bucket'];
+            $counts[$bucket] = ($counts[$bucket] ?? 0) + 1;
+            $number = (string)$row['case_number'];
+
+            $items .= '<tr>'
+                . '<td><a href="/admin/case?case=' . rawurlencode($number) . '">' . self::esc($number) . '</a></td>'
+                . '<td>' . self::statusLabel((string)$row['status']) . '</td>'
+                . '<td>' . self::orDash($row['retention_delete_due']) . '</td>'
+                . '<td>' . self::orDash($row['deleted_at']) . '</td>'
+                . '<td>' . self::bucketLabel($bucket) . '</td>'
+                . '</tr>';
+        }
+        if ($items === '') {
+            $items = '<tr><td colspan="5" class="muted">案件がありません。</td></tr>';
+        }
+
+        $summary = '';
+        foreach (['overdue', 'due', 'soon', 'later', 'unset', 'deleted'] as $key) {
+            $summary .= self::row(self::bucketName($key), self::esc((int)($counts[$key] ?? 0)) . ' 件');
+        }
+
+        $state = $enabled
+            ? '<p class="notice notice--warn">削除操作が<strong>有効</strong>になっています。'
+            . '期限到来した「確定」案件は、案件詳細から機密情報を削除できます。</p>'
+            : '<p class="notice notice--ok">削除操作は<strong>無効</strong>です。'
+            . 'バックアップの世代・削除方針が確定するまで、この環境では削除を実行できません。</p>';
+
+        return '<section class="card">'
+            . '<h1 class="card__title">保持期限</h1>'
+            . '<p class="lead">HP Intake が持つのは<strong>削除予定日だけ</strong>です。'
+            . '公開日と公開承認は保存しません（Smart Labo Operations の責任範囲です）。</p>'
+            . $state
+            . self::row('サーバーの日付', self::esc($today))
+            . $summary
+            . '<div class="tablewrap"><table class="table">'
+            . '<thead><tr><th>案件番号</th><th>状態</th><th>削除予定日</th><th>削除実施日</th><th>区分</th></tr></thead>'
+            . '<tbody>' . $items . '</tbody></table></div>'
+            . '<div class="actions"><a class="btn btn--outline" href="/admin/maintenance">保守（監査・セッション）へ</a></div>'
+            . '</section>'
+            . '<div class="endrow">'
+            . self::actionForm('/admin/logout', $csrf, [], 'ログアウト', 'btn--quiet')
+            . '</div>';
+    }
+
+    private static function bucketName(string $bucket): string
+    {
+        return [
+            'overdue' => '期限超過',
+            'due'     => '期限到来',
+            'soon'    => '30日以内',
+            'later'   => '期限より前',
+            'unset'   => '削除予定日 未設定',
+            'deleted' => '削除済み',
+        ][$bucket] ?? $bucket;
+    }
+
+    /** 区分は色だけでなく**文字**でも示す */
+    private static function bucketLabel(string $bucket): string
+    {
+        return '<span class="badge badge--' . self::esc($bucket) . '">'
+            . self::esc(self::bucketName($bucket)) . '</span>';
+    }
+
+    /* ------------------------------------------------ 機密情報の削除（4F） */
+
+    /**
+     * 削除の確認画面（SSOT v1.7 §9.3）。
+     *
+     * ★元に戻せないこと・Drive は別作業であること・バックアップにも期限があること・
+     *   継続保持は先に移しておくことを、実行前に全部書く。
+     * ★誤操作を防ぐため `DELETE <案件番号>` の完全一致入力を求める。
+     */
+    public static function purgeForm(string $caseNumber, string $due, string $csrf): string
+    {
+        $phrase = \SmartLabo\Intake\Service\RetentionService::confirmPhrase($caseNumber);
+
+        return '<section class="card">'
+            . '<h1 class="card__title">機密情報の削除</h1>'
+            . self::row('案件番号', self::esc($caseNumber))
+            . self::row('削除予定日', self::esc($due))
+            . '<div class="notice notice--error">'
+            . '<p class="notice__title">実行すると、元に戻せません</p>'
+            . '<ul class="list">'
+            . '<li>店舗の<strong>回答本文</strong>を物理削除します。</li>'
+            . '<li><strong>修正依頼</strong>（メッセージ・対象項目）を物理削除します。</li>'
+            . '<li><strong>提出履歴</strong>を物理削除します。</li>'
+            . '<li><strong>token と店舗セッション</strong>を物理削除します。</li>'
+            . '<li><strong>素材フォルダのURLと共有先メール</strong>（暗号文）を削除します。</li>'
+            . '<li>案件には<strong>案件番号・状態・日付だけ</strong>が残ります。</li>'
+            . '</ul></div>'
+            . '<div class="notice notice--warn">'
+            . '<p class="notice__title">実行の前にご確認ください</p>'
+            . '<ul class="list">'
+            . '<li><strong>継続保持する情報</strong>（法的同意の証跡・掲載同意・公開承認・素材権利台帳の要点）が、'
+            . 'Smart Labo Operations または標準管理票へ<strong>移してあること</strong>。</li>'
+            . '<li><strong>Google Drive の実ファイルはここでは消えません。</strong>'
+            . 'Drive 側の削除は別作業です。実施日は標準管理票へ残してください。</li>'
+            . '<li><strong>バックアップにも保持期限があります。</strong>'
+            . '古い世代が残っている間は、そこから復元できてしまいます。</li>'
+            . '</ul></div>'
+            . '<form method="post" action="/admin/purge/send" autocomplete="off">'
+            . '<input type="hidden" name="csrf_token" value="' . self::esc($csrf) . '">'
+            . '<input type="hidden" name="case" value="' . self::esc($caseNumber) . '">'
+            . '<div class="field">'
+            . '<label class="field__label" for="confirm">確認のため、次のとおり入力してください</label>'
+            . '<p class="lead"><code>' . self::esc($phrase) . '</code></p>'
+            . '<input id="confirm" name="confirm" type="text" autocomplete="off" '
+            . 'spellcheck="false" required>'
+            . '</div>'
+            . '<div class="actions">'
+            . '<button type="submit" class="btn btn--danger">機密情報を削除する</button>'
+            . '<a class="btn btn--outline" href="/admin/case?case=' . rawurlencode($caseNumber) . '">やめる</a>'
+            . '</div></form></section>';
+    }
+
+    /**
+     * 削除済み案件の詳細（SSOT v1.7 §9.4）。
+     * ★残っている最小メタデータだけ。回答・Drive・店舗名の欄そのものを作らない。
+     *
+     * @param array<string,mixed> $case
+     */
+    public static function deletedCase(array $case): string
+    {
+        return '<section class="card">'
+            . '<h1 class="card__title">' . self::esc($case['case_number']) . '</h1>'
+            . '<p class="notice notice--ok">この案件の機密情報は削除済みです。'
+            . '残っているのは案件番号・状態・日付だけです。</p>'
+            . self::row('状態', self::statusLabel((string)$case['status']))
+            . self::row('契約種別', self::orDash($case['contract_type']))
+            . self::row('提出日時', self::orDash($case['submitted_at']))
+            . self::row('確定日時', self::orDash($case['locked_at']))
+            . self::row('終了日時', self::orDash($case['closed_at']))
+            . self::row('削除予定日', self::orDash($case['retention_delete_due']))
+            . self::row('削除実施日', self::orDash($case['deleted_at']))
+            . '<p class="lead">Google Drive の実ファイルと、継続保持する情報の所在は'
+            . 'Smart Labo Operations または標準管理票でご確認ください。</p>'
+            . '<div class="actions"><a class="btn btn--outline" href="/admin/retention">保持期限一覧へ</a></div>'
+            . '</section>';
+    }
+
+    /* ------------------------------------------------ 保守（4F） */
+
+    /**
+     * 監査の13か月削除と、管理セッションの清掃（SSOT v1.7 §9.1 / §2.7-8）。
+     * ★出すのは**件数だけ**。監査の中身も session hash も HMAC 化IP も描かない。
+     */
+    public static function maintenance(
+        int $auditDue,
+        string $cutoff,
+        int $sessionsDue,
+        bool $enabled,
+        string $csrf,
+        string $flash = '',
+    ): string {
+        $notice = $flash === '' ? '' : self::notice('ok', $flash);
+
+        $auditAction = $enabled
+            ? self::actionForm('/admin/maintenance/audit', $csrf, [],
+                '13か月を過ぎた監査ログを削除する', 'btn--danger')
+            : '<p class="muted">削除操作が無効のため実行できません。</p>';
+
+        return $notice
+            . '<section class="card">'
+            . '<h1 class="card__title">保守</h1>'
+            . '<p class="lead">自動実行はしません。実行するときは、この画面から明示的に行います。</p>'
+            . '</section>'
+            . '<section class="card">'
+            . '<h2 class="card__title">監査ログ（13か月保持）</h2>'
+            . self::row('保持の境目', self::esc($cutoff))
+            . self::row('削除対象', self::esc($auditDue) . ' 件')
+            . '<p class="lead">監査ログは本文も個人情報も持ちません（案件・イベント種別・結果・'
+            . 'HMAC化したIP・日時のみ）。削除するとHMAC化IPも同時に消えます。</p>'
+            . '<p class="lead">この削除自体も監査へ1件残りますが、その行も13か月後に'
+            . '同じ規則で削除対象になります（保持が終わらなくなることはありません）。</p>'
+            . '<div class="actions">' . $auditAction . '</div>'
+            . '</section>'
+            . '<section class="card">'
+            . '<h2 class="card__title">管理セッション</h2>'
+            . self::row('期限切れ・失効済み', self::esc($sessionsDue) . ' 件')
+            . '<p class="lead">いま有効なセッションは削除しません。'
+            . 'この操作でログアウトさせられることはありません。</p>'
+            . '<div class="actions">'
+            . self::actionForm('/admin/maintenance/sessions', $csrf, [],
+                '期限切れの管理セッションを削除する', 'btn--outline')
+            . '</div>'
+            . '</section>'
+            . '<div class="endrow">'
+            . self::actionForm('/admin/logout', $csrf, [], 'ログアウト', 'btn--quiet')
+            . '</div>';
     }
 
     /* ------------------------------------------------ ご案内リンクの再発行 */

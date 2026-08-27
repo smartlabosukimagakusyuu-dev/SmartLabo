@@ -163,14 +163,26 @@ final class Response
         return json_encode($this->body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
+    /**
+     * SSOT §10.4。
+     *
+     * ★CSP は**静的側（public/.htaccess）と同一の文字列**にそろえる（4F / P3-2）。
+     *   API と画面で守りが違うと、どちらが本当の方針なのか読めなくなる。
+     *   - `object-src 'none'` … プラグイン埋め込みを作らせない
+     *   - `font-src 'self'`   … 外部フォントを取りに行かせない（既定は default-src だが明示する）
+     *   - `img-src 'self'`    … **data: を許さない**。この画面群は画像もアイコンも使わない
+     *   `unsafe-inline` / `unsafe-eval` / ワイルドカードは入れない。
+     */
+    public const CSP = "default-src 'self'; script-src 'self'; style-src 'self'; "
+        . "img-src 'self'; font-src 'self'; connect-src 'self'; form-action 'self'; "
+        . "frame-ancestors 'none'; base-uri 'none'; object-src 'none'";
+
     /** @return array<string,string> SSOT §10.4 */
     public static function securityHeaders(): array
     {
         return [
             'Content-Type'              => 'application/json; charset=UTF-8',
-            'Content-Security-Policy'   => "default-src 'self'; script-src 'self'; style-src 'self'; "
-                . "img-src 'self' data:; connect-src 'self'; form-action 'self'; "
-                . "frame-ancestors 'none'; base-uri 'none'",
+            'Content-Security-Policy'   => self::CSP,
             'X-Content-Type-Options'    => 'nosniff',
             'X-Frame-Options'           => 'DENY',
             'Referrer-Policy'           => 'no-referrer',
