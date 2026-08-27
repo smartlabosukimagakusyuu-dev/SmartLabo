@@ -1,0 +1,751 @@
+/**
+ * 店舗向け入力画面のスタイル。
+ *
+ * ★外部CDN・外部フォントを読み込まない（SSOT §10.5）。端末にある書体だけを使う。
+ * ★色は Smart Labo の既存トークンに合わせる（Smart Blue #2563EB / Navy #0A1B3D）。
+ * ★スマートフォンを優先し、PC・iPad でも読めるようにする。
+ */
+
+:root {
+  --c-navy: #0a1b3d;
+  --c-blue: #2563eb;
+  --c-blue-dark: #1d4ed8;
+  --c-blue-pale: #eff6ff;
+  --c-blue-soft: #e6eefb;
+  --c-ink: #172033;
+  --c-gray: #64748b;
+  --c-line: #cbd5e1;
+  --c-line-soft: #e2e8f0;
+  --c-white: #fff;
+  --c-bg: #f6f8fb;
+  --c-ok: #0f766e;
+  --c-ok-bg: #ecfdf5;
+  --c-warn: #92400e;
+  --c-warn-bg: #fffbeb;
+  --c-err: #b42318;
+  --c-err-bg: #fef3f2;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(23, 32, 51, 0.06), 0 8px 24px rgba(23, 32, 51, 0.08);
+  --shadow-sm: 0 1px 2px rgba(23, 32, 51, 0.06), 0 3px 10px rgba(23, 32, 51, 0.06);
+
+  --font-sans: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Meiryo, sans-serif;
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--c-ink);
+  background: var(--c-bg);
+}
+
+/* ---------------------------------------------------------------- 骨格 */
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.masthead {
+  background: linear-gradient(135deg, var(--c-navy) 0%, #143b7a 55%, var(--c-blue) 100%);
+  color: var(--c-white);
+  padding: var(--sp-4) var(--sp-4) var(--sp-5);
+}
+
+.masthead__inner,
+.wrap {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.masthead__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.masthead__sub {
+  margin: var(--sp-1) 0 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.masthead__case {
+  margin: var(--sp-3) 0 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+main {
+  flex: 1 1 auto;
+  padding: var(--sp-5) var(--sp-4) 96px;
+}
+
+.card {
+  background: var(--c-white);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-5) var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.card__title {
+  margin: 0 0 var(--sp-2);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--c-navy);
+}
+
+.card__lead {
+  margin: 0 0 var(--sp-5);
+  font-size: 0.9rem;
+  color: var(--c-gray);
+}
+
+/* ---------------------------------------------------------------- 進捗 */
+
+.progress {
+  background: var(--c-white);
+  border-bottom: 1px solid var(--c-line-soft);
+  padding: var(--sp-3) var(--sp-4);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.progress__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--c-gray);
+}
+
+.progress__step {
+  font-weight: 700;
+  color: var(--c-navy);
+  font-size: 0.95rem;
+}
+
+.progress__bar {
+  margin-top: var(--sp-2);
+  height: 6px;
+  border-radius: 999px;
+  background: var(--c-blue-soft);
+  overflow: hidden;
+}
+
+.progress__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--c-blue) 0%, #38bdf8 100%);
+  transition: width 0.25s ease;
+}
+
+/*
+ * 12ステップぶんの幅。
+ * ★style 属性で幅を書くと CSP（style-src 'self'）に弾かれるため、
+ *   data-step を見て CSS 側で決める。
+ */
+.progress__fill[data-step="1"]  { width: 8.34%; }
+.progress__fill[data-step="2"]  { width: 16.67%; }
+.progress__fill[data-step="3"]  { width: 25%; }
+.progress__fill[data-step="4"]  { width: 33.34%; }
+.progress__fill[data-step="5"]  { width: 41.67%; }
+.progress__fill[data-step="6"]  { width: 50%; }
+.progress__fill[data-step="7"]  { width: 58.34%; }
+.progress__fill[data-step="8"]  { width: 66.67%; }
+.progress__fill[data-step="9"]  { width: 75%; }
+.progress__fill[data-step="10"] { width: 83.34%; }
+.progress__fill[data-step="11"] { width: 91.67%; }
+.progress__fill[data-step="12"] { width: 100%; }
+
+/* ---------------------------------------------------------------- 入力欄 */
+
+.field {
+  margin-bottom: var(--sp-5);
+}
+
+.field__label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-bottom: var(--sp-2);
+  color: var(--c-navy);
+}
+
+.field__hint {
+  margin: var(--sp-1) 0 var(--sp-2);
+  font-size: 0.82rem;
+  color: var(--c-gray);
+}
+
+.tag {
+  display: inline-block;
+  margin-left: var(--sp-2);
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  vertical-align: middle;
+  line-height: 1.6;
+}
+
+.tag--required {
+  background: var(--c-err-bg);
+  color: var(--c-err);
+  border: 1px solid #fbd5d1;
+}
+
+.tag--internal {
+  background: var(--c-blue-pale);
+  color: var(--c-blue-dark);
+  border: 1px solid var(--c-blue-soft);
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 11px 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--c-ink);
+  background: var(--c-white);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  /* iOS で自動ズームしないよう 16px 未満にしない */
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--c-blue);
+  outline-offset: 2px;
+}
+
+/* ★フォーカス表示を消さない。マウス操作でも枠は残す */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--c-blue);
+}
+
+.field--invalid input,
+.field--invalid select,
+.field--invalid textarea {
+  border-color: var(--c-err);
+  background: var(--c-err-bg);
+}
+
+.field__error {
+  margin: var(--sp-2) 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--c-err);
+}
+
+/* 色だけで状態を示さないよう、記号を添える */
+.field__error::before {
+  content: "! ";
+}
+
+.checkline {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--sp-2);
+  background: var(--c-white);
+  cursor: pointer;
+}
+
+.checkline input {
+  width: 22px;
+  height: 22px;
+  margin: 2px 0 0;
+  flex: 0 0 auto;
+  accent-color: var(--c-blue);
+}
+
+.checkline__text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.checkline__code {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--c-gray);
+  font-weight: 700;
+}
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.checks .checkline {
+  flex: 1 1 44%;
+  min-width: 150px;
+  margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------- 繰り返し入力 */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.row {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: flex-start;
+}
+
+.row input {
+  flex: 1 1 auto;
+}
+
+.group {
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius);
+  padding: var(--sp-4) var(--sp-3);
+  background: #fbfcfe;
+}
+
+.group__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+
+.group__title {
+  font-weight: 700;
+  color: var(--c-navy);
+  font-size: 0.95rem;
+}
+
+.group .field:last-child {
+  margin-bottom: 0;
+}
+
+.weekly {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.weekly__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius-sm);
+  background: var(--c-white);
+}
+
+.weekly__day {
+  flex: 0 0 2.2em;
+  font-weight: 700;
+}
+
+.weekly__closed {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: 0.85rem;
+}
+
+.weekly__closed input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--c-blue);
+}
+
+.weekly__time {
+  flex: 1 1 88px;
+  min-width: 88px;
+}
+
+/* ---------------------------------------------------------------- ボタン */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: 48px;
+  padding: 12px 20px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: var(--c-white);
+  color: var(--c-ink);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn--primary {
+  background: var(--c-blue);
+  border-color: var(--c-blue);
+  color: var(--c-white);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--c-blue-dark);
+  border-color: var(--c-blue-dark);
+}
+
+.btn--outline {
+  border-color: var(--c-line);
+  color: var(--c-navy);
+}
+
+.btn--outline:hover:not(:disabled) {
+  border-color: var(--c-blue);
+  color: var(--c-blue-dark);
+}
+
+.btn--quiet {
+  border-color: transparent;
+  color: var(--c-gray);
+  min-height: 40px;
+  padding: 8px 12px;
+}
+
+.btn--danger-quiet {
+  border-color: var(--c-line);
+  color: var(--c-err);
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn--small {
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+/* ---------------------------------------------------------------- 通知 */
+
+.notice {
+  border-radius: var(--radius-sm);
+  padding: var(--sp-3) var(--sp-4);
+  margin-bottom: var(--sp-4);
+  font-size: 0.9rem;
+  border: 1px solid;
+}
+
+.notice--info {
+  background: var(--c-blue-pale);
+  border-color: var(--c-blue-soft);
+  color: #1e3a8a;
+}
+
+.notice--ok {
+  background: var(--c-ok-bg);
+  border-color: #a7f3d0;
+  color: var(--c-ok);
+}
+
+.notice--warn {
+  background: var(--c-warn-bg);
+  border-color: #fde68a;
+  color: var(--c-warn);
+}
+
+.notice--error {
+  background: var(--c-err-bg);
+  border-color: #fbd5d1;
+  color: var(--c-err);
+}
+
+.notice__title {
+  font-weight: 700;
+  margin: 0 0 var(--sp-1);
+}
+
+.notice__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+
+.missing-list {
+  margin: var(--sp-2) 0 0;
+  padding-left: 1.3em;
+}
+
+.missing-list li {
+  margin-bottom: var(--sp-1);
+}
+
+/* ---------------------------------------------------------- 保存の状態 */
+
+.savebar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--c-white);
+  border-top: 1px solid var(--c-line-soft);
+  padding: var(--sp-2) var(--sp-4);
+  box-shadow: 0 -2px 12px rgba(23, 32, 51, 0.08);
+  z-index: 10;
+}
+
+.savebar__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.savestate {
+  font-size: 0.8rem;
+  color: var(--c-gray);
+  min-height: 1.4em;
+}
+
+.savestate--dirty {
+  color: var(--c-warn);
+  font-weight: 700;
+}
+
+.savestate--saved {
+  color: var(--c-ok);
+}
+
+.savestate--error {
+  color: var(--c-err);
+  font-weight: 700;
+}
+
+.navrow {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+}
+
+.stepnav {
+  display: flex;
+  gap: var(--sp-3);
+  justify-content: space-between;
+  margin-top: var(--sp-5);
+}
+
+.endrow {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--c-line-soft);
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- 確認 */
+
+.review__group {
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--sp-3);
+  overflow: hidden;
+}
+
+.review__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  background: var(--c-blue-pale);
+}
+
+.review__title {
+  font-weight: 700;
+  color: var(--c-navy);
+  font-size: 0.92rem;
+}
+
+.review__body {
+  padding: var(--sp-3);
+}
+
+.review__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px dashed var(--c-line-soft);
+  font-size: 0.88rem;
+}
+
+.review__row:last-child {
+  border-bottom: 0;
+}
+
+.review__key {
+  flex: 0 0 40%;
+  min-width: 140px;
+  color: var(--c-gray);
+}
+
+.review__val {
+  flex: 1 1 50%;
+  min-width: 160px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.review__val--empty {
+  color: var(--c-gray);
+}
+
+/* ---------------------------------------------------------- 単独メッセージ */
+
+.solo {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-5) var(--sp-4);
+}
+
+.solo__card {
+  background: var(--c-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--sp-6) var(--sp-5);
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.solo__mark {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--sp-4);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-navy), var(--c-blue));
+}
+
+.solo__title {
+  margin: 0 0 var(--sp-3);
+  font-size: 1.1rem;
+  color: var(--c-navy);
+}
+
+.solo__text {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--c-gray);
+  line-height: 1.8;
+}
+
+.solo__actions {
+  margin-top: var(--sp-5);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------- 画面幅 */
+
+@media (min-width: 700px) {
+  main {
+    padding: var(--sp-6) var(--sp-4) 96px;
+  }
+
+  .card {
+    padding: var(--sp-6);
+  }
+
+  .masthead {
+    padding: var(--sp-5) var(--sp-4);
+  }
+
+  .group {
+    padding: var(--sp-5);
+  }
+}
+
+/* 動きを減らす設定を尊重する */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

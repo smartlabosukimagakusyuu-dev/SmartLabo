@@ -64,11 +64,39 @@ final class Guard
         if ($this->config->requireHttps && !$req->isHttps) {
             return Response::error('forbidden', 403);
         }
-        if (!$this->originAllowed($req)) {
+        if (!$this->sameOriginFetch($req) && !$this->originAllowed($req)) {
             return Response::error('forbidden', 403);
         }
 
         return null;
+    }
+
+    /**
+     * 同一オリジンからの取得かどうかを、ブラウザが付ける Fetch Metadata で確かめる。
+     *
+     * ★同一オリジンの GET には **Origin が付かない**（ブラウザの仕様）。
+     *   さらに本画面は `Referrer-Policy: no-referrer`（SSOT §10.4）なので Referer も付かない。
+     *   そのため GET だけは、この経路でも受け付ける必要がある。
+     *
+     * ★`Sec-Fetch-*` は**禁止ヘッダー名**であり、ページ内の JavaScript から偽装できない。
+     *   他サイトからの要求では `cross-site` になるため、CSRF の判定として成立する。
+     *   `none`（URL直打ち・ブックマーク）は受け付けない。
+     *   ヘッダー自体が無い場合は false を返し、従来の Origin / Referer 検査へ委ねる。
+     */
+    public function sameOriginFetch(Request $req): bool
+    {
+        $site = $req->header('Sec-Fetch-Site');
+        if ($site === null || strtolower(trim($site)) !== 'same-origin') {
+            return false;
+        }
+
+        // 画面遷移ではなく、スクリプトからの取得であること
+        $mode = $req->header('Sec-Fetch-Mode');
+        if ($mode !== null && strtolower(trim($mode)) === 'navigate') {
+            return false;
+        }
+
+        return true;
     }
 
     /**

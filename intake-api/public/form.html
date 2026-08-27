@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>ホームページ制作情報の入力｜Smart Labo</title>
+<link rel="stylesheet" href="/assets/intake.css">
+</head>
+<body>
+
+<!-- 読み込み中・エラー・終了などの単独メッセージ -->
+<div class="solo" id="solo">
+  <div class="solo__card">
+    <div class="solo__mark" aria-hidden="true"></div>
+    <h1 class="solo__title" id="solo-title">ホームページ制作情報の入力</h1>
+    <p class="solo__text" id="solo-text" role="status" aria-live="polite">
+      入力内容を読み込んでいます。少しお待ちください。
+    </p>
+    <div class="solo__actions" id="solo-actions" hidden></div>
+    <noscript>
+      <p class="solo__text">このフォームを利用するにはJavaScriptを有効にしてください。</p>
+    </noscript>
+  </div>
+</div>
+
+<!-- 入力画面本体 -->
+<div class="page" id="page" hidden>
+
+  <header class="masthead">
+    <div class="masthead__inner">
+      <h1 class="masthead__title">ホームページ制作情報の入力</h1>
+      <p class="masthead__sub">入力内容は途中保存できます。あとから続きを入力できます。</p>
+      <p class="masthead__case" id="case-label"></p>
+    </div>
+  </header>
+
+  <div class="progress">
+    <div class="wrap">
+      <div class="progress__meta">
+        <span class="progress__step" id="progress-step"></span>
+        <span id="progress-count"></span>
+      </div>
+      <!--
+        ★進み具合の幅は CSS（data-step）で決める。
+          style 属性で幅を書くと CSP の style-src 'self' に弾かれるため。
+      -->
+      <div class="progress__bar" role="progressbar" id="progress-bar"
+           aria-valuemin="1" aria-valuemax="12" aria-valuenow="1"
+           aria-label="入力の進み具合">
+        <div class="progress__fill" id="progress-fill" data-step="1"></div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="wrap">
+      <div id="alerts" role="status" aria-live="polite"></div>
+
+      <section class="card" aria-labelledby="step-title">
+        <h2 class="card__title" id="step-title"></h2>
+        <p class="card__lead" id="step-lead"></p>
+        <form id="step-form" novalidate autocomplete="off"></form>
+
+        <div class="stepnav">
+          <button type="button" class="btn btn--outline" id="btn-prev">前へ</button>
+          <button type="button" class="btn btn--primary" id="btn-next">次へ</button>
+        </div>
+      </section>
+
+      <div class="endrow">
+        <button type="button" class="btn btn--danger-quiet" id="btn-end">入力を終了する</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="savebar">
+    <div class="savebar__inner">
+      <span class="savestate" id="savestate" role="status" aria-live="polite"></span>
+      <div class="navrow">
+        <button type="button" class="btn btn--outline btn--small" id="btn-save">保存する</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="/assets/form.js"></script>
+</body>
+</html>

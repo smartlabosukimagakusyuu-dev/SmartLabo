@@ -94,14 +94,14 @@ final class Config
         if (!is_array($origins) || $origins === []) {
             $origins = ['https://intake.smartlaboworks.com'];
         }
+        $requireHttps = $pick('require_https', 'INTAKE_REQUIRE_HTTPS');
+        $requireHttps = $requireHttps === null ? true : (bool)$requireHttps;
+
         foreach ($origins as $o) {
-            if (!is_string($o) || strncmp($o, 'https://', 8) !== 0) {
+            if (!is_string($o) || !self::originAcceptable($o, $requireHttps)) {
                 throw new ConfigException('allowed_origins must be https');
             }
         }
-
-        $requireHttps = $pick('require_https', 'INTAKE_REQUIRE_HTTPS');
-        $requireHttps = $requireHttps === null ? true : (bool)$requireHttps;
 
         return new self(
             dbPath: (string)($pick('db_path', 'INTAKE_DB_PATH') ?? __DIR__ . '/../private/intake.sqlite'),
@@ -112,5 +112,25 @@ final class Config
             logPath: $pick('log_path', 'INTAKE_LOG_PATH'),
             requireHttps: $requireHttps,
         );
+    }
+
+    /**
+     * 許可オリジンとして受け付けてよいか。
+     *
+     * ★本番（`require_https` が真＝既定）は **https のみ**。
+     *   `require_https` を明示的に偽にしたローカル確認のときに限り、
+     *   **自分の端末（127.0.0.1 / ::1 / localhost）の http** だけを許す。
+     *   それ以外の http は、ローカル確認中であっても許さない。
+     */
+    public static function originAcceptable(string $origin, bool $requireHttps): bool
+    {
+        if (strncmp($origin, 'https://', 8) === 0) {
+            return true;
+        }
+        if ($requireHttps) {
+            return false;
+        }
+
+        return preg_match('#^http://(127\.0\.0\.1|localhost|\[::1\])(:\d{1,5})?$#', $origin) === 1;
     }
 }

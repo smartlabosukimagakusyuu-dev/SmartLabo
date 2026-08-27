@@ -6,6 +6,10 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# 店舗向けの画面（4C）。拡張子を出さずに配る
+RewriteRule ^start/?$ start.html [L]
+RewriteRule ^form/?$  form.html  [L]
+
 # すべての要求をフロントコントローラへ渡す（実ファイルは除く）
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -18,3 +22,22 @@ Options -Indexes
 <FilesMatch "(intake-config|\.example)\.php$">
     Require all denied
 </FilesMatch>
+
+# ------------------------------------------------------------------
+# 画面（HTML / CSS / JS）のヘッダー（SSOT §10.4 / §10.5）
+# ★API の応答ヘッダーは PHP 側（Http/Response.php）で付ける。ここは静的ファイル用。
+# ------------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "no-referrer"
+    Header always set Cache-Control "no-store, no-cache, must-revalidate"
+    Header always set Pragma "no-cache"
+    Header always set Strict-Transport-Security "max-age=31536000"
+
+    # 外部CDN・外部フォント・外部通信を許さない。自分自身だけ
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
+
+    # 検索結果へ出さない（SSOT §4.8）
+    Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+</IfModule>

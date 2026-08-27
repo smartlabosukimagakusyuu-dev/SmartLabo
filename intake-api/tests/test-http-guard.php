@@ -160,3 +160,91 @@ test('config: 許可オリジンに https 以外を設定できない', function
     }
     assertTrue($thrown, 'http のオリジンが許可されてしまう');
 });
+
+/* ------------------------------------------------------------------------
+ * Fetch Metadata（4C で追加）
+ *
+ * 同一オリジンの GET には Origin が付かず、画面は Referrer-Policy: no-referrer
+ * （SSOT §10.4）なので Referer も付かない。GET だけはこの経路でも受け付ける。
+ * ★POST は従来どおり Origin の厳格検査だけで守る（緩めない）。
+ * ---------------------------------------------------------------------- */
+
+test('guard: 同一オリジンの GET は Sec-Fetch-Site で受け付ける', function (): void {
+    [$k, , $secret] = withSession('HP-2026-0500');
+
+    $req = new \SmartLabo\Intake\Http\Request(
+        method: 'GET',
+        path: '/case',
+        headers: ['Sec-Fetch-Site' => 'same-origin', 'Sec-Fetch-Mode' => 'cors'],
+        body: '',
+        cookies: [Config::COOKIE_NAME => $secret],
+        isHttps: true,
+        clientIp: '203.0.113.10',
+    );
+
+    $res = $k->app->handle($req);
+    assertSame(200, $res->status, 'Origin も Referer も無い同一オリジンの GET が弾かれる');
+});
+
+test('guard: 他サイトからの GET は受け付けない', function (): void {
+    [$k, , $secret] = withSession('HP-2026-0501');
+
+    foreach (['cross-site', 'same-site', 'none', ''] as $site) {
+        $req = new \SmartLabo\Intake\Http\Request(
+            method: 'GET',
+            path: '/case',
+            headers: ['Sec-Fetch-Site' => $site, 'Sec-Fetch-Mode' => 'cors'],
+            body: '',
+            cookies: [Config::COOKIE_NAME => $secret],
+            isHttps: true,
+            clientIp: '203.0.113.10',
+        );
+        assertSame(403, $k->app->handle($req)->status, 'Sec-Fetch-Site=' . $site . ' が通ってしまう');
+    }
+});
+
+test('guard: URL直打ち・画面遷移の GET は受け付けない', function (): void {
+    [$k, , $secret] = withSession('HP-2026-0502');
+
+    $req = new \SmartLabo\Intake\Http\Request(
+        method: 'GET',
+        path: '/case',
+        headers: ['Sec-Fetch-Site' => 'same-origin', 'Sec-Fetch-Mode' => 'navigate'],
+        body: '',
+        cookies: [Config::COOKIE_NAME => $secret],
+        isHttps: true,
+        clientIp: '203.0.113.10',
+    );
+
+    assertSame(403, $k->app->handle($req)->status, '画面遷移としての取得が通ってしまう');
+});
+
+test('guard: POST は Sec-Fetch-Site だけでは通さない（緩めない）', function (): void {
+    [$k, , $secret] = withSession('HP-2026-0503');
+
+    foreach (['/answers/save', '/submit', '/session/logout', '/session/start'] as $path) {
+        $req = new \SmartLabo\Intake\Http\Request(
+            method: 'POST',
+            path: $path,
+            headers: ['Content-Type' => 'application/json', 'Sec-Fetch-Site' => 'same-origin'],
+            body: '{}',
+            cookies: [Config::COOKIE_NAME => $secret],
+            isHttps: true,
+            clientIp: '203.0.113.10',
+        );
+        assertSame(403, $k->app->handle($req)->status, $path . ' が Origin 無しで通ってしまう');
+    }
+});
+
+test('guard: Sec-Fetch-Site が無くても、従来の Origin 検査は効く', function (): void {
+    [$k, , $secret] = withSession('HP-2026-0504');
+
+    $ok = $k->app->handle(jsonGet('/case', ['cookies' => [Config::COOKIE_NAME => $secret]]));
+    assertSame(200, $ok->status, '従来の Origin 経由の GET が壊れている');
+
+    $ng = $k->app->handle(jsonGet('/case', [
+        'cookies' => [Config::COOKIE_NAME => $secret],
+        'origin'  => 'https://evil.example',
+    ]));
+    assertSame(403, $ng->status, '許可外オリジンが通ってしまう');
+});
