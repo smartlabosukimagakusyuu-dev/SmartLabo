@@ -1104,6 +1104,8 @@ test('export: allowlist の外側が1つも出ない（マーカーで実測）'
     $sid = newSubmissionId();
     $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => completeSections()], $cookies));
     $k->app->handle(jsonPost('/submit', ['submission_id' => $sid], $cookies));
+    // ★4F-R3: 書き出しには Smart Labo の制作設定も要る（SSOT v1.9 §3.12）
+    setAdminSettings($k, $caseId);
 
     $login = loginAdmin($k);
     $k->app->handle(revisionPost('HP-2026-0990', ['basic.legal_name'], (string)$login['csrf'],

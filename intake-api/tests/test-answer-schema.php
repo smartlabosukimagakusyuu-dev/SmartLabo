@@ -29,22 +29,48 @@ const UNK_MARKER = 'UNKNOWNKEYMARK0001';
  */
 function everyPathSections(): array
 {
-    $value = static function (array $node) use (&$value): mixed {
+    // ★語彙が決まっている項目は、正式な値を使う（4F-R3 で語彙検査を入れたため）
+    $value = static function (array $node, string $path) use (&$value): mixed {
+        $allowed = AnswerSchema::ENUMS[$path] ?? null;
+
         return match ($node['type']) {
-            'scalar'  => '架空の値',
+            'scalar'  => $allowed === null ? '架空の値' : $allowed[0],
             'bool'    => true,
-            'list'    => ['架空1', '架空2'],
-            'object'  => array_map($value, $node['fields']),
-            'objects' => [array_map($value, $node['item'])],
+            'list'    => $allowed === null ? ['架空1', '架空2'] : [$allowed[0]],
+            'object'  => (static function () use ($node, $path, $value): array {
+                $out = [];
+                foreach ($node['fields'] as $key => $child) {
+                    $out[$key] = $value($child, $path . '.' . $key);
+                }
+
+                return $out;
+            })(),
+            'objects' => [(static function () use ($node, $path, $value): array {
+                $out = [];
+                foreach ($node['item'] as $key => $child) {
+                    $out[$key] = $value($child, $path . '.' . $key);
+                }
+
+                return $out;
+            })()],
             default   => null,
         };
     };
 
     $out = [];
     foreach (AnswerSchema::STRUCTURE as $name => $node) {
-        $out[$name] = $node['type'] === 'objects'
-            ? [array_map($value, $node['item'])]
-            : array_map($value, $node['fields']);
+        $bag = $node['type'] === 'objects' ? $node['item'] : $node['fields'];
+        // ★Smart Labo 設定（§3.12）は店舗から送れない。除いて組み立てる
+        $bag = array_filter(
+            $bag,
+            static fn (string $key): bool => !in_array($name . '.' . $key, AnswerSchema::ADMIN_PATHS, true),
+            ARRAY_FILTER_USE_KEY
+        );
+        $row = [];
+        foreach ($bag as $key => $child) {
+            $row[$key] = $value($child, $name . '.' . $key);
+        }
+        $out[$name] = $node['type'] === 'objects' ? [$row] : $row;
     }
 
     return $out;
@@ -82,19 +108,31 @@ function rawSection(object $k, int $caseId, string $section): array
 
 /* ==================================================== 生成物との一致 */
 
-test('schema: 生成物が 11分類・129パスで、手書きの一覧と一致する', function (): void {
+test('schema: 生成物が 11分類・134パスで、手書きの一覧と一致する', function (): void {
     assertSame(11, count(AnswerSchema::SECTIONS), '分類が11個でない');
-    assertSame(129, count(AnswerSchema::PATHS), 'パスが129件でない');
+    // 134 = 店舗 129 ＋ Smart Labo 設定 5（4F-R3 / SSOT v1.9 §3.12）
+    assertSame(134, count(AnswerSchema::PATHS), 'パスが134件でない');
+    assertSame(129, count(AnswerSchema::STORE_PATHS), '店舗パスが129件でない');
+    assertSame(5, count(AnswerSchema::ADMIN_PATHS), '管理パスが5件でない');
     assertSame(AnswerSchema::SECTIONS, Migrator::ANSWER_SECTIONS, '分類名または順序が DB 側と違う');
     assertSame(AnswerSchema::PATHS, AnswerPaths::ALL, 'AnswerPaths が生成物と食い違っている');
     assertSame(array_keys(AnswerSchema::STRUCTURE), AnswerSchema::SECTIONS, '構造の分類が一致しない');
 });
 
-test('schema: 必須22パスが正式パスの部分集合である', function (): void {
-    assertSame(22, count(AnswerService::REQUIRED_PATHS), '必須が22件でない');
+test('schema: 必須は生成物を指すだけで、手書きの一覧を持たない', function (): void {
+    // ★4F-R2 で見つかった食い違い（SSOT 39 / 実装 22）の再発を防ぐ
+    assertSame(39, count(AnswerSchema::STORE_REQUIRED_NON_EMPTY), '必須が39件でない');
+    assertSame(AnswerSchema::STORE_REQUIRED_NON_EMPTY, AnswerService::REQUIRED_PATHS,
+        'AnswerService が生成物を指していない');
 
     $unknown = array_values(array_diff(AnswerService::REQUIRED_PATHS, AnswerSchema::PATHS));
     assertSame([], $unknown, '必須に正式パス以外がある: ' . implode(', ', $unknown));
+
+    // 手書きの配列が復活していないこと
+    $php = stripPhpComments((string)file_get_contents(__DIR__ . '/../src/Service/AnswerService.php'));
+    assertTrue(str_contains($php, 'REQUIRED_PATHS = AnswerSchema::STORE_REQUIRED_NON_EMPTY'),
+        'REQUIRED_PATHS が生成物を参照していない');
+    assertTrue(preg_match("/REQUIRED_PATHS = \[/", $php) !== 1, '手書きの必須配列が残っている');
 });
 
 test('schema: schema.js の項目がすべて構造へ入っている', function (): void {
@@ -171,7 +209,7 @@ test('schema: 生成物であることが本文に書いてある（手編集を
 
 /* ==================================================== 正常保存 */
 
-test('save: 129パスすべてを埋めた回答を保存できる', function (): void {
+test('save: 店舗パスすべてを埋めた回答を保存できる', function (): void {
     [$k, $caseId, $cookies] = schemaCase('HP-202608-9300');
 
     $res = saveSections($k, $cookies, everyPathSections());
@@ -182,7 +220,7 @@ test('save: 129パスすべてを埋めた回答を保存できる', function ()
     // 129パスがすべて往復する
     $sections = $k->answers->get($caseId)['sections'];
     $missing  = [];
-    foreach (AnswerSchema::PATHS as $path) {
+    foreach (AnswerSchema::STORE_PATHS as $path) {
         if (!str_contains($path, '.')) {
             continue;
         }
@@ -383,6 +421,7 @@ function legacyUnknownCase(string $number): array
     $cookies = ['cookies' => [Config::COOKIE_NAME => $secret]];
 
     $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => completeSections()], $cookies));
+    setAdminSettings($k, $caseId);
 
     // ★保存 API を通さずに直接埋め込む（いまの API では入らないため）
     $basic = rawSection($k, $caseId, 'basic');

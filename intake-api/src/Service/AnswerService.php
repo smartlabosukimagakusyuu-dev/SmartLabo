@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace SmartLabo\Intake\Service;
 
 use SmartLabo\Intake\Db;
+use SmartLabo\Intake\AnswerSchema;
 use SmartLabo\Intake\Migrator;
 use SmartLabo\Intake\Support\Clock;
 
@@ -29,17 +30,17 @@ final class AnswerService
     /** 1分類あたりのエンコード後の上限バイト（body 1MB の内訳として） */
     public const SECTION_MAX_BYTES = 262144;
 
-    /** 提出に必要な条件。値ではなく**パスのみ**を返す */
-    public const REQUIRED_PATHS = [
-        'basic.legal_name', 'basic.operator_name', 'basic.postal_code', 'basic.address',
-        'basic.access_text', 'basic.description', 'basic.payment_methods', 'basic.booking_methods',
-        'business_hours.weekly', 'business_hours.closed_note',
-        'menus', 'promotion.strengths', 'promotion.customer_profile', 'promotion.problems',
-        'promotion.recommended_menus', 'promotion.concept',
-        'design.template', 'design.tone', 'design.hero_message',
-        'web_links.contact_methods',
-        'image_metadata', 'rights.confirmations',
-    ];
+    /**
+     * 提出に必要な条件（SSOT v1.9 §3.0.2）。
+     *
+     * ★**生成物**を参照するだけにする。ここへ一覧を手で書かない。
+     *   v1.8 まではこのファイルに22件を書き写しており、
+     *   SSOT §3 が必須と定める39件と食い違っていた（4F-R2 で判明）。
+     *   同じものを2か所に置けば、いつか片方だけが古くなる。
+     *
+     * @var list<string>
+     */
+    public const REQUIRED_PATHS = AnswerSchema::STORE_REQUIRED_NON_EMPTY;
 
     /** 写真の最低枚数（SSOT §3.10 / 仕様書 §12.3） */
     public const MIN_IMAGES = 8;
@@ -99,7 +100,8 @@ final class AnswerService
         //   **要求そのものを拒否**する。黙って捨てて保存しない（SSOT v1.8 §3.0-9）。
         //   トランザクションへ入る前に判定するので、DBは1バイトも変わらない。
         //   ★どのキーが不正だったかは返さない（内部の一覧を推測させない）。
-        if (AnswerValidator::check($sections)['ok'] !== true) {
+        //   ★店舗は Smart Labo 設定（§3.12）を書けない。混ざっていたら丸ごと拒否する。
+        if (AnswerValidator::check($sections, AnswerValidator::AUDIENCE_STORE)['ok'] !== true) {
             return ['ok' => false, 'error' => 'bad_request'];
         }
 
@@ -119,11 +121,21 @@ final class AnswerService
             }
         }
 
+        // ★店舗は分類をまるごと送ってくる。素直に上書きすると
+        //   Smart Labo 設定（§3.12）が毎回消えるので、保存済みの分を残す。
+        $current = $this->get($caseId)['sections'];
+
         $set    = ['version = version + 1', 'updated_at = :now'];
         $params = [':now' => $this->clock->iso(), ':id' => $caseId, ':version' => $clientVersion];
         foreach ($sections as $name => $value) {
-            $set[]                      = $name . '_json = :' . $name;
-            $params[':' . $name]        = json_encode($value, JSON_UNESCAPED_UNICODE);
+            $merged = AnswerValidator::mergeKeeping(
+                $current[$name] ?? [],
+                (array)$value,
+                AnswerValidator::AUDIENCE_STORE,
+                $name
+            );
+            $set[]               = $name . '_json = :' . $name;
+            $params[':' . $name] = json_encode($merged, JSON_UNESCAPED_UNICODE);
         }
 
         $stmt = $this->db->pdo()->prepare(
@@ -141,6 +153,240 @@ final class AnswerService
         return ['ok' => true, 'version' => $clientVersion + 1];
     }
 
+    /* ============================================ 必須の評価（4F-R3） */
+
+    /**
+     * 値が「回答済み」か。
+     *
+     * ★SSOT §3.0-4 のとおり、**未入力は `null` / `""` / `[]`**。
+     *   `false` はここに入らない。真偽の項目では `false` も**回答**である。
+     */
+    private static function isAnswered(mixed $value, string $type): bool
+    {
+        if ($type === 'bool') {
+            return is_bool($value);           // ★null も文字列も数値も回答ではない
+        }
+        if ($value === null) {
+            return false;
+        }
+        if (is_string($value)) {
+            return trim($value) !== '';       // enum の未選択（""）も未回答
+        }
+        if (is_array($value)) {
+            return $value !== [];
+        }
+
+        return true;
+    }
+
+    /**
+     * 正式パスの型を構造から引く（`basic.parking.type` のような子キーも辿る）。
+     * @return array{0:string,1:array<string,mixed>} [型, ノード]
+     */
+    private static function nodeOf(string $path): array
+    {
+        $parts   = explode('.', $path);
+        $section = array_shift($parts);
+        $node    = AnswerSchema::STRUCTURE[$section] ?? ['type' => 'object', 'fields' => []];
+
+        foreach ($parts as $part) {
+            $bag  = $node['fields'] ?? $node['item'] ?? [];
+            $node = $bag[$part] ?? ['type' => 'scalar'];
+        }
+
+        return [$node['type'], $node];
+    }
+
+    /**
+     * 正式パスの値を集める。
+     *
+     * ★途中に配列（`objects`）があれば、要素ごとに枝分かれする。
+     *   `menus.name` は「全メニューの name」を意味する。
+     *
+     * @param array<string,mixed> $sections
+     * @return list<array{0:string,1:mixed,2:bool}> [表示用パス, 値, キーが存在したか]
+     */
+    private static function collect(array $sections, string $path): array
+    {
+        $parts   = explode('.', $path);
+        $section = array_shift($parts);
+        $node    = AnswerSchema::STRUCTURE[$section] ?? null;
+        if ($node === null) {
+            return [];
+        }
+
+        $cursors = [[$section, $sections[$section] ?? null, array_key_exists($section, $sections)]];
+
+        foreach ($parts as $part) {
+            $next = [];
+            foreach ($cursors as [$label, $value, $exists]) {
+                if ($node['type'] === 'objects') {
+                    // 配列。要素ごとに分かれる
+                    foreach (is_array($value) ? $value : [] as $i => $row) {
+                        $next[] = [
+                            $label . '[' . (int)$i . '].' . $part,
+                            is_array($row) ? ($row[$part] ?? null) : null,
+                            is_array($row) && array_key_exists($part, $row),
+                        ];
+                    }
+                    continue;
+                }
+                $next[] = [
+                    $label . '.' . $part,
+                    is_array($value) ? ($value[$part] ?? null) : null,
+                    is_array($value) && array_key_exists($part, $value),
+                ];
+            }
+            $bag     = $node['fields'] ?? $node['item'] ?? [];
+            $node    = $bag[$part] ?? ['type' => 'scalar'];
+            $cursors = $next;
+        }
+
+        return $cursors;
+    }
+
+    /**
+     * 指定した必須集合を評価して、不足パスを返す。
+     *
+     * ★返すのは**パスだけ**。値・氏名・連絡先は返さない。
+     *
+     * @param array<string,mixed> $sections
+     * @param list<string> $nonEmpty  値が入っていること
+     * @param list<string> $keyOnly   キーが存在すること（正式な空値を認める）
+     * @param list<string> $elements  配列要素・object の子キー
+     * @return list<string>
+     */
+    private static function missingFor(array $sections, array $nonEmpty, array $keyOnly, array $elements = []): array
+    {
+        $missing = [];
+
+        foreach ($nonEmpty as $path) {
+            [$type] = self::nodeOf($path);
+            foreach (self::collect($sections, $path) as [$label, $value, $exists]) {
+                if (!$exists || !self::isAnswered($value, $type)) {
+                    $missing[] = $label;
+                }
+            }
+        }
+
+        foreach ($keyOnly as $path) {
+            [$type] = self::nodeOf($path);
+            foreach (self::collect($sections, $path) as [$label, $value, $exists]) {
+                // ★キーがあることが条件。ただし真偽の項目は型まで見る
+                //   （`"false"` や `0` や `null` を回答として通さない）。
+                //   判定は isAnswered() ひとつに寄せる。同じ規則を2か所に書かない。
+                if (!$exists || ($type === 'bool' && !self::isAnswered($value, 'bool'))) {
+                    $missing[] = $label;
+                }
+            }
+        }
+
+        // 配列要素・object の子キー。★要素が無ければ何も要求しない
+        foreach ($elements as $path) {
+            [$type] = self::nodeOf($path);
+            foreach (self::collect($sections, $path) as [$label, $value, $exists]) {
+                // ★真偽なら `false` も回答（isAnswered が判断する）。
+                //   それ以外は「値が入っていること」。
+                if (!$exists || !self::isAnswered($value, $type)) {
+                    $missing[] = $label;
+                }
+            }
+        }
+
+        return $missing;
+    }
+
+    /**
+     * Smart Labo が書き出し前に設定する項目の不足（SSOT v1.9 §3.0.2）。
+     *
+     * ★店舗の提出は妨げない。書き出しの直前にだけ効く。
+     * ★「設定した」＝キーが存在すること。該当が無い場合も明示的に記録する。
+     *
+     * @return list<string>
+     */
+    public function missingAdminSettings(int $caseId): array
+    {
+        $sections = $this->get($caseId)['sections'];
+        $missing  = [];
+
+        foreach (AnswerSchema::ADMIN_REQUIRED_FOR_EXPORT as $path) {
+            [$type] = self::nodeOf($path);
+            foreach (self::collect($sections, $path) as [$label, $value, $exists]) {
+                if (!$exists || ($type === 'bool' && !self::isAnswered($value, 'bool'))) {
+                    $missing[] = $label;
+                }
+            }
+        }
+
+        return $missing;
+    }
+
+    /**
+     * Smart Labo 管理設定の現在値（管理画面の表示用）。
+     * ★店舗の回答は返さない。管理パスだけを取り出す。
+     *
+     * @return array<string,array<string,mixed>>
+     */
+    public function adminSettings(int $caseId): array
+    {
+        $sections = $this->get($caseId)['sections'];
+        $out      = [];
+
+        foreach (AnswerSchema::ADMIN_PATHS as $path) {
+            [$section, $key] = explode('.', $path, 2);
+            if (is_array($sections[$section] ?? null) && array_key_exists($key, $sections[$section])) {
+                $out[$section][$key] = $sections[$section][$key];
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Smart Labo 管理設定を保存する（§3.12 / 代表判断 Q4）。
+     *
+     * ★店舗の回答には触れない。管理パス以外のキーが来たら**丸ごと拒否**する。
+     * ★呼べるのは管理画面だけ（認証・CSRF・Origin は呼び出し側で検査する）。
+     *
+     * @param array<string,mixed> $sections
+     * @return array{ok:bool,error?:string}
+     */
+    public function saveAdminSettings(int $caseId, array $sections): array
+    {
+        if ($sections === []) {
+            return ['ok' => false, 'error' => 'bad_request'];
+        }
+        if (AnswerValidator::check($sections, AnswerValidator::AUDIENCE_ADMIN)['ok'] !== true) {
+            return ['ok' => false, 'error' => 'bad_request'];
+        }
+
+        $current = $this->get($caseId)['sections'];
+        $names   = [];
+        $params  = [':id' => $caseId, ':now' => $this->clock->iso()];
+
+        foreach ($sections as $name => $value) {
+            // ★店舗の回答は1バイトも触らない。管理パスだけを差し替える
+            $merged = AnswerValidator::mergeKeeping(
+                $current[$name] ?? [],
+                (array)$value,
+                AnswerValidator::AUDIENCE_ADMIN,
+                $name
+            );
+            $names[]                 = $name . '_json = :' . $name;
+            $params[':' . $name]     = json_encode($merged, JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->db->pdo()->prepare(
+            'UPDATE intake_answers SET ' . implode(', ', $names) . ', updated_at = :now
+              WHERE intake_case_id = :id'
+        )->execute($params);
+
+        // ★値を書かない。設定したという事実だけ
+        $this->audit->record($caseId, 'admin_settings_saved', 'ok');
+
+        return ['ok' => true];
+    }
+
     /**
      * 提出に必要な条件を評価する。
      * ★不足は**パスのみ**を返す（値・氏名・連絡先を返さない）。
@@ -148,39 +394,17 @@ final class AnswerService
      */
     public function evaluate(int $caseId): array
     {
-        $s       = $this->get($caseId)['sections'];
-        $missing = [];
+        $s = $this->get($caseId)['sections'];
 
-        $filled = static function (mixed $v): bool {
-            if (is_string($v)) {
-                return trim($v) !== '';
-            }
-            if (is_array($v)) {
-                return $v !== [];
-            }
-
-            return $v !== null;
-        };
-
-        $req = static function (string $path) use ($s, $filled, &$missing): void {
-            $parts = explode('.', $path);
-            $value = $s;
-            foreach ($parts as $part) {
-                if (!is_array($value) || !array_key_exists($part, $value)) {
-                    $missing[] = $path;
-
-                    return;
-                }
-                $value = $value[$part];
-            }
-            if (!$filled($value)) {
-                $missing[] = $path;
-            }
-        };
-
-        foreach (self::REQUIRED_PATHS as $path) {
-            $req($path);
-        }
+        // ★必須の一覧は**生成物**から来る（SSOT v1.9 §3.0.2）。
+        //   画面・API・管理画面・書き出しが同じ集合を見るので、
+        //   「画面では止まるのに API では通る」状態が作れない。
+        $missing = self::missingFor(
+            $s,
+            AnswerSchema::STORE_REQUIRED_NON_EMPTY,
+            AnswerSchema::STORE_REQUIRED_KEY_ALLOW_EMPTY,
+            AnswerSchema::ARRAY_ELEMENT_REQUIRED,
+        );
 
         // 営業時間は7曜日ぶん
         $weekly = $s['business_hours']['weekly'] ?? null;

@@ -80,7 +80,8 @@ test('修正依頼: サーバーの正式パスをすべて言い換えられる
     for (const f of s.fields) all.push(`${s.key}.${f.path}`);
   }
 
-  assertSame(129, all.length, '正式パスの件数が想定と違う');
+  // 134 = 店舗 129 ＋ Smart Labo 設定 5（4F-R3 / SSOT v1.9 §3.12）
+  assertSame(134, all.length, '正式パスの件数が想定と違う');
 
   for (const path of all) {
     const [d] = describeAllMissing([path]);

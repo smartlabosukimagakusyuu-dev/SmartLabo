@@ -157,6 +157,25 @@ function newSubmissionId(): string
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($b), 4));
 }
 
+/**
+ * Smart Labo の制作設定（SSOT v1.9 §3.12）を埋める。
+ *
+ * ★4F-R3 から、書き出しは店舗の提出条件に加えて**この5件**も要求する。
+ *   店舗の提出そのものは、これが無くても通る。
+ */
+function setAdminSettings(object $k, int $caseId): void
+{
+    $k->answers->saveAdminSettings($caseId, [
+        'web_links' => ['salon_booking_url' => null],
+        'privacy'   => [
+            'destination'       => '架空の送信先',
+            'storage'           => '架空の保管方法',
+            'external_services' => [],
+            'consent_checkbox'  => true,
+        ],
+    ]);
+}
+
 /** 提出条件を満たす完全な回答（架空データのみ） */
 function completeSections(): array
 {
@@ -197,11 +216,17 @@ function completeSections(): array
             'payment_methods'  => ['cash'],
             'booking_methods'  => ['web'],
             'internal_contact' => ['phone' => '03-0000-0000', 'email' => 'internal@example.invalid'],
+            // ★4F-R3: SSOT §3 が必須と定める項目をすべて満たす
+            'address_visibility' => 'full',
+            'parking'            => ['type' => 'own', 'note' => '2台'],
         ],
-        'business_hours' => ['weekly' => $weekly, 'closed_note' => '毎週月曜'],
+        'business_hours' => [
+            'weekly' => $weekly, 'closed_note' => '毎週月曜', 'irregular_notice' => 'none',
+        ],
         'menus'          => [[
             'name' => 'カット', 'price_type' => 'fixed', 'price_inc_tax' => 5500,
             'tax_type' => 'inc', 'published' => true, 'bookable' => true,
+            'first_time_only' => false, 'limited_period' => false,
         ]],
         'staff'      => [],
         'promotion'  => [
@@ -211,11 +236,19 @@ function completeSections(): array
             'recommended_menus' => ['カット'],
             'concept'           => '架空のコンセプト',
             'exclusions'        => 'なし',
+            'forbidden_expressions' => 'なし',
         ],
-        'design'         => ['template' => 'beauty', 'tone' => ['シンプル'], 'hero_message' => '架空のメッセージ'],
-        'web_links'      => ['contact_methods' => ['phone']],
+        'design'         => [
+            'template' => 'beauty', 'tone' => ['シンプル'], 'hero_message' => '架空のメッセージ',
+            'logo' => 'none', 'emphasis' => 'photo',
+        ],
+        'web_links'      => ['contact_methods' => ['phone'], 'map_display' => 'show'],
         'contact_form'   => ['enabled' => false],
-        'privacy'        => ['collected_data' => ['name'], 'purpose' => '架空の目的'],
+        'privacy'        => [
+            'collected_data' => ['name'], 'purpose' => '架空の目的',
+            'retention' => '1年', 'third_party' => 'none',
+            'contact_window' => '架空の窓口', 'marketing_use' => 'no',
+        ],
         'image_metadata' => $images,
         'rights'         => ['confirmations' => $confirmations, 'agreed_by' => '架空 担当者'],
     ];

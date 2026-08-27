@@ -24,6 +24,8 @@
  *   GET  /admin/maintenance   監査13か月削除・管理session清掃の件数表示（4F）
  *   POST /admin/maintenance/audit    監査の13か月削除
  *   POST /admin/maintenance/sessions 期限切れ管理sessionの削除
+ *   GET  /admin/settings      制作設定（Smart Labo 入力・4F-R3）
+ *   POST /admin/settings/save 制作設定の保存
  *   GET  /admin/export   検証済み JSON のダウンロード
  *
  * 守ること:
@@ -60,6 +62,12 @@ final class AdminApp
     private const MSG_FORBIDDEN    = 'この操作は許可されていません。';
     private const MSG_NOT_FOUND    = 'この画面は表示できません。';
     private const MSG_CONFLICT     = '別の操作で状態が変わっています。最新の内容をご確認ください。';
+
+    /**
+     * Smart Labo の制作設定を変更してよい案件状態（SSOT v1.9 §3.12）。
+     * ★店舗の確認が済んでから設定する。`closed` / 削除済みは変更しない。
+     */
+    private const SETTABLE_STATUSES = ['reviewed', 'locked'];
 
     public function __construct(
         private readonly Config $config,
@@ -114,6 +122,8 @@ final class AdminApp
             '/admin/maintenance'  => $this->maintenance($req),
             '/admin/maintenance/audit'    => $this->purgeAudit($req),
             '/admin/maintenance/sessions' => $this->purgeAdminSessions($req),
+            '/admin/settings'      => $this->settingsForm($req),
+            '/admin/settings/save' => $this->saveSettings($req),
             default         => Response::html(
                 View::page('表示できません', View::notice('error', self::MSG_NOT_FOUND), false),
                 404
@@ -296,6 +306,13 @@ final class AdminApp
 
         $body = $notice
             . $this->summarySection($case, $evaluation, $csrf, $status)
+            // ★店舗回答の不足と、Smart Labo 設定の不足は**別々に**出す（4F-R3）。
+            //   混ぜると「店舗へ差し戻すべきか」の判断ができなくなる。
+            . View::adminSettingsStatus(
+                (string)$case['case_number'],
+                $this->answers->missingAdminSettings($caseId),
+                in_array($status, self::SETTABLE_STATUSES, true),
+            )
             . $this->revisionSection($caseId)
             . $this->missingSection($evaluation)
             . $this->answersSection($answers['sections'])
@@ -320,6 +337,7 @@ final class AdminApp
             'due_invalid' => View::notice('warn', '削除予定日を登録できませんでした。'
                 . 'YYYY-MM-DD の実在する日付を、確定済み以降の案件にご入力ください。'),
             'purged'      => View::notice('ok', '機密情報を削除しました。この操作は元に戻せません。'),
+            'settings'    => View::notice('ok', '制作設定を保存しました。'),
             'conflict'    => View::notice('warn', self::MSG_CONFLICT),
             'invalid'     => View::notice('warn', 'その操作はこの状態では行えません。'),
             default       => '',
@@ -372,10 +390,13 @@ final class AdminApp
         }
 
         // 書き出しは提出済み以降かつ必須充足のときだけ出す
-        $exportable = in_array($status, ExportService::EXPORTABLE, true) && $complete;
+        $adminReady = $this->answers->missingAdminSettings((int)$case['id']) === [];
+        $exportable = in_array($status, ExportService::EXPORTABLE, true) && $complete && $adminReady;
         $exportHtml = $exportable
             ? '<a class="btn btn--outline" href="/admin/export?case=' . rawurlencode($number) . '">検証済みJSONを書き出す</a>'
-            : '<span class="muted">必須項目が満たされるまで書き出せません</span>';
+            : '<span class="muted">' . ($complete
+                ? '制作設定が揃うまで書き出せません'
+                : '店舗の必須項目が満たされるまで書き出せません') . '</span>';
 
         return '<section class="card">'
             . '<h1 class="card__title">' . View::esc($number) . '</h1>'
@@ -447,7 +468,7 @@ final class AdminApp
             $items .= '<li>' . View::esc($path) . '</li>';
         }
 
-        return '<section class="card"><h2 class="card__title">不足項目</h2>'
+        return '<section class="card"><h2 class="card__title">店舗回答の不足項目</h2>'
             . '<ul class="list">' . $items . '</ul></section>';
     }
 
@@ -1310,6 +1331,134 @@ final class AdminApp
             )),
             403
         );
+    }
+
+    /* ------------------------------------------------ Smart Labo 設定（4F-R3） */
+
+    /**
+     * 制作設定の入力画面（GET）。★ここでは何も変えない。
+     *
+     * SSOT v1.9 §3.12 の「Smart Labo が入力する」項目だけを扱う。
+     * 店舗の回答欄と**同じ画面に混ぜない**。
+     */
+    private function settingsForm(Request $req, string $message = ''): Response
+    {
+        [$session, $fail] = $this->requireSession($req, 'GET');
+        if ($fail !== null) {
+            return $fail;
+        }
+
+        $case = $this->cases->findByNumber((string)($req->query['case'] ?? ''));
+        if ($case === null || $case['deleted_at'] !== null) {
+            return $this->notFound();
+        }
+        if (!in_array((string)$case['status'], self::SETTABLE_STATUSES, true)) {
+            return Response::html(
+                View::page('設定できません', View::notice(
+                    'warn',
+                    'この案件は、いまの状態では制作設定を変更できません。'
+                    . '店舗の確認が済んでから設定してください。'
+                )),
+                409
+            );
+        }
+
+        $csrf   = $this->auth->rotateCsrf((int)$session['id']);
+        $notice = $message === '' ? '' : View::notice('error', $message);
+
+        return Response::html(View::page('制作設定', $notice . View::adminSettingsForm(
+            (string)$case['case_number'],
+            $this->answers->adminSettings((int)$case['id']),
+            $this->answers->missingAdminSettings((int)$case['id']),
+            $csrf,
+        )), $message === '' ? 200 : 400);
+    }
+
+    /**
+     * 制作設定を保存する（POST）。
+     *
+     * ★店舗の回答には触れない（AnswerService 側で保存済みの値を残す）。
+     * ★値をログにも監査にも出さない。残すのは案件番号と結果だけ。
+     */
+    private function saveSettings(Request $req): Response
+    {
+        [$session, $fail] = $this->requirePostSession($req);
+        if ($fail !== null) {
+            return $fail;
+        }
+        $this->auth->rotateCsrf((int)$session['id']);
+
+        $form   = $req->formFields();
+        $number = (string)($form['case'] ?? '');
+        $case   = $this->cases->findByNumber($number);
+        if ($case === null || $case['deleted_at'] !== null) {
+            return $this->notFound();
+        }
+        if (!in_array((string)$case['status'], self::SETTABLE_STATUSES, true)) {
+            return Response::html(
+                View::page('設定できません', View::notice('warn', 'この案件は、いまの状態では制作設定を変更できません。')),
+                409
+            );
+        }
+
+        // 誤操作防止: 案件番号の再入力が完全一致すること
+        if (!hash_equals($number, (string)($form['confirm_case'] ?? ''))) {
+            return $this->settingsForm(
+                $this->sameOriginGet('/admin/settings', ['case' => $number], $req),
+                '案件番号が一致しません。もう一度ご確認ください。'
+            );
+        }
+
+        // 同意チェックの表示は真偽。空のままは受け付けない
+        $consent = (string)($form['consent_checkbox'] ?? '');
+        if (!in_array($consent, ['true', 'false'], true)) {
+            return $this->settingsForm(
+                $this->sameOriginGet('/admin/settings', ['case' => $number], $req),
+                '同意チェックの表示は「表示する」「表示しない」のどちらかをお選びください。'
+            );
+        }
+
+        $services = [];
+        foreach (preg_split('/\r\n|\r|\n/', (string)($form['external_services'] ?? '')) ?: [] as $line) {
+            $line = trim($line);
+            if ($line !== '') {
+                $services[] = $line;
+            }
+        }
+
+        $trimOrNull = static function (mixed $value): ?string {
+            $text = trim((string)$value);
+
+            return $text === '' ? null : $text;
+        };
+
+        $result = $this->answers->saveAdminSettings((int)$case['id'], [
+            'web_links' => [
+                'salon_booking_url' => $trimOrNull($form['salon_booking_url'] ?? ''),
+            ],
+            'privacy' => [
+                'destination'       => $trimOrNull($form['destination'] ?? ''),
+                'storage'           => $trimOrNull($form['storage'] ?? ''),
+                'external_services' => $services,
+                'consent_checkbox'  => $consent === 'true',
+            ],
+        ]);
+
+        if ($result['ok'] !== true) {
+            return $this->settingsForm(
+                $this->sameOriginGet('/admin/settings', ['case' => $number], $req),
+                '設定を保存できませんでした。入力内容をご確認ください。'
+            );
+        }
+
+        // ★設定値そのものはログへ出さない
+        $this->logger->info('admin_settings_saved', [
+            'case_number' => $number,
+            'result_code' => 'ok',
+            'http_status' => 303,
+        ]);
+
+        return Response::redirect('/admin/case?case=' . rawurlencode($number) . '&msg=settings');
     }
 
     /* ------------------------------------------------------------ 書き出し */

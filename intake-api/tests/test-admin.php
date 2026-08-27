@@ -98,6 +98,10 @@ function submittedCase(object $k, string $caseNumber): array
     $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => completeSections()], $cookies));
     $k->app->handle(jsonPost('/submit', ['submission_id' => newSubmissionId()], $cookies));
 
+    // ★4F-R3: 書き出しには Smart Labo の制作設定も要る（SSOT v1.9 §3.12）。
+    //   ゲートそのものを見るテストは、別途 makeKernel() から組み立てている。
+    setAdminSettings($k, $caseId);
+
     return [$caseId, $cookies];
 }
 

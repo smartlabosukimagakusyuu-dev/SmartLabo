@@ -1,9 +1,9 @@
 # 店舗向けHP導入フォーム データモデル・token設計 v1
 
 ```text
-STATUS      : APPROVED / 4F-R1 実装済み（受付API・店舗入力画面・内部確認画面・運用フロー・保持削除）
-VERSION     : v1.8（R8）
-DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.8 改定）
+STATUS      : APPROVED / 4F-R3 実装済み（受付API・店舗入力画面・内部確認画面・運用フロー・保持削除）
+VERSION     : v1.9（R9）
+DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.9 改定）
 工程        : HP-ONBOARDING-4A ／ -4A-R1（AI Sales 分離・Operations 境界確定）
               ／ -4B-PRE（XServer 実行環境の実測）／ -4A-R2（実測反映）
               ／ -4B（受付API 実装）／ -4B-R1（提出の冪等化）
@@ -12,7 +12,9 @@ DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.8 改定）
               ／ -4D-R2（ご案内リンクの再発行）／ -4E（セキュリティ総合検査）
               ／ -4F-PRE（本番前hardening・保持削除ライフサイクル）
               ／ -4F（架空店舗による全工程通し確認）
-              ／ **-4F-R1（回答JSONの厳格allowlist・操作領域48px・本改定）**
+              ／ -4F-R1（回答JSONの厳格allowlist・操作領域48px）
+              ／ -4F-R2（必須定義の差分調査・STOP）
+              ／ **-4F-R3（必須契約の統一・Smart Labo管理設定5項目・本改定）**
 本番環境    : XServer 共用（PHP 8.3.33 / **SQLite 3.26.0** / pdo_sqlite・OpenSSL・mbstring 有効）
               ★実測日 2026-08-27。**VACUUM INTO は使用不可**（§2.0.1・§9.6）
 対象        : intake.smartlaboworks.com（店舗向けHP導入フォーム）
@@ -357,7 +359,7 @@ Smart Labo Operations の完成前に契約が発生した場合、
 |---|---|---|---|
 | `id` | INTEGER PK AUTOINCREMENT | — | |
 | `intake_case_id` | INTEGER REFERENCES intake_cases(id) | 可 | token 不一致時など、案件を特定できない場合は NULL |
-| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加）<br>／ **`token_reissued`**（v1.6 で追加。§4.4.1）<br>／ **`retention_due_set` / `retention_purged` / `audit_purged` / `admin_sessions_purged`**（v1.7 で追加。§9.3） |
+| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加）<br>／ **`token_reissued`**（v1.6 で追加。§4.4.1）<br>／ **`retention_due_set` / `retention_purged` / `audit_purged` / `admin_sessions_purged`**（v1.7 で追加。§9.3）<br>／ **`admin_settings_saved`**（v1.9 で追加。§3.12。**設定値を書かない**） |
 | `result_code` | TEXT NOT NULL | 不可 | `ok` / `invalid` / `expired` / `revoked` / `not_found` / `rate_limited` / `conflict` |
 | `ip_hmac` | TEXT | 可 | **HMAC-SHA256(IP, ip_hash_secret) の先頭32文字**。生IPを保存しない |
 | `created_at` | TEXT NOT NULL | 不可 | |
@@ -623,6 +625,80 @@ allowlist を名乗る以上、中身まで検査する。
 | 4 | 一致（分類・パス・配列要素の許可キー・型）と**生成の冪等性**を自動テストで固定する |
 | 5 | 新しいビルドシステムや npm 依存を増やさない（Node の標準機能だけで生成する） |
 
+### 3.0.2 必須の種類（v1.9 で確定・4F-R3 で実装）
+
+v1.8 まで、実装が見ていた必須は **22件**だった。
+一方 §3 の各表が「必須」と記しているのは **39件**（本節の分類でいう
+`STORE_REQUIRED_NON_EMPTY`）である。通常の画面は45件を止めていたため
+気づけず、**API を直接呼べば17件を欠いたまま提出できた**（4F-R2 で判明）。
+
+原因は「必須」を1種類として扱っていたことにある。実際には、
+**誰が・いつまでに・何をもって満たすか**が項目ごとに違う。5種へ分ける。
+
+| 種別 | 意味 | 満たし方 |
+|---|---|---|
+| `STORE_REQUIRED_NON_EMPTY` | 店舗が**値を入れる／能動的に選ぶ** | `null` / `""` / `[]` は**未回答** |
+| `STORE_REQUIRED_KEY_ALLOW_EMPTY` | 店舗が**答えたことが分かる**必要がある | **キーの存在**が条件。正式な空値（`false` 等）を認める |
+| `ADMIN_REQUIRED_FOR_EXPORT` | Smart Labo が**書き出し前に**設定する | 店舗の提出は妨げない。§11.3 の直前に検査する |
+| `ARRAY_ELEMENT_REQUIRED` | 配列要素・object の**中で**満たす条件 | **要素があるときだけ**効く。配列自体の要否とは別 |
+| `OPTIONAL` | 欠落してよい | — |
+| `CONDITIONAL_REQUIRED` | §3 に条件が**明記されている**ものだけ | 条件が書かれていなければ使わない |
+
+**空値の扱い（型ごと）**
+
+| 型 | 未回答 | 正式な回答になりうる空 |
+|---|---|---|
+| string | `null` / `""` | — |
+| enum | `null` / `""` / 語彙外 | **正式な語彙**（`none` / `no` も、店舗が選べば回答） |
+| boolean | キーが無い／`null`／`"false"`／`0`／`1` | **`false`**（「しない」という回答） |
+| 配列 | `[]`（§3 が1件以上を求める場合） | `[]`（§3 が許す場合） |
+| object | キーが無い／`{}` | — （必須の子キーを満たすこと） |
+
+> ★`false` を「欠落」と同じ扱いにしない。
+> 「掲載しない」「予約を受けない」は**答えである**。
+> ★`null` は原則として未回答。真偽の項目では**回答として認めない**。
+
+**能動選択が必要な enum 7件（代表判断 Q3）**
+
+`basic.address_visibility` ／ `business_hours.irregular_notice` ／
+`privacy.third_party` ／ `privacy.marketing_use` ／
+`design.logo` ／ `design.emphasis` ／ `web_links.map_display`
+
+| # | 規則 |
+|---|---|
+| 1 | 画面の初期状態は「選択してください」。**既定の語彙を選択済みにしない** |
+| 2 | 未選択（`""`）を**正式値として保存しない** |
+| 3 | 店舗が選んだ**正式な語彙**だけを回答済みとする |
+| 4 | API を直接呼んでも同じ。キー欠落・空文字は未回答、語彙外は**保存そのものを拒否** |
+| 5 | 語彙そのものは変えない |
+| 6 | ★とくに `address_visibility` の `full`、`map_display` の `show` を**自動で選ばない**。<br>住所と地図を、本人の能動的な選択なしに公開側へ回さない |
+
+> ★§3 の各表の「空値」欄は、**未入力をどう表すか**を示すものであり、
+> 「既定値として入れてよい値」ではない。v1.8 まではこの2つを混同していた。
+
+**必須定義の唯一の実装元**
+
+| # | 規則 |
+|---|---|
+| 1 | 必須の一覧を **PHP へ手書きしない**。`schema.js` から機械生成する |
+| 2 | 生成物（`AnswerSchema`）が **STORE_REQUIRED_NON_EMPTY / STORE_REQUIRED_KEY_ALLOW_EMPTY /<br>ADMIN_REQUIRED_FOR_EXPORT / ARRAY_ELEMENT_REQUIRED / OPTIONAL_PATHS / ENUMS** を持つ |
+| 3 | **画面・API・管理画面・書き出しが同じ集合を見る**。別々に持たない |
+| 4 | 「画面では止まるのに API では通る」状態を作らない。その逆も作らない |
+| 5 | 一致と生成の冪等性を自動テストで固定する |
+
+**`promotion.industry` は Phase 1 の対象外（代表判断 Q1）**
+
+§3.5 の `promotion.industry`（業種別ブロック BT-01〜／WL-01〜 ほか）は、
+**Phase 2 以降**とする。Phase 1 では次のとおり扱う。
+
+| # | 扱い |
+|---|---|
+| 1 | 正式パス（134件）へ**含めない** |
+| 2 | 店舗画面・管理画面・DB の回答・書き出しへ**追加しない** |
+| 3 | Phase 1 の必須から**撤回**する |
+| 4 | 「任意項目」ではない。**Phase 1 対象外**である（実装しないことを明示する） |
+| 5 | 理由: 業種別14項目を足すと入力画面が大きく膨らむ。<br>Phase 1 の受付は `menus` / `staff` / `promotion` / `design` で必要情報を集められる。<br>実案件で不足を確認してから追加するほうが安全 |
+
 ### 3.1 basic_json（店舗基本情報）
 
 パス接頭辞 `basic.`
@@ -751,7 +827,11 @@ allowlist を名乗る以上、中身まで検査する。
 | `promotion.testimonials[]` | P-15 | 任意 | string[] | 各300 / **上限3** | 公開 | 条件付き | ESC+NL2BR | `[]` |
 | `promotion.testimonials_permitted` | P-16 | 条件付き | boolean | — | **内部** | **不可** | — | `false` |
 | `promotion.testimonials_permitted_date` | P-16 | 条件付き | string\|null | `YYYY-MM-DD` | **内部** | **不可** | — | `null` |
-| `promotion.industry` | §8 | 必須 | object | — | 混在 | 可 | — | `{}` |
+| ~~`promotion.industry`~~ | §8 | **Phase 2 以降**（v1.9） | object | — | 混在 | — | — | — |
+
+> ★**v1.9（代表判断 Q1）: `promotion.industry` は Phase 1 の対象外**である。
+> 正式パス134件に含めず、画面・DB・書き出しへも追加しない（§3.0.2）。
+> 下表は Phase 2 以降の参考として残す。
 
 `promotion.industry` は `design.template` に応じて1系統だけを持つ（他系統のキーを作らない）。
 
@@ -912,10 +992,34 @@ allowlist を名乗る以上、中身まで検査する。
 |---|---|---|
 | **店舗が入力** | §3.1〜§3.11 のうち「必須／任意／条件付き」の項目 | `intake_answers` |
 | **Smart Labo が入力** | `web_links.salon_booking_url`（W-05）／`privacy.destination`（PR-03）／`privacy.storage`（PR-04）／`privacy.external_services[]`（PR-07）／`privacy.consent_checkbox`（PR-09）／`image_metadata[].alt` の補完（IMG-05） | `intake_answers`（管理画面から） |
+| **正式パスの内訳**（v1.9） | 店舗 **129** ＋ Smart Labo 設定 **5** ＝ **134**。`promotion.industry` は含めない | — |
 | **Smart Labo が案件に持つ** | `case_number` / `contract_type` / `status` / Drive URL / 期限 | `intake_cases` |
 | **intake に持たない** | C-01〜C-16（契約・請求・Stripe参照）／公開承認 | **Smart Labo Operations 側**（未実装の間は §1.3 の標準管理票） |
 
 画面上でも、店舗入力欄と Smart Labo 設定欄は**同じ画面に混在させない**（4C で分ける）。
+
+**Smart Labo 設定5件の扱い（v1.9 で確定・代表判断 Q4）**
+
+| # | 規則 |
+|---|---|
+| 1 | 正式パスへ**追加する**（129 → 134）。保存先は既存の `intake_answers` の JSON 内 |
+| 2 | **新しい表も列も作らない。** migration 版・回答スキーマ版も変えない |
+| 3 | **店舗の入力項目にしない。** 店舗画面へ欄を作らない |
+| 4 | **店舗の提出条件に含めない**（`ADMIN_REQUIRED_FOR_EXPORT`。§3.0.2） |
+| 5 | **`GET /case` で店舗へ返さない** |
+| 6 | **`POST /answers/save` から変更できない**（店舗の要求に混ざっていたら丸ごと拒否） |
+| 7 | 逆に、店舗が分類をまるごと保存しても**この5件が消えない**（保存済みの値を残す） |
+| 8 | 設定できるのは**管理者だけ**。管理者認証・管理 session・CSRF・Origin 検査・**案件番号の再入力**を必須とする |
+| 9 | 設定できる案件状態は **`reviewed` / `locked`**。`closed` と削除済みは変更しない |
+| 10 | **検証済み書き出しの前に検証する**（§11.3）。不足なら書き出しを拒否する |
+| 11 | 「設定した」＝**キーが存在すること**。該当が無い場合も、空のまま保存して**記録を残す**<br>（「まだ設定していない」と区別するため） |
+| 12 | **値をログ・監査へ出さない**。監査は `admin_settings_saved` / `ok` の固定語彙だけ |
+| 13 | Operations・AI Sales へ保存しない。HP Intake 内の制作設定として持つ |
+| 14 | token / session / Drive 情報と**同じ画面に混ぜない** |
+| 15 | 型・上限・語彙は §3.7（W-05）・§3.9（PR-03/04/07/09）の表に従う |
+
+> ★管理設定の不足だけを理由に、店舗を `needs_revision` へ戻さない。
+> 店舗回答の不足と Smart Labo 設定の不足は、管理画面でも**別々に表示**する。
 
 ---
 
@@ -2079,6 +2183,7 @@ Operations（OPS-4）が**最初に取り込むのはこの形**である。API 
 | 5 | §8 の保存禁止情報は従来どおり除外する |
 | 6 | 既存DBに未知キーがあることだけで、**管理画面や書き出しを 500 にしない**。<br>正式値だけで安全に出せるなら出す |
 | 7 | 必須が不正・欠落なら、**従来どおり書き出しを拒否**する（§11.3-5。絞り込みで甘くしない） |
+| 8 | **Smart Labo 設定（§3.12）が揃っていること**も検査する（v1.9）。<br>不足なら書き出しを拒否し、**不足パスだけ**を管理者へ示す。**店舗へは返さない** |
 
 > ★保存側は「要求全体を拒否」、書き出し側は「出力しない」。
 > **方向が違う**ので同じ処理にまとめない。片方が緩んでも、もう片方が止める。
@@ -2134,7 +2239,7 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 
 **データモデル上の矛盾は残していない。以下は運用値と実装手段の未確定である。**
 
-### 12.1 R2 / R3 / R4 / R5 / R6 / R7 / R8 で確定した事項（未確定から外したもの）
+### 12.1 R2 / R3 / R4 / R5 / R6 / R7 / R8 / R9 で確定した事項（未確定から外したもの）
 
 | 旧# | 事項 | 確定内容 | 反映先 |
 |---|---|---|---|
@@ -2153,6 +2258,12 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 | — | 既存DBの未知キー（R8） | 読み出し・書き出しで**出力しない**。落とさない。**自動清掃はしない** | §3.0.1・§11.3 |
 | — | 正式構造の生成元（R8） | **schema.js を起点**に PHP 側を機械生成する。二重に手書きしない | §3.0.1 |
 | — | 操作対象の大きさ（R8） | **最小 48px**（`label` を含む領域で確保。文章中のリンクは対象外） | §10.10 |
+| — | 必須の種類（R9） | **5種へ分ける**。必須を1種類として扱わない | §3.0.2 |
+| — | 必須の実装元（R9） | **schema.js から生成**。PHP へ手書きしない。画面・API・管理・書き出しが同じ集合を見る | §3.0.2 |
+| — | enum 7件（R9） | **能動選択必須**。既定値を自動で入れない。`full` / `show` を自動で選ばない | §3.0.2 |
+| — | `contact_form.enabled`（R9） | **キー必須・`false` は正式な回答**。`"false"` / `0` / `1` / `null` は拒否 | §3.0.2 |
+| — | `promotion.industry`（R9） | **Phase 1 対象外**。正式パスへ含めない（任意ではない） | §3.0.2・§3.5 |
+| — | Smart Labo 設定5件（R9） | **正式パスへ追加**（129→134）。店舗から見えず書けず、**書き出し前にだけ**必須 | §3.12・§11.3-8 |
 | — | display_errors | **本番の必須要件として明文化**（Off / log_errors On / error_log は public_html 外） | §10.4.1・§10.6 |
 | **3（R3）** | Google Drive のフォルダ命名規則 | **最上位は案件番号のみ**／固定サブフォルダ4つ<br>（`01_images` / `02_logo` / `03_documents` / `04_references`）<br>店舗名・氏名・電話番号・住所・メールを**フォルダ名へ入れない** | §7.1 |
 | **—（R3）** | 提出の冪等化 | **`submission_id`（UUID v4）を `/submit` の必須入力**とし、<br>`intake_submission_history` へ保存・部分一意索引で重複を防ぐ | §2.4・§6.4 |
@@ -2290,3 +2401,4 @@ HP-ONBOARDING-4A-R1 で次の順序へ変更した。
 | **v1.6（R6）** | 2026-08-27 | 改定（HP-ONBOARDING-4D-R2・代表承認）。**§4.4.1 ご案内リンクの再発行を新設**。平文は発行直後に1回しか出さないため、受け取れなかった場合の**唯一の回復手段が再発行**であることを明記し、**「以前の token を復元する」機能は作らない**と確定した（復元できるということは、どこかに平文が残っているということである）。再発行してよいのは **`draft` / `needs_revision` のみ**とし、`submitted` / `reviewed` / `locked` / `closed` / 未知状態は**すべて拒否**（修正が要る場合は**先に §5.1 の `needs_revision` へ**遷移させてから再発行する）。手順6段を**同一トランザクション**で行うことを明記（①状態をトランザクション内で再確認 ②有効 token をすべて失効 ③その token から出た**店舗 session をすべて失効** ④`random_bytes(32)` で新 token ⑤**SHA-256 hash のみ**保存・期限は発行から14日 ⑥監査 `token_reissued` を1件）。守ること6項目を明記（**回答・`version`・提出履歴・修正依頼・Drive 情報を消さない**／新しい平文は**成功画面で1回だけ**・戻る/再読込で再表示しない／**ログ・監査・DBの平文列・管理 session・URL・Cookie へ出さない**／実行前に**案件番号の再入力を求め完全一致のみ実行**／**POST のみ**で CSRF・Origin 検査・管理 session 必須／**案件単位＋HMAC化IP で 10分5回**）。通信断時の扱いも明記（DB上は成功しており**旧 token はすでに無効**。もう一度再発行してよく、直前の新 token も失効し監査が1件増える。回答は維持）。**§2.5 へ `token_reissued` を追加**（初回の `token_issued` と区別し、「何回配り直したか」を監査から読めるようにする。**token 平文も hash も書かない**）。§9.2 の失効タイミングへ「再発行時は**関連する店舗 session も**即時失効」を追記。§12.1 へ R6 の確定1件。**JSON 11分類・§3 の全データパス・token の生成規則（`random_bytes(32)`／base64url 43文字／hash のみ保存／14日／1案件1本）・6状態そのもの・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマの変更も無い（8表のまま）。** |
 | **v1.7（R7）** | 2026-08-27 | 改定（HP-ONBOARDING-4F-PRE・代表承認）。**保持・削除の責任境界を確定**した。**§9.0 を新設**し、13条を明記（**公開日を Intake へ保存しない**／**公開承認を Intake へ保存しない**／公開日・公開承認は **Smart Labo Operations の責任**、未完成の間は §1.3 の標準管理票を正とする／「公開後6か月」の削除予定日は **Operations または標準管理票の側で計算**する／Intake が持つのは **`retention_delete_due` の1列だけ**で**人が手動登録**する／**`retention_delete_due` から公開日を逆算しない**／Intake と Operations を**直接DB接続しない**・OPS-4 までは §11.3 の検証済み書き出しと手動登録／**自動削除しない**（cron・起動時処理・バッチを作らない）／Phase 1 は**管理者の明示操作のみ**／**Google Drive の実ファイル削除は Intake の責任外**／Drive 削除実施日は標準管理票または Operations 側で管理／**AI Sales へ保持情報を移さない**）。判断の理由も明記した（公開日を持てば「6か月後」を Intake が計算することになり、**公開判断の責任が Intake へ滑り込む**）。**§9.1 保持期間を全面改定**（回答本文・token・店舗 session・**修正依頼**・提出履歴・**Drive URL と共有先メールの暗号文**・案件メタ・監査13か月・管理 session を1表に整理）。**§2.8-11 で `intake_revision_requests` の保持期間を確定**（**回答本文と同じ**。案件削除時に `open` / `resolved` を問わず物理削除し、`message` と `requested_paths_json` を残さない。理由: この表は「どこを直してほしいか」＝**回答の内容そのもの**を指しており、回答だけ消して依頼が残れば内容が読めてしまう）。**§9.3 削除の実施を全面改定**し、7節へ分割した（**9.3-1 削除予定日の登録**＝`reviewed` / `locked` のみ・`YYYY-MM-DD` の実在日のみ・過去日は警告・同日再送は冪等・変更は監査へ・**取り消し経路を作らない**・**公開日/公開承認/契約金額/Stripe の入力欄を作らない**・POST＋CSRF＋Origin＋管理session・**日付をログへ書かない**・一覧の区分5種・**一覧に回答本文/店舗名/Drive 情報を出さない**／**9.3-2 実行条件8件**を fail closed で列挙／**9.3-3 手順12段を同一トランザクション**・失敗時は全ロールバック／**9.3-4 削除後の禁止8件**／**9.3-5 `PRAGMA secure_delete = ON`**／**9.3-6 削除要請時**は削除予定日を要請日以前へ変更して実施し、要請理由の欄を Intake へ作らない／**9.3-7 自動実行しない**）。**§9.4 を 9.4-1（Operations へ移す継続保持）と 9.4-2（intake に残る最小メタデータの allowlist）へ分割**し、残す列を1つずつ理由つきで確定した。**§9.8 破壊的操作のフラグを新設**（`retention_actions_enabled` / `backup_policy_confirmed`。**既定はどちらも false**・片方でも false なら 403 でボタンも出さない・**`(bool)` で丸めず「明示的に真」だけを真とする**・実値を Git へ入れない・**4G より前に `backup_policy_confirmed` を真にしない**）。**§5.1 へ `locked`（確定）の規則11条を新設**（`reviewed` からのみ／POST＋CSRF＋Origin＋管理session／**確認画面と案件番号の再入力**／**token と店舗 session を同一トランザクションで失効**／監査3種／冪等／**回答・履歴・修正依頼・Drive 情報を削除しない**／`needs_revision` へ戻さない／再発行しない）。あわせて **`closed` は機密情報の削除完了時に設定する**ものとし、**通常操作を管理画面に作らない**と確定した。**§5.2 へ削除済み案件の全面拒否**を追記。**§2.5 へ監査4種を追加**（`retention_due_set` / `retention_purged` / `audit_purged` / `admin_sessions_purged`。**日付も件数の内訳も値も書かない**・`audit_purged` の行**自身も13か月後に削除対象**になるため保持が循環しない）。v1.6 までの **`answers_deleted` を `retention_purged` へ統合**（語彙は残すが新規記録しない）。**§2.7-10 / -11 へ管理 session の清掃**を追加（期限切れ・失効済みのみ物理削除・**有効な session は1件も消さない**・件数上限あり・**hash をログにも監査にも出さない**・案件の保持期限とは無関係・§9.8 のフラグを要求しない・**自動 cron を作らない**）。**§10.4 の CSP を改定**（4E の P3-2。**API 側と静的側で完全に同一の文字列**にする・**`object-src 'none'` と `font-src 'self'` を明示**・**`img-src` の `data:` を撤回**〔この画面群は画像もアイコンも使わない〕・`unsafe-inline` / `unsafe-eval` / ワイルドカード禁止）。**§10.4 へ公開領域の誤配置対策**を新設（4E の P3-3。ドットファイル／DB・ログ・退避／秘密鍵・証明書／設定／Composer 関連を拒否。**`.well-known` だけは除外**〔塞ぐと SSL 証明書の自動更新が止まる〕。**拒否規則をフロントコントローラより前**に置き、`mod_rewrite` と `FilesMatch` の**二重**で塞ぐ）。**§10.4.1 へ `expose_php = Off` を追加**（4E の P3-1。`PHP_INI_SYSTEM` のため共用サーバーでは `.user.ini` から効かないことがあり、**実機確認は 4H**。`.htaccess` の `Header always unset X-Powered-By` を併記）。**§2.0.1 の「使用してよい」へ `PRAGMA secure_delete` を追加**。§12.1 へ R7 の確定6件、§12.2 へ未確定 -11（`expose_php` の実機での効き）・-12（中止案件を `closed` にする経路）・-13（管理 session 清掃の自動化）を追加し、-4 を「世代・削除方針の確定まで `backup_policy_confirmed` を真にしない」へ具体化。**JSON 11分類・§3 の全データパス129件・token の生成規則・6状態そのもの・楽観ロック・`submission_id` の冪等化・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマの変更も無い（8表・`PRAGMA user_version` は 4 のまま）。** |
 | **v1.8（R8）** | 2026-08-27 | 改定（HP-ONBOARDING-4F-R1・代表承認）。**回答 JSON の allowlist を分類の中身まで徹底**した。4F の通し確認で、保存 API が**分類名（11種）だけ**を見ており、分類内部のキーは素通しで保存され、**§11.3 の「検証済み JSON」にも出ていた**ことが判明したため（P3・データ整合性）。**§3.0.1 を新設**し、受け取るとき14条／型5種／出すとき6条／正式構造の管理5条を確定した。**受け取るとき**: 保存できるのは **§3 の11分類・129パスだけ**／**分類の内部のキーも厳格に検査**／未知キーが**1件でも**あれば**要求全体を拒否**（400）／未知キーだけを**黙って削除して保存しない**／未知キーの**名前も値も**応答・ログ・監査へ出さない／**正常な分だけの部分保存をしない**／**配列要素の中の未知キー**も拒否（`menus[]` / `staff[]` / `image_metadata[]` / `business_hours.weekly[]` / `rights.confirmations[]`）／オブジェクト階層の誤りも拒否／**型**が違えば拒否／判定は**保存トランザクションより前**でDBは1バイトも変わらない／`version` を進めず監査も増やさない／固定コード・固定文言／既存のサイズ上限・配列上限・文字数・語彙・楽観ロックは従来どおり／「変更した分類だけを送る」既存方式（§6.1）を変えない。**型**は `scalar`（配列・オブジェクト不可）／`bool`（文字列 `"true"` 不可）／`list`／`object`／`objects` の5種。`__proto__` / `constructor` / `prototype` は**特別扱いの分岐を書かず**、「一覧に無いキー」として落とすことを明記した（分岐を書けば、書き忘れた名前が残る）。**出すとき**: 保存済みの値を**無条件に信用しない**／既存DBに未知キーが残っていても**出力しない**／未知キーが**あるだけで画面や書き出しを失敗させない**／**自動変換も別フィールドへの移送もしない**／**自動清掃機能は作らない**（既存行は触らない）／必須の欠落・不正は**従来どおり拒否**。**正式構造の管理**: 正式パスの追加・変更は **`public/assets/lib/schema.js` を起点**とし、PHP 側は**機械生成**（手で書き換えない）、**二重に手書きしない**、一致（分類・パス・配列要素の許可キー・型）と**生成の冪等性**を自動テストで固定、**新しいビルドシステムや npm 依存を増やさない**。**§11.3 へ「書き出し直前の絞り込み」7条を追加**（読み出しと書き出しで**二重**に絞る／保存側は「要求全体を拒否」・書き出し側は「出力しない」で**方向が違うため同じ処理にまとめない**／未知キーがあるだけで 500 にしない／必須の欠落は従来どおり拒否）。**§10.10 操作対象の大きさを新設**（4F で主導線 48px・補助 40px という食い違いを実測したため。主要・補助を問わず**最小 48px**／チェックは **`label` を含む領域**で確保／操作用リンクも 48px 相当／**文章中の通常リンクは対象外**／`height` で固定せず **`min-height` ＋ padding**／複数行の文言を許容／320px 幅で横へはみ出さない／操作間隔を保つ／`:focus-visible` 維持／無効は**色だけで示さない**／**管理画面も同じ基準**）。§12.1 へ R8 の確定4件。**JSON 11分類・§3 の全データパス129件・必須22パス・token 規則・6状態・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマ・migration 版・回答スキーマ版の変更も無い（8表・`user_version` 4・回答スキーマ 1 のまま）。** |
+| **v1.9（R9）** | 2026-08-27 | 改定（HP-ONBOARDING-4F-R3・代表承認）。**必須定義を SSOT §3 へ統一**した。4F-R2 の差分調査で、§3 が必須と定める **39件**に対し実装は **22件**しか見ておらず、画面（45件）だけが厳しく、**API を直接呼べば17件を欠いたまま提出できた**ことが判明したため。原因は「必須」を1種類として扱っていたことにある。**§3.0.2 を新設**し、必須を5種へ分けた（`STORE_REQUIRED_NON_EMPTY` ／ `STORE_REQUIRED_KEY_ALLOW_EMPTY` ／ `ADMIN_REQUIRED_FOR_EXPORT` ／ `ARRAY_ELEMENT_REQUIRED` ／ `OPTIONAL`。条件付きは §3 に条件が明記されているものだけ）。**空値の扱いを型ごとに明記**（string は `null` / `""` が未回答／enum は `null` / `""` / 語彙外が未回答で、**正式な語彙は `none` / `no` でも回答**／boolean は**キー無し・`null`・`"false"`・`0`・`1` が未回答**で **`false` は回答**／配列は §3 が1件以上を求めるときだけ `[]` が未回答／object はキー無しと `{}` が未回答）。**`false` を欠落と同じ扱いにしない**ことを明記した（「掲載しない」「予約を受けない」は答えである）。**能動選択が必要な enum 7件**（`basic.address_visibility` / `business_hours.irregular_notice` / `privacy.third_party` / `privacy.marketing_use` / `design.logo` / `design.emphasis` / `web_links.map_display`）を確定し、画面の初期状態を「選択してください」とし、**既定の語彙を選択済みにしない**・未選択（`""`）を正式値として保存しない・API でも同じ・**語彙外は保存そのものを拒否**・語彙自体は変えない、を規定した。とくに **`address_visibility` の `full` と `map_display` の `show` を自動で選ばない**（住所と地図を、本人の能動的な選択なしに公開側へ回さない）。あわせて「§3 の**空値欄は未入力の表し方**であり、既定値として入れてよい値ではない」ことを明記した（v1.8 まではこの2つを混同していた）。**必須の実装元を一本化**（PHP へ手書きしない／`schema.js` から機械生成／画面・API・管理画面・書き出しが**同じ集合**を見る／「画面では止まるのに API では通る」状態を作らない／一致と生成の冪等性を自動テストで固定）。**`promotion.industry` を Phase 1 の対象外**とした（代表判断 Q1。正式パスへ含めない・画面/DB/書き出しへ追加しない・**「任意」ではなく対象外**として明示・Phase 2 以降。§3.5 の表を取り消し線つきで残し、参考記述はそのまま置く）。**§3.12 を改定し、Smart Labo 設定5件を正式パスへ追加**（`web_links.salon_booking_url` / `privacy.destination` / `privacy.storage` / `privacy.external_services` / `privacy.consent_checkbox`。**129 → 134**）。15条を規定した（既存の `intake_answers` JSON 内へ保存し**新しい表も列も作らない**／**migration 版・回答スキーマ版も変えない**／店舗の入力項目にしない／**店舗の提出条件に含めない**／**`GET /case` で店舗へ返さない**／**`POST /answers/save` から変更できない**／逆に店舗が分類をまるごと保存しても**この5件が消えない**／管理者認証・管理 session・CSRF・Origin 検査・**案件番号の再入力**を必須／設定できるのは **`reviewed` / `locked`**・`closed` と削除済みは不可／**書き出しの前に検証**し不足なら拒否／「設定した」＝**キーが存在すること**で該当が無い場合も空のまま保存して記録を残す／**値をログ・監査へ出さない**／Operations・AI Sales へ保存しない／token・session・Drive 情報と同じ画面に混ぜない／型・上限・語彙は §3.7・§3.9 の表に従う）。**管理設定の不足だけで店舗を `needs_revision` へ戻さない**こと、管理画面では**店舗回答の不足と管理設定の不足を別々に表示**することも明記した。**§11.3 へ規則8を追加**（書き出し前に Smart Labo 設定が揃っていることを検査し、不足なら拒否して**不足パスだけ**を管理者へ示す。店舗へは返さない）。**§2.5 へ監査 `admin_settings_saved` を追加**（**設定値を書かない**）。§12.1 へ R9 の確定6件。**JSON 11分類・§3 の店舗パス129件・token 規則・6状態・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマ・migration 版・回答スキーマ版の変更も無い（8表・`PRAGMA user_version` 4・回答スキーマ 1 のまま）。** |

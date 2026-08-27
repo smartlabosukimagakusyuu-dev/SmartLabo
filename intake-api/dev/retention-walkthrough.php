@@ -175,6 +175,13 @@ $submit = $kernel->app->handle($post('/submit', ['submission_id' => (function ()
 
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($b), 4));
 })()], $cookies));
+$kernel->answers->saveAdminSettings($caseId, [
+    'web_links' => ['salon_booking_url' => null],
+    'privacy'   => [
+        'destination' => '架空の送信先', 'storage' => '架空の保管方法',
+        'external_services' => [], 'consent_checkbox' => true,
+    ],
+]);
 $check('提出できた（status = submitted）',
     $submit->status === 200 && $kernel->cases->find($caseId)['status'] === 'submitted');
 

@@ -28,6 +28,8 @@ final class Audit
         // ★`answers_deleted` は v1.7 で `retention_purged` へ統合した。
         //   語彙としては残す（過去DBの行を読めなくしないため）が、新規には記録しない。
         'retention_due_set', 'retention_purged', 'audit_purged', 'admin_sessions_purged',
+        // 4F-R3（SSOT v1.9 §3.12）
+        'admin_settings_saved',
     ];
 
     public function __construct(

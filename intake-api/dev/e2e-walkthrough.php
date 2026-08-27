@@ -18,6 +18,7 @@
  *   E 確認・提出                K closed 後の全面拒否
  *   F 管理確認・export          L maintenance
  *                               M 回答の正式構造（4F-R1）
+ *                               N 必須契約・Smart Labo 設定（4F-R3）
  *
  * ★J の「削除が成功すること」の確認は dev/retention-walkthrough.php が担当する
  *   （別の使い捨てDBで、override したときだけ動く）。ここでは
@@ -179,6 +180,18 @@ $uuid4 = static function (): string {
     $b[8] = chr((ord($b[8]) & 0x3f) | 0x80);
 
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($b), 4));
+};
+/** Smart Labo の制作設定（SSOT v1.9 §3.12）を埋める。書き出しの前に要る */
+$setSettings = static function (Kernel $k, int $caseId): void {
+    $k->answers->saveAdminSettings($caseId, [
+        'web_links' => ['salon_booking_url' => null],
+        'privacy'   => [
+            'destination'       => '架空の送信先',
+            'storage'           => '架空の保管方法',
+            'external_services' => [],
+            'consent_checkbox'  => true,
+        ],
+    ]);
 };
 $rows = static function (Kernel $k, string $sql, array $p = []): int {
     $stmt = $k->db->pdo()->prepare($sql);
@@ -476,6 +489,15 @@ $check('詳細に token / session / 内部ID / IP を出さない',
     !str_contains($html, $token) && !str_contains($html, $sid)
     && !str_contains($html, 'token_hash') && !str_contains($html, 'ip_hmac')
     && !preg_match('/"id"\s*:\s*' . $caseId . '\b/', $html));
+
+// ★4F-R3: 制作設定が無いうちは書き出せない（代表判断 Q4）
+$beforeSettings = $k->app->handle($adminGet('/admin/export', $admin, ['case' => $number]));
+$check('制作設定が無いうちは書き出せない（店舗の提出は済んでいる）',
+    $beforeSettings->status === 409
+    && $k->export->export($caseId)['error'] === 'admin_settings_missing');
+
+$setSettings($k, $caseId);
+$check('Smart Labo の制作設定5件を入れた', $k->answers->missingAdminSettings($caseId) === []);
 
 $export = $k->app->handle($adminGet('/admin/export', $admin, ['case' => $number]));
 $body   = (string)$export->rawBody;
@@ -808,6 +830,7 @@ $cShop   = [Config::COOKIE_NAME => (string)$cStart->cookies[0]['value']];
 $c->app->handle($json('POST', '/answers/save', ['version' => 1, 'sections' => $sections], $cShop));
 $c->app->handle($json('POST', '/submit', ['submission_id' => $uuid4()], $cShop));
 $c->cases->adminChangeStatus($cId, 'reviewed', 'reviewed');
+$setSettings($c, $cId);
 $c->cases->adminLock($cId);
 $c->retention->setDeleteDue($cId, '2026-01-15');
 $purged = $c->retention->purgeCase($cId, $cNumber, 'DELETE ' . $cNumber);
@@ -923,6 +946,7 @@ $check('直して再保存でき、復元にも反映される',
 
 $wSubmit = $w->app->handle($json('POST', '/submit', ['submission_id' => $uuid4()], $wShop));
 $check('提出できる', $wSubmit->status === 200 && (string)$w->cases->find($wId)['status'] === 'submitted');
+$setSettings($w, $wId);
 
 // ★4F-R1 より前に入った未知キーの再現（保存 API を通さず直接埋め込む）
 $rawJson = static function (Kernel $kern, int $id, string $col): array {
@@ -969,12 +993,195 @@ $check('未知キーを自動で消したり移したりしない（DBはその�
 $check('未知キーの名前も値もログへ出ない',
     !str_contains($log($baseSchema), $UNK) && str_contains($log($baseSchema), $wNumber));
 
+/* ================================================================ N */
+
+$head('N. 必須契約と Smart Labo 設定（4F-R3 / SSOT v1.9 §3.0.2 / §3.12）');
+
+$nClock = new E2eClock();
+[$n, $baseContract] = $makeEnv('contract', $nClock, false);
+
+$nNumber = 'HP-202608-0021';
+$nId     = $n->cases->create($nNumber, E2E_SHOP . ' ' . E2E_MARKER);
+$nToken  = $n->tokens->issue($nId);
+$nStart  = $n->app->handle($json('POST', '/session/start', ['token' => $nToken]));
+$nShop   = [Config::COOKIE_NAME => (string)$nStart->cookies[0]['value']];
+
+// 能動選択が必要な enum 7件（代表判断 Q3）
+$enums = [
+    'basic.address_visibility'        => 'full',
+    'business_hours.irregular_notice' => 'none',
+    'privacy.third_party'             => 'none',
+    'privacy.marketing_use'           => 'no',
+    'design.logo'                     => 'none',
+    'design.emphasis'                 => 'photo',
+    'web_links.map_display'           => 'show',
+];
+
+// enum を未選択にした状態で保存する
+$blank = $sections;
+foreach ($enums as $path => $value) {
+    [$sec, $key] = explode('.', $path, 2);
+    unset($blank[$sec][$key]);
+}
+unset($blank['contact_form']['enabled'], $blank['basic']['parking']);
+
+$n->app->handle($json('POST', '/answers/save', ['version' => 1, 'sections' => $blank], $nShop));
+$missingBefore = $n->answers->evaluate($nId)['missing'];
+
+$check('enum 7件・二択・駐車場を未選択のままだと、9件が不足として出る',
+    count(array_intersect(array_keys($enums), $missingBefore)) === 7
+    && in_array('contact_form.enabled', $missingBefore, true)
+    && in_array('basic.parking', $missingBefore, true));
+
+$blocked = $n->app->handle($json('POST', '/submit', ['submission_id' => $uuid4()], $nShop));
+$check('API を直接呼んでも提出できない（画面だけの検査になっていない）',
+    ($blocked->body['submitted'] ?? null) === false
+    && (string)$n->cases->find($nId)['status'] === 'draft');
+
+// 語彙外は保存そのものを拒否
+$badVocab = $sections;
+$badVocab['basic']['address_visibility'] = 'public';
+$rejected = $n->app->handle($json('POST', '/answers/save', [
+    'version' => $n->answers->get($nId)['version'], 'sections' => $badVocab,
+], $nShop));
+$check('正式な語彙でない値は保存そのものを拒否する', $rejected->status === 400);
+
+// 能動的に選び、二択と駐車場も答える
+$answered = $sections;
+foreach ($enums as $path => $value) {
+    [$sec, $key] = explode('.', $path, 2);
+    $answered[$sec][$key] = $value;
+}
+$answered['contact_form']['enabled'] = false;          // ★「設置しない」も正式な回答
+$answered['basic']['parking']        = ['type' => 'none', 'note' => ''];
+
+$nSave = $n->app->handle($json('POST', '/answers/save', [
+    'version' => $n->answers->get($nId)['version'], 'sections' => $answered,
+], $nShop));
+$check('7件を能動選択し、false と type=none と空の note を含めて保存できる',
+    $nSave->status === 200);
+$check('画面の不足も API の不足も 0 件になる',
+    $n->answers->evaluate($nId)['missing'] === []
+    && ($n->app->handle($shopGet('/case', $nShop))->status === 200));
+
+$nSubmit = $n->app->handle($json('POST', '/submit', ['submission_id' => $uuid4()], $nShop));
+$check('提出できる', $nSubmit->status === 200
+    && (string)$n->cases->find($nId)['status'] === 'submitted');
+
+// Smart Labo 設定
+$nLogin = $n->app->handle($adminPost('/admin/login', ['admin_id' => E2E_ADMIN_ID, 'password' => E2E_ADMIN_PW]));
+$nAdmin = [Config::ADMIN_COOKIE_NAME => (string)$nLogin->cookies[0]['value']];
+
+$detailN = $n->app->handle($adminGet('/admin/case', $nAdmin, ['case' => $nNumber]));
+$check('管理詳細に「制作設定 5 件未設定」が出る',
+    str_contains((string)$detailN->rawBody, '5 件未設定')
+    && count($n->answers->missingAdminSettings($nId)) === 5);
+$check('制作設定が無いうちは書き出せない（店舗の提出は済んでいる）',
+    ($n->export->export($nId)['error'] ?? '') === 'admin_settings_missing');
+
+$n->cases->adminChangeStatus($nId, 'reviewed', 'reviewed');
+$formN = $n->app->handle($adminGet('/admin/settings', $nAdmin, ['case' => $nNumber]));
+$saveN = $n->app->handle($adminPost('/admin/settings/save', [
+    'csrf_token'        => $csrfOf($formN->rawBody),
+    'case'              => $nNumber,
+    'confirm_case'      => $nNumber,
+    'salon_booking_url' => '',
+    'destination'       => '架空の送信先 ' . E2E_MARKER,
+    'storage'           => '架空の保管方法',
+    'external_services' => '',
+    'consent_checkbox'  => 'true',
+], $nAdmin));
+$check('管理者が制作設定5件を入れられる',
+    $saveN->status === 303 && $n->answers->missingAdminSettings($nId) === []);
+
+$caseN = $n->app->handle($shopGet('/case', $nShop));
+$adminKeysLeaked = [];
+foreach (['salon_booking_url', 'destination', 'storage', 'external_services', 'consent_checkbox'] as $key) {
+    foreach (['web_links', 'privacy'] as $sec) {
+        if (array_key_exists($key, $caseN->body['sections'][$sec] ?? [])) {
+            $adminKeysLeaked[] = $sec . '.' . $key;
+        }
+    }
+}
+$check('店舗の復元に制作設定が出ない' . ($adminKeysLeaked === [] ? '' : '（出た: ' . implode(',', $adminKeysLeaked) . '）'),
+    $adminKeysLeaked === [] && $caseN->body['sections']['privacy']['purpose'] === '架空の目的');
+
+// ★書き込みの検査は**入力中（draft）**の案件で行う。
+//   提出済み・確認済みの案件はそもそも店舗が保存できない（状態の検査が先に効く）ため、
+//   「管理設定を書けないこと」を確かめたことにならない。
+$wNumber2 = 'HP-202608-0022';
+$wId2     = $n->cases->create($wNumber2, E2E_SHOP);
+$wToken2  = $n->tokens->issue($wId2);
+$wShop2   = [Config::COOKIE_NAME => (string)$n->app->handle(
+    $json('POST', '/session/start', ['token' => $wToken2])
+)->cookies[0]['value']];
+$n->app->handle($json('POST', '/answers/save', ['version' => 1, 'sections' => $answered], $wShop2));
+$setSettings($n, $wId2);
+
+$beforeSettings = $n->answers->adminSettings($wId2);
+$writeAttempt   = $n->app->handle($json('POST', '/answers/save', [
+    'version'  => $n->answers->get($wId2)['version'],
+    'sections' => ['privacy' => ['destination' => '店舗が書き換えた'] + $answered['privacy']],
+], $wShop2));
+$check('店舗の保存では制作設定を変更できない（入力中の案件で確認）',
+    $writeAttempt->status === 400 && $n->answers->adminSettings($wId2) == $beforeSettings);
+
+$storeResave = $n->app->handle($json('POST', '/answers/save', [
+    'version' => $n->answers->get($wId2)['version'], 'sections' => ['privacy' => $answered['privacy']],
+], $wShop2));
+$check('店舗が分類をまるごと保存し直しても制作設定が消えない',
+    $storeResave->status === 200 && $n->answers->missingAdminSettings($wId2) === []);
+
+$detailN2 = $n->app->handle($adminGet('/admin/case', $nAdmin, ['case' => $nNumber]));
+$exportN  = $n->app->handle($adminGet('/admin/export', $nAdmin, ['case' => $nNumber]));
+$bodyN    = (string)$exportN->rawBody;
+$decodedN = json_decode($bodyN, true);
+
+$check('管理詳細の不足が 0 件になる', str_contains((string)$detailN2->rawBody, '設定済み'));
+$check('書き出せる。SHA-256 が本文と一致する',
+    $exportN->status === 200
+    && hash('sha256', $bodyN) === ($exportN->headers['X-Intake-Export-Sha256'] ?? ''));
+$check('書き出しに promotion.industry が無い', !str_contains($bodyN, 'industry'));
+
+$outside = [];
+foreach (($decodedN['answers'] ?? []) as $sec => $value) {
+    foreach (is_array($value) ? $value : [] as $key => $child) {
+        $keys = is_int($key) ? array_keys(is_array($child) ? $child : []) : [$key];
+        foreach ($keys as $one) {
+            $full = $sec . '.' . $one;
+            $ok   = in_array($full, \SmartLabo\Intake\AnswerSchema::PATHS, true);
+            foreach (\SmartLabo\Intake\AnswerSchema::PATHS as $candidate) {
+                if (str_starts_with($candidate, $full . '.')) {
+                    $ok = true;
+                }
+            }
+            if (!$ok) {
+                $outside[] = $full;
+            }
+        }
+    }
+}
+$check('書き出しに134パスの外が1つも無い' . ($outside === [] ? '' : '（外: ' . implode(',', array_unique($outside)) . '）'),
+    $outside === []);
+
+$check('制作設定の値をログにも監査にも出さない',
+    !str_contains($log($baseContract), '架空の送信先')
+    && !str_contains($log($baseContract), '架空の保管方法')
+    && str_contains($log($baseContract), 'admin_settings_saved')
+    && $n->audit->countFor($nId, 'admin_settings_saved') === 1
+    && (static function () use ($n): bool {
+        $stmt = $n->db->pdo()->prepare('SELECT COUNT(*) FROM intake_audit_events WHERE result_code LIKE :m');
+        $stmt->execute([':m' => '%架空%']);
+
+        return (int)$stmt->fetchColumn() === 0;
+    })());
+
 /* ================================================================ 後始末 */
 
 $head('後始末');
 
 $dbFiles = [];
-foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema] as $b) {
+foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema, $baseContract] as $b) {
     $dbFiles[$b] = (string)file_get_contents($b . '/intake.sqlite');
 }
 $check('削除済みDBの生ファイルに架空 PII が残っていない',
@@ -984,7 +1191,7 @@ $check('削除済みDBの生ファイルに架空 PII が残っていない',
     && str_contains($dbFiles[$baseClosed], $cNumber));
 
 $leak = [];
-foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema] as $b) {
+foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema, $baseContract] as $b) {
     foreach ([E2E_MARKER, E2E_EMAIL, E2E_TEL, E2E_REVISION, 'drive.google.com',
               $token, $token2, $sid, $cToken, E2E_ADMIN_PW] as $needle) {
         if ($needle !== '' && str_contains($log($b), $needle)) {
@@ -992,7 +1199,7 @@ foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema] as $b) {
         }
     }
 }
-$check('4つのログに PII・token・session・パスワードが1つも出ていない'
+$check('5つのログに PII・token・session・パスワードが1つも出ていない'
     . ($leak === [] ? '' : '（残: ' . implode(',', $leak) . '）'), $leak === []);
 $check('ログは空ではない（検査が空振りしていない）',
     str_contains($log($baseMain), 'export_generated') && str_contains($log($baseMain), $number));
@@ -1001,7 +1208,8 @@ $k->db->close();
 $m->db->close();
 $c->db->close();
 $w->db->close();
-unset($k, $m, $c, $w, $dbFiles, $ins, $stmt);
+$n->db->close();
+unset($k, $m, $c, $w, $n, $dbFiles, $ins, $stmt);
 gc_collect_cycles();
 
 $left = [];
@@ -1018,7 +1226,7 @@ foreach ($roots as $b) {
         $left[] = $b;
     }
 }
-$check('使い捨てDBを4つとも削除した' . ($left === [] ? '' : '（残: ' . implode(',', $left) . '）'), $left === []);
+$check('使い捨てDBを5つとも削除した' . ($left === [] ? '' : '（残: ' . implode(',', $left) . '）'), $left === []);
 
 echo "\n" . str_repeat('=', 66) . "\n";
 printf("  %d 項目 / NG %d 件\n", $step, count($bad));

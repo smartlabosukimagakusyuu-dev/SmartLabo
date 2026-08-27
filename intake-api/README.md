@@ -1,8 +1,8 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F-R1）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F-R3）
 
 ```text
 STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.8**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.9**
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -172,6 +172,8 @@ php -c intake-api/dev/php.ini -S 127.0.0.1:8788 -t intake-api/public intake-api/
 | GET | `/admin/maintenance` | 監査13か月削除・管理session清掃の件数（4F） |
 | POST | `/admin/maintenance/audit` | 監査の13か月削除（4F） |
 | POST | `/admin/maintenance/sessions` | 期限切れ管理sessionの削除（4F） |
+| GET | `/admin/settings?case=…` | 制作設定（Smart Labo 入力・4F-R3） |
+| POST | `/admin/settings/save` | 制作設定の保存（4F-R3） |
 
 - 代表1名のみ。資格情報は `private/intake-config.php`（**hash だけ**。§6）
 - **未設定なら管理画面ごと 404**（fail closed）。店舗向けAPIはそのまま動く
@@ -346,9 +348,32 @@ rate limit 一覧・書き出しの allowlist / denylist・本番前の残存課
 - 検査で追加した自動テスト: `tests/test-security.php` ／ `tests/test-security-static.php`
 - 仕様は SSOT が正。検査レポートは SSOT を上書きしない
 
-### 回答の正式構造（4F-R1・SSOT v1.8 §3.0.1）
+### 回答の正式構造と必須（4F-R1 / 4F-R3・SSOT v1.9 §3.0.1 / §3.0.2）
 
 **正は `public/assets/lib/schema.js`。** PHP 側は生成物である。
+
+**正式パスは 134 件**（店舗 129 ＋ Smart Labo 設定 5）。
+`promotion.industry` は **Phase 1 の対象外**なので含めない（SSOT §3.5）。
+
+**必須は1種類ではない**（SSOT §3.0.2）。
+
+| 種別 | 誰が・いつまでに | 満たし方 | 件数 |
+|---|---|---|---|
+| `STORE_REQUIRED_NON_EMPTY` | 店舗が提出するまでに | 値を入れる／能動的に選ぶ | 39 |
+| `STORE_REQUIRED_KEY_ALLOW_EMPTY` | 店舗が提出するまでに | **キーがあればよい**（`false` も回答） | 1 |
+| `ADMIN_REQUIRED_FOR_EXPORT` | Smart Labo が書き出しまでに | キーがあればよい（該当無しも記録する） | 5 |
+| `ARRAY_ELEMENT_REQUIRED` | 要素があるときだけ | 要素の中で満たす | 19 |
+| `OPTIONAL` | — | 欠落してよい | 89 |
+
+- **`false` は「欠落」ではない。**「掲載しない」「予約を受けない」は答えである
+- **`null` / `""` / 語彙外は未回答。** enum は店舗が選ぶまで未回答（`none` / `no` も、選べば回答）
+- **`address_visibility` の `full` と `map_display` の `show` を自動で選ばない。**
+  住所と地図を、本人の能動的な選択なしに公開側へ回さない
+- 語彙が決まっている項目は、**語彙外の値を保存そのものから拒否**する
+
+**画面・API・管理画面・書き出しが同じ集合を見る。**
+v1.8 まではサーバーが22件しか見ておらず、画面（45件）とずれていた。
+通常操作では画面が止めるが、**API を直接呼べば素通り**した（4F-R2 で判明）。
 
 ```bash
 node intake-api/dev/generate-answer-schema.mjs
@@ -373,6 +398,21 @@ node intake-api/dev/generate-answer-schema.mjs
 - 未知キーの**名前も値も**、応答・ログ・監査へ出さない
 - `__proto__` / `constructor` / `prototype` は「一覧に無いキー」として落ちる
   （特別扱いの分岐を書かない。書けば、書き忘れた名前が残る）
+
+### Smart Labo 設定（4F-R3・SSOT v1.9 §3.12）
+
+`web_links.salon_booking_url` ／ `privacy.destination` ／ `privacy.storage` ／
+`privacy.external_services` ／ `privacy.consent_checkbox` の5件。
+
+- **店舗の入力項目ではない。** 店舗画面に欄を作らず、`GET /case` でも返さない
+- **店舗の `POST /answers/save` から変更できない**（混ざっていたら要求ごと拒否）
+- 逆に、店舗が分類をまるごと保存しても**この5件は消えない**
+- 設定は管理画面 `/admin/settings` から。**認証・CSRF・Origin・案件番号の再入力**が要る
+- 設定できるのは **`reviewed` / `locked`**。`closed`・削除済みは変更しない
+- **店舗の提出は妨げない。** 効くのは**検証済みJSONの書き出し直前**だけ
+- 「設定した」＝**キーがあること**。該当が無い場合も空のまま保存して記録を残す
+- **値をログにも監査にも出さない**（監査は `admin_settings_saved` / `ok` だけ）
+- 保存先は既存の `intake_answers` の JSON 内。**新しい表も列も作らない**
 
 **出すとき（`GET /case`・管理画面・書き出し）**
 
@@ -451,4 +491,7 @@ H リンク再発行／I 確定／J 保持期限／K closed 後の拒否／L 保
 | 7 | 本番バックアップの世代・削除方針 | **4G**。確定するまで `backup_policy_confirmed` を true にしない |
 | ~~8~~ | ~~分類の中の**未知キー**が書き出しへ通る~~ | **4F-R1 で是正**（SSOT v1.8 §3.0.1）。<br>保存は**要求全体を拒否**、読み出し・書き出しは**出力しない** |
 | ~~9~~ | ~~補助ボタンの高さが 40px~~ | **4F-R1 で是正**（SSOT v1.8 §10.10）。店舗・管理とも 48px |
-| 10 | 既存DBに残った未知キーの**清掃機能** | **作らない**（SSOT v1.8 §3.0.1）。読み出しで除くだけで、既存行は触らない。<br>必要になったら本書を改定してから作る |
+| 10 | 既存DBに残った未知キーの**清掃機能** | **作らない**（SSOT v1.9 §3.0.1）。読み出しで除くだけで、既存行は触らない。<br>必要になったら本書を改定してから作る |
+| ~~11~~ | ~~必須が SSOT と実装で食い違う~~ | **4F-R3 で是正**（SSOT v1.9 §3.0.2）。<br>必須は生成物ひとつ。画面・API・管理・書き出しが同じ集合を見る |
+| 12 | `promotion.industry`（業種別） | **Phase 1 対象外**（SSOT v1.9 §3.5）。Phase 2 以降で扱うかを判断する |
+| 13 | `ADMIN_REQUIRED_FOR_EXPORT` の厳しさ | いまは**キーの存在**で満たす。<br>「送信先・保管方法は空にできない」等の内容条件を課すかは、<br>Operations（OPS-4）の取込要件が決まってから判断する |

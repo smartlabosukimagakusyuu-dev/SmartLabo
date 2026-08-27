@@ -6,7 +6,7 @@
  * ★必須・内部の区別を、色だけでなく**文字**でも示す。
  */
 
-import { CONFIRMATION_ITEMS, KIND, WEEKDAYS } from './schema.js';
+import { CONFIRMATION_ITEMS, KIND, WEEKDAYS, storeFields } from './schema.js';
 import { el, replace } from './dom.js';
 import { fieldId } from './paths.js';
 
@@ -121,14 +121,45 @@ function selectControl(id, field, value, onInput) {
   });
   const options = field.options || [];
   const hasBlank = options.some(([v]) => v === '');
-  if (!hasBlank && !field.required) {
-    node.appendChild(el('option', { value: '', text: '選択しない' }));
+  // ★必須でも空の選択肢を必ず置く（代表判断 Q3）。
+  //   置かないと先頭の語彙が選ばれて見え、店舗が選んでいないのに
+  //   「回答済み」と誤解される。空は保存しない（下の change で null にする）。
+  if (!hasBlank) {
+    node.appendChild(
+      el('option', { value: '', text: field.required ? '選択してください' : '選択しない' }),
+    );
   }
   for (const [v, text] of options) {
     node.appendChild(el('option', { value: v, text }));
   }
   node.value = value === null || value === undefined ? '' : String(value);
   node.addEventListener('change', () => onInput(node.value === '' ? null : node.value));
+
+  return node;
+}
+
+/**
+ * 真偽の二択（代表判断 Q2）。
+ *
+ * ★チェックボックス1個では「まだ答えていない」と「いいえ」を区別できない。
+ *   「設置する／設置しない」を明示的に選ばせ、**既定ではどちらも選ばない**。
+ * ★保存する値は文字列ではなく真偽（`true` / `false`）にする。
+ */
+function boolChoiceControl(id, field, value, onInput) {
+  const node = el('select', {
+    id,
+    name: id,
+    class: 'field__control',
+    'aria-required': 'true',
+  });
+  node.appendChild(el('option', { value: '', text: '選択してください' }));
+  for (const [v, text] of field.options || []) {
+    node.appendChild(el('option', { value: v, text }));
+  }
+  node.value = value === true ? 'true' : value === false ? 'false' : '';
+  node.addEventListener('change', () => {
+    onInput(node.value === '' ? null : node.value === 'true');
+  });
 
   return node;
 }
@@ -372,11 +403,20 @@ function confirmationsControl(id, field, value, onInput) {
 }
 
 function parkingControl(id, field, value, onInput) {
-  const cur = value && typeof value === 'object' ? value : { type: 'none', note: '' };
+  const cur = value && typeof value === 'object' ? value : {};
   const typeId = `${id}-type`;
   const noteId = `${id}-note`;
 
-  const select = el('select', { id: typeId, class: 'field__control', 'aria-label': '駐車場の有無' });
+  const select = el('select', {
+    id: typeId,
+    class: 'field__control',
+    'aria-label': '駐車場の有無',
+    'aria-required': 'true',
+  });
+  // ★未選択を用意する（4F-R3）。既定で「なし」を選んだ形にすると、
+  //   画面は答えたように見えるのに、サーバーには何も届いていない状態になる。
+  //   「なし」は正式な回答なので、店舗が選んだときだけ保存する。
+  select.appendChild(el('option', { value: '', text: '選択してください' }));
   for (const [v, t] of [
     ['none', 'なし'],
     ['own', '専用駐車場あり'],
@@ -384,7 +424,7 @@ function parkingControl(id, field, value, onInput) {
   ]) {
     select.appendChild(el('option', { value: v, text: t }));
   }
-  select.value = cur.type || 'none';
+  select.value = cur.type || '';
 
   const note = el('input', {
     id: noteId,
@@ -396,7 +436,9 @@ function parkingControl(id, field, value, onInput) {
   });
   note.value = cur.note || '';
 
-  const emit = () => onInput({ type: select.value, note: note.value });
+  // ★未選択のうちは何も保存しない（未回答のまま）
+  const emit = () =>
+    onInput(select.value === '' && note.value === '' ? null : { type: select.value, note: note.value });
   select.addEventListener('change', emit);
   note.addEventListener('input', emit);
 
@@ -417,6 +459,8 @@ export function renderField(sectionKey, field, sectionValue, onChange, index) {
       return wrap(id, field, numberControl(id, field, value, set));
     case KIND.SELECT:
       return wrap(id, field, selectControl(id, field, value, set));
+    case KIND.BOOL_CHOICE:
+      return wrap(id, field, boolChoiceControl(id, field, value, set));
     case KIND.CHECKS:
       return wrap(id, field, checksControl(id, field, value, set));
     case KIND.LIST:
@@ -464,7 +508,8 @@ export function renderStep(step, value, onChange) {
               },
             }),
           ]),
-          ...step.fields.map((field) =>
+          // ★Smart Labo 設定（§3.12）は店舗画面へ出さない
+          ...storeFields(step).map((field) =>
             renderField(
               step.key,
               field,
@@ -509,7 +554,8 @@ export function renderStep(step, value, onChange) {
   }
 
   const working = value && typeof value === 'object' && !Array.isArray(value) ? { ...value } : {};
-  for (const field of step.fields) {
+  // ★Smart Labo 設定（§3.12）は店舗画面へ出さない
+  for (const field of storeFields(step)) {
     frag.appendChild(
       renderField(step.key, field, working, (path, next) => {
         setAt(working, path, next);
@@ -524,7 +570,7 @@ export function renderStep(step, value, onChange) {
 /** 繰り返し1件の初期値（SSOT §3 の「空値」列） */
 export function defaultsFor(step) {
   const out = {};
-  for (const field of step.fields) {
+  for (const field of storeFields(step)) {
     if (field.default !== undefined) {
       setAt(out, field.path, field.default);
     }

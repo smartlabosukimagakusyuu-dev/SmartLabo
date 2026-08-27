@@ -253,6 +253,109 @@ final class View
             . '</div></form></section>';
     }
 
+    /* ------------------------------------------------ 制作設定（4F-R3） */
+
+    /**
+     * Smart Labo が入力する項目（SSOT v1.9 §3.12）。
+     *
+     * ★店舗画面には出さない。店舗の回答欄と同じ画面に混ぜない。
+     * ★該当が無い場合も「空のまま保存」して**設定した事実**を残す。
+     *   書き出しの前に「まだ設定していない」と区別するためである。
+     *
+     * @param array<string,mixed> $current
+     * @param list<string> $missing
+     */
+    public static function adminSettingsForm(
+        string $caseNumber,
+        array $current,
+        array $missing,
+        string $csrf,
+    ): string {
+        $services = $current['privacy']['external_services'] ?? [];
+        $consent  = $current['privacy']['consent_checkbox'] ?? null;
+
+        $state = $missing === []
+            ? self::notice('ok', '制作設定は設定済みです。')
+            : self::notice('warn', '未設定の項目が ' . count($missing) . ' 件あります。'
+                . '設定するまで検証済みJSONを書き出せません。');
+
+        $text = static function (string $name, string $label, mixed $value, int $max, string $hint): string {
+            return '<div class="field">'
+                . '<label class="field__label" for="s-' . self::esc($name) . '">' . self::esc($label) . '</label>'
+                . '<input id="s-' . self::esc($name) . '" name="' . self::esc($name) . '" type="text" '
+                . 'maxlength="' . self::esc($max) . '" value="' . self::esc($value ?? '') . '">'
+                . '<p class="lead">' . self::esc($hint) . '</p></div>';
+        };
+
+        return '<section class="card">'
+            . '<h1 class="card__title">制作設定 — ' . self::esc($caseNumber) . '</h1>'
+            . '<p class="lead">ここは <strong>Smart Labo が入力する欄</strong>です。'
+            . '店舗の入力画面には出ません。店舗から変更することもできません。</p>'
+            . $state
+            . '<form method="post" action="/admin/settings/save" autocomplete="off">'
+            . '<input type="hidden" name="csrf_token" value="' . self::esc($csrf) . '">'
+            . '<input type="hidden" name="case" value="' . self::esc($caseNumber) . '">'
+            . $text('salon_booking_url', 'サロン共通の予約URL（W-05）',
+                $current['web_links']['salon_booking_url'] ?? null, 500,
+                '該当が無い場合は空のままにしてください。')
+            . $text('destination', '情報の送信先（PR-03）',
+                $current['privacy']['destination'] ?? null, 200,
+                'プライバシーポリシーに載る送信先です。')
+            . $text('storage', '情報の保管方法（PR-04）',
+                $current['privacy']['storage'] ?? null, 200,
+                'プライバシーポリシーに載る保管方法です。')
+            . '<div class="field">'
+            . '<label class="field__label" for="s-services">利用する外部サービス（PR-07）</label>'
+            . '<textarea id="s-services" name="external_services" rows="4">'
+            . self::esc(is_array($services) ? implode("\n", array_map('strval', $services)) : '')
+            . '</textarea>'
+            . '<p class="lead">1行に1つ。無い場合は空のままにしてください（10件まで）。</p></div>'
+            . '<div class="field">'
+            . '<label class="field__label" for="s-consent">同意チェックの表示（PR-09）</label>'
+            . '<select id="s-consent" name="consent_checkbox" aria-required="true">'
+            . '<option value=""' . ($consent === null ? ' selected' : '') . '>選択してください</option>'
+            . '<option value="true"' . ($consent === true ? ' selected' : '') . '>表示する</option>'
+            . '<option value="false"' . ($consent === false ? ' selected' : '') . '>表示しない</option>'
+            . '</select>'
+            . '<p class="lead">お問い合わせフォームに同意チェックを置くかどうかです。</p></div>'
+            . '<div class="field">'
+            . '<label class="field__label" for="s-confirm">確認のため、案件番号をご入力ください</label>'
+            . '<input id="s-confirm" name="confirm_case" type="text" autocomplete="off" '
+            . 'spellcheck="false" required placeholder="' . self::esc($caseNumber) . '">'
+            . '</div>'
+            . '<div class="actions">'
+            . '<button type="submit" class="btn btn--primary">制作設定を保存する</button>'
+            . '<a class="btn btn--outline" href="/admin/case?case=' . rawurlencode($caseNumber) . '">やめる</a>'
+            . '</div></form></section>';
+    }
+
+    /**
+     * 案件詳細に出す「制作設定の状況」。
+     * ★値そのものは出さない。設定済みかどうかだけを示す。
+     *
+     * @param list<string> $missing
+     */
+    public static function adminSettingsStatus(string $caseNumber, array $missing, bool $settable): string
+    {
+        $body = $missing === []
+            ? '<span class="ok">設定済み</span>'
+            : '<span class="ng">' . self::esc(count($missing)) . ' 件未設定</span>';
+
+        $action = $settable
+            ? '<a class="btn btn--outline" href="/admin/settings?case=' . rawurlencode($caseNumber) . '">制作設定を開く</a>'
+            : '<span class="muted">この状態では設定できません（確認済み・確定のときに設定します）</span>';
+
+        return '<section class="card"><h2 class="card__title">制作設定（Smart Labo 入力）</h2>'
+            . '<p class="lead">店舗の入力とは別に、当社が設定する項目です。'
+            . '<strong>設定が揃うまで検証済みJSONを書き出せません。</strong></p>'
+            . self::row('状況', $body)
+            . self::row('未設定', $missing === []
+                ? '<span class="muted">なし</span>'
+                : '<ul class="list"><li>' . implode('</li><li>', array_map(
+                    static fn (string $p): string => self::esc(self::pathDisplay($p)), $missing)) . '</li></ul>')
+            . '<div class="actions">' . $action . '</div></section>';
+    }
+
     /* ------------------------------------------------ 入力確定（4F） */
 
     /**

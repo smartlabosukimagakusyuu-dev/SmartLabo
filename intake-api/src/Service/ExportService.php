@@ -84,6 +84,13 @@ final class ExportService
             return ['ok' => false, 'error' => 'incomplete'];
         }
 
+        // ★Smart Labo が設定する項目（§3.12）も、書き出しの前に揃っていること
+        //   （代表判断 Q4）。店舗の提出は妨げないが、外へ出す一歩手前で止める。
+        $adminMissing = $this->answers->missingAdminSettings($caseId);
+        if ($adminMissing !== []) {
+            return ['ok' => false, 'error' => 'admin_settings_missing', 'missing' => $adminMissing];
+        }
+
         $payload = $this->buildPayload($case, $caseId, $evaluation['field_count']);
 
         $json = json_encode(

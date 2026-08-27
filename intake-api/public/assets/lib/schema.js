@@ -21,7 +21,27 @@ export const KIND = {
   WEEKLY: 'weekly', // 営業時間（固定7要素）
   CONFIRMATIONS: 'confirmations', // 法的確認（固定13件）
   PARKING: 'parking', // 駐車場（object）
+  // ★真偽の二択（4F-R2 の代表判断 Q2）。
+  //   チェックボックス1個では「未回答」と「false」を区別できないため、
+  //   「掲載する／掲載しない」を明示的に選ばせる。既定では選択しない。
+  BOOL_CHOICE: 'bool_choice',
 };
+
+/**
+ * 必須の種類（SSOT v1.9 §3.0.2）。
+ *
+ *   required: true      … STORE_REQUIRED_NON_EMPTY
+ *                         店舗が値を入力・能動選択する（"" / [] / null は未回答）
+ *   requiredKey: true   … STORE_REQUIRED_KEY_ALLOW_EMPTY
+ *                         キーの存在が必須。正式な空値（false 等）を認める
+ *   adminRequired: true … ADMIN_REQUIRED_FOR_EXPORT
+ *                         店舗提出後、Smart Labo が書き出し前に設定する
+ *   itemRequired: [...] … ARRAY_ELEMENT_REQUIRED / object の必須子キー
+ *   audience: 'admin'   … 店舗へ出さない・店舗から書けない（§3.12）
+ *
+ * ★「必須なのに既定値が入っている」状態を作らない。
+ *   画面の初期値と、正式な回答値は別物である（代表判断 Q3）。
+ */
 
 /** 法的確認 L-01〜L-13（仕様書 §14） */
 export const CONFIRMATION_ITEMS = [
@@ -96,7 +116,7 @@ export const STEPS = [
         required: true,
         placeholder: '○○駅から徒歩3分',
       }),
-      f('parking', '駐車場', KIND.PARKING, { required: true }),
+      f('parking', '駐車場', KIND.PARKING, { required: true, itemRequired: ['type'] }),
       f('service_area', '対応エリア', KIND.TEXT, { max: 200 }),
       f('description', 'お店の紹介文', KIND.TEXTAREA, { max: 2000, required: true, rows: 6 }),
       f('opened_year', '開業年', KIND.NUMBER, { min: 1800, max: 2999 }),
@@ -122,7 +142,7 @@ export const STEPS = [
     title: '営業時間・定休日',
     lead: '曜日ごとの営業時間をご記入ください。',
     fields: [
-      f('weekly', '営業時間', KIND.WEEKLY, { required: true }),
+      f('weekly', '営業時間', KIND.WEEKLY, { required: true, itemRequired: ['day', 'closed'] }),
       f('closed_note', '定休日', KIND.TEXT, { max: 100, required: true, placeholder: '毎週月曜' }),
       f('irregular_notice', '不定休のお知らせ方法', KIND.SELECT, {
         required: true,
@@ -177,10 +197,10 @@ export const STEPS = [
       f('description', '説明', KIND.TEXTAREA, { max: 500 }),
       f('note', '補足', KIND.TEXTAREA, { max: 300 }),
       f('target', '対象のお客様', KIND.TEXT, { max: 100 }),
-      f('published', 'ホームページに掲載する', KIND.CHECKBOX, { default: true }),
-      f('bookable', 'ご予約を受け付ける', KIND.CHECKBOX, { default: true }),
-      f('first_time_only', '初回のお客様限定', KIND.CHECKBOX, { default: false }),
-      f('limited_period', '期間限定', KIND.CHECKBOX, { default: false }),
+      f('published', 'ホームページに掲載する', KIND.CHECKBOX, { default: true, required: true }),
+      f('bookable', 'ご予約を受け付ける', KIND.CHECKBOX, { default: true, required: true }),
+      f('first_time_only', '初回のお客様限定', KIND.CHECKBOX, { default: false, required: true }),
+      f('limited_period', '期間限定', KIND.CHECKBOX, { default: false, required: true }),
       f('period_start', '期間（開始）', KIND.TEXT, { inputType: 'date' }),
       f('period_end', '期間（終了）', KIND.TEXT, { inputType: 'date' }),
       f('cancel_policy', 'キャンセルについて', KIND.TEXTAREA, { max: 500 }),
@@ -209,7 +229,7 @@ export const STEPS = [
         hint: '共有フォルダへ入れた写真のファイル名をご記入ください。',
       }),
       f('nominatable', 'ご指名を受け付ける', KIND.CHECKBOX, { default: false }),
-      f('published', 'ホームページに掲載する', KIND.CHECKBOX, { default: false }),
+      f('published', 'ホームページに掲載する', KIND.CHECKBOX, { default: false, required: true }),
       f('consent_agreed', 'ご本人の掲載同意を得ている', KIND.CHECKBOX, { default: false }),
       f('consent_date', '同意を得た日', KIND.TEXT, { inputType: 'date' }),
     ],
@@ -374,6 +394,13 @@ export const STEPS = [
         inputType: 'email',
         hint: '受付方法で「メール」を選んだ場合は必ずご記入ください。',
       }),
+      f('salon_booking_url', 'サロン共通の予約URL', KIND.TEXT, {
+        max: 500,
+        inputType: 'url',
+        audience: 'admin',
+        adminRequired: true,
+        hint: 'Smart Labo が設定します（W-05）。該当が無い場合は空のまま設定してください。',
+      }),
       f('map_display', '地図の表示', KIND.SELECT, {
         required: true,
         options: [
@@ -400,7 +427,14 @@ export const STEPS = [
     title: 'お問い合わせフォーム',
     lead: 'ホームページにお問い合わせフォームを置くかどうかを決めます。',
     fields: [
-      f('enabled', 'お問い合わせフォームを設置する', KIND.CHECKBOX, { default: false }),
+      f('enabled', 'お問い合わせフォームの設置', KIND.BOOL_CHOICE, {
+        requiredKey: true,
+        options: [
+          ['true', '設置する'],
+          ['false', '設置しない'],
+        ],
+        hint: 'どちらかをお選びください。「設置しない」も正式なご回答です。',
+      }),
       f('topics', 'お問い合わせの種類', KIND.LIST, {
         cap: 5,
         itemMax: 40,
@@ -449,6 +483,38 @@ export const STEPS = [
           ['yes', '利用する'],
         ],
       }),
+      // ---- ここから Smart Labo 設定（SSOT §3.12）。店舗画面には出さない ----
+      f('destination', '情報の送信先', KIND.TEXT, {
+        max: 200,
+        audience: 'admin',
+        adminRequired: true,
+        internal: true,
+        hint: 'Smart Labo が設定します（PR-03）。',
+      }),
+      f('storage', '情報の保管方法', KIND.TEXT, {
+        max: 200,
+        audience: 'admin',
+        adminRequired: true,
+        hint: 'Smart Labo が設定します（PR-04）。',
+      }),
+      f('external_services', '利用する外部サービス', KIND.LIST, {
+        cap: 10,
+        itemMax: 60,
+        audience: 'admin',
+        adminRequired: true,
+        addLabel: '外部サービスを追加',
+        hint: 'Smart Labo が設定します（PR-07）。無い場合は0件のまま設定してください。',
+      }),
+      f('consent_checkbox', '同意チェックの表示', KIND.BOOL_CHOICE, {
+        audience: 'admin',
+        adminRequired: true,
+        internal: true,
+        options: [
+          ['true', '表示する'],
+          ['false', '表示しない'],
+        ],
+        hint: 'Smart Labo が設定します（PR-09）。',
+      }),
     ],
   },
   {
@@ -494,12 +560,13 @@ export const STEPS = [
       }),
       f('rights_confirmed', 'この写真を使う権利がある', KIND.CHECKBOX, {
         default: false,
+        required: true,
         hint: 'チェックがない写真はホームページに掲載できません。',
       }),
       f('person_consent', '写っている人の掲載同意を得ている', KIND.CHECKBOX, { default: false }),
       f('person_consent_date', '同意を得た日', KIND.TEXT, { inputType: 'date' }),
       f('alt', '写真の説明', KIND.TEXT, { max: 120, hint: '空欄の場合は当社で用意します。' }),
-      f('published', 'ホームページに掲載する', KIND.CHECKBOX, { default: true }),
+      f('published', 'ホームページに掲載する', KIND.CHECKBOX, { default: true, required: true }),
       f('placement', '掲載したい場所', KIND.SELECT, {
         options: [
           ['auto', 'おまかせ'],
@@ -508,7 +575,7 @@ export const STEPS = [
         ],
       }),
       f('expires_on', '掲載をやめる日', KIND.TEXT, { inputType: 'date' }),
-      f('ai_generated', 'AIで作成した画像', KIND.CHECKBOX, { default: false }),
+      f('ai_generated', 'AIで作成した画像', KIND.CHECKBOX, { default: false, required: true }),
       f('note', '補足', KIND.TEXT, { max: 200 }),
     ],
   },
@@ -517,7 +584,10 @@ export const STEPS = [
     title: '素材の使用・権利の確認',
     lead: 'ホームページを公開するために、13項目すべてのご確認をお願いします。',
     fields: [
-      f('confirmations', 'ご確認いただく内容', KIND.CONFIRMATIONS, { required: true }),
+      f('confirmations', 'ご確認いただく内容', KIND.CONFIRMATIONS, {
+        required: true,
+        itemRequired: ['code', 'agreed'],
+      }),
       f('agreed_by', 'ご確認いただいた方のお名前', KIND.TEXT, { max: 60, required: true, internal: true }),
       f('note', '補足', KIND.TEXTAREA, { max: 500, internal: true }),
     ],
@@ -529,3 +599,9 @@ export const STEP_BY_KEY = Object.fromEntries(STEPS.map((s) => [s.key, s]));
 
 /** サーバーが受け付ける分類名（これ以外を送らない） */
 export const SECTION_KEYS = STEPS.map((s) => s.key);
+
+/** 店舗が入力する項目だけ（Smart Labo 設定を除く。§3.12） */
+export const storeFields = (step) => step.fields.filter((x) => x.audience !== 'admin');
+
+/** Smart Labo が管理画面から設定する項目だけ（§3.12） */
+export const adminFields = (step) => step.fields.filter((x) => x.audience === 'admin');

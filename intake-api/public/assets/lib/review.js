@@ -5,7 +5,7 @@
  * ★参考サイト等の URL も、https 以外は**リンクにしない**（dom.js の safeLink）。
  */
 
-import { CONFIRMATION_ITEMS, KIND, STEPS, WEEKDAYS } from './schema.js';
+import { CONFIRMATION_ITEMS, KIND, STEPS, WEEKDAYS, storeFields } from './schema.js';
 import { el, safeLink } from './dom.js';
 import { getAt } from './fields.js';
 
@@ -92,7 +92,7 @@ export function renderReview(store, onEdit) {
       } else {
         items.forEach((item, i) => {
           body.appendChild(el('p', { class: 'review__title', text: `${step.itemLabel} ${i + 1}` }));
-          for (const field of step.fields) {
+          for (const field of storeFields(step)) {
             body.appendChild(
               el('div', { class: 'review__row' }, [
                 el('span', { class: 'review__key', text: field.label }),
@@ -103,7 +103,7 @@ export function renderReview(store, onEdit) {
         });
       }
     } else {
-      for (const field of step.fields) {
+      for (const field of storeFields(step)) {
         body.appendChild(
           el('div', { class: 'review__row' }, [
             el('span', { class: 'review__key', text: field.label }),

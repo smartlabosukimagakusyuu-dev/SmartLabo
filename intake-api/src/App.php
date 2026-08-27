@@ -184,7 +184,8 @@ final class App
             'drive_confirmed' => $case['drive_upload_confirmed_at'] !== null,
             'version'         => $answers['version'],
             'schema_version'  => $answers['schema_version'],
-            'sections'        => $answers['sections'],
+            // ★Smart Labo 設定（§3.12）は店舗へ返さない
+            'sections'        => \SmartLabo\Intake\Service\AnswerValidator::filterForStore($answers['sections']),
             // ★いま対応が必要な修正依頼だけ（resolved の本文は返さない。SSOT §2.8-9）
             'revision_requests' => $this->revisions->openForCase($caseId),
             // ★素材フォルダの案内。認証済みの本人にだけ返す（SSOT §7.3）
