@@ -812,17 +812,16 @@ test('admin: 許可されていない遷移は拒否する', function (): void {
     assertSame(0, $k->audit->countFor($caseId, 'case_status_changed'), '監査が増えている');
 });
 
-test('admin: reviewed から needs_revision へは戻せない（SSOT §5.1 の遷移表どおり）', function (): void {
-    // SSOT §5.1: reviewed → locked / closed のみ。needs_revision は submitted からだけ。
-    // 遷移表に無い操作は**ボタンにも出さない**。
+test('admin: locked / closed からは戻せない（SSOT §5.1 の遷移表どおり）', function (): void {
+    // v1.5 で reviewed → needs_revision は許可された。
+    // ただし locked / closed から戻す経路は**作らない**。
     $k = adminKernel();
     [$caseId] = submittedCase($k, 'HP-2026-0646');
     $login = loginAdmin($k);
 
-    $k->app->handle(adminPost('/admin/status',
-        ['case' => 'HP-2026-0646', 'to' => 'reviewed', 'csrf_token' => $login['csrf']],
-        ['cookies' => $login['cookie']]));
-    assertSame('reviewed', (string)$k->cases->find($caseId)['status']);
+    $k->cases->transitionTo($caseId, 'reviewed');
+    $k->cases->transitionTo($caseId, 'locked');
+    assertSame('locked', (string)$k->cases->find($caseId)['status']);
 
     $csrf = $k->adminAuth->rotateCsrf(
         (int)$k->db->pdo()->query('SELECT id FROM intake_admin_sessions ORDER BY id DESC LIMIT 1')->fetchColumn()
@@ -831,13 +830,9 @@ test('admin: reviewed から needs_revision へは戻せない（SSOT §5.1 の�
         ['case' => 'HP-2026-0646', 'to' => 'needs_revision', 'csrf_token' => $csrf],
         ['cookies' => $login['cookie']]));
 
-    assertTrue(str_contains($res->headers['Location'] ?? '', 'msg=invalid'), '遷移表に無い操作が通ってしまう');
-    assertSame('reviewed', (string)$k->cases->find($caseId)['status'], '状態が変わってしまった');
-
-    // 画面に押せないボタンを置かない
-    $html = (string)$k->app->handle(adminGet('/admin/case',
-        ['cookies' => $login['cookie'], 'query' => ['case' => 'HP-2026-0646']]))->rawBody;
-    assertTrue(!str_contains($html, '修正を依頼する'), '必ず失敗するボタンが出ている');
+    assertTrue(str_contains($res->headers['Location'] ?? '', 'msg=invalid'), 'locked から戻せてしまう');
+    assertSame('locked', (string)$k->cases->find($caseId)['status'], '状態が変わってしまった');
+    assertTrue($login['csrf'] !== null);
 });
 
 test('admin: 独自の status を受け付けない', function (): void {
@@ -984,7 +979,7 @@ test('export: 秘密値・内部情報を含めない（allowlist）', function 
     [$caseId] = submittedCase($k, 'HP-2026-0654');
 
     // Drive URL を登録しておき、書き出しへ出ないことを確かめる
-    $driveUrl = 'https://drive.example.invalid/folders/fake-id';
+    $driveUrl = 'https://drive.google.com/drive/folders/FAKE-FOLDER-ID-0000000000';
     $k->cases->setDriveFolder($caseId, $driveUrl, 'HP-2026-0654 写真');
 
     $login = loginAdmin($k);
@@ -1032,6 +1027,7 @@ test('export: 出すキーは決めたものだけ', function (): void {
         'drive_upload_confirmed_at', 'retention_delete_due',
         'reviewed_at', 'revision_requested_at',
         'answer_schema_version', 'answers', 'rights', 'submission_summary',
+        'revision_requests',
     ];
     foreach (array_keys($json) as $key) {
         assertTrue(in_array($key, $allowed, true), '想定外のキーが出ている: ' . $key);

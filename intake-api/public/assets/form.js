@@ -20,7 +20,7 @@ import { SubmissionAttempt } from './lib/submission.js';
 import { describeAllMissing } from './lib/paths.js';
 import { renderStep } from './lib/fields.js';
 import { renderReview } from './lib/review.js';
-import { clear, el, replace, show } from './lib/dom.js';
+import { clear, el, replace, safeLink, show } from './lib/dom.js';
 
 const UNAVAILABLE = 'このURLは使用できません。お手数ですが、担当者までご連絡ください。';
 const REVIEW_INDEX = STEPS.length; // 12番目 ＝ 確認・提出
@@ -41,6 +41,7 @@ const ui = {
   progressBar: document.getElementById('progress-bar'),
   progressFill: document.getElementById('progress-fill'),
   alerts: document.getElementById('alerts'),
+  revision: document.getElementById('revision'),
   stepTitle: document.getElementById('step-title'),
   stepLead: document.getElementById('step-lead'),
   stepForm: document.getElementById('step-form'),
@@ -286,8 +287,61 @@ function renderProgress() {
   ui.progressBar.setAttribute('aria-valuetext', `${title}（${current} / ${total}）`);
 }
 
+/**
+ * 修正依頼のお知らせ（SSOT v1.5 §2.8）。
+ *
+ * ★担当者が書いた文面は **textContent でだけ**出す（HTML として解釈しない）。
+ * ★対象項目は既存の対応付け（paths.js）でラベルへ言い換え、その欄へ移動できるようにする。
+ */
+function renderRevisionNotice() {
+  if (!store.hasRevisionRequest || finished) {
+    return;
+  }
+
+  const blocks = store.revisionRequests.map((request) => {
+    const described = describeAllMissing(request.requested_paths || []);
+
+    const list = el(
+      'ul',
+      { class: 'missing-list' },
+      described.map((m) =>
+        el('li', {}, [
+          el('button', {
+            type: 'button',
+            class: 'btn btn--quiet btn--small',
+            text: m.label,
+            onClick: () => focusMissing(m),
+          }),
+        ]),
+      ),
+    );
+
+    return el('div', {}, [
+      el('p', { class: 'notice__title', text: `修正のお願い（${request.request_number}回目）` }),
+      // ★担当者からの文面。textContent なので HTML にはならない
+      request.message ? el('p', { class: 'revision__message', text: request.message }) : null,
+      described.length > 0
+        ? el('p', { class: 'field__hint', text: '次の項目をご確認ください。押すとその欄へ移動します。' })
+        : null,
+      list,
+    ]);
+  });
+
+  replace(ui.revision, [
+    el('div', { class: 'notice notice--warn' }, [
+      ...blocks,
+      el('p', {
+        class: 'field__hint',
+        text: 'ご修正のうえ、もう一度いちばん下から提出してください。',
+      }),
+    ]),
+  ]);
+  show(ui.revision, true);
+}
+
 function renderStepView() {
   renderProgress();
+  renderRevisionNotice();
   clear(ui.stepForm);
 
   if (stepIndex === REVIEW_INDEX) {
@@ -378,13 +432,33 @@ function driveGuide() {
     ['04_references', '参考にしたい資料'],
   ];
 
+  const drive = store.drive || {};
+  const hasLink = typeof drive.folder_url === 'string' && drive.folder_url.startsWith('https://');
+
   return el('div', { class: 'notice notice--info' }, [
     el('p', { class: 'notice__title', text: '写真データのお預かりについて' }),
     el('p', {
       text:
-        '写真そのものは、担当者からご案内する共有フォルダへお入れください。'
+        '写真そのものは、下の共有フォルダへお入れください。'
         + 'この画面ではファイル名と権利の確認だけをお願いしています。',
     }),
+
+    // ★フォルダを開くリンク。https 以外はリンクにしない（safeLink）
+    hasLink
+      ? el('p', {}, [safeLink(drive.folder_url, '素材フォルダを開く')])
+      : el('p', {
+        class: 'field__hint',
+        text: '共有フォルダのご案内は、担当者からお送りします。',
+      }),
+
+    // ★共有先メールは、認証済みのご本人にだけ返している（SSOT §7.2 の必須文言）
+    drive.shared_email
+      ? el('p', {
+        class: 'field__hint',
+        text: `このフォルダは ${drive.shared_email} にのみ共有しています。`,
+      })
+      : null,
+
     el('p', {
       text: store.caseNumber
         ? `いちばん上のフォルダ名は「${store.caseNumber}」です。その中に次の4つが並んでいます。`
@@ -639,6 +713,7 @@ function onSubmitted() {
   finished = true;
   saver.dispose();
   store.setStatus('submitted');
+  show(ui.revision, false);
   // ★API が返していない日時等を作らない
   showSolo(
     'ご提出ありがとうございました',

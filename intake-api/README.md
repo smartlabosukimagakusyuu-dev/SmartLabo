@@ -1,8 +1,8 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B / -4B-R1 / -4C / -4D）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4D-R1）
 
 ```text
 STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.4**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.5**
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -102,10 +102,23 @@ php -c intake-api/dev/php.ini -S 127.0.0.1:8788 -t intake-api/public intake-api/
 | POST | `/session/logout` | session の個別失効 |
 | POST | `/drive/confirm` | 素材アップロード完了の申告（4D）。`{"confirmed": true}` のみ受理・冪等 |
 
+`GET /case` は 4D-R1 で次を返すようになった（**認証済みの本人にだけ**）。
+
+| キー | 内容 |
+|---|---|
+| `revision_requests` | **`open` の修正依頼だけ**（`request_number` / `requested_paths` / `message` / `created_at`） |
+| `drive` | 素材フォルダの案内（`folder_url` / `folder_label` / `shared_email`） |
+
+★どちらも**ログ・監査・書き出しへは出さない**。`resolved` の依頼本文は返さない。
+
 > ★同一オリジンの **GET には `Origin` が付かない**（ブラウザの仕様）。
 > さらに画面は `Referrer-Policy: no-referrer`（SSOT §10.4）なので **`Referer` も付かない**。
-> そのため GET だけは `Sec-Fetch-Site: same-origin`（**禁止ヘッダー名**でありJSから偽装できない）
-> でも受け付ける。**POST は従来どおり `Origin` の厳格検査だけで守る。**
+> そのため GET だけは `Sec-Fetch-Site: same-origin` でも受け付ける。
+> **POST は従来どおり `Origin` の厳格検査だけで守る。**
+>
+> ★`Sec-Fetch-*` は **Forbidden request header** であり、**ブラウザ内の JavaScript からは設定できない**。
+> ただし **curl 等の非ブラウザからは任意に構成できる**ので、単独では守りにならない。
+> CSRF token・session・Origin 検査・`SameSite=Strict` と組み合わせた多層防御を前提とする。
 
 ## 4.1 画面（4C の範囲）
 
@@ -141,8 +154,12 @@ php -c intake-api/dev/php.ini -S 127.0.0.1:8788 -t intake-api/public intake-api/
 | GET / POST | `/admin/login` | ログイン |
 | POST | `/admin/logout` | ログアウト（★GET では受けない） |
 | GET | `/admin/` | 案件一覧（**回答本文を出さない**） |
-| GET | `/admin/case?case=…` | 案件詳細（11分類・不足項目・提出履歴） |
-| POST | `/admin/status` | `reviewed` / `needs_revision` への変更 |
+| GET | `/admin/case?case=…` | 案件詳細（11分類・不足項目・提出履歴・修正依頼） |
+| POST | `/admin/status` | `reviewed` への変更 |
+| GET | `/admin/revision?case=…` | 修正依頼の入力（4D-R1） |
+| POST | `/admin/revision/send` | 修正依頼の確定 ＋ `needs_revision` へ差し戻し（4D-R1） |
+| GET | `/admin/new` | 新しい案件の入力（4D-R1） |
+| POST | `/admin/create` | 案件作成 ＋ ご案内リンクの発行（4D-R1） |
 | GET | `/admin/export?case=…` | 検証済み JSON のダウンロード |
 
 - 代表1名のみ。資格情報は `private/intake-config.php`（**hash だけ**。§6）
@@ -248,11 +265,33 @@ Google Drive 実連携（**案内文だけ**。API へ接続しない・SSOT §7
 Smart Labo Operations との連携（OPS-4。**書き出しファイルの受け渡しまで**）／
 Stripe（一切）／本番配置・サブドメイン・SSL（4H）
 
+### 修正依頼（4D-R1・SSOT v1.5 §2.8）
+
+差し戻しの理由は **`intake_revision_requests`（8表目）**が持つ。回答欄へ押し込まない。
+
+| # | 決まり |
+|---|---|
+| 1 | 対象項目は **§3 の正式パス129件**（`src/AnswerPaths.php`）だけ。未知パスを含む要求は**丸ごと拒否** |
+| 2 | `AnswerPaths.php` は `public/assets/lib/schema.js` から**機械的に生成**した。**手で書き換えない** |
+| 3 | メッセージは**1000文字まで**（切り捨てず拒否）。**ログ・監査・書き出しへ出さない** |
+| 4 | 状態変更と依頼の作成は**同一トランザクション** |
+| 5 | 店舗の**再提出が成功したら** `open` を `resolved` にする。過去の依頼は消さない |
+| 6 | 店舗へ返すのは `open` のものだけ |
+
+### 案件作成とご案内リンク（4D-R1）
+
+管理画面の「新しいHP制作案件」から作る。**CLI は運用にしない**。
+
+- 案件番号は**サーバーが採番**する（`HP-YYYYMM-NNNN`）。店舗名を含めない
+- token は既存の `TokenService`（`random_bytes(32)` / DBには hash のみ）
+- **平文は作成直後の画面に1回だけ**。再表示の経路を作らない
+- 二重送信は **CSRF token の作り直し**で止める（同じ画面を再送しても通らない）
+- 紛失時は**発行し直す**（旧 token と関連 session は失効する）
+
 ### 残っている宿題（4E 以降）
 
 | # | 事項 | いまの扱い |
 |---|---|---|
-| 1 | **修正依頼の理由を店舗へ伝える経路**が無い | 構造化して保持する正式列が無いため、`needs_revision` は**状態変更のみ**。<br>理由は担当者からの連絡で伝える（SSOT §12.2-8）。**回答欄へ押し込まない** |
-| 2 | **店舗画面への Drive リンク表示** | SSOT §7.2 は表示を許しているが、必要な文言<br>「このフォルダは○○（指定メール）にのみ共有しています」の**共有先メールを持つ列が無い**。<br>正確に書けないため表示しない（SSOT §12.2-9）。案内文のみ |
-| 3 | `GET /case` の `Sec-Fetch-Site` 受理 | **4E でセキュリティ再検証**（SSOT §10.9-4） |
-| 4 | 管理画面からの**案件作成・ご案内リンク発行** | 4D の範囲外。現状は CLI |
+| 1 | `GET /case` の `Sec-Fetch-Site` 受理 | **4E でセキュリティ再検証**（SSOT §10.9-4） |
+| 2 | 管理画面からの **token 再発行** | 4D-R1 では**未実装**。初回発行のみ。<br>再発行が要る場合は `TokenService::issue()` を呼ぶ導線を 4E 以降で足す |
+| 3 | `locked` / `closed` への遷移 | 画面から行わない（誤操作の影響が大きいため） |

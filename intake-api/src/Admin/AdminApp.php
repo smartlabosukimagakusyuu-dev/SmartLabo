@@ -8,7 +8,11 @@
  *   POST /admin/logout   ログアウト（★GET では受けない）
  *   GET  /admin/         案件一覧
  *   GET  /admin/case     案件詳細
- *   POST /admin/status   状態変更（reviewed / needs_revision）
+ *   POST /admin/status   状態変更（reviewed へ）
+ *   GET  /admin/revision      修正依頼の入力（4D-R1）
+ *   POST /admin/revision/send 修正依頼の確定（＋ needs_revision へ差し戻し）
+ *   GET  /admin/new           新しい案件の入力（4D-R1）
+ *   POST /admin/create        案件作成 ＋ ご案内リンクの発行
  *   GET  /admin/export   検証済み JSON のダウンロード
  *
  * 守ること:
@@ -24,6 +28,7 @@ use SmartLabo\Intake\Config;
 use SmartLabo\Intake\Http\Guard;
 use SmartLabo\Intake\Http\Request;
 use SmartLabo\Intake\Http\Response;
+use SmartLabo\Intake\AnswerPaths;
 use SmartLabo\Intake\Migrator;
 use SmartLabo\Intake\Service\AdminAuth;
 use SmartLabo\Intake\Service\AnswerService;
@@ -31,6 +36,8 @@ use SmartLabo\Intake\Service\Audit;
 use SmartLabo\Intake\Service\CaseService;
 use SmartLabo\Intake\Service\ExportService;
 use SmartLabo\Intake\Service\RateLimiter;
+use SmartLabo\Intake\Service\RevisionRequestService;
+use SmartLabo\Intake\Service\TokenService;
 use SmartLabo\Intake\Support\Logger;
 
 final class AdminApp
@@ -50,6 +57,8 @@ final class AdminApp
         private readonly CaseService $cases,
         private readonly AnswerService $answers,
         private readonly ExportService $export,
+        private readonly RevisionRequestService $revisions,
+        private readonly TokenService $tokens,
         private readonly Audit $audit,
         private readonly Logger $logger,
     ) {
@@ -77,6 +86,10 @@ final class AdminApp
             '/admin/case'   => $this->caseDetail($req),
             '/admin/status' => $this->changeStatus($req),
             '/admin/export' => $this->downloadExport($req),
+            '/admin/revision'     => $this->revisionForm($req),
+            '/admin/revision/send' => $this->sendRevision($req),
+            '/admin/new'    => $this->newCaseForm($req),
+            '/admin/create' => $this->createCase($req),
             default         => Response::html(
                 View::page('表示できません', View::notice('error', self::MSG_NOT_FOUND), false),
                 404
@@ -201,6 +214,7 @@ final class AdminApp
         $body = '<section class="card">'
             . '<h1 class="card__title">案件一覧</h1>'
             . '<p class="lead">回答の中身はこの画面に出しません。詳細画面でご確認ください。</p>'
+            . '<div class="actions"><a class="btn btn--primary" href="/admin/new">新しいHP制作案件</a></div>'
             . '<div class="tablewrap"><table class="table">'
             . '<thead><tr><th>案件番号</th><th>状態</th><th>提出日時</th><th>素材</th><th>更新日時</th><th>保持期限</th></tr></thead>'
             . '<tbody>' . $items . '</tbody></table></div>'
@@ -257,6 +271,7 @@ final class AdminApp
 
         $body = $notice
             . $this->summarySection($case, $evaluation, $csrf, $status)
+            . $this->revisionSection($caseId)
             . $this->missingSection($evaluation)
             . $this->answersSection($answers['sections'])
             . $this->historySection($caseId)
@@ -277,6 +292,8 @@ final class AdminApp
         //   `submitted` からは reviewed / needs_revision の両方へ行ける。
         //   `reviewed` から needs_revision へは**戻れない**（遷移表に無い）。
         //   押しても必ず失敗するボタンを置かないこと自体が、仕様の説明になる。
+        // ★v1.5: submitted / reviewed の両方から修正を依頼できる（代表判断の案B）。
+        //   修正依頼は理由の入力が要るので、別画面へ送る（GET では何も変えない）。
         $actions = '';
         if ($status === 'submitted') {
             $actions .= View::actionForm(
@@ -286,15 +303,10 @@ final class AdminApp
                 '確認済みにする',
                 'btn--primary'
             );
-            $actions .= View::actionForm(
-                '/admin/status',
-                $csrf,
-                ['case' => $number, 'to' => 'needs_revision'],
-                '修正を依頼する',
-                'btn--outline'
-            );
-        } elseif ($status === 'reviewed') {
-            $actions .= '<span class="muted">確認済みです。修正が必要な場合は担当者へご連絡ください。</span>';
+        }
+        if (in_array($status, CaseService::REVISABLE, true)) {
+            $actions .= '<a class="btn btn--outline" href="/admin/revision?case='
+                . rawurlencode($number) . '">修正を依頼する</a>';
         }
 
         // 書き出しは提出済み以降かつ必須充足のときだけ出す
@@ -317,6 +329,46 @@ final class AdminApp
                 : '<span class="ng">' . View::esc(count($evaluation['missing'])) . ' 件不足</span>')
             . '<div class="actions">' . $actions . $exportHtml . '</div>'
             . '</section>';
+    }
+
+    /**
+     * これまでの修正依頼（SSOT v1.5 §2.8）。
+     * ★過去の依頼も残して見せる。消さない・上書きしない。
+     */
+    private function revisionSection(int $caseId): string
+    {
+        $rows = $this->revisions->allForCase($caseId);
+        if ($rows === []) {
+            return '';
+        }
+
+        $items = '';
+        foreach (array_reverse($rows) as $row) {
+            $decoded = json_decode((string)$row['requested_paths_json'], true);
+            $paths   = '';
+            foreach (is_array($decoded) ? $decoded : [] as $path) {
+                $paths .= '<li>' . View::esc(View::pathDisplay((string)$path)) . '</li>';
+            }
+
+            $open = (string)$row['status'] === RevisionRequestService::STATUS_OPEN;
+            $items .= '<div class="group">'
+                . '<div class="group__head">'
+                . '<span class="group__title">' . View::esc('第' . (int)$row['request_number'] . '回') . '</span>'
+                . ($open
+                    ? '<span class="badge badge--needs_revision">対応中</span>'
+                    : '<span class="badge badge--reviewed">対応済み</span>')
+                . '</div>'
+                . View::row('依頼日時', View::orDash($row['created_at']))
+                . View::row('対応日時', View::orDash($row['resolved_at']))
+                . View::row('対象項目', '<ul class="list">' . $paths . '</ul>')
+                . View::row('メッセージ', $row['message'] === null || (string)$row['message'] === ''
+                    ? '<span class="muted">なし</span>'
+                    : View::escLines((string)$row['message']))
+                . '</div>';
+        }
+
+        return '<section class="card"><h2 class="card__title">修正依頼</h2>'
+            . '<div class="rows">' . $items . '</div></section>';
     }
 
     private function missingSection(array $evaluation): string
@@ -475,6 +527,257 @@ final class AdminApp
         return Response::redirect('/admin/case?case=' . rawurlencode($number) . '&msg=' . $msg);
     }
 
+    /* ------------------------------------------------------------ 修正依頼 */
+
+    /**
+     * 修正依頼の入力画面（GET）。
+     * ★ここでは何も変えない。確定は POST /admin/revision/send。
+     */
+    private function revisionForm(Request $req): Response
+    {
+        [$session, $fail] = $this->requireSession($req, 'GET');
+        if ($fail !== null) {
+            return $fail;
+        }
+
+        $case = $this->cases->findByNumber((string)($req->query['case'] ?? ''));
+        if ($case === null) {
+            return $this->notFound();
+        }
+
+        $number = (string)$case['case_number'];
+        $status = (string)$case['status'];
+        if (!in_array($status, CaseService::REVISABLE, true)) {
+            return Response::html(
+                View::page('修正を依頼できません', View::notice(
+                    'warn',
+                    'この案件は、いまの状態では修正を依頼できません。'
+                )),
+                409
+            );
+        }
+
+        $csrf    = $this->auth->rotateCsrf((int)$session['id']);
+        $missing = $this->answers->evaluate((int)$case['id'])['missing'];
+
+        return Response::html(View::page(
+            '修正を依頼する',
+            View::revisionForm($number, $csrf, $missing),
+        ));
+    }
+
+    /**
+     * 修正依頼を確定する（POST）。
+     * ★状態変更と依頼の作成は CaseService 側で同一トランザクションにまとめる。
+     */
+    private function sendRevision(Request $req): Response
+    {
+        if ($req->method !== 'POST' || !$this->guard->adminPostAllowed($req)) {
+            return $this->forbidden();
+        }
+
+        $session = $this->auth->verify($req->cookie(Config::ADMIN_COOKIE_NAME));
+        if ($session === null) {
+            return Response::redirect('/admin/login');
+        }
+        if (!$this->auth->csrfMatches($session, $this->csrfFrom($req))) {
+            return $this->forbidden();
+        }
+        $this->auth->touch((int)$session['id']);
+
+        $form   = $req->formFields();
+        $number = (string)($form['case'] ?? '');
+        $case   = $this->cases->findByNumber($number);
+        if ($case === null) {
+            return $this->notFound();
+        }
+
+        // ★checkbox は同名の複数値。formFields() は文字列だけを返すので、ここで生body を読む
+        $paths = $this->pathsFrom($req);
+
+        $checked = $this->revisions->validate($paths, $form['message'] ?? null);
+        if ($checked['ok'] !== true) {
+            $reason = (string)$checked['error'];
+            $text   = match ($reason) {
+                'empty'            => '修正をお願いする項目を1つ以上お選びください。',
+                'message_too_long' => 'メッセージが長すぎます（1000文字まで）。',
+                default            => '入力内容を確認できませんでした。',
+            };
+
+            return Response::html(
+                View::page('修正を依頼する', View::notice('error', $text)
+                    . View::revisionForm($number, $this->auth->rotateCsrf((int)$session['id']),
+                        $this->answers->evaluate((int)$case['id'])['missing'])),
+                400
+            );
+        }
+
+        $result = $this->cases->requestRevision(
+            (int)$case['id'],
+            (array)$checked['paths'],
+            $checked['message'],
+            $this->revisions,
+        );
+
+        if ($result['ok'] !== true) {
+            $msg = ($result['error'] ?? '') === 'conflict' ? 'conflict' : 'invalid';
+
+            return Response::redirect('/admin/case?case=' . rawurlencode($number) . '&msg=' . $msg);
+        }
+
+        // ★本文も対象パスもログへ出さない（SSOT §2.8-4）
+        $this->logger->info('case_status_changed', [
+            'case_number' => $number,
+            'result_code' => 'ok',
+            'http_status' => 303,
+        ]);
+
+        return Response::redirect('/admin/case?case=' . rawurlencode($number) . '&msg=revision');
+    }
+
+    /**
+     * `paths[]` を生 body から読む。
+     * ★同名複数値のため formFields()（文字列のみ）では取れない。
+     * @return list<string>
+     */
+    private function pathsFrom(Request $req): array
+    {
+        $ctype = strtolower(trim(explode(';', (string)$req->header('Content-Type'))[0]));
+        if ($ctype !== 'application/x-www-form-urlencoded') {
+            return [];
+        }
+        $parsed = [];
+        parse_str($req->body, $parsed);
+        $paths = $parsed['paths'] ?? [];
+
+        $out = [];
+        foreach (is_array($paths) ? $paths : [] as $p) {
+            if (is_string($p)) {
+                $out[] = $p;
+            }
+        }
+
+        return $out;
+    }
+
+    /* ------------------------------------------------------------ 案件作成 */
+
+    private function newCaseForm(Request $req): Response
+    {
+        [$session, $fail] = $this->requireSession($req, 'GET');
+        if ($fail !== null) {
+            return $fail;
+        }
+
+        $csrf = $this->auth->rotateCsrf((int)$session['id']);
+
+        return Response::html(View::page('新しいHP制作案件', View::newCaseForm($csrf)));
+    }
+
+    /**
+     * 案件を作り、ご案内リンクを**1回だけ**表示する。
+     *
+     * ★token の平文はこの応答にしか出さない。再表示の経路を作らない。
+     * ★token をログ・監査・URL・Cookie へ出さない。
+     */
+    private function createCase(Request $req): Response
+    {
+        if ($req->method !== 'POST' || !$this->guard->adminPostAllowed($req)) {
+            return $this->forbidden();
+        }
+
+        $session = $this->auth->verify($req->cookie(Config::ADMIN_COOKIE_NAME));
+        if ($session === null) {
+            return Response::redirect('/admin/login');
+        }
+        if (!$this->auth->csrfMatches($session, $this->csrfFrom($req))) {
+            return $this->forbidden();
+        }
+        // ★ここで CSRF を作り直す。これが**二重送信の歯止め**になる。
+        //   ブラウザの再送・戻る→再送信で同じ画面をもう一度送っても、
+        //   古い token では通らないので案件が重複しない。
+        $this->auth->touch((int)$session['id']);
+        $this->auth->rotateCsrf((int)$session['id']);
+
+        $form = $req->formFields();
+
+        $created = $this->cases->createFromAdmin(
+            (string)($form['shop_display_name'] ?? ''),
+            (string)($form['contract_type'] ?? 'standalone'),
+        );
+        if ($created['ok'] !== true) {
+            $text = ($created['error'] ?? '') === 'bad_name'
+                ? '管理用の名前をご入力ください（100文字まで）。'
+                : '案件を作成できませんでした。';
+
+            return Response::html(
+                View::page('新しいHP制作案件',
+                    View::notice('error', $text)
+                    . View::newCaseForm($this->auth->rotateCsrf((int)$session['id']))),
+                400
+            );
+        }
+
+        $caseId = (int)$created['case_id'];
+        $number = (string)$created['case_number'];
+
+        // Drive の情報は任意。入っていれば検査して保存する
+        $driveError = $this->applyDrive($caseId, $number, $form);
+        if ($driveError !== null) {
+            return Response::html(
+                View::page('新しいHP制作案件',
+                    View::notice('error', $driveError)
+                    . View::notice('warn', '案件 ' . View::esc($number) . ' は作成済みです。'
+                        . '素材フォルダの設定は案件詳細からやり直してください。')),
+                400
+            );
+        }
+
+        // ご案内リンクの発行（既存の TokenService をそのまま使う）
+        $token = $this->tokens->issue($caseId);
+
+        $this->logger->info('token_issued', [
+            'case_number' => $number,
+            'result_code' => 'ok',
+            'http_status' => 200,
+        ]);
+
+        // ★no-store。この画面を離れると復元できない
+        return Response::html(View::page('案件を作成しました', View::createdCase($number, $token)));
+    }
+
+    /**
+     * Drive の URL と共有先メールを保存する。
+     * @param array<string,string> $form
+     * @return string|null エラー文言（成功なら null）
+     */
+    private function applyDrive(int $caseId, string $caseNumber, array $form): ?string
+    {
+        $url   = trim((string)($form['drive_url'] ?? ''));
+        $email = trim((string)($form['drive_shared_email'] ?? ''));
+
+        if ($url === '' && $email === '') {
+            return null;
+        }
+        if ($url === '' || $email === '') {
+            return '素材フォルダのURLと共有先メールは、両方そろえてご入力ください。';
+        }
+
+        try {
+            $this->cases->setDriveFolder(
+                $caseId,
+                $url,
+                $caseNumber . ' 素材',
+                $email,
+            );
+        } catch (\InvalidArgumentException $e) {
+            // ★例外の内容（拒否理由）をそのまま画面へ出さない
+            return 'この素材フォルダのURLまたはメールアドレスは受け付けられません。';
+        }
+
+        return null;
+    }
+
     /* ------------------------------------------------------------ 書き出し */
 
     private function downloadExport(Request $req): Response
@@ -560,6 +863,14 @@ final class AdminApp
         $form = $req->formFields();
 
         return isset($form['csrf_token']) ? (string)$form['csrf_token'] : null;
+    }
+
+    private function notFound(): Response
+    {
+        return Response::html(
+            View::page('表示できません', View::notice('error', self::MSG_NOT_FOUND)),
+            404
+        );
     }
 
     private function forbidden(): Response

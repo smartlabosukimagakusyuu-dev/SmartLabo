@@ -1,13 +1,14 @@
 # 店舗向けHP導入フォーム データモデル・token設計 v1
 
 ```text
-STATUS      : APPROVED / 4C 実装済み（受付API・店舗入力画面）
-VERSION     : v1.4（R4）
-DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2 R2・v1.3 R3・v1.4 R4 改定）
+STATUS      : APPROVED / 4D 実装済み（受付API・店舗入力画面・内部確認画面）
+VERSION     : v1.5（R5）
+DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2 R2・v1.3 R3・v1.4 R4・v1.5 R5 改定）
 工程        : HP-ONBOARDING-4A ／ -4A-R1（AI Sales 分離・Operations 境界確定）
               ／ -4B-PRE（XServer 実行環境の実測）／ -4A-R2（実測反映）
               ／ -4B（受付API 実装）／ -4B-R1（提出の冪等化）
-              ／ -4C（店舗入力画面）／ **-4D（内部確認・書き出し・本改定）**
+              ／ -4C（店舗入力画面）／ -4D（内部確認・書き出し）
+              ／ **-4D-R1（修正依頼・案件作成・Drive 案内・本改定）**
 本番環境    : XServer 共用（PHP 8.3.33 / **SQLite 3.26.0** / pdo_sqlite・OpenSSL・mbstring 有効）
               ★実測日 2026-08-27。**VACUUM INTO は使用不可**（§2.0.1・§9.6）
 対象        : intake.smartlaboworks.com（店舗向けHP導入フォーム）
@@ -238,6 +239,7 @@ Smart Labo Operations の完成前に契約が発生した場合、
 | `current_step` | TEXT | 可 | NULL | 店舗が最後に開いていた入力ステップ（再開位置）。例 `basic` / `menus` / `photos` |
 | `drive_folder_url_enc` | BLOB | 可 | NULL | Google Drive フォルダURLの**暗号文**（§7.3）。平文で保存しない |
 | `drive_folder_label` | TEXT | 可 | NULL | 管理・画面表示用のフォルダ名（例「HP-2026-0001 写真」）。URLではない |
+| `drive_shared_email_enc` | BLOB | 可 | NULL | **共有先メールアドレスの暗号文**（§7.3・v1.5 で追加）。<br>店舗画面の案内文「このフォルダは○○にのみ共有しています」に使う。<br>**平文で保存しない。書き出し・監査・ログへ出さない** |
 | `drive_upload_confirmed_at` | TEXT | 可 | NULL | 店舗が「アップロード完了」を申告した日時 |
 | `submitted_at` | TEXT | 可 | NULL | 初回提出日時 |
 | `locked_at` | TEXT | 可 | NULL | 編集ロック日時 |
@@ -461,13 +463,54 @@ Smart Labo 内部の管理画面用。**§2.6 の `intake_sessions`（店舗向�
 > ★店舗向け（§2.6）と同じ設計を意図的に踏襲している。
 > 「hash のみ保存」「idle と絶対の二重期限」「Cookie 属性」を**別実装で作り分けない**ため。
 
-### 2.8 提案：追加しないテーブル（判断の記録）
+### 2.8 H. intake_revision_requests（修正依頼・v1.5 で追加）
+
+差し戻し（`needs_revision`）の理由を**構造として持つ**表。
+
+> ★これを作る理由: 理由を回答欄（`intake_answers`）へ書くと**回答本文と混ざり**、
+> 書き出し・削除・保持期間の扱いが壊れる。監査ログへ書くと**本文が監査へ入る**。
+> どちらも避けるため、専用の表を1つ足す（v1.4 §2.8 で「作らない」としていた判断を撤回する）。
+
+| 列 | 型 | NULL | 内容 |
+|---|---|---|---|
+| `id` | INTEGER PK AUTOINCREMENT | — | ★外部・書き出しへ出さない |
+| `intake_case_id` | INTEGER NOT NULL REFERENCES intake_cases(id) | 不可 | |
+| `request_number` | INTEGER NOT NULL | 不可 | **案件内の通し番号**（1から）。店舗へ見せるのはこちら |
+| `requested_paths_json` | TEXT NOT NULL | 不可 | **§3 の正式パスだけ**の配列。未知パスは受け付けない |
+| `message` | TEXT | 可 | 店舗向けの補足。**最大1000文字**。HTML として扱わない |
+| `status` | TEXT NOT NULL | 不可 | `open` / `resolved` |
+| `created_at` | TEXT NOT NULL | 不可 | |
+| `resolved_at` | TEXT | 可 | 店舗の再提出が成功した日時 |
+
+索引: `INDEX(intake_case_id, status)` ／ `UNIQUE(intake_case_id, request_number)`
+
+**規則**
+
+| # | 規則 |
+|---|---|
+| 1 | `requested_paths_json` は **§3 の正式パスのみ**。未知パスを含む要求は**丸ごと拒否**する |
+| 2 | 同じパスが重複したら**正規化**して1つにする（順序は入力順を保つ） |
+| 3 | `message` は任意。**1000文字を超えたら拒否**（切り捨てない） |
+| 4 | `message` と `requested_paths` を**アプリログへ出さない**（§10.7） |
+| 5 | **監査ログに本文を持たせない**。監査は `case_status_changed` の発生だけを残す |
+| 6 | 1案件に**複数回**保持できる。過去の依頼を**削除も上書きもしない** |
+| 7 | `needs_revision` への状態変更と依頼の作成は**同一トランザクション**で行う |
+| 8 | **店舗の再提出が成功した時点**で、その案件の `open` をすべて `resolved` にする |
+| 9 | 店舗へ返してよいのは **`open` の依頼だけ**（`request_number` / `requested_paths` / `message` / `created_at`） |
+| 10 | **管理者を識別する列を作らない。** Phase 1 は代表1名（§10.8）であり、<br>誰が出したかは自明。個人IDを増やさない |
+
+> ★`created_by_admin_session_id` のような列は**作らない**。
+> 管理 session の識別子は秘密値であり、**残す理由が無い**（§2.7-9）。
+> 「いつ差し戻したか」は `created_at` と監査の `case_status_changed` で追える。
+
+### 2.9 提案：追加しないテーブル（判断の記録）
 
 | 候補 | 判断 | 理由 |
 |---|---|---|
 | メニュー・スタッフ・写真の正規化テーブル | **作らない** | 案件内でしか使わず横断集計もしない。JSON で足りる（§2.3） |
 | 管理画面の**アカウント表** | **作らない**（v1.4 で確定） | Phase 1 は代表1名。資格情報は `private/intake-config.php` に置く（§10.8）。<br>複数管理者は Phase 1 の範囲外（§11.2-11） |
-| 修正依頼の理由テーブル | **本工程では作らない**（v1.4） | `needs_revision` の理由は**構造化して保持する正式要件が未確定**。<br>回答欄へ押し込むと回答本文と混ざるため、**status 変更のみ**とし<br>理由の伝達は運用（担当者からの連絡）で行う。§12.2-8 |
+| ~~修正依頼の理由テーブル~~ | **v1.5 で作った**（§2.8） | v1.4 の「作らない」判断を撤回。理由を回答欄へ押し込まず、<br>監査へ本文を入れないために**専用の表**を持つ |
+| 管理者の個人アカウント表 | **作らない**（v1.5 で再確認） | Phase 1 は代表1名。修正依頼にも作成者列を作らない（§2.8-10） |
 | 不足項目テーブル | **作らない** | 判定は回答から都度算出する。保存すると回答と二重管理になり必ず食い違う |
 | Drive ファイル一覧テーブル | **作らない** | Drive API を使わない（§11）。件数・種類は `image_metadata_json` が持つ |
 | Stripe 参照テーブル | **作らない** | §8 により intake は Stripe 情報を一切持たない |
@@ -938,6 +981,9 @@ XServer 側のアクセスログはアプリから制御できない。したが
 ```text
 draft ──submit──> submitted ──┬── request_revision ──> needs_revision ──resubmit──> submitted
                               └── approve_review ────> reviewed ──lock──> locked ──close──> closed
+                                                          │
+                                                          └── request_revision ──> needs_revision
+                                                              （v1.5 で追加）
 ```
 
 | 状態 | 意味 |
@@ -957,9 +1003,20 @@ draft ──submit──> submitted ──┬── request_revision ──> nee
 | `submitted` | `needs_revision` | Smart Labo |
 | `submitted` | `reviewed` | Smart Labo |
 | `needs_revision` | `submitted` | 店舗（再提出） |
+| **`reviewed`** | **`needs_revision`** | **Smart Labo（v1.5 で追加）** |
 | `reviewed` | `locked` | Smart Labo |
 | `locked` | `closed` | Smart Labo |
 | 任意 | `closed` | Smart Labo（中止案件） |
+
+**`reviewed` → `needs_revision` を許す理由（v1.5・代表判断）**
+
+| # | 内容 |
+|---|---|
+| 1 | 実運用では、確認後に**写真・料金・表現・権利確認**の不足が見つかりうる |
+| 2 | 戻せない設計は、**DBの直接操作や別管理**を誘発する。それを運用にしない |
+| 3 | 戻せるのは **`locked` / `closed` より前**まで。確定後は戻さない |
+| 4 | 差し戻したら、`reviewed` へ進むには**店舗の再提出が必要**（近道を作らない） |
+| 5 | 差し戻しは必ず**修正依頼（§2.9）とともに**行い、監査へ残す |
 
 ### 5.2 状態別に許可する操作
 
@@ -1197,9 +1254,36 @@ HP-202608-0001/          ← 最上位。**案件番号のみ**。店舗名を�
 | 4 | 復号するのは「Smart Labo 管理画面の表示時」と「店舗画面の描画時」のみ |
 | 5 | **書き出しファイル・通知メール・監査ログ・エラー表示へ出さない** |
 | 6 | 表示用の識別には `drive_folder_label`（フォルダ名）を使う |
+| 7 | **共有先メールも同じ方式で暗号化**して `drive_shared_email_enc` へ持つ（v1.5） |
 
 > ★暗号化は「DBファイルが単体で漏れた場合に、共有先の入り口を即座に晒さない」ための
 > 多層防御である。**アクセス制御の代わりではない。**
+
+**Drive URL の受け入れ条件（v1.5 で確定）**
+
+管理画面から登録するときに、次をすべて満たさないものは**拒否**する。
+
+| # | 条件 |
+|---|---|
+| 1 | `https://` で始まること（`http` / `javascript:` / `data:` / `file:` / `vbscript:` は拒否） |
+| 2 | ホストが **Google Drive の正式ホスト**であること<br>（`drive.google.com` / `docs.google.com` / `drive.usercontent.google.com`） |
+| 3 | **userinfo（`user:pass@`）を含まないこと**（表示上のホストを偽装できるため） |
+| 4 | 短縮URL（`bit.ly` 等）を**受け付けない**（規則2で自動的に除外される） |
+| 5 | ポート指定を含まないこと |
+| 6 | 制御文字・空白・改行を含まないこと |
+| 7 | **query と fragment は保持してよい**（Drive の `?usp=sharing` 等は正当）。<br>ただし**そのまま属性値としてのみ**使い、HTML へ文字列連結しない |
+| 8 | 長さは 500 文字まで（§3.7 の URL 上限に合わせる） |
+
+**共有先メールの扱い（v1.5 で確定）**
+
+| # | 規則 |
+|---|---|
+| 1 | **平文で保存しない。** `drive_shared_email_enc` に AES-256-GCM で保存する |
+| 2 | **書き出し（§11.3）へ含めない** |
+| 3 | **監査ログ・アプリログへ出さない**（§10.7） |
+| 4 | **管理画面の一覧へ出さない。** 詳細画面で必要なときだけ表示する |
+| 5 | **店舗へは、session で認証された `GET /case` でだけ返してよい**。<br>本人への案内であり、§7.2 が求める文言を正確に書くために必要である |
+| 6 | 回答本文（`intake_answers`）とは**別に扱う**。回答へ混ぜない |
 
 ### 7.4 障害時・例外
 
@@ -1525,12 +1609,19 @@ error_log              = <public_html の外のパス>
 |---|---|
 | 1 | Origin が付いていて `null` でなければ → **許可一覧と厳格に照合**する（従来どおり） |
 | 2 | Origin が無い／`null` のときだけ → **`Sec-Fetch-Site: same-origin`** を見る |
-| 3 | `Sec-Fetch-*` は**禁止ヘッダー名**であり、ページ内 JavaScript から偽装できない。<br>他サイトからの送信では `cross-site` になるため、CSRF の判定として成立する |
-| 4 | この判定は**多層防御の1枚**である。**CSRF token は引き続き必須**（規則1〜3） |
-| 5 | **店舗向けの JSON POST は変更しない。** `fetch()` からの呼び出しなので<br>正しい Origin が必ず付き、従来どおり Origin の厳格検査だけで守る |
-| 6 | 管理画面の Cookie は `SameSite=Strict`。他サイト起点の送信には**そもそも付かない** |
+| 3 | `Sec-Fetch-*` は **Forbidden request header** であり、**ブラウザ内の JavaScript からは設定できない**。<br>他サイトからの送信では `cross-site` になるため、**ブラウザ経由の CSRF に対する補助信号**として使う |
+| 4 | `cross-site` / `none` / ヘッダー欠落は**すべて拒否**する（fail closed） |
+| 5 | この判定は**多層防御の1枚にすぎない**。**CSRF token は常に必須**（規則1〜3） |
+| 6 | **店舗向けの JSON POST は変更しない。** `fetch()` からの呼び出しなので<br>正しい Origin が必ず付き、従来どおり Origin の厳格検査だけで守る |
+| 7 | 管理画面の Cookie は `SameSite=Strict`。他サイト起点の送信には**そもそも付かない** |
 
-> ★これは緩和ではない。**Origin だけでは判定できない経路を、偽装できない別の signal で塞ぐ**ものである。
+> ★**「偽装不可能」とは書かない。** 正確には次のとおりである。
+> - ブラウザ内の JavaScript からは設定できない（Forbidden request header）
+> - **curl 等の非ブラウザからは任意に構成できる**
+>
+> したがって `Sec-Fetch-Site` 単独では守りにならない。
+> **CSRF token（server 側 session に hash で保持）・管理 session・Origin 検査・SameSite=Strict**
+> と組み合わせた多層防御を維持すること。
 > `Sec-Fetch-Site` 非対応のブラウザは §10.9 のとおりサポート対象外とする。
 
 ### 10.9 対応ブラウザ（v1.4 で確定）
@@ -1602,12 +1693,25 @@ Operations（OPS-4）が**最初に取り込むのはこの形**である。API 
 | `answers` | **JSON 11分類**（§3。公開・内部の区別は取込側で行う） |
 | `rights` | 権利・同意（`answers.rights` と同じ内容を、証跡として明示的に置く） |
 | `submission_summary` | 提出履歴の**件数と最終結果だけ**（`submitted_at` / `result_code` / `field_count` / `missing_count`） |
+| `revision_requests` | 差し戻しの経緯（v1.5）。**`request_number` / `requested_paths` / `status` /<br>`created_at` / `resolved_at` のみ。★`message` 本文と `id` を含めない** |
+
+**`revision_requests.message` を書き出しへ含めない理由（v1.5）**
+
+| # | 判断 |
+|---|---|
+| 1 | 取込側（OPS-4）が必要とするのは「**何回・どの項目を・いつ差し戻したか**」であり、<br>店舗向けの文面そのものではない |
+| 2 | `message` は自由記述であり、**担当者が書いた連絡文**が入る。<br>制作管理データとして持ち回る必要が無い |
+| 3 | 含めないほうが、書き出しファイルの取り扱い（保管・受け渡し）が軽くなる |
+
+> ★将来 OPS-4 が本文を必要とした場合は、**本書を改定してから**追加する。
+> 追加するときも、ログへ出さない規則（§2.8-4）は変えない。
 
 **含めない（禁止。1つでも出たら不具合とする）**
 
 token 平文 ／ `token_hash` ／ session secret ／ `session_hash` ／ CSRF token ／
 管理 session ／ 生IP ／ `ip_hmac` ／ Cookie ／ 暗号鍵 ／ password hash ／
-レート制限の記録 ／ **Drive URL**（暗号文・平文とも） ／ **DBの内部ID（`id` 列）** ／
+レート制限の記録 ／ **Drive URL**（暗号文・平文とも） ／ **Drive 共有先メール**（v1.5）／
+**DBの内部ID（`id` 列）** ／ **`revision_requests.message` 本文**（v1.5）／
 Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監査ログの明細
 
 **要件**
@@ -1642,7 +1746,7 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 
 **データモデル上の矛盾は残していない。以下は運用値と実装手段の未確定である。**
 
-### 12.1 R2 / R3 / R4 で確定した事項（未確定から外したもの）
+### 12.1 R2 / R3 / R4 / R5 で確定した事項（未確定から外したもの）
 
 | 旧# | 事項 | 確定内容 | 反映先 |
 |---|---|---|---|
@@ -1659,6 +1763,11 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 | **1（R4）** | **管理画面の認証方式** | **代表1名・`private/intake-config.php` の ID ＋ `password_hash()` の hash**（Argon2id 優先）。<br>アカウント表は作らない。session は **`intake_admin_sessions`（7表目）**。<br>idle 30分／絶対8時間／ログイン時に再生成／CSRF は hash で server 保持 | §2.7・§10.8 |
 | **—（R4）** | 検証済み書き出しの形 | **allowlist 方式の JSON**（`export_schema_version` / `answers` / `rights` /<br>`submission_summary` 等）。token・session・IP・鍵・Drive URL・内部IDを**含めない** | §11.3 |
 | **—（R4）** | 対応ブラウザ | **現行 Chrome / Edge / Firefox / Safari**。`Sec-Fetch-Site` 非対応はサポート対象外。<br>`Referrer-Policy: no-referrer` のため「Referer で通る」前提に依存しない | §10.9 |
+| **10（R5）** | **`reviewed` → `needs_revision`** | **代表判断で許可**（案B）。`locked` / `closed` より前まで戻せる。<br>戻したら `reviewed` へは**店舗の再提出を経る**。監査・履歴・修正依頼を必ず残す | §5.1 |
+| **8（R5）** | **修正理由の伝え方** | **`intake_revision_requests`（8表目）を新設**。回答欄へ押し込まず、<br>監査にも本文を入れない。`open` / `resolved`・複数回保持・再提出で自動 resolved | §2.8 |
+| **9（R5）** | **Drive 共有先メールの保持** | **`drive_shared_email_enc`（AES-256-GCM）**を追加。<br>店舗の §7.2 案内文を正確に書けるようにする。書き出し・監査・ログへ出さない | §2.1・§7.3 |
+| **—（R5）** | **Drive URL の受け入れ条件** | https のみ／**Google Drive の正式ホストのみ**／userinfo 禁止／ポート禁止／<br>制御文字禁止／500文字まで。query・fragment は保持してよい | §7.3 |
+| **—（R5）** | **案件作成・token 初回発行の経路** | **管理画面から行える**ようにした（CLI を運用にしない）。<br>token 平文は**作成直後に1回だけ表示**。再表示機能を作らない | §10.8・README |
 
 ### 12.2 残る未確定事項
 
@@ -1671,22 +1780,24 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 | 5 | **mail() の実送信確認** | 関数・sendmail 設定の存在までを実測。**実送信は未確認** | 4H（宛先は当社 info@ のみ） |
 | 6 | **1案件あたりの配列上限値** | §3 に**設計既定値**（menus 60 / staff 30 / images 60 等）を置いた。<br>運用実績で調整する余地を残す | 4B（既定値のまま進めてよい） |
 | 7 | **ローカル開発環境の php.ini** | ローカルは `php.ini` 未読込のため pdo_sqlite / openssl / mbstring が無効。<br>DLL は同梱済みで、有効化すれば解決する | 4B 冒頭（代表判断は不要） |
-| **8（R4）** | **`needs_revision` の理由の伝え方** | 構造化して保持する正式列が無い。**回答欄へ押し込まない**（§2.8）。<br>4D では **status 変更のみ**を実装し、理由は担当者からの連絡で伝える（運用課題） | 4E 以降（必要になった時点で列を設計する） |
-| **9（R4）** | **店舗画面への Drive リンク表示** | §7.2 は表示を**許している**が、必要な文言<br>「このフォルダは○○（指定メール）にのみ共有しています」の**共有先メールを保持する列が無い**。<br>正確に書けないため 4D では表示しない（§7.2 の条件を満たせないため） | 4E 以降（共有先を持つか、文言を見直す） |
-| **10（R4）** | **`reviewed` から `needs_revision` へ戻せない** | §5.1 の遷移表は `reviewed` → `locked` / `closed` のみを許している。<br>4D の指示は「submitted / reviewed → needs_revision」を求めたが、<br>**遷移表を変えることは状態機械そのものの改定**にあたるため、4D では行わなかった。<br>4D は **`submitted` → `needs_revision`** だけを実装し、`reviewed` では<br>**押しても必ず失敗するボタンを画面に出さない**（下の枠に改定案） | **代表判断**（4E 着手前） |
+| ~~8~~ | ~~**`needs_revision` の理由の伝え方**~~ | **R5 で確定**（§2.8 `intake_revision_requests`）。番号は参照の互換のため空けてある | ~~4E 以降~~ |
+| ~~9~~ | ~~**店舗画面への Drive リンク表示**~~ | **R5 で確定**（§2.1 `drive_shared_email_enc`・§7.3）。番号は参照の互換のため空けてある | ~~4E 以降~~ |
+| ~~10~~ | ~~**`reviewed` から `needs_revision` へ戻せない**~~ | **R5 で案B を採用し確定**（§5.1）。番号は参照の互換のため空けてある | ~~代表判断~~ |
 
-**改定案：`reviewed` → `needs_revision` を許すかどうか（未承認）**
+**`reviewed` → `needs_revision`（R5・代表判断で「案B」を採用）**
 
-現状の運用では、**確認済みにしたあとで不備に気づいた場合に戻す手段が無い**。
-戻せるようにするなら §5.1 の遷移表へ1行足すことになる。
+4D で提示した2案のうち、代表が**案B（遷移表へ1行追加）**を採用した。
 
-| 案 | 内容 | 影響 |
-|---|---|---|
-| **A（現状維持）** | `reviewed` からは戻せない。やり直しは案件を作り直す | 遷移表を変えない。運用の手戻りが大きい |
-| **B（1行追加）** | `'reviewed' => ['needs_revision', 'locked', 'closed']` へ変更 | 状態機械の改定。`intake_submission_history` は<br>`revision_requested` を既に語彙に持つため**表の変更は不要** |
+| 項目 | 決定 |
+|---|---|
+| 遷移表 | `'reviewed' => ['needs_revision', 'locked', 'closed']`（§5.1） |
+| 戻せる範囲 | **`locked` / `closed` より前**まで。確定後は戻さない |
+| 戻したあと | `reviewed` へ進むには**店舗の再提出が必要**（近道を作らない） |
+| 記録 | 監査 `case_status_changed` ＋ 履歴 `revision_requested` ＋ 修正依頼（§2.8） |
+| 理由 | 確認後に写真・料金・表現・権利確認の不足が見つかりうる。<br>戻せない設計は **DB直接操作や別管理を誘発する**ため運用に適さない |
 
-> ★**本書は A のままである。** B を採るかどうかは代表が決める。
-> 決まるまで、実装は A に従う（4D はそのように作ってある）。
+> ★`intake_submission_history` は `revision_requested` を既に語彙に持つため、
+> §2.4 の表は変更していない。
 
 > ★§12.2-6 について: 本書の上限値は**実装既定値として確定**しており、
 > これに従えばモデルは成立する。Phase 1 の運用記録（仕様書 §20）を見て
@@ -1773,3 +1884,4 @@ HP-ONBOARDING-4A-R1 で次の順序へ変更した。
 | **v1.2（R2）** | 2026-08-27 | 改定（HP-ONBOARDING-4A-R2・代表承認）。**XServer 実測（-4B-PRE / 2026-08-27）を反映**。§0.2 に実測値・確定運用値・本番環境の記録を新設。**`VACUUM INTO` を撤回**し（本番 SQLite **3.26.0** のため使用不可）、**`SQLite3::backup()` を第一手段**へ変更（§9.6・§9.6.1 新設）。**§2.0.1 SQLite 3.26.0 互換サブセット**を新設（使用禁止機能・使用可機能・起動時ガード・4E での静的チェック）。**§2.6 `intake_sessions` を追加**（5表 → **6表**）。旧 §2.6 を §2.7 へ繰り下げ。**token 初回交換方式を正式採用**（`/start#<token>` → `POST /session/start` → Secure / HttpOnly / SameSite=Strict Cookie。§4.2 全面書き換え・§4.5 を (A)(B) の2段へ・§4.7 を「設計候補」から「正式採用」へ）。**§10.4.1 PHP 設定（display_errors=Off / display_startup_errors=Off / log_errors=On / error_log は public_html 外）を本番必須要件として新設**し、§10.6 へ反映。§10.7 のマスク対象へ session secret を追加。§12 を §12.1（R2 で確定：SQLite/PDO・contact.php 配置済み・mail() 採用・rate limit 値・token 交換方式・display_errors）と §12.2（残る未確定7件）へ再編。§13 へ2行追加。**JSON 11分類・§3 の全データパス・状態遷移・途中保存・Google Drive 運用・保持削除規則・保存禁止15種は一切変更していない。** |
 | **v1.3（R3）** | 2026-08-27 | 改定（HP-ONBOARDING-4B-R1・代表承認）。**最終提出の冪等化を確定**した。**§2.4 へ `submission_id TEXT NULL` を追加**（クライアント生成 UUID v4・保存先はこの1列のみ・`UNIQUE(intake_case_id, submission_id) WHERE submission_id IS NOT NULL` の部分一意索引・既存行との互換のため NULL 許容・HTTP `/submit` では必須・ログ／監査／エラー本文へ出さない）。**§6.4 を全面改定**し、`status` だけの冪等化を4層（画面／`submission_id`／`status`／DB一意制約）へ拡張。`/submit` の挙動を表で確定した（欠落・不正形式=**400**／初回=履歴1件＋監査1件＋`submitted` 遷移／**同一 `submission_id` の再送=履歴も監査も増やさず同じ結果**／**異なる `submission_id` で `submitted`・`reviewed` の案件へ提出=409**・既存 `submission_id` も提出済み内容も返さない／競合は固定応答へ変換）。**履歴追加と状態遷移を同一トランザクション**とすることを明記。`submission_id` の生成契約（送信のたびに新規・再試行のときだけ同一・検証エラー修正後は新規）を 4C の義務として追加。**§2.6 へ Cookie `Max-Age` 24時間の維持を確定事項として明記**し、4C の「入力を終了する」ボタン＋`POST /session/logout` を必須化（規則12・判断根拠5点）。**§6.1 へ自動保存の方式を確定**（最終変更から30秒後／ステップ移動時／手動保存ボタン・変更分類のみ送信・成功後に `version` 更新・409 では上書きせず利用者へ確認）。これにより §6.1 の「間隔は未確定」という記述と §12.1-8 の「自動保存30秒で確定」との食い違いを解消した。**§7.1 へ Drive フォルダ命名規則を追加**（規則12〜14。最上位は**案件番号のみ**／固定サブフォルダ `01_images`・`02_logo`・`03_documents`・`04_references`／店舗名・氏名・電話番号・住所・メールをフォルダ名へ入れない）。§10.7 の「出さない」へ `submission_id` を追加し、**ログのキーを許可制（allowlist）**とする方針を明記。§12.1 へ R3 の確定4件を追加し、§12.2-3（Drive 命名規則）を確定済みへ。**JSON 11分類・§3 の全データパス・token 規則・状態遷移6状態・楽観ロック・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは一切変更していない。** DB変更は `intake_submission_history` への**列1つの追加と索引1つの追加のみ**で、既存の6テーブル構成は変わらない。 |
 | **v1.4（R4）** | 2026-08-27 | 改定（HP-ONBOARDING-4D・代表承認）。**管理画面の認証方式を確定**し、§12.2-1 を未確定から外した。**§10.8 を全面改定**（資格情報は `private/intake-config.php` の管理者ID＋`password_hash()` の hash のみ・**Argon2id 優先**・実値をGitへ入れない・**未設定なら fail closed**・IDの存在有無で応答も時間も変えない／session は idle 30分・絶対8時間・**ログイン成功時に再生成**／ログイン防御は **HMAC化IP で10分5回**・固定文言・`admin_login` へIDもパスワードも記録しない／CSRF は `random_bytes(32)` を **server 側 session へ hash で保持**し `hash_equals()` で照合・URLとログへ出さない・Origin 検査を併用・**GET で状態を変えない**）。**§2.7 `intake_admin_sessions` を新設**（6表 → **7表**。店舗の §2.6 とは別表・平文列を作らない・`csrf_hash` を同居させる・ロール列を作らない）。旧 §2.7 を **§2.8** へ繰り下げ、**アカウント表と修正理由テーブルを「作らない」判断**として記録。**§2.5 へ監査イベント4種を追加**（`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`。ログイン系は `intake_case_id` を NULL とし、**入力された管理者IDを記録しない**）。**§11.3 検証済み書き出しを新設**（allowlist 方式・含める11キーと**含めない16種**を明記・`Content-Disposition: attachment`・`no-store`・書き出し直前の再検証・未提出案件を出さない・一時ファイルを公開領域へ作らない・`X-Intake-Export-Sha256` は**独自ヘッダーとして README へ明記**）。**§10.9 対応ブラウザを新設**（現行 Chrome / Edge / Firefox / Safari。**`Sec-Fetch-Site` 非対応はサポート対象外**。`Referrer-Policy: no-referrer` のため「Referer で通る」前提に依存しないことを明記し、**4C 報告の当該説明を訂正**。`GET /case` の受理は **4E で再検証**。**POST の Origin 検査は変更しない**）。§11.2-11 を「代表1名」へ具体化。§12.2 へ **-8（修正理由の伝え方）** と **-9（店舗画面への Drive リンク表示）** を新規の未確定として追加。**JSON 11分類・§3 の全データパス・token 規則・状態遷移6状態・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは一切変更していない。** |
+| **v1.5（R5）** | 2026-08-27 | 改定（HP-ONBOARDING-4D-R1・代表承認）。**§5.1 の遷移表へ `reviewed` → `needs_revision` を追加**（4D で提示した案B を代表が採用。`locked` / `closed` より前まで戻せる／戻したら `reviewed` へは**店舗の再提出**を経る／監査・履歴・修正依頼を必ず残す／DBの直接操作を運用にしないための判断）。**§2.8 `intake_revision_requests` を新設**（7表 → **8表**。`request_number` / `requested_paths_json` / `message` / `status` / `created_at` / `resolved_at`。**§3 の正式パス129件のみ許可**・未知パスを含む要求は丸ごと拒否・重複は正規化・`message` は1000文字まで・**本文をログと監査へ出さない**・複数回保持・過去を削除も上書きもしない・**状態変更と同一トランザクション**・**店舗の再提出成功で `open` を `resolved` へ**・店舗へ返すのは `open` のみ・**管理者を識別する列を作らない**）。v1.4 §2.8 の「修正依頼の理由テーブルを作らない」判断を**撤回**し、旧 §2.8 を **§2.9** へ繰り下げ。**§2.1 へ `drive_shared_email_enc` を追加**（AES-256-GCM。§7.2 の案内文「このフォルダは○○にのみ共有しています」を正確に書くため。**平文保存禁止／書き出し・監査・ログへ出さない／一覧へ出さない／認証済み店舗の `GET /case` にだけ返してよい**）。**§7.3 へ Drive URL の受け入れ条件8項目**（https のみ・**Google Drive の正式ホストのみ**・userinfo 禁止・短縮URL拒否・ポート禁止・制御文字禁止・query/fragment は保持可・500文字まで）と**共有先メールの扱い6項目**を新設。**§10.8 の Fetch Metadata の記述を訂正**（「偽装できない」→「**Forbidden request header でありブラウザ内 JavaScript からは設定できない**が、**curl 等の非ブラウザからは任意に構成できる**」。`cross-site` / `none` / 欠落はすべて拒否。**CSRF token は常に必須**で、多層防御を維持する）。**§11.3 へ `revision_requests` を追加**（`request_number` / `requested_paths` / `status` / `created_at` / `resolved_at` のみ。**`message` 本文と `id` は含めない**。理由も明記）。除外一覧へ **Drive 共有先メール**と **`revision_requests.message`** を追加。**案件作成と token 初回発行を管理画面から行える**ようにし、CLI を運用にしない方針を確定（token 平文は作成直後に1回だけ表示・再表示機能を作らない）。§12.1 へ R5 の確定5件、§12.2-8・-9・-10 を確定済みへ。**JSON 11分類・§3 の全データパス・token 規則・6状態そのもの・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。** |

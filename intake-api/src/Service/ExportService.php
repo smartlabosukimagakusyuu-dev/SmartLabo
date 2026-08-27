@@ -46,6 +46,7 @@ final class ExportService
         private readonly Clock $clock,
         private readonly CaseService $cases,
         private readonly AnswerService $answers,
+        private readonly RevisionRequestService $revisions,
     ) {
     }
 
@@ -131,6 +132,7 @@ final class ExportService
         $out['rights'] = $answers['sections']['rights'] ?? null;
 
         $out['submission_summary'] = $this->submissionSummary($caseId, $fieldCount);
+        $out['revision_requests']  = $this->revisionSummary($caseId);
 
         return $out;
     }
@@ -174,6 +176,31 @@ final class ExportService
             'field_count'   => $last === false ? $fieldCount : (int)$last['field_count'],
             'missing_count' => $last === false ? 0 : (int)$last['missing_count'],
         ];
+    }
+
+    /**
+     * 差し戻しの経緯（SSOT v1.5 §11.3）。
+     *
+     * ★`message` 本文と DB の内部ID を**含めない**。
+     *   取込側が必要とするのは「何回・どの項目を・いつ差し戻したか」だけである。
+     * @return list<array<string,mixed>>
+     */
+    private function revisionSummary(int $caseId): array
+    {
+        $out = [];
+        foreach ($this->revisions->allForCase($caseId) as $row) {
+            $decoded = json_decode((string)$row['requested_paths_json'], true);
+
+            $out[] = [
+                'request_number'  => (int)$row['request_number'],
+                'requested_paths' => is_array($decoded) ? array_values($decoded) : [],
+                'status'          => (string)$row['status'],
+                'created_at'      => (string)$row['created_at'],
+                'resolved_at'     => $row['resolved_at'] === null ? null : (string)$row['resolved_at'],
+            ];
+        }
+
+        return $out;
     }
 
     /** 案件番号を安全に正規化したファイル名（SSOT §11.3-2） */

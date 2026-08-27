@@ -78,8 +78,10 @@ final class Guard
      *   さらに本画面は `Referrer-Policy: no-referrer`（SSOT §10.4）なので Referer も付かない。
      *   そのため GET だけは、この経路でも受け付ける必要がある。
      *
-     * ★`Sec-Fetch-*` は**禁止ヘッダー名**であり、ページ内の JavaScript から偽装できない。
-     *   他サイトからの要求では `cross-site` になるため、CSRF の判定として成立する。
+     * ★`Sec-Fetch-*` は **Forbidden request header** であり、
+     *   **ブラウザ内の JavaScript からは設定できない**。他サイトからの要求では
+     *   `cross-site` になるため、**ブラウザ経由の CSRF に対する補助信号**として使える。
+     *   ただし **curl 等の非ブラウザからは任意に構成できる**ので、単独では守りにならない。
      *   `none`（URL直打ち・ブックマーク）は受け付けない。
      *   ヘッダー自体が無い場合は false を返し、従来の Origin / Referer 検査へ委ねる。
      */
@@ -134,8 +136,9 @@ final class Guard
      *   1. Origin が付いていて `null` でなければ → **許可一覧と厳格に照合**する
      *   2. Origin が無い／`null` のときだけ → `Sec-Fetch-Site: same-origin` を見る
      *
-     * `Sec-Fetch-*` は**禁止ヘッダー名**でありページ内 JavaScript から偽装できない。
-     * 他サイトからの送信では `cross-site` になるため、CSRF の判定として成立する。
+     * `Sec-Fetch-*` は **Forbidden request header** であり、
+     * **ブラウザ内の JavaScript からは設定できない**。他サイトからの送信では `cross-site` になる。
+     * ただし **curl 等の非ブラウザからは任意に構成できる**ため、これ単独では守りにならない。
      * さらに管理画面は **CSRF token（server 側 session に hash で保持）を必須**にしており、
      * この判定は多層防御の1枚である。
      *

@@ -224,12 +224,12 @@ test('case: /case は回答と version を返す', function (): void {
 test('drive: URL は暗号化して保存し、復号できる（平文で保存しない）', function (): void {
     $k      = makeKernel();
     $caseId = $k->cases->create('HP-2026-0313', '架空サロン');
-    $url    = 'https://drive.example.invalid/folders/fake-folder-id';
+    $url    = 'https://drive.google.com/drive/folders/FAKE-FOLDER-ID-0000000000';
 
     $k->cases->setDriveFolder($caseId, $url, 'HP-2026-0313 写真');
 
     $raw = (string)$k->db->pdo()->query('SELECT drive_folder_url_enc FROM intake_cases')->fetchColumn();
-    assertTrue(!str_contains($raw, 'drive.example.invalid'), '平文で保存されている');
+    assertTrue(!str_contains($raw, 'FAKE-FOLDER-ID'), '平文で保存されている');
     assertSame($url, $k->cases->driveFolderUrl($caseId), '復号できない');
 });
 
@@ -239,7 +239,7 @@ test('drive: http の URL は受け付けない', function (): void {
 
     $thrown = false;
     try {
-        $k->cases->setDriveFolder($caseId, 'http://drive.example.invalid/x', 'label');
+        $k->cases->setDriveFolder($caseId, 'http://drive.google.com/drive/folders/x', 'label');
     } catch (\InvalidArgumentException $e) {
         $thrown = true;
     }

@@ -15,6 +15,7 @@ use SmartLabo\Intake\Service\Audit;
 use SmartLabo\Intake\Service\CaseService;
 use SmartLabo\Intake\Service\ExportService;
 use SmartLabo\Intake\Service\RateLimiter;
+use SmartLabo\Intake\Service\RevisionRequestService;
 use SmartLabo\Intake\Service\SessionService;
 use SmartLabo\Intake\Service\TokenService;
 use SmartLabo\Intake\Support\Clock;
@@ -32,6 +33,7 @@ final class Kernel
     public readonly SessionService $sessions;
     public readonly CaseService $cases;
     public readonly AnswerService $answers;
+    public readonly RevisionRequestService $revisions;
     public readonly AdminAuth $adminAuth;
     public readonly ExportService $export;
     public readonly AdminApp $admin;
@@ -59,11 +61,12 @@ final class Kernel
             new Crypto($config->encKey),
         );
         $this->answers     = new AnswerService($this->db, $this->clock, $this->audit);
+        $this->revisions   = new RevisionRequestService($this->db, $this->clock);
 
         $guard = new Guard($config);
 
         $this->adminAuth = new AdminAuth($config, $this->db, $this->clock, $this->audit, $this->rateLimiter);
-        $this->export    = new ExportService($this->db, $this->clock, $this->cases, $this->answers);
+        $this->export    = new ExportService($this->db, $this->clock, $this->cases, $this->answers, $this->revisions);
 
         $this->admin = new AdminApp(
             $config,
@@ -73,6 +76,8 @@ final class Kernel
             $this->cases,
             $this->answers,
             $this->export,
+            $this->revisions,
+            $this->tokens,
             $this->audit,
             $this->logger,
         );
@@ -85,6 +90,7 @@ final class Kernel
             $this->sessions,
             $this->cases,
             $this->answers,
+            $this->revisions,
             $this->audit,
             $this->logger,
             $this->clock,

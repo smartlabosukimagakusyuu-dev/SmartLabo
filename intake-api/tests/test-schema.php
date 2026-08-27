@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 use SmartLabo\Intake\Migrator;
 
-test('schema: SSOT の7テーブルが作られる', function (): void {
-    // 6表（SSOT v1.3 §2.1〜§2.6）＋ 管理画面用1表（v1.4 §2.7）
+test('schema: SSOT の8テーブルが作られる', function (): void {
+    // 6表（v1.3 §2.1〜§2.6）＋ 管理 session（v1.4 §2.7）＋ 修正依頼（v1.5 §2.8）
     $k    = makeKernel();
     $rows = $k->db->pdo()->query(
         "SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'intake_%' ORDER BY name"
@@ -16,7 +16,7 @@ test('schema: SSOT の7テーブルが作られる', function (): void {
 
     assertSame([
         'intake_admin_sessions', 'intake_answers', 'intake_audit_events', 'intake_cases',
-        'intake_sessions', 'intake_submission_history', 'intake_tokens',
+        'intake_revision_requests', 'intake_sessions', 'intake_submission_history', 'intake_tokens',
     ], $names, 'テーブル一覧が SSOT と一致しない');
 });
 

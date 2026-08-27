@@ -26,6 +26,7 @@ use SmartLabo\Intake\Service\AnswerService;
 use SmartLabo\Intake\Service\Audit;
 use SmartLabo\Intake\Service\CaseService;
 use SmartLabo\Intake\Service\RateLimiter;
+use SmartLabo\Intake\Service\RevisionRequestService;
 use SmartLabo\Intake\Service\SessionService;
 use SmartLabo\Intake\Service\TokenService;
 use SmartLabo\Intake\Support\Clock;
@@ -41,6 +42,7 @@ final class App
         private readonly SessionService $sessions,
         private readonly CaseService $cases,
         private readonly AnswerService $answers,
+        private readonly RevisionRequestService $revisions,
         private readonly Audit $audit,
         private readonly Logger $logger,
         private readonly Clock $clock,
@@ -170,7 +172,8 @@ final class App
             return Response::unavailable();
         }
         $case    = $auth['case'];
-        $answers = $this->answers->get((int)$case['id']);
+        $caseId  = (int)$case['id'];
+        $answers = $this->answers->get($caseId);
 
         return Response::ok([
             'case_number'     => (string)$case['case_number'],
@@ -182,7 +185,31 @@ final class App
             'version'         => $answers['version'],
             'schema_version'  => $answers['schema_version'],
             'sections'        => $answers['sections'],
+            // ★いま対応が必要な修正依頼だけ（resolved の本文は返さない。SSOT §2.8-9）
+            'revision_requests' => $this->revisions->openForCase($caseId),
+            // ★素材フォルダの案内。認証済みの本人にだけ返す（SSOT §7.3）
+            'drive'           => $this->driveGuidance($caseId),
         ]);
+    }
+
+    /**
+     * 素材フォルダの案内（SSOT §7.2 / §7.3）。
+     *
+     * ★URL と共有先メールを返してよいのは、**session で認証された本人**だけである。
+     *   §7.2 が求める「このフォルダは○○にのみ共有しています」を正確に書くために要る。
+     * ★どちらも**ログ・監査・書き出しへは出さない**。
+     *
+     * @return array{folder_url:?string,folder_label:?string,shared_email:?string}
+     */
+    private function driveGuidance(int $caseId): array
+    {
+        $case = $this->cases->find($caseId);
+
+        return [
+            'folder_url'   => $this->cases->driveFolderUrl($caseId),
+            'folder_label' => $case === null ? null : $case['drive_folder_label'],
+            'shared_email' => $this->cases->driveSharedEmail($caseId),
+        ];
     }
 
     private function saveAnswers(Request $req): Response
@@ -272,13 +299,16 @@ final class App
             return Response::error('bad_request', 400);
         }
 
-        // 成功したときだけ、履歴の記録と同じトランザクションの中で状態を遷移させる
+        // 成功したときだけ、履歴の記録と同じトランザクションの中で状態を遷移させる。
+        // ★開いている修正依頼も、同じトランザクションで閉じる（SSOT v1.5 §2.8-8）。
+        //   「提出は通ったのに依頼が開いたまま」を作らない。
         $result = $this->answers->submit(
             $caseId,
             (string)$case['status'],
             $submissionId,
             function () use ($caseId): void {
                 $this->cases->transitionTo($caseId, 'submitted');
+                $this->revisions->resolveOpen($caseId);
             },
         );
 

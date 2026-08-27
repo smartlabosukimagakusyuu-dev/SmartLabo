@@ -749,3 +749,15 @@ textarea:focus {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------------------------------------------- 修正のお願い（4D-R1） */
+
+.revision__message {
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3);
+  background: var(--c-white);
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-sm);
+  white-space: pre-wrap;
+  word-break: break-word;
+}

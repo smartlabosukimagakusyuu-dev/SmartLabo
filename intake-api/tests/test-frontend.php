@@ -463,6 +463,57 @@ test('管理: 画面を組み立てる場所を1か所に閉じている', funct
     assertTrue(!str_contains($view, '<script'), 'View が script を出している');
 });
 
+test('記録: Sec-Fetch-Site を「偽装不可能」と書かない', function (): void {
+    // 正確には「Forbidden request header でブラウザ内 JS からは設定できない」であり、
+    // curl 等の非ブラウザからは構成できる（SSOT v1.5 §10.8）。
+    $targets = [
+        'SSOT'      => (string)file_get_contents(__DIR__ . '/../../docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md'),
+        'README.md' => (string)file_get_contents(__DIR__ . '/../README.md'),
+        'Guard.php' => (string)file_get_contents(__DIR__ . '/../src/Http/Guard.php'),
+    ];
+
+    foreach ($targets as $label => $text) {
+        // 「偽装不可能」に触れてよいのは、**それを否定するときだけ**である
+        preg_match_all('/[^\n]*偽装(?:不可能|できない)[^\n]*/u', $text, $m);
+        foreach ($m[0] as $line) {
+            $negated = str_contains($line, 'とは書かない')
+                || str_contains($line, '→')
+                || str_contains($line, '訂正');
+            assertTrue($negated, $label . ' に否定なしの断定が残っている: ' . trim($line));
+        }
+    }
+
+    // 非ブラウザからは構成できることを、どこかに明記している
+    assertTrue(
+        str_contains($targets['SSOT'], 'curl'),
+        'SSOT に非ブラウザからは構成できる旨の記載が無い'
+    );
+});
+
+test('記録: 修正依頼の本文をログへ出す経路が無い', function (): void {
+    $admin = (string)file_get_contents(__DIR__ . '/../src/Admin/AdminApp.php');
+
+    // logger へ message / requested_paths を渡していないこと
+    assertTrue(
+        preg_match("/logger->\w+\([^)]*['\"]message['\"]/", $admin) !== 1,
+        'ログへ message を渡している'
+    );
+    assertTrue(
+        preg_match("/logger->\w+\([^)]*requested_paths/", $admin) !== 1,
+        'ログへ requested_paths を渡している'
+    );
+
+    // Logger の許可キーにも入れない
+    assertTrue(
+        !in_array('message', \SmartLabo\Intake\Support\Logger::ALLOWED, true),
+        'ログの許可キーへ message が入っている'
+    );
+    assertTrue(
+        !in_array('requested_paths', \SmartLabo\Intake\Support\Logger::ALLOWED, true),
+        'ログの許可キーへ requested_paths が入っている'
+    );
+});
+
 test('管理: JSON の endpoint と form の endpoint を混ぜない', function (): void {
     $request = (string)file_get_contents(__DIR__ . '/../src/Http/Request.php');
 

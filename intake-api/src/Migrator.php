@@ -11,6 +11,8 @@
  *   1 … 4B。SSOT v1.2 の6テーブル
  *   2 … 4B-R1。intake_submission_history.submission_id と部分一意索引（SSOT v1.3 §2.4 / §6.4）
  *   3 … 4D。intake_admin_sessions（管理画面用。SSOT v1.4 §2.7）
+ *   4 … 4D-R1。intake_revision_requests と intake_cases.drive_shared_email_enc
+ *        （SSOT v1.5 §2.8 / §2.1）
  *
  * ★migrate() は**何度実行しても同じ結果**になる（再実行可能）。
  *   ALTER TABLE ADD COLUMN だけは IF NOT EXISTS を書けないため、
@@ -22,7 +24,7 @@ namespace SmartLabo\Intake;
 
 final class Migrator
 {
-    public const SCHEMA_VERSION = 3;
+    public const SCHEMA_VERSION = 4;
 
     /**
      * 回答スキーマの版（intake_cases.schema_version / intake_answers.schema_version）。
@@ -66,8 +68,57 @@ final class Migrator
             $pdo->exec($sql);
         }
 
+        // v4: 修正依頼と Drive 共有先メール（SSOT v1.5 §2.8 / §2.1）
+        $this->upgradeToV4($pdo);
+
         // PRAGMA は値をbindできない。埋め込むのはクラス定数であり外部入力ではない。
         $pdo->exec('PRAGMA user_version = ' . (int)self::SCHEMA_VERSION);
+    }
+
+    /**
+     * v3 → v4。既存DBを壊さない追加のみ（表1つ・列1つ・索引2つ）。
+     * 既存行の drive_shared_email_enc は NULL のまま残す。
+     */
+    private function upgradeToV4(\PDO $pdo): void
+    {
+        if (!self::hasColumn($pdo, 'intake_cases', 'drive_shared_email_enc')) {
+            $pdo->exec(self::ADD_DRIVE_SHARED_EMAIL);
+        }
+        foreach (self::statementsV4() as $sql) {
+            $pdo->exec($sql);
+        }
+    }
+
+    /** v4 の列追加。NULL 許容（既存行との互換のため DEFAULT も付けない） */
+    public const ADD_DRIVE_SHARED_EMAIL =
+        'ALTER TABLE intake_cases ADD COLUMN drive_shared_email_enc BLOB';
+
+    /**
+     * v4: intake_revision_requests（SSOT v1.5 §2.8）。
+     *
+     * ★理由を回答欄（intake_answers）へ押し込まないための表である。
+     * ★管理者を識別する列を作らない（Phase 1 は代表1名。§2.8-10）。
+     * ★過去の依頼を削除も上書きもしない。案件内の通し番号で数える。
+     * @return list<string>
+     */
+    public static function statementsV4(): array
+    {
+        return [
+            'CREATE TABLE IF NOT EXISTS intake_revision_requests (
+                id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+                intake_case_id       INTEGER NOT NULL REFERENCES intake_cases(id),
+                request_number       INTEGER NOT NULL,
+                requested_paths_json TEXT    NOT NULL,
+                message              TEXT,
+                status               TEXT    NOT NULL DEFAULT "open",
+                created_at           TEXT    NOT NULL,
+                resolved_at          TEXT
+            )',
+            'CREATE INDEX IF NOT EXISTS idx_revision_case
+                ON intake_revision_requests (intake_case_id, status)',
+            'CREATE UNIQUE INDEX IF NOT EXISTS idx_revision_number
+                ON intake_revision_requests (intake_case_id, request_number)',
+        ];
     }
 
     /**
@@ -144,6 +195,8 @@ final class Migrator
             [self::ADD_SUBMISSION_ID],
             self::statementsV2(),
             self::statementsV3(),
+            [self::ADD_DRIVE_SHARED_EMAIL],
+            self::statementsV4(),
         );
     }
 

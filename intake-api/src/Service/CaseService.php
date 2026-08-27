@@ -17,6 +17,7 @@ use SmartLabo\Intake\Db;
 use SmartLabo\Intake\Migrator;
 use SmartLabo\Intake\Support\Clock;
 use SmartLabo\Intake\Support\Crypto;
+use SmartLabo\Intake\Support\DriveLink;
 
 final class CaseService
 {
@@ -28,15 +29,24 @@ final class CaseService
     /** 店舗が閲覧できる状態（locked / closed は token/session ごと失効させる） */
     public const READABLE = ['draft', 'submitted', 'needs_revision', 'reviewed'];
 
-    /** 許可する遷移（これ以外は行わない。SSOT §5.1） */
+    /**
+     * 許可する遷移（これ以外は行わない。SSOT §5.1）。
+     *
+     * ★v1.5 で `reviewed` → `needs_revision` を追加した（代表判断の案B）。
+     *   確認後に不足が見つかっても戻せるようにするため。
+     *   `locked` / `closed` からは戻さない。
+     */
     private const TRANSITIONS = [
         'draft'          => ['submitted', 'closed'],
         'submitted'      => ['needs_revision', 'reviewed', 'closed'],
         'needs_revision' => ['submitted', 'closed'],
-        'reviewed'       => ['locked', 'closed'],
+        'reviewed'       => ['needs_revision', 'locked', 'closed'],
         'locked'         => ['closed'],
         'closed'         => [],
     ];
+
+    /** 修正依頼を出してよい状態（SSOT v1.5 §5.1） */
+    public const REVISABLE = ['submitted', 'reviewed'];
 
     public function __construct(
         private readonly Db $db,
@@ -139,23 +149,45 @@ final class CaseService
         }
     }
 
-    /** Drive フォルダURLは暗号化して保存する（SSOT §7.3）。ログ・応答へ出さない */
-    public function setDriveFolder(int $caseId, string $url, string $label): void
+    /**
+     * Drive フォルダURLと共有先メールを暗号化して保存する（SSOT v1.5 §7.3）。
+     *
+     * ★受け入れ条件は DriveLink で厳しく検査する。ログ・応答・書き出しへ出さない。
+     * ★共有先メールは、店舗画面の案内文「このフォルダは○○にのみ共有しています」に使う。
+     */
+    public function setDriveFolder(int $caseId, string $url, string $label, ?string $sharedEmail = null): void
     {
-        if (strncmp($url, 'https://', 8) !== 0) {
-            throw new \InvalidArgumentException('drive url must be https');
+        $checked = DriveLink::checkUrl($url);
+        if ($checked['ok'] !== true) {
+            throw new \InvalidArgumentException('drive url rejected: ' . (string)$checked['error']);
         }
-        $this->db->pdo()->prepare(
-            'UPDATE intake_cases
-                SET drive_folder_url_enc = :enc, drive_folder_label = :label, updated_at = :now
-              WHERE id = :id'
-        )->execute([
-            ':enc'   => $this->crypto->encrypt($url),
+
+        $fields = [
+            'drive_folder_url_enc = :enc',
+            'drive_folder_label = :label',
+            'updated_at = :now',
+        ];
+        $params = [
+            ':enc'   => $this->crypto->encrypt((string)$checked['url']),
             ':label' => $label,
             ':now'   => $this->clock->iso(),
             ':id'    => $caseId,
-        ]);
+        ];
 
+        if ($sharedEmail !== null) {
+            $email = DriveLink::checkEmail($sharedEmail);
+            if ($email['ok'] !== true) {
+                throw new \InvalidArgumentException('drive shared email rejected');
+            }
+            $fields[]        = 'drive_shared_email_enc = :email';
+            $params[':email'] = $this->crypto->encrypt((string)$email['email']);
+        }
+
+        $this->db->pdo()
+            ->prepare('UPDATE intake_cases SET ' . implode(', ', $fields) . ' WHERE id = :id')
+            ->execute($params);
+
+        // ★URL もメールも監査へ書かない。設定した事実だけを残す
         $this->audit->record($caseId, 'drive_url_set', 'ok');
     }
 
@@ -167,6 +199,20 @@ final class CaseService
         }
 
         return $this->crypto->decrypt((string)$case['drive_folder_url_enc']);
+    }
+
+    /**
+     * 共有先メールを復号する。
+     * ★呼んでよいのは「管理画面の詳細表示」と「認証済み店舗の GET /case」だけ（SSOT §7.3）。
+     */
+    public function driveSharedEmail(int $caseId): ?string
+    {
+        $case = $this->find($caseId);
+        if ($case === null || ($case['drive_shared_email_enc'] ?? null) === null) {
+            return null;
+        }
+
+        return $this->crypto->decrypt((string)$case['drive_shared_email_enc']);
     }
 
     /**
@@ -250,6 +296,78 @@ final class CaseService
         return ['ok' => true, 'changed' => true];
     }
 
+    /**
+     * 修正依頼を出して `needs_revision` へ差し戻す（SSOT v1.5 §2.8-7 / §5.1）。
+     *
+     * ★**状態変更と依頼の作成を同一トランザクション**で行う。
+     *   「差し戻したのに理由が無い」「理由はあるのに差し戻っていない」を作らない。
+     * ★`submitted` / `reviewed` からのみ。`locked` / `closed` からは戻さない。
+     *
+     * @param list<string> $paths 検査済みのパス
+     * @return array{ok:bool,error?:string,request_number?:int}
+     */
+    public function requestRevision(
+        int $caseId,
+        array $paths,
+        ?string $message,
+        RevisionRequestService $revisions,
+    ): array {
+        $case = $this->find($caseId);
+        if ($case === null) {
+            return ['ok' => false, 'error' => 'not_found'];
+        }
+
+        $current = (string)$case['status'];
+        if (!in_array($current, self::REVISABLE, true)) {
+            return ['ok' => false, 'error' => 'invalid_transition'];
+        }
+        if (!in_array('needs_revision', self::TRANSITIONS[$current] ?? [], true)) {
+            return ['ok' => false, 'error' => 'invalid_transition'];
+        }
+
+        $now = $this->clock->iso();
+
+        try {
+            return $this->db->transaction(function (\PDO $pdo) use ($caseId, $current, $now, $paths, $message, $revisions): array {
+                // 現在状態を条件に入れる（判定と更新の間に変わっていたら止める）
+                $stmt = $pdo->prepare(
+                    'UPDATE intake_cases SET status = :next, updated_at = :now
+                      WHERE id = :id AND status = :current'
+                );
+                $stmt->execute([
+                    ':next'    => 'needs_revision',
+                    ':now'     => $now,
+                    ':id'      => $caseId,
+                    ':current' => $current,
+                ]);
+                if ($stmt->rowCount() === 0) {
+                    return ['ok' => false, 'error' => 'conflict'];
+                }
+
+                $number = $revisions->insert($caseId, $paths, $message);
+
+                $pdo->prepare(
+                    'INSERT INTO intake_submission_history
+                        (intake_case_id, event_type, schema_version, submitted_at, result_code)
+                     VALUES (:id, :event, :schema_version, :now, :ok)'
+                )->execute([
+                    ':id'             => $caseId,
+                    ':event'          => 'revision_requested',
+                    ':schema_version' => Migrator::ANSWER_SCHEMA_VERSION,
+                    ':now'            => $now,
+                    ':ok'             => 'ok',
+                ]);
+
+                // ★監査には本文を持たせない（SSOT §2.8-5）
+                $this->audit->record($caseId, 'case_status_changed', 'ok');
+
+                return ['ok' => true, 'request_number' => $number];
+            });
+        } catch (\PDOException $e) {
+            return ['ok' => false, 'error' => 'conflict'];
+        }
+    }
+
     /** 管理画面の一覧（回答本文・PII を持ち出さない。SSOT §7 の一覧要件） */
     public function listForAdmin(int $limit = 200): array
     {
@@ -264,6 +382,77 @@ final class CaseService
         $stmt->execute();
 
         return $stmt->fetchAll();
+    }
+
+    /**
+     * 案件番号を採番する（SSOT §2.1 の形式にならう）。
+     *
+     * 形式: `HP-YYYYMM-NNNN`（`dev/preview-seed.php` と同じ形）。
+     * ★店舗名を含めない。連番は**その年月の中**で 1 から数える。
+     * ★呼び出し側は、採番と INSERT を同じトランザクションに入れること。
+     */
+    public function nextCaseNumber(?string $yearMonth = null): string
+    {
+        $ym     = $yearMonth ?? substr(str_replace('-', '', $this->clock->iso()), 0, 6);
+        $prefix = 'HP-' . $ym . '-';
+
+        $stmt = $this->db->pdo()->prepare(
+            'SELECT case_number FROM intake_cases
+              WHERE case_number LIKE :prefix
+              ORDER BY case_number DESC LIMIT 1'
+        );
+        $stmt->execute([':prefix' => $prefix . '%']);
+        $last = $stmt->fetchColumn();
+
+        $next = 1;
+        if ($last !== false && preg_match('/-(\d{4})$/', (string)$last, $m) === 1) {
+            $next = (int)$m[1] + 1;
+        }
+
+        return $prefix . str_pad((string)$next, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * 管理画面からの案件作成（4D-R1）。
+     *
+     * ★採番と INSERT を同一トランザクションで行い、番号の衝突を避ける。
+     * ★契約金額・Stripe・公開承認・営業履歴は受け取らない（SSOT §8 / §11.2）。
+     *
+     * @return array{ok:bool,error?:string,case_id?:int,case_number?:string}
+     */
+    public function createFromAdmin(string $shopDisplayName, string $contractType): array
+    {
+        $name = trim($shopDisplayName);
+        if ($name === '' || mb_strlen($name, 'UTF-8') > 100) {
+            return ['ok' => false, 'error' => 'bad_name'];
+        }
+        if (!in_array($contractType, ['salon', 'standalone'], true)) {
+            return ['ok' => false, 'error' => 'bad_contract_type'];
+        }
+
+        // ★create() が内側でトランザクションを開くため、ここでは開かない（PDO は入れ子にできない）。
+        //   番号の衝突は UNIQUE(case_number) が最後に止める。負けたら採番し直す。
+        for ($attempt = 0; $attempt < 3; ++$attempt) {
+            $number = $this->nextCaseNumber();
+            try {
+                $caseId = $this->create($number, $name, $contractType);
+            } catch (\PDOException $e) {
+                if (self::isUniqueViolation($e)) {
+                    continue;
+                }
+                throw $e;
+            }
+
+            return ['ok' => true, 'case_id' => $caseId, 'case_number' => $number];
+        }
+
+        return ['ok' => false, 'error' => 'conflict'];
+    }
+
+    private static function isUniqueViolation(\PDOException $e): bool
+    {
+        return ($e->getCode() === '23000' || ($e->errorInfo[1] ?? null) === 19)
+            && stripos($e->getMessage(), 'unique') !== false;
     }
 
     /** @return array<string,mixed>|null */

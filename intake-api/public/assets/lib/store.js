@@ -16,6 +16,8 @@ export class Store {
   #caseNumber = '';
   #contractType = 'standalone';
   #driveConfirmed = false;
+  #revisionRequests = [];
+  #drive = { folder_url: null, folder_label: null, shared_email: null };
   #listeners = new Set();
 
   /** GET /case の応答を取り込む（既存入力の復元） */
@@ -30,6 +32,12 @@ export class Store {
     this.#caseNumber = String(payload.case_number || '');
     this.#contractType = String(payload.contract_type || 'standalone');
     this.#driveConfirmed = payload.drive_confirmed === true;
+    // ★いま対応が必要な修正依頼だけ（サーバーが open のものしか返さない）
+    this.#revisionRequests = Array.isArray(payload.revision_requests) ? payload.revision_requests : [];
+    // ★素材フォルダの案内。**メモリだけ**で持ち、保存領域へ書かない
+    this.#drive = payload.drive && typeof payload.drive === 'object'
+      ? payload.drive
+      : { folder_url: null, folder_label: null, shared_email: null };
     this.#dirty.clear();
     this.#emit();
   }
@@ -48,6 +56,15 @@ export class Store {
   }
   get driveConfirmed() {
     return this.#driveConfirmed;
+  }
+  get revisionRequests() {
+    return this.#revisionRequests;
+  }
+  get drive() {
+    return this.#drive;
+  }
+  get hasRevisionRequest() {
+    return this.#revisionRequests.length > 0;
   }
   get isEditable() {
     return this.#status === 'draft' || this.#status === 'needs_revision';
@@ -121,6 +138,9 @@ export class Store {
     this.#version = 1;
     this.#status = 'closed';
     this.#caseNumber = '';
+    // ★素材フォルダのURL・共有先メール・修正依頼も手元から捨てる
+    this.#revisionRequests = [];
+    this.#drive = { folder_url: null, folder_label: null, shared_email: null };
     this.#emit();
   }
 
