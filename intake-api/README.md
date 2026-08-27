@@ -1,4 +1,4 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F-PRE）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F）
 
 ```text
 STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除）。**本番未配置**
@@ -380,7 +380,28 @@ php -c intake-api/dev/php.ini intake-api/dev/retention-walkthrough.php
 毎回新しい使い捨てDBを作り、**終わったら消す**。
 `dev/.preview/` を含む**既存DBへは一切接続しない**。
 
-### 残っている宿題（4F-PRE 以降）
+### 全工程の通し確認（4F）
+
+```bash
+php -c intake-api/dev/php.ini intake-api/dev/e2e-walkthrough.php
+```
+
+架空店舗1件で、管理者の案件作成から削除済み案件の全面拒否までを
+**88項目**確かめる（A 案件開始／B 初回交換／C 入力・途中保存／
+D Drive 申告／E 提出／F 管理確認・書き出し／G 修正依頼・再提出／
+H リンク再発行／I 確定／J 保持期限／K closed 後の拒否／L 保守）。
+
+- 使い捨てDBを**3つ**作り、終了時にすべて消す
+- 架空の店舗名・`example.invalid` のメール・架空のフォルダURLだけを使う
+- 外部（XServer・Drive API・Stripe・Operations・AI Sales・実メール）へ接続しない
+- **J は本番想定の既定状態（フラグ false）で削除できないこと**を確かめる。
+  削除が成功することの確認は `retention-walkthrough.php` が担当する
+
+ブラウザからしか見えない項目（`location.hash` / `localStorage` /
+`document.cookie` / console / Referer / 実際の描画）は、
+`dev/preview-seed.php` ＋ ローカルサーバーで**実ブラウザ**から確認する。
+
+### 残っている宿題（4F 以降）
 
 | # | 事項 | いまの扱い |
 |---|---|---|
@@ -389,5 +410,7 @@ php -c intake-api/dev/php.ini intake-api/dev/retention-walkthrough.php
 | 3 | `closed` への通常遷移 | **作らない**。`closed` は削除完了時に設定される（SSOT §9.3-3） |
 | 4 | 中止案件を `closed` にする経路 | 未定（SSOT §12.2-12）。運用が固まってから決める |
 | 5 | 管理 session 清掃の自動化 | Phase 1 は保守画面からの明示操作（SSOT §2.7-10） |
-| 6 | `expose_php` が実機で効くか | **4H で確認**（`.htaccess` 側の受け止めあり） |
+| 6 | `expose_php` が実機で効くか | **4H で確認**。ローカルの PHP 内蔵サーバーでは<br>`.user.ini`（`PHP_INI_SYSTEM`）も `.htaccess`（Apache）も適用されないため、<br>**この2つの対策はローカルでは検証できない**（4F で実測） |
 | 7 | 本番バックアップの世代・削除方針 | **4G**。確定するまで `backup_policy_confirmed` を true にしない |
+| 8 | 分類の中の**未知キー**が書き出しへ通る | **4F で発見（P3）**。`POST /answers/save` は分類名（11種）を検査するが、<br>分類の**中身のキーは検査しない**。未知キーはそのまま保存され、<br>「検証済み JSON」にも出る。認証済み店舗が自分の案件へ入れた値であり、<br>HTML はエスケープ済み・JSON も符号化済みのため**漏えいにはならない**が、<br>SSOT §11.3 の allowlist 方針とは緩い。**取込側（OPS-4）を作る前に判断する** |
+| 9 | 補助ボタンの高さが 40px | **4F で発見（P3）**。主導線（前へ／次へ）は 48px を満たす。<br>「追加」「保存する」「入力を終了する」は 40px で、<br>WCAG 2.5.8（24px）は満たすが 4F の目標値 48px には届かない |

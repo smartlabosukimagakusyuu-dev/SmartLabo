@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use SmartLabo\Intake\Config;
 use SmartLabo\Intake\Service\CaseService;
+use SmartLabo\Intake\Service\ExportService;
 use SmartLabo\Intake\Service\RetentionService;
 
 /** 架空の素材フォルダ（実在しない） */
@@ -963,7 +964,159 @@ test('purge: 店舗の Cookie では削除経路へ入れない', function (): v
     assertSame(1, rowCount($k, 'intake_answers', $caseId), '削除されている');
 });
 
+/* ==================================================== 削除済みの書き出し拒否（4F §2） */
+
+/**
+ * 4F-PRE の mutation M9 は「削除済みでも書き出せる」改変を検出したが、
+ * 落ち方が **回答行が無いことによる例外**だった。
+ * つまり「状態ゲートが効いている」ことを見ていなかった。
+ *
+ * ここでは **回答行を残したまま** `deleted_at` だけを立てる。
+ * 例外が起きる余地を消したうえで、ゲートそのものが拒否理由になることを見る。
+ *
+ * @return array{0:object,1:int,2:string} [kernel, caseId, caseNumber]
+ */
+function deletedButAnswersIntact(string $number): array
+{
+    $k = retentionKernel();
+    [$caseId] = reviewedCase($k, $number);
+    $k->cases->adminLock($caseId);
+
+    // ★purgeCase() を通さない。回答・履歴・修正依頼は**残したまま**、
+    //   案件行だけを「削除済み」の形にする。
+    $k->db->pdo()->prepare(
+        'UPDATE intake_cases SET status = :s, closed_at = :now, deleted_at = :now WHERE id = :id'
+    )->execute([':s' => 'closed', ':now' => '2026-08-27T00:00:00Z', ':id' => $caseId]);
+
+    return [$k, $caseId, $number];
+}
+
+test('export: 削除済み案件は「回答が無いから」ではなく状態ゲートで拒否される', function (): void {
+    [$k, $caseId, $number] = deletedButAnswersIntact('HP-202608-9290');
+
+    // 前提: 回答行は**残っている**（例外で落ちる余地が無い）
+    assertSame(1, rowCount($k, 'intake_answers', $caseId), '回答行が消えている（検査が空振り）');
+    assertSame([], $k->answers->evaluate($caseId)['missing'], '必須が欠けている（検査が空振り）');
+    assertSame('closed', $k->cases->find($caseId)['status'], '状態が closed でない');
+    assertTrue(in_array('closed', ExportService::EXPORTABLE, true),
+        'closed が EXPORTABLE から外れた（この検査の前提が崩れている）');
+
+    $before = $k->audit->countFor($caseId, 'export_generated');
+
+    $result = $k->export->export($caseId);
+
+    // 拒否の**理由**まで見る。not_exportable でも incomplete でもない
+    assertSame(false, $result['ok'], '削除済みなのに書き出せた');
+    assertSame('deleted', $result['error'], '拒否理由が状態ゲートでない');
+
+    // 本文が1バイトも作られていない
+    assertTrue(!array_key_exists('json', $result), 'JSON 本文が作られている');
+    assertTrue(!array_key_exists('file_name', $result), 'ファイル名が作られている');
+    assertTrue(!array_key_exists('sha256', $result), 'SHA-256 が作られている');
+    assertSame(['ok', 'error'], array_keys($result), '応答に余分なキーがある');
+
+    // 監査が増えていない
+    assertSame($before, $k->audit->countFor($caseId, 'export_generated'), '監査が増えている');
+    unset($number);
+});
+
+test('export: 回答行が無い（実際に削除済み）案件でも、例外ではなく同じ理由で拒否される', function (): void {
+    $k = retentionKernel();
+    [$caseId] = lockedCase($k, 'HP-202608-9291');
+    $k->retention->purgeCase($caseId, 'HP-202608-9291', 'DELETE HP-202608-9291');
+
+    assertSame(0, rowCount($k, 'intake_answers', $caseId), '回答行が残っている');
+
+    $result = $k->export->export($caseId);
+
+    assertSame(false, $result['ok'], '書き出せてしまった');
+    assertSame('deleted', $result['error'], '拒否理由が違う（例外や別条件で落ちている）');
+});
+
+test('export: 状態ゲートは回答の読み出しより前にある（到達しない）', function (): void {
+    $code = stripPhpComments((string)file_get_contents(__DIR__ . '/../src/Service/ExportService.php'));
+
+    $gate = strpos($code, "'deleted'");
+    assertTrue($gate !== false, '削除済みの拒否が見当たらない');
+
+    // 回答へ触る最初の位置より前に、ゲートがあること
+    foreach (['$this->answers->evaluate', '$this->answers->get', 'buildPayload'] as $touch) {
+        $at = strpos($code, $touch);
+        assertTrue($at !== false, $touch . ' が見当たらない');
+        assertTrue($gate < $at, '削除済みの拒否が ' . $touch . ' より後ろにある');
+    }
+});
+
+test('export: 削除済み案件の画面応答は固定・ファイルも作られない', function (): void {
+    [$k, $caseId, $number] = deletedButAnswersIntact('HP-202608-9292');
+    unset($caseId);
+
+    $login  = loginAdmin($k);
+    $before = glob(sys_get_temp_dir() . '/*intake*') ?: [];
+
+    $res = $k->app->handle(adminGet('/admin/export', [
+        'cookies' => $login['cookie'], 'query' => ['case' => $number],
+    ]));
+
+    assertSame(409, $res->status, '応答が 409 でない');
+    assertSame('text/html; charset=UTF-8', $res->headers['Content-Type'] ?? null, 'HTML で返っていない');
+
+    // 書き出しの痕跡が1つも無い
+    assertTrue(!isset($res->headers['Content-Disposition']), 'Content-Disposition が出ている');
+    assertTrue(!isset($res->headers['X-Intake-Export-Sha256']), 'SHA-256 ヘッダーが出ている');
+    assertTrue(!isset($res->headers['Content-Length']), 'Content-Length が出ている');
+    assertSame('no-store, no-cache, must-revalidate', $res->headers['Cache-Control'] ?? null, 'no-store でない');
+    assertSame('nosniff', $res->headers['X-Content-Type-Options'] ?? null, 'nosniff が無い');
+
+    // 本文に回答が1つも出ていない
+    $body = (string)$res->rawBody;
+    foreach ([RET_MARKER, RET_DRIVE_EMAIL, 'ハルカゼ', '架空県', 'export_schema_version', 'hp_intake'] as $banned) {
+        assertTrue(!str_contains($body, $banned), '応答に書き出し内容が出ている: ' . $banned);
+    }
+
+    // 一時ファイルを作っていない
+    assertSame($before, glob(sys_get_temp_dir() . '/*intake*') ?: [], '一時ファイルが作られている');
+});
+
 /* ==================================================== 監査の13か月削除 */
+
+test('audit: 保持期間は13か月そのもの（実装の計算に頼らず確かめる）', function (): void {
+    // ★4F の mutation で見つかった穴をふさぐ。
+    //   境目のテストは auditCutoff() を基準に前後へ行を置くため、
+    //   保持月数そのものを変えられても**気づけなかった**。
+    //   ここでは「13」という値と、絶対時刻での残す／消すを直接見る。
+    assertSame(13, RetentionService::AUDIT_RETENTION_MONTHS, '保持月数が SSOT §9.1 と違う');
+
+    $k   = retentionKernel();
+    $now = time();
+    $ago = (int)strtotime($k->retention->auditCutoff());
+    $days = (int)floor(($now - $ago) / 86400);
+    // 13か月 = 395〜397日（月の長さで前後する）。ここを外れたら期間が変わっている
+    assertTrue($days >= 393 && $days <= 400, '保持の境目が13か月から外れている: ' . $days . '日');
+
+    $caseId = $k->cases->create('HP-202608-9275', '架空サロン');
+    $insert = $k->db->pdo()->prepare(
+        'INSERT INTO intake_audit_events (intake_case_id, event_type, result_code, ip_hmac, created_at)
+         VALUES (:id, :e, :r, NULL, :at)'
+    );
+    // ★絶対時刻で置く。実装がどこを境目と考えていても、この2件の扱いは決まっている
+    $keep = gmdate('Y-m-d\TH:i:s\Z', $now - (365 * 86400));   // 12か月前 → 残す
+    $drop = gmdate('Y-m-d\TH:i:s\Z', $now - (425 * 86400));   // 14か月前 → 消す
+    $insert->execute([':id' => $caseId, ':e' => 'admin_viewed', ':r' => 'ok', ':at' => $keep]);
+    $insert->execute([':id' => $caseId, ':e' => 'admin_viewed', ':r' => 'ok', ':at' => $drop]);
+
+    assertSame(1, $k->retention->countAuditDue(), '削除対象が1件でない（12か月前まで消そうとしている）');
+
+    $k->retention->purgeAudit();
+
+    $stmt = $k->db->pdo()->prepare(
+        'SELECT COUNT(*) FROM intake_audit_events WHERE intake_case_id = :id AND created_at = :at'
+    );
+    $stmt->execute([':id' => $caseId, ':at' => $keep]);
+    assertSame(1, (int)$stmt->fetchColumn(), '12か月前の監査まで消えている');
+    $stmt->execute([':id' => $caseId, ':at' => $drop]);
+    assertSame(0, (int)$stmt->fetchColumn(), '14か月前の監査が残っている');
+});
 
 test('audit: 13か月の境目で残す・消すが分かれる', function (): void {
     $clock = new TestClock();
