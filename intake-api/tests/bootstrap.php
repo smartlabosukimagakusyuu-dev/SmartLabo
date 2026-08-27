@@ -144,6 +144,19 @@ function jsonGet(string $path, array $opts = []): Request
     );
 }
 
+/**
+ * 提出要求の冪等化キー（SSOT v1.3 §6.4）。UUID v4 を1件つくる。
+ * ★4C の「送信を押すたびに新しい値を生成する」契約をテストでも同じ形で守る。
+ */
+function newSubmissionId(): string
+{
+    $b     = random_bytes(16);
+    $b[6]  = chr((ord($b[6]) & 0x0f) | 0x40); // version 4
+    $b[8]  = chr((ord($b[8]) & 0x3f) | 0x80); // variant 10xx
+
+    return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($b), 4));
+}
+
 /** 提出条件を満たす完全な回答（架空データのみ） */
 function completeSections(): array
 {

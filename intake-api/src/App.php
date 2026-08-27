@@ -231,9 +231,16 @@ final class App
         return Response::ok(['version' => $result['version']]);
     }
 
+    /**
+     * POST /submit
+     * body: { "submission_id": "<UUID v4>" }
+     *
+     * submission_id は**提出要求の冪等化キー**である（SSOT v1.3 §6.4）。
+     * ★値をログ・監査 result_code・エラー本文へ出さない（SSOT §10.7）。
+     */
     private function submit(Request $req): Response
     {
-        [$fail] = $this->guard->checkJsonPost($req);
+        [$fail, $payload] = $this->guard->checkJsonPost($req);
         if ($fail !== null) {
             return $fail;
         }
@@ -252,7 +259,21 @@ final class App
             return Response::error('rate_limited', 429);
         }
 
-        $result = $this->answers->submit($caseId, (string)$case['status']);
+        // 冪等化キーは必須。形式は UUID v4 のみ（SSOT v1.3 §6.4）
+        $submissionId = $payload['submission_id'] ?? null;
+        if (!is_string($submissionId)) {
+            return Response::error('bad_request', 400);
+        }
+
+        // 成功したときだけ、履歴の記録と同じトランザクションの中で状態を遷移させる
+        $result = $this->answers->submit(
+            $caseId,
+            (string)$case['status'],
+            $submissionId,
+            function () use ($caseId): void {
+                $this->cases->transitionTo($caseId, 'submitted');
+            },
+        );
 
         if ($result['ok'] !== true) {
             if (($result['error'] ?? '') === 'incomplete') {
@@ -264,15 +285,20 @@ final class App
                 ], 200);
             }
 
-            return Response::error('not_editable', 409);
+            // 固定文言のみ。既存の submission_id・提出日時・提出済みの内容を返さない
+            return match ((string)($result['error'] ?? '')) {
+                'bad_request'       => Response::error('bad_request', 400),
+                'already_submitted' => Response::error('already_submitted', 409),
+                'conflict'          => Response::error('conflict', 409),
+                default             => Response::error('not_editable', 409),
+            };
         }
 
         if (($result['already'] ?? false) === true) {
-            // 二重送信: 状態を変えず、履歴も増やさない（SSOT §6.4）
+            // 同一 submission_id の再送: 状態も履歴も監査も変えない（SSOT §6.4）
             return Response::ok(['submitted' => true, 'already_submitted' => true]);
         }
 
-        $this->cases->transitionTo($caseId, 'submitted');
         $this->logger->info('submitted', [
             'case_number' => (string)$case['case_number'],
             'result_code' => 'ok',

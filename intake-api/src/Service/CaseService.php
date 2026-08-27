@@ -65,7 +65,7 @@ final class CaseService
                 ':shop'           => $shopDisplayName,
                 ':contract_type'  => $contractType,
                 ':status'         => 'draft',
-                ':schema_version' => Migrator::SCHEMA_VERSION,
+                ':schema_version' => Migrator::ANSWER_SCHEMA_VERSION,
                 ':created_at'     => $now,
                 ':updated_at'     => $now,
             ]);
@@ -73,7 +73,7 @@ final class CaseService
 
             // 回答行は空 JSON で初期化する（「行が無い」状態を作らない。SSOT §2.3）
             $cols   = [];
-            $params = [':case_id' => $caseId, ':schema_version' => Migrator::SCHEMA_VERSION, ':now' => $now];
+            $params = [':case_id' => $caseId, ':schema_version' => Migrator::ANSWER_SCHEMA_VERSION, ':now' => $now];
             foreach (Migrator::ANSWER_SECTIONS as $section) {
                 $cols[':' . $section]                = in_array($section, Migrator::LIST_SECTIONS, true) ? '[]' : '{}';
                 $params[':' . $section . '_v']       = $cols[':' . $section];

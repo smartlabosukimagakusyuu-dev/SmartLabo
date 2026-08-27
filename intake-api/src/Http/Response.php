@@ -24,6 +24,8 @@ final class Response
         'method_not_allowed' => 'この操作は許可されていません。',
         'conflict'           => '他の端末で更新されています。最新の内容を読み込んでください。',
         'not_editable'       => '現在この内容は編集できません。',
+        // ★提出済みであること以外を伝えない（既存の submission_id・提出日時・提出内容を出さない）
+        'already_submitted'  => 'この内容はすでに提出済みです。',
         'payload_too_large'  => '送信内容が大きすぎます。',
         'rate_limited'       => '短時間に操作が集中しました。しばらくおいてからお試しください。',
         'server_error'       => 'ただいま処理できません。時間をおいてお試しください。',

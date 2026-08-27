@@ -84,7 +84,7 @@ test('schema: Stripe参照・カード情報・公開承認の列が存在しな
 });
 
 test('schema: 3.26.0 非対応構文を DDL に含まない（SSOT §2.0.1）', function (): void {
-    $sql = strtoupper(implode(' ', Migrator::statements()));
+    $sql = strtoupper(implode(' ', Migrator::allStatements()));
     foreach (['VACUUM INTO', 'RETURNING', ') STRICT', 'DROP COLUMN', 'GENERATED ALWAYS'] as $banned) {
         assertTrue(!str_contains($sql, $banned), 'DDL に ' . $banned . ' が含まれる');
     }

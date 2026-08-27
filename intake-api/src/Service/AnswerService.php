@@ -4,9 +4,10 @@
  *
  *  - 受け付けるのは JSON 11分類のみ。**未知キーは拒否**
  *  - 楽観ロック（intake_answers.version）
- *  - 二重送信は status による冪等化で防ぐ（SSOT §6.4）
+ *  - 二重送信は **submission_id（UUID v4）による冪等化 ＋ status ＋ DB一意制約**で防ぐ
+ *    （SSOT v1.3 §6.4。status だけでは「応答が消えた後の再送」を区別できない）
  *  - 提出履歴には**件数だけ**を残す（回答本文・項目名を残さない。SSOT §2.4）
- *  - 回答内容・PII をログへ出さない
+ *  - 回答内容・PII・**submission_id** をログへ出さない（SSOT §10.7）
  */
 declare(strict_types=1);
 
@@ -228,34 +229,124 @@ final class AnswerService
     }
 
     /**
-     * 最終提出。
-     * ★二重送信は status による冪等化で防ぐ（SSOT §6.4）。2回目は履歴を増やさない。
+     * 最終提出（SSOT v1.3 §6.4）。
+     *
+     * 冪等化は4層で守る:
+     *   1. 画面のボタン無効化（ここではない）
+     *   2. **submission_id**  … 同じ要求の再送を、同じ結果で返す
+     *   3. status            … 別要求としての二重提出を弾く
+     *   4. DB の部分一意索引  … 同時送信の競合を最後に止める
+     *
+     * $onCommit は「成功したときにだけ、同じトランザクションの中で実行したい処理」
+     * （案件を submitted へ遷移させる）。履歴だけ残って状態が変わらない中間状態を作らない。
+     *
+     * @param callable():void|null $onCommit
      * @return array{ok:bool,error?:string,already?:bool,missing?:list<string>,missing_count?:int}
      */
-    public function submit(int $caseId, string $currentStatus): array
+    public function submit(int $caseId, string $currentStatus, string $submissionId, ?callable $onCommit = null): array
     {
+        if (!self::isValidSubmissionId($submissionId)) {
+            // 値そのものは記録も返却もしない（SSOT §10.7）
+            return ['ok' => false, 'error' => 'bad_request'];
+        }
+        $submissionId = strtolower($submissionId);
+
+        // 層2: 同じ submission_id を先に処理済みなら、そのときの結果を返すだけ
+        $recorded = $this->findBySubmissionId($caseId, $submissionId);
+        if ($recorded !== null) {
+            return $this->replay($caseId, $recorded);
+        }
+
+        // 層3: 別要求としての二重提出
         if (in_array($currentStatus, ['submitted', 'reviewed'], true)) {
-            return ['ok' => true, 'already' => true];
+            return ['ok' => false, 'error' => 'already_submitted'];
         }
         if (!in_array($currentStatus, CaseService::EDITABLE, true)) {
             return ['ok' => false, 'error' => 'not_editable'];
         }
 
-        $result   = $this->evaluate($caseId);
-        $missing  = $result['missing'];
-        $schemaV  = $this->get($caseId)['schema_version'];
+        $result  = $this->evaluate($caseId);
+        $missing = $result['missing'];
+        $schemaV = $this->get($caseId)['schema_version'];
 
-        if ($missing !== []) {
-            $this->recordHistory($caseId, 'submitted', $schemaV, 'validation_error', $result['field_count'], count($missing));
-            $this->audit->record($caseId, 'submitted', 'validation_error');
+        try {
+            return $this->db->transaction(function () use ($caseId, $schemaV, $result, $missing, $submissionId, $onCommit): array {
+                if ($missing !== []) {
+                    $this->recordHistory(
+                        $caseId, 'submitted', $schemaV, 'validation_error',
+                        $result['field_count'], count($missing), $submissionId
+                    );
+                    $this->audit->record($caseId, 'submitted', 'validation_error');
 
-            return ['ok' => false, 'error' => 'incomplete', 'missing' => $missing, 'missing_count' => count($missing)];
+                    return ['ok' => false, 'error' => 'incomplete', 'missing' => $missing, 'missing_count' => count($missing)];
+                }
+
+                $this->recordHistory($caseId, 'submitted', $schemaV, 'ok', $result['field_count'], 0, $submissionId);
+                $this->audit->record($caseId, 'submitted', 'ok');
+
+                if ($onCommit !== null) {
+                    $onCommit();
+                }
+
+                return ['ok' => true, 'already' => false];
+            });
+        } catch (\PDOException $e) {
+            // 層4: 同時送信で一意索引に負けた。例外を外へ出さず、勝った側の結果を返す
+            if (!self::isUniqueViolation($e)) {
+                throw $e;
+            }
+            $recorded = $this->findBySubmissionId($caseId, $submissionId);
+
+            return $recorded === null
+                ? ['ok' => false, 'error' => 'conflict']
+                : $this->replay($caseId, $recorded);
+        }
+    }
+
+    /**
+     * 記録済みの提出要求を、副作用なしで返し直す（履歴も監査も増やさない）。
+     * @param array<string,mixed> $recorded
+     * @return array{ok:bool,error?:string,already?:bool,missing?:list<string>,missing_count?:int}
+     */
+    private function replay(int $caseId, array $recorded): array
+    {
+        if ((string)$recorded['result_code'] === 'ok') {
+            return ['ok' => true, 'already' => true];
         }
 
-        $this->recordHistory($caseId, 'submitted', $schemaV, 'ok', $result['field_count'], 0);
-        $this->audit->record($caseId, 'submitted', 'ok');
+        // 検証エラーだった要求の再送。現時点の不足を返す（記録は増やさない）
+        $missing = $this->evaluate($caseId)['missing'];
 
-        return ['ok' => true, 'already' => false];
+        return ['ok' => false, 'error' => 'incomplete', 'missing' => $missing, 'missing_count' => count($missing)];
+    }
+
+    /** UUID v4 のみ（SSOT v1.3 §2.4-1）。大文字小文字は問わないが、保存は小文字へ揃える */
+    public static function isValidSubmissionId(string $value): bool
+    {
+        return preg_match(
+            '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i',
+            $value
+        ) === 1;
+    }
+
+    /** @return array<string,mixed>|null */
+    private function findBySubmissionId(int $caseId, string $submissionId): ?array
+    {
+        $stmt = $this->db->pdo()->prepare(
+            'SELECT * FROM intake_submission_history
+              WHERE intake_case_id = :id AND submission_id = :sid
+              LIMIT 1'
+        );
+        $stmt->execute([':id' => $caseId, ':sid' => $submissionId]);
+        $row = $stmt->fetch();
+
+        return $row === false ? null : $row;
+    }
+
+    private static function isUniqueViolation(\PDOException $e): bool
+    {
+        return ($e->getCode() === '23000' || ($e->errorInfo[1] ?? null) === 19)
+            && stripos($e->getMessage(), 'unique') !== false;
     }
 
     public function recordHistory(
@@ -265,11 +356,14 @@ final class AnswerService
         string $resultCode,
         ?int $fieldCount = null,
         ?int $missingCount = null,
+        ?string $submissionId = null,
     ): void {
         $this->db->pdo()->prepare(
             'INSERT INTO intake_submission_history
-                (intake_case_id, event_type, schema_version, submitted_at, result_code, field_count, missing_count)
-             VALUES (:case_id, :event_type, :schema_version, :submitted_at, :result_code, :field_count, :missing_count)'
+                (intake_case_id, event_type, schema_version, submitted_at, result_code,
+                 field_count, missing_count, submission_id)
+             VALUES (:case_id, :event_type, :schema_version, :submitted_at, :result_code,
+                 :field_count, :missing_count, :submission_id)'
         )->execute([
             ':case_id'        => $caseId,
             ':event_type'     => $eventType,
@@ -278,6 +372,7 @@ final class AnswerService
             ':result_code'    => $resultCode,
             ':field_count'    => $fieldCount,
             ':missing_count'  => $missingCount,
+            ':submission_id'  => $submissionId,
         ]);
     }
 

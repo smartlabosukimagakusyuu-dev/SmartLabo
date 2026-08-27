@@ -94,7 +94,7 @@ test('save: rate limit は 10分60回', function (): void {
 test('submit: 未入力なら不足パスを返し、値は返さない', function (): void {
     [$k, $caseId, $secret] = withSession('HP-2026-0305');
 
-    $res = $k->app->handle(jsonPost('/submit', [], ['cookies' => [Config::COOKIE_NAME => $secret]]));
+    $res = $k->app->handle(jsonPost('/submit', ['submission_id' => newSubmissionId()], ['cookies' => [Config::COOKIE_NAME => $secret]]));
     assertSame(200, $res->status);
     assertSame(false, $res->body['submitted']);
     assertTrue($res->body['missing_count'] > 0, '不足が検出されない');
@@ -120,7 +120,7 @@ test('submit: 条件を満たせば submitted へ遷移する', function (): voi
     ], $cookies));
     assertSame(200, $res->status, '完全な回答が保存できない: ' . json_encode($res->body, JSON_UNESCAPED_UNICODE));
 
-    $res = $k->app->handle(jsonPost('/submit', [], $cookies));
+    $res = $k->app->handle(jsonPost('/submit', ['submission_id' => newSubmissionId()], $cookies));
     assertSame(200, $res->status);
     assertSame(true, $res->body['submitted'], json_encode($res->body, JSON_UNESCAPED_UNICODE));
     assertSame(false, $res->body['already_submitted']);
@@ -131,13 +131,16 @@ test('submit: 二重送信は状態を変えず履歴も増やさない', functi
     [$k, $caseId, $secret] = withSession('HP-2026-0307');
     $cookies = ['cookies' => [Config::COOKIE_NAME => $secret]];
 
+    // 同じ submission_id での再送 ＝「同じ提出要求の再試行」（SSOT v1.3 §6.4）
+    $sid = newSubmissionId();
+
     $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => completeSections()], $cookies));
-    $k->app->handle(jsonPost('/submit', [], $cookies));
+    $k->app->handle(jsonPost('/submit', ['submission_id' => $sid], $cookies));
 
     $historyBefore = $k->answers->historyCount($caseId);
     $updatedBefore = (string)$k->cases->find($caseId)['submitted_at'];
 
-    $res = $k->app->handle(jsonPost('/submit', [], $cookies));
+    $res = $k->app->handle(jsonPost('/submit', ['submission_id' => $sid], $cookies));
     assertSame(200, $res->status);
     assertSame(true, $res->body['already_submitted'], '二重送信が検出されない');
     assertSame($historyBefore, $k->answers->historyCount($caseId), '履歴が増えている');
@@ -149,7 +152,7 @@ test('submit: 提出後は編集できない（not_editable）', function (): vo
     $cookies = ['cookies' => [Config::COOKIE_NAME => $secret]];
 
     $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => completeSections()], $cookies));
-    $k->app->handle(jsonPost('/submit', [], $cookies));
+    $k->app->handle(jsonPost('/submit', ['submission_id' => newSubmissionId()], $cookies));
 
     $res = $k->app->handle(jsonPost('/answers/save', [
         'version' => 2, 'sections' => ['basic' => ['legal_name' => 'X']],
@@ -163,10 +166,10 @@ test('submit: needs_revision へ戻すと再提出できる', function (): void 
     $cookies = ['cookies' => [Config::COOKIE_NAME => $secret]];
 
     $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => completeSections()], $cookies));
-    $k->app->handle(jsonPost('/submit', [], $cookies));
+    $k->app->handle(jsonPost('/submit', ['submission_id' => newSubmissionId()], $cookies));
 
     $k->cases->transitionTo($caseId, 'needs_revision');
-    $res = $k->app->handle(jsonPost('/submit', [], $cookies));
+    $res = $k->app->handle(jsonPost('/submit', ['submission_id' => newSubmissionId()], $cookies));
     assertSame(200, $res->status);
     assertSame(true, $res->body['submitted']);
     assertSame(false, $res->body['already_submitted']);
@@ -178,7 +181,7 @@ test('submit: 提出履歴は回答本文・個人情報を持たない', functi
     $cookies = ['cookies' => [Config::COOKIE_NAME => $secret]];
 
     $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => completeSections()], $cookies));
-    $k->app->handle(jsonPost('/submit', [], $cookies));
+    $k->app->handle(jsonPost('/submit', ['submission_id' => newSubmissionId()], $cookies));
 
     $rows = $k->db->pdo()->query('SELECT * FROM intake_submission_history')->fetchAll();
     foreach ($rows as $row) {
