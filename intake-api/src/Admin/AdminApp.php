@@ -13,6 +13,8 @@
  *   POST /admin/revision/send 修正依頼の確定（＋ needs_revision へ差し戻し）
  *   GET  /admin/new           新しい案件の入力（4D-R1）
  *   POST /admin/create        案件作成 ＋ ご案内リンクの発行
+ *   GET  /admin/reissue       ご案内リンク再発行の確認（4D-R2）
+ *   POST /admin/reissue/send  再発行の実行（旧token・店舗sessionを失効）
  *   GET  /admin/export   検証済み JSON のダウンロード
  *
  * 守ること:
@@ -90,6 +92,8 @@ final class AdminApp
             '/admin/revision/send' => $this->sendRevision($req),
             '/admin/new'    => $this->newCaseForm($req),
             '/admin/create' => $this->createCase($req),
+            '/admin/reissue'      => $this->reissueForm($req),
+            '/admin/reissue/send' => $this->doReissue($req),
             default         => Response::html(
                 View::page('表示できません', View::notice('error', self::MSG_NOT_FOUND), false),
                 404
@@ -307,6 +311,12 @@ final class AdminApp
         if (in_array($status, CaseService::REVISABLE, true)) {
             $actions .= '<a class="btn btn--outline" href="/admin/revision?case='
                 . rawurlencode($number) . '">修正を依頼する</a>';
+        }
+        // ★ご案内リンクの再発行は draft / needs_revision だけ（SSOT v1.6 §4.4.1）。
+        //   押しても必ず失敗するボタンを置かない
+        if (in_array($status, CaseService::REISSUABLE, true)) {
+            $actions .= '<a class="btn btn--outline" href="/admin/reissue?case='
+                . rawurlencode($number) . '">店舗入力リンクを再発行</a>';
         }
 
         // 書き出しは提出済み以降かつ必須充足のときだけ出す
@@ -776,6 +786,141 @@ final class AdminApp
         }
 
         return null;
+    }
+
+    /* ------------------------------------------------ ご案内リンクの再発行 */
+
+    /**
+     * 再発行の確認画面（GET）。
+     * ★ここでは何も変えない。実行は POST /admin/reissue/send。
+     */
+    private function reissueForm(Request $req, string $message = ''): Response
+    {
+        [$session, $fail] = $this->requireSession($req, 'GET');
+        if ($fail !== null) {
+            return $fail;
+        }
+
+        $case = $this->cases->findByNumber((string)($req->query['case'] ?? ''));
+        if ($case === null) {
+            return $this->notFound();
+        }
+
+        $status = (string)$case['status'];
+        if (!in_array($status, CaseService::REISSUABLE, true)) {
+            return Response::html(
+                View::page('再発行できません', View::notice(
+                    'warn',
+                    'この案件は、いまの状態ではご案内リンクを再発行できません。'
+                    . '修正が必要な場合は、先に「修正を依頼する」で差し戻してください。'
+                )),
+                409
+            );
+        }
+
+        $csrf   = $this->auth->rotateCsrf((int)$session['id']);
+        $notice = $message === '' ? '' : View::notice('error', $message);
+
+        return Response::html(View::page(
+            'ご案内リンクの再発行',
+            $notice . View::reissueForm((string)$case['case_number'], $status, $csrf),
+        ), $message === '' ? 200 : 400);
+    }
+
+    /**
+     * 再発行を実行する（POST）。
+     *
+     * ★旧 token と関連する店舗 session の失効、新 token の発行は
+     *   TokenService::reissue() が**同一トランザクション**で行う。
+     * ★新しい平文はこの応答にしか出さない。再表示の経路を作らない。
+     */
+    private function doReissue(Request $req): Response
+    {
+        if ($req->method !== 'POST' || !$this->guard->adminPostAllowed($req)) {
+            return $this->forbidden();
+        }
+
+        $session = $this->auth->verify($req->cookie(Config::ADMIN_COOKIE_NAME));
+        if ($session === null) {
+            return Response::redirect('/admin/login');
+        }
+        if (!$this->auth->csrfMatches($session, $this->csrfFrom($req))) {
+            return $this->forbidden();
+        }
+        $this->auth->touch((int)$session['id']);
+        // ★ここで作り直すことが二重送信の歯止めになる。
+        //   ブラウザの再送・戻る→再送信では古い token になり通らない
+        $this->auth->rotateCsrf((int)$session['id']);
+
+        $form   = $req->formFields();
+        $number = (string)($form['case'] ?? '');
+        $case   = $this->cases->findByNumber($number);
+        if ($case === null) {
+            return $this->notFound();
+        }
+
+        $caseId = (int)$case['id'];
+        $status = (string)$case['status'];
+
+        // 誤操作防止: 案件番号の再入力が完全一致すること
+        // ★入力された比較値をログへ出さない
+        if (!hash_equals($number, (string)($form['confirm_case'] ?? ''))) {
+            return $this->reissueForm(
+                new Request(
+                    method: 'GET',
+                    path: '/admin/reissue',
+                    headers: ['Sec-Fetch-Site' => 'same-origin'],
+                    cookies: $req->cookies,
+                    isHttps: $req->isHttps,
+                    query: ['case' => $number],
+                ),
+                '案件番号が一致しません。もう一度ご確認ください。'
+            );
+        }
+
+        // レート制限（案件 ＋ HMAC化IP で 10分5回）
+        $ipHmac   = $this->rateLimiter->ipHmac($req->clientIp);
+        $identity = $ipHmac . ':case:' . $caseId;
+        if (!$this->rateLimiter->allow('token_reissue', $identity)) {
+            $this->audit->record($caseId, 'token_reissued', 'rate_limited', $ipHmac);
+            $this->logger->warn('token_reissued', [
+                'case_number' => $number,
+                'result_code' => 'rate_limited',
+                'ip_hmac'     => $ipHmac,
+                'http_status' => 429,
+            ]);
+
+            return Response::html(
+                View::page('再発行できません', View::notice('warn', self::MSG_RATE_LIMITED)),
+                429
+            );
+        }
+
+        $result = $this->tokens->reissue($caseId, CaseService::REISSUABLE, $ipHmac);
+
+        if ($result['ok'] !== true) {
+            // ★理由の詳細を画面へ出さない
+            return Response::html(
+                View::page('再発行できません', View::notice(
+                    'warn',
+                    'この案件は、いまの状態ではご案内リンクを再発行できません。'
+                )),
+                409
+            );
+        }
+
+        // ★token 平文はログへ出さない。案件番号と結果だけ
+        $this->logger->info('token_reissued', [
+            'case_number' => $number,
+            'result_code' => 'ok',
+            'ip_hmac'     => $ipHmac,
+            'http_status' => 200,
+        ]);
+
+        return Response::html(View::page(
+            'ご案内リンクを再発行しました',
+            View::reissuedLink($number, $status, (string)$result['token']),
+        ));
     }
 
     /* ------------------------------------------------------------ 書き出し */

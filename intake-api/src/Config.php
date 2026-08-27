@@ -52,6 +52,8 @@ final class Config
         'drive_confirm' => [5, 600],
         // 管理ログイン: HMAC化IP単位で 10分5回（SSOT §10.8）
         'admin_login' => [5, 600],
+        // ご案内リンクの再発行: 案件 ＋ HMAC化IP 単位で 10分5回（SSOT v1.6 §4.4.1）
+        'token_reissue' => [5, 600],
     ];
 
     public function __construct(

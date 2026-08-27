@@ -22,6 +22,8 @@ final class Audit
         'export_generated', 'drive_url_set', 'answers_deleted', 'rate_limited',
         // 4D（SSOT v1.4 §2.5）
         'drive_upload_confirmed', 'case_status_changed', 'admin_login', 'admin_logout',
+        // 4D-R2（SSOT v1.6 §2.5 / §4.4.1）
+        'token_reissued',
     ];
 
     public function __construct(

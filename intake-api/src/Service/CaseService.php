@@ -48,6 +48,15 @@ final class CaseService
     /** 修正依頼を出してよい状態（SSOT v1.5 §5.1） */
     public const REVISABLE = ['submitted', 'reviewed'];
 
+    /**
+     * ご案内リンクを再発行してよい状態（SSOT v1.6 §4.4.1）。
+     *
+     * ★`submitted` / `reviewed` では出さない。受付済みの案件へ新しい編集リンクを配らない。
+     *   修正が必要なら、先に `needs_revision` へ差し戻してから再発行する。
+     * ★`locked` / `closed` は確定済み（token ごと失効させている）。
+     */
+    public const REISSUABLE = ['draft', 'needs_revision'];
+
     public function __construct(
         private readonly Db $db,
         private readonly Clock $clock,

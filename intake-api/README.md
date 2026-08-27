@@ -1,8 +1,8 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4D-R1）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4D-R2）
 
 ```text
 STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.5**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.6**
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -160,6 +160,8 @@ php -c intake-api/dev/php.ini -S 127.0.0.1:8788 -t intake-api/public intake-api/
 | POST | `/admin/revision/send` | 修正依頼の確定 ＋ `needs_revision` へ差し戻し（4D-R1） |
 | GET | `/admin/new` | 新しい案件の入力（4D-R1） |
 | POST | `/admin/create` | 案件作成 ＋ ご案内リンクの発行（4D-R1） |
+| GET | `/admin/reissue?case=…` | ご案内リンク再発行の確認（4D-R2） |
+| POST | `/admin/reissue/send` | 再発行の実行（旧token・店舗sessionを失効。4D-R2） |
 | GET | `/admin/export?case=…` | 検証済み JSON のダウンロード |
 
 - 代表1名のみ。資格情報は `private/intake-config.php`（**hash だけ**。§6）
@@ -288,10 +290,38 @@ Stripe（一切）／本番配置・サブドメイン・SSL（4H）
 - 二重送信は **CSRF token の作り直し**で止める（同じ画面を再送しても通らない）
 - 紛失時は**発行し直す**（旧 token と関連 session は失効する）
 
+### ご案内リンクの再発行（4D-R2・SSOT v1.6 §4.4.1）
+
+平文は発行直後に1回しか出ないため、**受け取れなかったときの回復手段は再発行だけ**である。
+「以前の token を復元する」機能は作らない（復元できる＝どこかに平文が残っている、ということ）。
+
+| 状態 | 再発行 |
+|---|---|
+| `draft` / `needs_revision` | **可** |
+| `submitted` / `reviewed` | **不可**。修正が要るなら**先に「修正を依頼する」で差し戻す** |
+| `locked` / `closed` / 未知 | **不可**（fail closed） |
+
+実行は `TokenService::reissue()` が**同一トランザクション**で行う。
+
+1. 状態をトランザクションの中で再確認
+2. 有効な token をすべて失効
+3. その token から出た**店舗 session をすべて失効**
+4. `random_bytes(32)` で新 token
+5. DBへは **SHA-256 hash のみ**（期限は発行から14日）
+6. 監査 `token_reissued` を1件（初回の `token_issued` と区別する）
+
+| # | 守っていること |
+|---|---|
+| 1 | **回答・`version`・提出履歴・修正依頼・Drive 情報を消さない** |
+| 2 | 実行前に**案件番号の再入力**を求め、`hash_equals()` で**完全一致**のときだけ実行 |
+| 3 | 新しい平文は成功画面の `input` **1箇所だけ**。URL・Cookie・HTMLコメント・ログ・監査・DBへ出さない |
+| 4 | 二重送信は **CSRF token の作り直し**で阻止（ブラウザ再送は 403、token は増えない） |
+| 5 | **案件 ＋ HMAC化IP で 10分5回**。6回目は 429（自動再試行しない） |
+| 6 | 通信断で応答を受け取れなくても、**もう一度再発行できる**（直前の token も失効し、監査が1件増える） |
+
 ### 残っている宿題（4E 以降）
 
 | # | 事項 | いまの扱い |
 |---|---|---|
 | 1 | `GET /case` の `Sec-Fetch-Site` 受理 | **4E でセキュリティ再検証**（SSOT §10.9-4） |
-| 2 | 管理画面からの **token 再発行** | 4D-R1 では**未実装**。初回発行のみ。<br>再発行が要る場合は `TokenService::issue()` を呼ぶ導線を 4E 以降で足す |
-| 3 | `locked` / `closed` への遷移 | 画面から行わない（誤操作の影響が大きいため） |
+| 2 | `locked` / `closed` への遷移 | 画面から行わない（誤操作の影響が大きいため） |

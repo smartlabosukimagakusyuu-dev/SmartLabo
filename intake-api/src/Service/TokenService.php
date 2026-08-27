@@ -66,6 +66,74 @@ final class TokenService
     }
 
     /**
+     * ご案内リンクを再発行する（SSOT v1.6 §4.4.1）。
+     *
+     * `issue()` との違いは2つだけ:
+     *   1. **状態をトランザクションの中で**もう一度確かめる（許可された状態でなければ何もしない）
+     *   2. 監査へ `token_issued` ではなく **`token_reissued`** を残す
+     *
+     * ★平文は戻り値でしか渡さない。ログ・監査・DBの平文列・URL へ出さない。
+     * ★店舗の入力済み回答には一切触れない（`intake_answers` を更新しない）。
+     *
+     * @param list<string> $allowedStatuses 再発行してよい案件状態
+     * @return array{ok:bool,error?:string,token?:string}
+     */
+    public function reissue(int $caseId, array $allowedStatuses, ?string $ipHmac = null): array
+    {
+        $plain = Secret::generate();
+        $now   = $this->clock->iso();
+
+        $result = $this->db->transaction(function (\PDO $pdo) use ($caseId, $plain, $now, $allowedStatuses): array {
+            // 1. 状態の再確認。判定してから実行するまでの間に変わっていたら止める
+            $stmt = $pdo->prepare('SELECT status FROM intake_cases WHERE id = :id');
+            $stmt->execute([':id' => $caseId]);
+            $status = $stmt->fetchColumn();
+
+            if ($status === false) {
+                return ['ok' => false, 'error' => 'not_found'];
+            }
+            if (!in_array((string)$status, $allowedStatuses, true)) {
+                return ['ok' => false, 'error' => 'invalid_status'];
+            }
+
+            // 2-3. 旧 token から発行された session → 旧 token の順に失効させる
+            $pdo->prepare(
+                'UPDATE intake_sessions SET revoked_at = :now
+                  WHERE revoked_at IS NULL
+                    AND token_id IN (SELECT id FROM intake_tokens
+                                      WHERE intake_case_id = :case_id AND revoked_at IS NULL)'
+            )->execute([':now' => $now, ':case_id' => $caseId]);
+
+            $pdo->prepare(
+                'UPDATE intake_tokens SET revoked_at = :now
+                  WHERE intake_case_id = :case_id AND revoked_at IS NULL'
+            )->execute([':now' => $now, ':case_id' => $caseId]);
+
+            // 4-5. 新しい token。★DBへは hash のみ
+            $pdo->prepare(
+                'INSERT INTO intake_tokens (intake_case_id, token_hash, expires_at, created_at)
+                 VALUES (:case_id, :hash, :expires_at, :created_at)'
+            )->execute([
+                ':case_id'    => $caseId,
+                ':hash'       => Secret::hash($plain),
+                ':expires_at' => $this->clock->isoAfter(Config::TOKEN_TTL),
+                ':created_at' => $now,
+            ]);
+
+            return ['ok' => true];
+        });
+
+        if ($result['ok'] !== true) {
+            return $result;
+        }
+
+        // 6. 監査。★token 平文も hash も書かない
+        $this->audit->record($caseId, 'token_reissued', 'ok', $ipHmac);
+
+        return ['ok' => true, 'token' => $plain];
+    }
+
+    /**
      * 平文 token を照合する。
      * @return array{row:?array<string,mixed>,reason:string} reason は監査用（外部へ出さない）
      */

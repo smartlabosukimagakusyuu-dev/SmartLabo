@@ -251,6 +251,71 @@ final class View
             . '</div></form></section>';
     }
 
+    /* ------------------------------------------------ ご案内リンクの再発行 */
+
+    /**
+     * 再発行の確認画面（SSOT v1.6 §4.4.1）。
+     *
+     * ★何が起きるかを先に全部見せる。押してから気づく画面にしない。
+     * ★誤操作を防ぐため、案件番号の再入力を求める（完全一致のみ実行）。
+     */
+    public static function reissueForm(string $caseNumber, string $status, string $csrf): string
+    {
+        return '<section class="card">'
+            . '<h1 class="card__title">ご案内リンクの再発行</h1>'
+            . self::row('案件番号', self::esc($caseNumber))
+            . self::row('現在の状態', self::statusLabel($status))
+            . '<div class="notice notice--warn">'
+            . '<p class="notice__title">実行すると、次のことが起こります</p>'
+            . '<ul class="list">'
+            . '<li><strong>これまでのご案内リンクは使えなくなります。</strong></li>'
+            . '<li>店舗がいま開いている入力画面も、その場で使えなくなります。</li>'
+            . '<li><strong>入力済みの内容は消えません。</strong>'
+            . '新しいリンクから、そのまま続きを入力できます。</li>'
+            . '<li>新しいリンクは<strong>次の画面で1回だけ</strong>表示されます。</li>'
+            . '</ul></div>'
+            . '<form method="post" action="/admin/reissue/send" autocomplete="off">'
+            . '<input type="hidden" name="csrf_token" value="' . self::esc($csrf) . '">'
+            . '<input type="hidden" name="case" value="' . self::esc($caseNumber) . '">'
+            . '<div class="field">'
+            . '<label class="field__label" for="confirm-case">確認のため、案件番号をご入力ください</label>'
+            . '<input id="confirm-case" name="confirm_case" type="text" autocomplete="off" '
+            . 'spellcheck="false" required placeholder="' . self::esc($caseNumber) . '">'
+            . '</div>'
+            . '<div class="actions">'
+            . '<button type="submit" class="btn btn--primary">リンクを再発行する</button>'
+            . '<a class="btn btn--outline" href="/admin/case?case=' . rawurlencode($caseNumber) . '">やめる</a>'
+            . '</div></form></section>';
+    }
+
+    /**
+     * 再発行直後の1回だけ、新しいご案内リンクを見せる。
+     * ★この画面を離れると再表示できない（SSOT v1.6 §4.4.1-2）。
+     */
+    public static function reissuedLink(string $caseNumber, string $status, string $token): string
+    {
+        $url = 'https://intake.smartlaboworks.com/start#' . $token;
+
+        return '<section class="card">'
+            . '<h1 class="card__title">ご案内リンクを再発行しました</h1>'
+            . self::row('案件番号', self::esc($caseNumber))
+            . self::row('現在の状態', self::statusLabel($status))
+            . '<div class="notice notice--warn">'
+            . '<p class="notice__title">この画面を閉じると再表示できません</p>'
+            . '<p>下のリンクを店舗へお伝えください。'
+            . '控えを取り忘れた場合は、もう一度発行し直してください'
+            . '（そのときも、いま出ているリンクは使えなくなります）。</p>'
+            . '</div>'
+            . '<div class="field"><label class="field__label" for="issued-link">新しいご案内リンク</label>'
+            . '<input id="issued-link" type="text" readonly value="' . self::esc($url) . '"></div>'
+            . '<p class="lead">これまでのリンクと、店舗が開いていた入力画面は使えなくなりました。'
+            . '入力済みの内容はそのまま残っています。</p>'
+            . '<div class="actions">'
+            . '<a class="btn btn--primary" href="/admin/case?case=' . rawurlencode($caseNumber) . '">案件詳細へ</a>'
+            . '<a class="btn btn--outline" href="/admin/">案件一覧へ</a>'
+            . '</div></section>';
+    }
+
     /**
      * 作成直後の1回だけ、ご案内リンクを見せる。
      *

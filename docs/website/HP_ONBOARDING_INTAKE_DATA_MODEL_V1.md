@@ -1,14 +1,15 @@
 # 店舗向けHP導入フォーム データモデル・token設計 v1
 
 ```text
-STATUS      : APPROVED / 4D 実装済み（受付API・店舗入力画面・内部確認画面）
-VERSION     : v1.5（R5）
-DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2 R2・v1.3 R3・v1.4 R4・v1.5 R5 改定）
+STATUS      : APPROVED / 4D-R1 実装済み（受付API・店舗入力画面・内部確認画面・運用フロー）
+VERSION     : v1.6（R6）
+DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.6 改定）
 工程        : HP-ONBOARDING-4A ／ -4A-R1（AI Sales 分離・Operations 境界確定）
               ／ -4B-PRE（XServer 実行環境の実測）／ -4A-R2（実測反映）
               ／ -4B（受付API 実装）／ -4B-R1（提出の冪等化）
               ／ -4C（店舗入力画面）／ -4D（内部確認・書き出し）
-              ／ **-4D-R1（修正依頼・案件作成・Drive 案内・本改定）**
+              ／ -4D-R1（修正依頼・案件作成・Drive 案内）
+              ／ **-4D-R2（ご案内リンクの再発行・本改定）**
 本番環境    : XServer 共用（PHP 8.3.33 / **SQLite 3.26.0** / pdo_sqlite・OpenSSL・mbstring 有効）
               ★実測日 2026-08-27。**VACUUM INTO は使用不可**（§2.0.1・§9.6）
 対象        : intake.smartlaboworks.com（店舗向けHP導入フォーム）
@@ -352,7 +353,7 @@ Smart Labo Operations の完成前に契約が発生した場合、
 |---|---|---|---|
 | `id` | INTEGER PK AUTOINCREMENT | — | |
 | `intake_case_id` | INTEGER REFERENCES intake_cases(id) | 可 | token 不一致時など、案件を特定できない場合は NULL |
-| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加） |
+| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加）<br>／ **`token_reissued`**（v1.6 で追加。§4.4.1） |
 | `result_code` | TEXT NOT NULL | 不可 | `ok` / `invalid` / `expired` / `revoked` / `not_found` / `rate_limited` / `conflict` |
 | `ip_hmac` | TEXT | 可 | **HMAC-SHA256(IP, ip_hash_secret) の先頭32文字**。生IPを保存しない |
 | `created_at` | TEXT NOT NULL | 不可 | |
@@ -371,6 +372,15 @@ Smart Labo Operations の完成前に契約が発生した場合、
 | `case_status_changed` | 管理者が `reviewed` / `needs_revision` へ変更したとき | 案件 | `result_code` は `ok` / `conflict`。**変更後の状態名は書かない**（履歴側が持つ） |
 | `admin_login` | 管理者のログイン試行 | **NULL** | `result_code` は `ok` / `invalid` / `rate_limited`。**IDもパスワードも書かない** |
 | `admin_logout` | 管理者のログアウト | **NULL** | |
+
+**v1.6 で追加した1種（4D-R2）**
+
+| event_type | いつ | `intake_case_id` | 備考 |
+|---|---|---|---|
+| `token_reissued` | 管理者がご案内リンクを**再発行**したとき | 案件 | `result_code` は `ok` / `rate_limited`。<br>**token 平文も hash も書かない。** 再発行のたびに1件増える（§4.4.1） |
+
+> ★初回発行は従来どおり `token_issued`。**再発行は `token_reissued`** で区別する。
+> 「何回配り直したか」が監査から読めるようにするためである。
 
 > ★管理者の操作は**案件に紐づくものだけ** `intake_case_id` を持つ。
 > ログイン・ログアウトは案件と無関係なので NULL にする。
@@ -875,6 +885,54 @@ https://intake.smartlaboworks.com/start#<token>
 - 案件が `closed` へ移った時点で、その案件の全 token を失効させる。
 - 失効・期限切れの行は**削除しない**（監査のため残す）。§9 の削除規則に従う。
 
+### 4.4.1 再発行（v1.6 で確定・4D-R2 で実装）
+
+**ご案内リンクの平文は、発行直後に1回しか表示しない**（§10.8）。
+通信が切れた・画面を閉じたなどで受け取れなかった場合、**復元はできない**。
+そのときは**新しい token を発行する**。これが唯一の回復手段である。
+
+> ★「以前の token を復元する」機能を作らない。
+> 復元できるということは、どこかに平文が残っているということである。
+
+**再発行してよい状態**
+
+| 状態 | 再発行 | 理由 |
+|---|---|---|
+| `draft` | **可** | まだ入力中。リンクを配り直してよい |
+| `needs_revision` | **可** | 差し戻し中。店舗が再入力する必要がある |
+| `submitted` | **不可** | 受付済み。新しい編集リンクを出さない |
+| `reviewed` | **不可** | 同上。修正が要るなら**先に `needs_revision` へ**（§5.1） |
+| `locked` / `closed` | **不可** | 確定済み。§5.2 のとおり token ごと失効させている |
+| 未知の状態 | **不可** | 判断を漏らさない（fail closed） |
+
+**手順（すべて同一トランザクション）**
+
+| # | 処理 |
+|---|---|
+| 1 | 案件の状態を**トランザクションの中で**もう一度確かめる |
+| 2 | その案件の**有効な token をすべて失効**させる |
+| 3 | その token から発行された**店舗 session をすべて失効**させる |
+| 4 | `random_bytes(32)` で新しい token を作る |
+| 5 | DBへは **SHA-256 hash のみ**保存する（有効期限は発行から14日。§4.3） |
+| 6 | 監査へ **`token_reissued`** を1件記録する |
+
+**必ず守ること**
+
+| # | 規則 |
+|---|---|
+| 1 | **店舗の入力済み回答を消さない**（`version` / 提出履歴 / 修正依頼 / Drive 情報も維持） |
+| 2 | 新しい平文リンクは**成功画面で1回だけ**。戻る・再読込で再表示しない |
+| 3 | token 平文を**ログ・監査・DBの平文列・管理 session・URL・Cookie へ出さない** |
+| 4 | 誤操作を防ぐため、実行前に**案件番号の再入力**を求め、**完全一致**のときだけ実行する |
+| 5 | 再発行は **POST のみ**。CSRF・Origin 検査・管理 session を必須とする（§10.8） |
+| 6 | **案件単位 ＋ HMAC化IP で 10分5回**のレート制限をかける（誤操作・連打を止める） |
+
+**通信が切れた場合**
+
+DB上は成功しているため、**旧 token はすでに無効**である。
+管理画面へ戻ってもう一度再発行してよい。そのとき直前の新 token も失効し、
+さらに新しい token が出る。監査は**そのたびに1件**増える。回答内容は維持される。
+
 ### 4.5 検証の順序（4B で実装）
 
 **(A) 初回交換 `POST /session/start`（body で token を受け取る）**
@@ -1347,7 +1405,7 @@ HP-202608-0001/          ← 最上位。**案件番号のみ**。店舗名を�
 - 提出後の編集可能期間（7日）終了時
 - `locked` へ遷移した時
 - `closed` へ遷移した時
-- 再発行した時（旧 token を即時失効）
+- 再発行した時（旧 token と**関連する店舗 session** を即時失効。§4.4.1）
 - 漏えい・誤送信が判明した時（即時）
 
 ### 9.3 削除の実施
@@ -1746,7 +1804,7 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 
 **データモデル上の矛盾は残していない。以下は運用値と実装手段の未確定である。**
 
-### 12.1 R2 / R3 / R4 / R5 で確定した事項（未確定から外したもの）
+### 12.1 R2 / R3 / R4 / R5 / R6 で確定した事項（未確定から外したもの）
 
 | 旧# | 事項 | 確定内容 | 反映先 |
 |---|---|---|---|
@@ -1768,6 +1826,7 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 | **9（R5）** | **Drive 共有先メールの保持** | **`drive_shared_email_enc`（AES-256-GCM）**を追加。<br>店舗の §7.2 案内文を正確に書けるようにする。書き出し・監査・ログへ出さない | §2.1・§7.3 |
 | **—（R5）** | **Drive URL の受け入れ条件** | https のみ／**Google Drive の正式ホストのみ**／userinfo 禁止／ポート禁止／<br>制御文字禁止／500文字まで。query・fragment は保持してよい | §7.3 |
 | **—（R5）** | **案件作成・token 初回発行の経路** | **管理画面から行える**ようにした（CLI を運用にしない）。<br>token 平文は**作成直後に1回だけ表示**。再表示機能を作らない | §10.8・README |
+| **—（R6）** | **ご案内リンクの再発行** | **管理画面から行える**（§4.4.1）。`draft` / `needs_revision` のみ。<br>旧 token と**関連する店舗 session を同一トランザクションで失効**。<br>新しい平文は**1回だけ表示**し、復元機能を作らない。監査は `token_reissued`。<br>**回答・version・提出履歴・修正依頼・Drive 情報は維持**する | §4.4.1・§2.5 |
 
 ### 12.2 残る未確定事項
 
@@ -1885,3 +1944,4 @@ HP-ONBOARDING-4A-R1 で次の順序へ変更した。
 | **v1.3（R3）** | 2026-08-27 | 改定（HP-ONBOARDING-4B-R1・代表承認）。**最終提出の冪等化を確定**した。**§2.4 へ `submission_id TEXT NULL` を追加**（クライアント生成 UUID v4・保存先はこの1列のみ・`UNIQUE(intake_case_id, submission_id) WHERE submission_id IS NOT NULL` の部分一意索引・既存行との互換のため NULL 許容・HTTP `/submit` では必須・ログ／監査／エラー本文へ出さない）。**§6.4 を全面改定**し、`status` だけの冪等化を4層（画面／`submission_id`／`status`／DB一意制約）へ拡張。`/submit` の挙動を表で確定した（欠落・不正形式=**400**／初回=履歴1件＋監査1件＋`submitted` 遷移／**同一 `submission_id` の再送=履歴も監査も増やさず同じ結果**／**異なる `submission_id` で `submitted`・`reviewed` の案件へ提出=409**・既存 `submission_id` も提出済み内容も返さない／競合は固定応答へ変換）。**履歴追加と状態遷移を同一トランザクション**とすることを明記。`submission_id` の生成契約（送信のたびに新規・再試行のときだけ同一・検証エラー修正後は新規）を 4C の義務として追加。**§2.6 へ Cookie `Max-Age` 24時間の維持を確定事項として明記**し、4C の「入力を終了する」ボタン＋`POST /session/logout` を必須化（規則12・判断根拠5点）。**§6.1 へ自動保存の方式を確定**（最終変更から30秒後／ステップ移動時／手動保存ボタン・変更分類のみ送信・成功後に `version` 更新・409 では上書きせず利用者へ確認）。これにより §6.1 の「間隔は未確定」という記述と §12.1-8 の「自動保存30秒で確定」との食い違いを解消した。**§7.1 へ Drive フォルダ命名規則を追加**（規則12〜14。最上位は**案件番号のみ**／固定サブフォルダ `01_images`・`02_logo`・`03_documents`・`04_references`／店舗名・氏名・電話番号・住所・メールをフォルダ名へ入れない）。§10.7 の「出さない」へ `submission_id` を追加し、**ログのキーを許可制（allowlist）**とする方針を明記。§12.1 へ R3 の確定4件を追加し、§12.2-3（Drive 命名規則）を確定済みへ。**JSON 11分類・§3 の全データパス・token 規則・状態遷移6状態・楽観ロック・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは一切変更していない。** DB変更は `intake_submission_history` への**列1つの追加と索引1つの追加のみ**で、既存の6テーブル構成は変わらない。 |
 | **v1.4（R4）** | 2026-08-27 | 改定（HP-ONBOARDING-4D・代表承認）。**管理画面の認証方式を確定**し、§12.2-1 を未確定から外した。**§10.8 を全面改定**（資格情報は `private/intake-config.php` の管理者ID＋`password_hash()` の hash のみ・**Argon2id 優先**・実値をGitへ入れない・**未設定なら fail closed**・IDの存在有無で応答も時間も変えない／session は idle 30分・絶対8時間・**ログイン成功時に再生成**／ログイン防御は **HMAC化IP で10分5回**・固定文言・`admin_login` へIDもパスワードも記録しない／CSRF は `random_bytes(32)` を **server 側 session へ hash で保持**し `hash_equals()` で照合・URLとログへ出さない・Origin 検査を併用・**GET で状態を変えない**）。**§2.7 `intake_admin_sessions` を新設**（6表 → **7表**。店舗の §2.6 とは別表・平文列を作らない・`csrf_hash` を同居させる・ロール列を作らない）。旧 §2.7 を **§2.8** へ繰り下げ、**アカウント表と修正理由テーブルを「作らない」判断**として記録。**§2.5 へ監査イベント4種を追加**（`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`。ログイン系は `intake_case_id` を NULL とし、**入力された管理者IDを記録しない**）。**§11.3 検証済み書き出しを新設**（allowlist 方式・含める11キーと**含めない16種**を明記・`Content-Disposition: attachment`・`no-store`・書き出し直前の再検証・未提出案件を出さない・一時ファイルを公開領域へ作らない・`X-Intake-Export-Sha256` は**独自ヘッダーとして README へ明記**）。**§10.9 対応ブラウザを新設**（現行 Chrome / Edge / Firefox / Safari。**`Sec-Fetch-Site` 非対応はサポート対象外**。`Referrer-Policy: no-referrer` のため「Referer で通る」前提に依存しないことを明記し、**4C 報告の当該説明を訂正**。`GET /case` の受理は **4E で再検証**。**POST の Origin 検査は変更しない**）。§11.2-11 を「代表1名」へ具体化。§12.2 へ **-8（修正理由の伝え方）** と **-9（店舗画面への Drive リンク表示）** を新規の未確定として追加。**JSON 11分類・§3 の全データパス・token 規則・状態遷移6状態・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは一切変更していない。** |
 | **v1.5（R5）** | 2026-08-27 | 改定（HP-ONBOARDING-4D-R1・代表承認）。**§5.1 の遷移表へ `reviewed` → `needs_revision` を追加**（4D で提示した案B を代表が採用。`locked` / `closed` より前まで戻せる／戻したら `reviewed` へは**店舗の再提出**を経る／監査・履歴・修正依頼を必ず残す／DBの直接操作を運用にしないための判断）。**§2.8 `intake_revision_requests` を新設**（7表 → **8表**。`request_number` / `requested_paths_json` / `message` / `status` / `created_at` / `resolved_at`。**§3 の正式パス129件のみ許可**・未知パスを含む要求は丸ごと拒否・重複は正規化・`message` は1000文字まで・**本文をログと監査へ出さない**・複数回保持・過去を削除も上書きもしない・**状態変更と同一トランザクション**・**店舗の再提出成功で `open` を `resolved` へ**・店舗へ返すのは `open` のみ・**管理者を識別する列を作らない**）。v1.4 §2.8 の「修正依頼の理由テーブルを作らない」判断を**撤回**し、旧 §2.8 を **§2.9** へ繰り下げ。**§2.1 へ `drive_shared_email_enc` を追加**（AES-256-GCM。§7.2 の案内文「このフォルダは○○にのみ共有しています」を正確に書くため。**平文保存禁止／書き出し・監査・ログへ出さない／一覧へ出さない／認証済み店舗の `GET /case` にだけ返してよい**）。**§7.3 へ Drive URL の受け入れ条件8項目**（https のみ・**Google Drive の正式ホストのみ**・userinfo 禁止・短縮URL拒否・ポート禁止・制御文字禁止・query/fragment は保持可・500文字まで）と**共有先メールの扱い6項目**を新設。**§10.8 の Fetch Metadata の記述を訂正**（「偽装できない」→「**Forbidden request header でありブラウザ内 JavaScript からは設定できない**が、**curl 等の非ブラウザからは任意に構成できる**」。`cross-site` / `none` / 欠落はすべて拒否。**CSRF token は常に必須**で、多層防御を維持する）。**§11.3 へ `revision_requests` を追加**（`request_number` / `requested_paths` / `status` / `created_at` / `resolved_at` のみ。**`message` 本文と `id` は含めない**。理由も明記）。除外一覧へ **Drive 共有先メール**と **`revision_requests.message`** を追加。**案件作成と token 初回発行を管理画面から行える**ようにし、CLI を運用にしない方針を確定（token 平文は作成直後に1回だけ表示・再表示機能を作らない）。§12.1 へ R5 の確定5件、§12.2-8・-9・-10 を確定済みへ。**JSON 11分類・§3 の全データパス・token 規則・6状態そのもの・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。** |
+| **v1.6（R6）** | 2026-08-27 | 改定（HP-ONBOARDING-4D-R2・代表承認）。**§4.4.1 ご案内リンクの再発行を新設**。平文は発行直後に1回しか出さないため、受け取れなかった場合の**唯一の回復手段が再発行**であることを明記し、**「以前の token を復元する」機能は作らない**と確定した（復元できるということは、どこかに平文が残っているということである）。再発行してよいのは **`draft` / `needs_revision` のみ**とし、`submitted` / `reviewed` / `locked` / `closed` / 未知状態は**すべて拒否**（修正が要る場合は**先に §5.1 の `needs_revision` へ**遷移させてから再発行する）。手順6段を**同一トランザクション**で行うことを明記（①状態をトランザクション内で再確認 ②有効 token をすべて失効 ③その token から出た**店舗 session をすべて失効** ④`random_bytes(32)` で新 token ⑤**SHA-256 hash のみ**保存・期限は発行から14日 ⑥監査 `token_reissued` を1件）。守ること6項目を明記（**回答・`version`・提出履歴・修正依頼・Drive 情報を消さない**／新しい平文は**成功画面で1回だけ**・戻る/再読込で再表示しない／**ログ・監査・DBの平文列・管理 session・URL・Cookie へ出さない**／実行前に**案件番号の再入力を求め完全一致のみ実行**／**POST のみ**で CSRF・Origin 検査・管理 session 必須／**案件単位＋HMAC化IP で 10分5回**）。通信断時の扱いも明記（DB上は成功しており**旧 token はすでに無効**。もう一度再発行してよく、直前の新 token も失効し監査が1件増える。回答は維持）。**§2.5 へ `token_reissued` を追加**（初回の `token_issued` と区別し、「何回配り直したか」を監査から読めるようにする。**token 平文も hash も書かない**）。§9.2 の失効タイミングへ「再発行時は**関連する店舗 session も**即時失効」を追記。§12.1 へ R6 の確定1件。**JSON 11分類・§3 の全データパス・token の生成規則（`random_bytes(32)`／base64url 43文字／hash のみ保存／14日／1案件1本）・6状態そのもの・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマの変更も無い（8表のまま）。** |
