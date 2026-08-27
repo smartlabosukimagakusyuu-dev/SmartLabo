@@ -35,6 +35,12 @@ final class Response
     public array $cookies = [];
 
     /**
+     * JSON 以外（HTML・書き出しファイル）を返すときの本文。
+     * ★null のときだけ $body が JSON として使われる。
+     */
+    public ?string $rawBody = null;
+
+    /**
      * @param array<string,mixed> $body
      * @param array<string,string> $headers
      */
@@ -43,6 +49,70 @@ final class Response
         public readonly array $body,
         public array $headers = [],
     ) {
+    }
+
+    /**
+     * 管理画面の HTML（SSOT §10.4 / §10.8）。
+     * ★キャッシュさせない・検索結果へ出さない・外部から埋め込ませない。
+     *
+     * ★Referrer-Policy は `no-referrer` のまま（SSOT §10.4）。
+     *   form 送信の `Origin` が `null` になるのは**ブラウザの画面遷移の仕様**であり、
+     *   Referrer-Policy を緩めても直らない（4D で実測）。
+     *   その判定は Guard::adminPostAllowed() が Fetch Metadata で行う。
+     */
+    public static function html(string $markup, int $status = 200): self
+    {
+        $res = new self($status, [], self::securityHeaders());
+        $res->rawBody = $markup;
+        $res->headers['Content-Type'] = 'text/html; charset=UTF-8';
+        $res->headers['X-Robots-Tag'] = 'noindex, nofollow, noarchive';
+
+        return $res;
+    }
+
+    /** 別のURLへ送る（POST 後は必ずこれで GET へ戻す） */
+    public static function redirect(string $location, int $status = 303): self
+    {
+        $res = new self($status, [], self::securityHeaders());
+        $res->rawBody = '';
+        // ★外部サイトへ飛ばさない。相対パスだけを許す
+        $res->headers['Location'] = str_starts_with($location, '/') && !str_starts_with($location, '//')
+            ? $location
+            : '/admin/';
+        $res->headers['X-Robots-Tag'] = 'noindex, nofollow, noarchive';
+
+        return $res;
+    }
+
+    /**
+     * 書き出しファイル（SSOT §11.3）。
+     * ★ブラウザに表示させず、必ずダウンロードさせる。
+     */
+    public static function download(string $content, string $fileName, string $contentType, array $extra = []): self
+    {
+        $res = new self(200, [], self::securityHeaders());
+        $res->rawBody = $content;
+        $res->headers['Content-Type']        = $contentType;
+        $res->headers['Content-Disposition'] = 'attachment; filename="' . self::safeFileName($fileName) . '"';
+        $res->headers['Content-Length']      = (string)strlen($content);
+        $res->headers['X-Robots-Tag']        = 'noindex, nofollow, noarchive';
+        foreach ($extra as $name => $value) {
+            $res->headers[$name] = $value;
+        }
+
+        return $res;
+    }
+
+    /**
+     * ファイル名を安全な形へ正規化する（SSOT §11.3-2）。
+     * ★引用符・改行・パス区切り・非ASCII を通さない（ヘッダー分割と誤解釈を防ぐ）。
+     */
+    public static function safeFileName(string $name): string
+    {
+        $clean = preg_replace('/[^A-Za-z0-9._-]/', '_', $name) ?? '';
+        $clean = trim($clean, '._-');
+
+        return $clean === '' ? 'export.json' : substr($clean, 0, 100);
     }
 
     /** @param array<string,mixed> $payload */
@@ -66,13 +136,13 @@ final class Response
         return self::error('unavailable', 404);
     }
 
-    public function withCookie(string $name, string $value, int $maxAge): self
+    public function withCookie(string $name, string $value, int $maxAge, string $path = '/'): self
     {
         $this->cookies[] = [
             'name'       => $name,
             'value'      => $value,
             'attributes' => [
-                'Path'     => '/',
+                'Path'     => $path,
                 'Max-Age'  => (string)$maxAge,
                 'Secure'   => true,
                 'HttpOnly' => true,
@@ -83,9 +153,9 @@ final class Response
         return $this;
     }
 
-    public function withClearedCookie(string $name): self
+    public function withClearedCookie(string $name, string $path = '/'): self
     {
-        return $this->withCookie($name, '', 0);
+        return $this->withCookie($name, '', 0, $path);
     }
 
     public function json(): string
@@ -120,12 +190,12 @@ final class Response
         foreach ($this->cookies as $cookie) {
             setcookie($cookie['name'], $cookie['value'], [
                 'expires'  => $cookie['attributes']['Max-Age'] === '0' ? 1 : time() + (int)$cookie['attributes']['Max-Age'],
-                'path'     => '/',
+                'path'     => (string)$cookie['attributes']['Path'],
                 'secure'   => true,
                 'httponly' => true,
                 'samesite' => 'Strict',
             ]);
         }
-        echo $this->json();
+        echo $this->rawBody ?? $this->json();
     }
 }

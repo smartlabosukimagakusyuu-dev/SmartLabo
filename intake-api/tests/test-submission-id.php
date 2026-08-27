@@ -343,7 +343,7 @@ test('migration: submission_id 列と部分一意索引が作られる', functio
     assertTrue(str_contains(strtoupper((string)$index), 'UNIQUE'), '索引が UNIQUE でない');
     assertTrue(str_contains(strtoupper((string)$index), 'WHERE'), '索引が部分索引でない');
 
-    assertSame(2, (int)$k->db->pdo()->query('PRAGMA user_version')->fetchColumn(), 'user_version が 2 でない');
+    assertSame(Migrator::SCHEMA_VERSION, (int)$k->db->pdo()->query('PRAGMA user_version')->fetchColumn(), 'user_version が最新でない');
 });
 
 test('migration: v1 のDBへ後から適用でき、既存行を壊さない', function (): void {
@@ -404,7 +404,7 @@ test('migration: 何度実行しても同じ結果になる（再実行可能）
 
     assertSame(1, $k->answers->historyCount($caseId), '再実行でデータが増減した');
     assertSame($sid, (string)$pdo->query('SELECT submission_id FROM intake_submission_history')->fetchColumn());
-    assertSame(2, (int)$pdo->query('PRAGMA user_version')->fetchColumn());
+    assertSame(Migrator::SCHEMA_VERSION, (int)$pdo->query('PRAGMA user_version')->fetchColumn());
 });
 
 test('migration: v2 の DDL も 3.26.0 非対応構文を含まない（SSOT §2.0.1）', function (): void {

@@ -1,0 +1,343 @@
+/**
+ * Smart Labo 内部確認画面（HP-ONBOARDING-4D）。
+ *
+ * ★外部CDN・外部フォントを読み込まない（SSOT §10.5）。
+ * ★店舗向け（intake.css）と別ファイルにする。混ぜない。
+ * ★状態を色だけで示さない。必ず文字を添える。
+ */
+
+:root {
+  --c-navy: #0a1b3d;
+  --c-blue: #2563eb;
+  --c-blue-dark: #1d4ed8;
+  --c-blue-pale: #eff6ff;
+  --c-ink: #172033;
+  --c-gray: #64748b;
+  --c-line: #cbd5e1;
+  --c-line-soft: #e2e8f0;
+  --c-white: #fff;
+  --c-bg: #f6f8fb;
+  --c-ok: #0f766e;
+  --c-ok-bg: #ecfdf5;
+  --c-warn: #92400e;
+  --c-warn-bg: #fffbeb;
+  --c-err: #b42318;
+  --c-err-bg: #fef3f2;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 1px 2px rgba(23, 32, 51, 0.06), 0 3px 10px rgba(23, 32, 51, 0.06);
+  --font-sans: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Meiryo, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--c-ink);
+  background: var(--c-bg);
+}
+
+.head {
+  background: linear-gradient(135deg, var(--c-navy) 0%, #143b7a 60%, var(--c-blue) 100%);
+  color: var(--c-white);
+  padding: 14px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  align-items: baseline;
+}
+
+.head__title {
+  font-weight: 700;
+}
+
+.nav a {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.88rem;
+}
+
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.card {
+  background: var(--c-white);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 16px;
+  margin-bottom: 16px;
+}
+
+.card--narrow {
+  max-width: 400px;
+  margin: 48px auto;
+}
+
+.card__title {
+  margin: 0 0 12px;
+  font-size: 1.02rem;
+  color: var(--c-navy);
+}
+
+.lead {
+  margin: 0 0 16px;
+  font-size: 0.86rem;
+  color: var(--c-gray);
+}
+
+/* ---------------------------------------------------------------- 表 */
+
+.tablewrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--c-line-soft);
+  white-space: nowrap;
+}
+
+.table th {
+  background: var(--c-blue-pale);
+  color: var(--c-navy);
+  font-size: 0.8rem;
+}
+
+/* ---------------------------------------------------------------- 明細 */
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--c-line-soft);
+  font-size: 0.9rem;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row__key {
+  flex: 0 0 32%;
+  min-width: 130px;
+  color: var(--c-gray);
+}
+
+.row__val {
+  flex: 1 1 55%;
+  min-width: 180px;
+  word-break: break-word;
+}
+
+.row__val p {
+  margin: 0 0 4px;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.3em;
+  font-size: 0.88rem;
+}
+
+.muted {
+  color: var(--c-gray);
+}
+
+.ok {
+  color: var(--c-ok);
+  font-weight: 700;
+}
+
+.ng {
+  color: var(--c-err);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------- 状態 */
+
+.badge {
+  display: inline-block;
+  padding: 1px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid var(--c-line);
+  background: var(--c-white);
+}
+
+.badge--submitted {
+  background: var(--c-blue-pale);
+  border-color: #bfdbfe;
+  color: var(--c-blue-dark);
+}
+
+.badge--reviewed {
+  background: var(--c-ok-bg);
+  border-color: #a7f3d0;
+  color: var(--c-ok);
+}
+
+.badge--needs_revision {
+  background: var(--c-warn-bg);
+  border-color: #fde68a;
+  color: var(--c-warn);
+}
+
+.badge--draft {
+  color: var(--c-gray);
+}
+
+/* ---------------------------------------------------------------- 入力 */
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field__label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.88rem;
+  margin-bottom: 6px;
+  color: var(--c-navy);
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 11px 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-white);
+  color: var(--c-ink);
+}
+
+input:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--c-blue);
+  outline-offset: 2px;
+}
+
+input:focus {
+  border-color: var(--c-blue);
+}
+
+/* ---------------------------------------------------------------- 操作 */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--c-line);
+  background: var(--c-white);
+  color: var(--c-navy);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn--primary {
+  background: var(--c-blue);
+  border-color: var(--c-blue);
+  color: var(--c-white);
+}
+
+.btn--primary:hover {
+  background: var(--c-blue-dark);
+}
+
+.btn--outline:hover {
+  border-color: var(--c-blue);
+  color: var(--c-blue-dark);
+}
+
+.btn--quiet {
+  border-color: transparent;
+  color: var(--c-gray);
+  min-height: 38px;
+  font-size: 0.85rem;
+}
+
+.inline {
+  display: inline;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--c-line-soft);
+}
+
+.endrow {
+  margin-top: 28px;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- 通知 */
+
+.notice {
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  margin: 0 0 16px;
+  font-size: 0.88rem;
+  border: 1px solid;
+}
+
+.notice--ok {
+  background: var(--c-ok-bg);
+  border-color: #a7f3d0;
+  color: var(--c-ok);
+}
+
+.notice--warn {
+  background: var(--c-warn-bg);
+  border-color: #fde68a;
+  color: var(--c-warn);
+}
+
+.notice--error {
+  background: var(--c-err-bg);
+  border-color: #fbd5d1;
+  color: var(--c-err);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

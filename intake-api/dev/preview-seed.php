@@ -55,7 +55,12 @@ echo "  1) 別のターミナルでサーバーを起動する\n";
 echo "     php -c intake-api/dev/php.ini -S 127.0.0.1:" . PREVIEW_PORT
     . " -t intake-api/public intake-api/dev/router.php\n";
 echo "\n";
-echo "  2) 次のリンクをブラウザで開く（このリンクは共有しない）\n";
+echo "  2) 店舗の入力画面（このリンクは共有しない）\n";
 echo "     " . PREVIEW_ORIGIN . "/start#" . $token . "\n";
 echo "\n";
-echo "  ※ このリンクはローカルの使い捨てDB専用です。本番とは無関係です。\n";
+echo "  3) 内部確認画面\n";
+echo "     " . PREVIEW_ORIGIN . "/admin/login\n";
+echo "     ID       : " . PREVIEW_ADMIN_ID . "\n";
+echo "     パスワード : " . PREVIEW_ADMIN_PASSWORD . "\n";
+echo "\n";
+echo "  ※ このリンクと資格情報はローカルの使い捨てDB専用です。本番とは無関係です。\n";

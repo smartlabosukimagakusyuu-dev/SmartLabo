@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace SmartLabo\Intake;
 
+use SmartLabo\Intake\Admin\AdminApp;
 use SmartLabo\Intake\Http\Guard;
+use SmartLabo\Intake\Service\AdminAuth;
 use SmartLabo\Intake\Service\AnswerService;
 use SmartLabo\Intake\Service\Audit;
 use SmartLabo\Intake\Service\CaseService;
+use SmartLabo\Intake\Service\ExportService;
 use SmartLabo\Intake\Service\RateLimiter;
 use SmartLabo\Intake\Service\SessionService;
 use SmartLabo\Intake\Service\TokenService;
@@ -29,6 +32,9 @@ final class Kernel
     public readonly SessionService $sessions;
     public readonly CaseService $cases;
     public readonly AnswerService $answers;
+    public readonly AdminAuth $adminAuth;
+    public readonly ExportService $export;
+    public readonly AdminApp $admin;
     public readonly App $app;
 
     public function __construct(
@@ -54,9 +60,26 @@ final class Kernel
         );
         $this->answers     = new AnswerService($this->db, $this->clock, $this->audit);
 
+        $guard = new Guard($config);
+
+        $this->adminAuth = new AdminAuth($config, $this->db, $this->clock, $this->audit, $this->rateLimiter);
+        $this->export    = new ExportService($this->db, $this->clock, $this->cases, $this->answers);
+
+        $this->admin = new AdminApp(
+            $config,
+            $guard,
+            $this->adminAuth,
+            $this->rateLimiter,
+            $this->cases,
+            $this->answers,
+            $this->export,
+            $this->audit,
+            $this->logger,
+        );
+
         $this->app = new App(
             $config,
-            new Guard($config),
+            $guard,
             $this->rateLimiter,
             $this->tokens,
             $this->sessions,
@@ -65,6 +88,7 @@ final class Kernel
             $this->audit,
             $this->logger,
             $this->clock,
+            $this->admin,
         );
     }
 }

@@ -10,6 +10,7 @@
  * 版:
  *   1 … 4B。SSOT v1.2 の6テーブル
  *   2 … 4B-R1。intake_submission_history.submission_id と部分一意索引（SSOT v1.3 §2.4 / §6.4）
+ *   3 … 4D。intake_admin_sessions（管理画面用。SSOT v1.4 §2.7）
  *
  * ★migrate() は**何度実行しても同じ結果**になる（再実行可能）。
  *   ALTER TABLE ADD COLUMN だけは IF NOT EXISTS を書けないため、
@@ -21,7 +22,7 @@ namespace SmartLabo\Intake;
 
 final class Migrator
 {
-    public const SCHEMA_VERSION = 2;
+    public const SCHEMA_VERSION = 3;
 
     /**
      * 回答スキーマの版（intake_cases.schema_version / intake_answers.schema_version）。
@@ -60,8 +61,38 @@ final class Migrator
         // v2: submission_id（SSOT v1.3 §2.4）
         $this->upgradeToV2($pdo);
 
+        // v3: 管理画面の session（SSOT v1.4 §2.7）。CREATE ... IF NOT EXISTS のみ
+        foreach (self::statementsV3() as $sql) {
+            $pdo->exec($sql);
+        }
+
         // PRAGMA は値をbindできない。埋め込むのはクラス定数であり外部入力ではない。
         $pdo->exec('PRAGMA user_version = ' . (int)self::SCHEMA_VERSION);
+    }
+
+    /**
+     * v3: intake_admin_sessions（SSOT v1.4 §2.7）。
+     *
+     * ★店舗向けの intake_sessions（§2.6）とは**別の表**である。流用しない。
+     * ★平文の session secret / CSRF token を保存する列を作らない（hash のみ）。
+     * ★ロール列を作らない（Phase 1 は代表1名。SSOT §11.2-11）。
+     * @return list<string>
+     */
+    public static function statementsV3(): array
+    {
+        return [
+            'CREATE TABLE IF NOT EXISTS intake_admin_sessions (
+                id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_hash        TEXT    NOT NULL UNIQUE,
+                csrf_hash           TEXT    NOT NULL,
+                expires_at          TEXT    NOT NULL,
+                absolute_expires_at TEXT    NOT NULL,
+                revoked_at          TEXT,
+                last_seen_at        TEXT,
+                created_at          TEXT    NOT NULL
+            )',
+            'CREATE INDEX IF NOT EXISTS idx_admin_sessions_expires ON intake_admin_sessions(expires_at)',
+        ];
     }
 
     /**
@@ -108,7 +139,12 @@ final class Migrator
     /** 静的チェック（SSOT §2.0.1）用に、実行しうる DDL をすべて返す */
     public static function allStatements(): array
     {
-        return array_merge(self::statements(), [self::ADD_SUBMISSION_ID], self::statementsV2());
+        return array_merge(
+            self::statements(),
+            [self::ADD_SUBMISSION_ID],
+            self::statementsV2(),
+            self::statementsV3(),
+        );
     }
 
     /** @return list<string> */

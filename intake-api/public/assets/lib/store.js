@@ -108,6 +108,12 @@ export class Store {
     this.#emit();
   }
 
+  /** 素材アップロードの完了申告が済んだ（取消は無い） */
+  markDriveConfirmed() {
+    this.#driveConfirmed = true;
+    this.#emit();
+  }
+
   /** ログアウト・終了時にメモリ上の入力内容を捨てる */
   clear() {
     this.#sections = {};

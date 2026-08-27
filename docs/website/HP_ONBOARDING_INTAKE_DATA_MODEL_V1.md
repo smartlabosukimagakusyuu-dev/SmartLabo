@@ -1,12 +1,13 @@
 # 店舗向けHP導入フォーム データモデル・token設計 v1
 
 ```text
-STATUS      : APPROVED / 4B 実装済み（受付API・token/session 基盤）
-VERSION     : v1.3（R3）
-DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2 R2 改定・v1.3 R3 改定）
+STATUS      : APPROVED / 4C 実装済み（受付API・店舗入力画面）
+VERSION     : v1.4（R4）
+DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2 R2・v1.3 R3・v1.4 R4 改定）
 工程        : HP-ONBOARDING-4A ／ -4A-R1（AI Sales 分離・Operations 境界確定）
               ／ -4B-PRE（XServer 実行環境の実測）／ -4A-R2（実測反映）
-              ／ -4B（受付API 実装）／ **-4B-R1（提出の冪等化・本改定）**
+              ／ -4B（受付API 実装）／ -4B-R1（提出の冪等化）
+              ／ -4C（店舗入力画面）／ **-4D（内部確認・書き出し・本改定）**
 本番環境    : XServer 共用（PHP 8.3.33 / **SQLite 3.26.0** / pdo_sqlite・OpenSSL・mbstring 有効）
               ★実測日 2026-08-27。**VACUUM INTO は使用不可**（§2.0.1・§9.6）
 対象        : intake.smartlaboworks.com（店舗向けHP導入フォーム）
@@ -349,7 +350,7 @@ Smart Labo Operations の完成前に契約が発生した場合、
 |---|---|---|---|
 | `id` | INTEGER PK AUTOINCREMENT | — | |
 | `intake_case_id` | INTEGER REFERENCES intake_cases(id) | 可 | token 不一致時など、案件を特定できない場合は NULL |
-| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted` |
+| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加） |
 | `result_code` | TEXT NOT NULL | 不可 | `ok` / `invalid` / `expired` / `revoked` / `not_found` / `rate_limited` / `conflict` |
 | `ip_hmac` | TEXT | 可 | **HMAC-SHA256(IP, ip_hash_secret) の先頭32文字**。生IPを保存しない |
 | `created_at` | TEXT NOT NULL | 不可 | |
@@ -359,6 +360,19 @@ Smart Labo Operations の完成前に契約が発生した場合、
 > ★`token_rejected` の `result_code` は監査目的で `invalid` / `expired` / `revoked` / `not_found` を
 > 区別して**記録する**が、**利用者へ返す画面は §4.6 のとおり常に同一文言**にする。
 > 記録の粒度と、外部へ見せる粒度を分ける。
+
+**v1.4 で追加した4種（4D）**
+
+| event_type | いつ | `intake_case_id` | 備考 |
+|---|---|---|---|
+| `drive_upload_confirmed` | 店舗が素材のアップロード完了を申告したとき | 案件 | 同じ申告の再送では**追加しない**（冪等） |
+| `case_status_changed` | 管理者が `reviewed` / `needs_revision` へ変更したとき | 案件 | `result_code` は `ok` / `conflict`。**変更後の状態名は書かない**（履歴側が持つ） |
+| `admin_login` | 管理者のログイン試行 | **NULL** | `result_code` は `ok` / `invalid` / `rate_limited`。**IDもパスワードも書かない** |
+| `admin_logout` | 管理者のログアウト | **NULL** | |
+
+> ★管理者の操作は**案件に紐づくものだけ** `intake_case_id` を持つ。
+> ログイン・ログアウトは案件と無関係なので NULL にする。
+> ★`admin_login` に**入力された管理者IDを記録しない**。存在の有無を残さないため（§10.8）。
 
 ### 2.6 F. intake_sessions（Cookie セッション）
 
@@ -409,12 +423,51 @@ session secret で継続する（§4.2・§4.7）。**token を URL に残さな
 | 4 | **4C は、目立つ位置に「入力を終了する」ボタンを置く**（画面下部に隠さない）。<br>押下で `POST /session/logout` を実行し、**Cookie も失効**させ、画面を終了状態へ切り替える |
 | 5 | 絶対有効期限 7日（規則7）は変更しない。24時間の延長を無限に繰り返せない歯止めである |
 
-### 2.7 提案：追加しないテーブル（判断の記録）
+### 2.7 G. intake_admin_sessions（管理画面のセッション・v1.4 で追加）
+
+Smart Labo 内部の管理画面用。**§2.6 の `intake_sessions`（店舗向け）とは別の表**である。
+店舗の session を管理画面へ流用しない。逆も行わない（§10.8）。
+
+**アカウント表は作らない。** Phase 1 は代表1名のみで、資格情報は
+`private/intake-config.php`（ドキュメントルート外・Git管理外）に置く（§10.8）。
+
+| 列 | 型 | NULL | 内容 |
+|---|---|---|---|
+| `id` | INTEGER PK AUTOINCREMENT | — | |
+| `session_hash` | TEXT NOT NULL UNIQUE | 不可 | **SHA-256(session secret) の16進64文字**。★平文列は作らない |
+| `csrf_hash` | TEXT NOT NULL | 不可 | **SHA-256(CSRF token)**。★平文を保存しない |
+| `expires_at` | TEXT NOT NULL | 不可 | **最終利用から30分**（利用のたびに延長） |
+| `absolute_expires_at` | TEXT NOT NULL | 不可 | **発行から8時間**。延長しない |
+| `revoked_at` | TEXT | 可 | ログアウト・再生成による失効 |
+| `last_seen_at` | TEXT | 可 | 最終利用日時（**利用元IPは保存しない**） |
+| `created_at` | TEXT NOT NULL | 不可 | |
+
+索引: `UNIQUE(session_hash)` ／ `INDEX(expires_at)`
+
+**規則**
+
+| # | 規則 |
+|---|---|
+| 1 | session secret / CSRF token とも **`random_bytes(32)`**（base64url 43文字） |
+| 2 | DBには **SHA-256 hash のみ**。平文を保存する列を作らない |
+| 3 | 平文 session secret は **Cookie にだけ**（Secure / HttpOnly / SameSite=Strict） |
+| 4 | Cookie 名に `admin`・店舗名・案件番号を**含めない**（固定の一般名） |
+| 5 | **ログイン成功時に必ず新しい行を作る**（session fixation 対策。古い行は失効させる） |
+| 6 | idle 30分・絶対 8時間。どちらか一方でも過ぎたら無効 |
+| 7 | 権限は**代表1種類のみ**。ロール列を作らない（§11.2-11） |
+| 8 | 「ログイン状態を保持する」機能を作らない |
+| 9 | session ID / CSRF token を**ログへ出さない**（§10.7） |
+
+> ★店舗向け（§2.6）と同じ設計を意図的に踏襲している。
+> 「hash のみ保存」「idle と絶対の二重期限」「Cookie 属性」を**別実装で作り分けない**ため。
+
+### 2.8 提案：追加しないテーブル（判断の記録）
 
 | 候補 | 判断 | 理由 |
 |---|---|---|
 | メニュー・スタッフ・写真の正規化テーブル | **作らない** | 案件内でしか使わず横断集計もしない。JSON で足りる（§2.3） |
-| 管理画面のセッション/アカウント表 | **本工程では定義しない** | 管理画面の認証方式が未確定（§12-1）。4D で確定してから定義する<br>★§2.6 の `intake_sessions` は**店舗向け**であり、管理画面用ではない |
+| 管理画面の**アカウント表** | **作らない**（v1.4 で確定） | Phase 1 は代表1名。資格情報は `private/intake-config.php` に置く（§10.8）。<br>複数管理者は Phase 1 の範囲外（§11.2-11） |
+| 修正依頼の理由テーブル | **本工程では作らない**（v1.4） | `needs_revision` の理由は**構造化して保持する正式要件が未確定**。<br>回答欄へ押し込むと回答本文と混ざるため、**status 変更のみ**とし<br>理由の伝達は運用（担当者からの連絡）で行う。§12.2-8 |
 | 不足項目テーブル | **作らない** | 判定は回答から都度算出する。保存すると回答と二重管理になり必ず食い違う |
 | Drive ファイル一覧テーブル | **作らない** | Drive API を使わない（§11）。件数・種類は `image_metadata_json` が持つ |
 | Stripe 参照テーブル | **作らない** | §8 により intake は Stripe 情報を一切持たない |
@@ -1417,12 +1470,82 @@ error_log              = <public_html の外のパス>
   （「マスクし忘れ」ではなく「そもそも通らない」構造にするため）。
 - 通知メールにも**案件番号のみ**を書く。本文・個人情報・Drive URL を入れない。
 
-### 10.8 管理画面
+### 10.8 管理画面（認証方式は v1.4 で確定）
 
 - **認証必須。** 未認証で到達できる管理画面を作らない。
-- 認証方式は未確定（§12-1）。**4D の着手前に確定する**。
 - 管理画面にも CSRF・レート制限・監査ログ（`admin_viewed` / `export_generated`）を適用する。
 - 管理画面は店舗向けURLとパスを分ける（`/admin/` 配下）。
+
+**資格情報（Phase 1 は代表1名）**
+
+| # | 規則 |
+|---|---|
+| 1 | 管理者IDは `private/intake-config.php` に置く（**ドキュメントルート外・Git管理外**） |
+| 2 | パスワードは**平文で保存しない**。`password_hash()` が作った **hash だけ**を置く |
+| 3 | **Argon2id を優先**し、利用できない環境でのみ bcrypt を使う |
+| 4 | 実パスワード・実 hash を**Gitへ入れない**。雛形には**明らかなダミー**だけを書く |
+| 5 | **未設定なら管理画面を動かさない**（fail closed）。初期パスワードをコードへ持たない |
+| 6 | 照合は `password_verify()`。**IDの存在有無で応答を変えない**（文言も時間も） |
+| 7 | 外部の認証サービスへ接続しない。AI Sales / Operations の認証を流用しない |
+
+**session（詳細は §2.7）**
+
+- 店舗の session（§2.6）を管理画面へ流用しない。逆も行わない。
+- **idle 30分／絶対 8時間**。ログイン成功時に**必ず新しい session を作る**（fixation 対策）。
+- Cookie は Secure / HttpOnly / SameSite=Strict。名前に `admin`・店舗名・案件番号を含めない。
+
+**ログイン防御**
+
+| # | 規則 |
+|---|---|
+| 1 | **HMAC化IP単位で 10分5回**（生IPを保存しない。§10.2 と同じ方式） |
+| 2 | 失敗時は**常に同一文言**。IDが存在するかどうかを推測させない |
+| 3 | ID不一致でも `password_verify()` 相当の時間を使い、**応答時間差を抑える** |
+| 4 | 監査へ `admin_login` を残す。**入力されたIDもパスワードも記録しない** |
+| 5 | 入力欄は `autocomplete="username"` / `"current-password"` を指定する |
+
+**CSRF（状態を変える操作すべて）**
+
+| # | 規則 |
+|---|---|
+| 1 | `random_bytes(32)` を **server 側の session（§2.7）へ hash で保持**する |
+| 2 | 画面の hidden 項目として渡し、`hash_equals()` で照合する |
+| 3 | **URL（query）へ出さない。ログへ出さない** |
+| 4 | Origin の厳格検査も**併用**する（どちらか一方に頼らない） |
+| 5 | **GET で状態を変えない。** ログアウトも POST |
+| 6 | form 送信の `Origin` が `null` になる件は、下の枠のとおり **Fetch Metadata で補う** |
+
+**form 送信の `Origin: null`（v1.4・実測にもとづく）**
+
+ブラウザは、**画面遷移としての form 送信**（`Sec-Fetch-Mode: navigate`）で
+`Origin: null` を送る。Referrer-Policy を変えても直らない（4D で Chrome にて実測）。
+そのため、JavaScript を使わない管理画面では Origin だけで同一オリジンを判定できない。
+
+| # | 決めたこと |
+|---|---|
+| 1 | Origin が付いていて `null` でなければ → **許可一覧と厳格に照合**する（従来どおり） |
+| 2 | Origin が無い／`null` のときだけ → **`Sec-Fetch-Site: same-origin`** を見る |
+| 3 | `Sec-Fetch-*` は**禁止ヘッダー名**であり、ページ内 JavaScript から偽装できない。<br>他サイトからの送信では `cross-site` になるため、CSRF の判定として成立する |
+| 4 | この判定は**多層防御の1枚**である。**CSRF token は引き続き必須**（規則1〜3） |
+| 5 | **店舗向けの JSON POST は変更しない。** `fetch()` からの呼び出しなので<br>正しい Origin が必ず付き、従来どおり Origin の厳格検査だけで守る |
+| 6 | 管理画面の Cookie は `SameSite=Strict`。他サイト起点の送信には**そもそも付かない** |
+
+> ★これは緩和ではない。**Origin だけでは判定できない経路を、偽装できない別の signal で塞ぐ**ものである。
+> `Sec-Fetch-Site` 非対応のブラウザは §10.9 のとおりサポート対象外とする。
+
+### 10.9 対応ブラウザ（v1.4 で確定）
+
+| # | 規則 |
+|---|---|
+| 1 | 対応対象は**現行の Chrome / Edge / Firefox / Safari** |
+| 2 | `Sec-Fetch-Site` に対応しない古いブラウザは**サポート対象外**とする |
+| 3 | 画面は `Referrer-Policy: no-referrer`（§10.4）なので、**`Referer` は同一オリジンでも送られない**。<br>「Sec-Fetch-Site 非対応でも Referer 経由で通る」とは**限らない**。この前提に依存しない |
+| 4 | `GET /case` が `Sec-Fetch-Site: same-origin` を受け付ける件は、**4E で改めて検証**する |
+| 5 | **POST の Origin 厳格検査は変更しない**。対応ブラウザの整理を理由に緩めない |
+
+> ★同一オリジンの GET には Origin が付かない（ブラウザの仕様）。
+> 規則3 と合わせると、GET だけは Fetch Metadata に依存せざるを得ない。
+> **これは 4C で判明した実測事実であり、設計上の選択である。**
 
 ---
 
@@ -1456,7 +1579,62 @@ error_log              = <public_html の外のパス>
 | 8 | LINE 連携 | 範囲外 |
 | 9 | Google Drive API | 正式判断・§7.1-11（人の操作で行う） |
 | 10 | 店舗による公開承認 | 公開承認は **Smart Labo Operations 側**（§5.4） |
-| 11 | 複数 Smart Labo 管理者の権限管理 | 認証方式が未確定（§12-1）。Phase 1 は単一運用 |
+| 11 | 複数 Smart Labo 管理者の権限管理 | Phase 1 は**代表1名**（§10.8）。ロールを作らない |
+
+### 11.3 検証済み書き出し（v1.4 で確定・4D で実装）
+
+Operations（OPS-4）が**最初に取り込むのはこの形**である。API 接続はしない。
+管理画面から**案件単位でダウンロード**する JSON ファイルだけを受け渡しに使う。
+
+**含める（allowlist。ここに無いものは出さない）**
+
+| キー | 内容 |
+|---|---|
+| `export_schema_version` | 書き出し形式の版（本表の版。**回答スキーマ版とは別**） |
+| `source` | 固定文字列 `hp_intake` |
+| `generated_at` | 書き出した日時 |
+| `case_number` / `contract_type` / `status` | 案件の識別と状態 |
+| `submitted_at` / `locked_at` / `closed_at` | **既存の正式な時刻列のみ**（§2.1） |
+| `reviewed_at` | **列は無い。** `intake_submission_history` の `reviewed` 行の時刻から導く（下の枠） |
+| `drive_upload_confirmed_at` | 素材の受領申告（§11.1-9） |
+| `retention_delete_due` | 保持期限（§9.1） |
+| `answer_schema_version` | 回答スキーマ版 |
+| `answers` | **JSON 11分類**（§3。公開・内部の区別は取込側で行う） |
+| `rights` | 権利・同意（`answers.rights` と同じ内容を、証跡として明示的に置く） |
+| `submission_summary` | 提出履歴の**件数と最終結果だけ**（`submitted_at` / `result_code` / `field_count` / `missing_count`） |
+
+**含めない（禁止。1つでも出たら不具合とする）**
+
+token 平文 ／ `token_hash` ／ session secret ／ `session_hash` ／ CSRF token ／
+管理 session ／ 生IP ／ `ip_hmac` ／ Cookie ／ 暗号鍵 ／ password hash ／
+レート制限の記録 ／ **Drive URL**（暗号文・平文とも） ／ **DBの内部ID（`id` 列）** ／
+Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監査ログの明細
+
+**要件**
+
+| # | 規則 |
+|---|---|
+| 1 | UTF-8 / `JSON_UNESCAPED_UNICODE`。`Content-Type: application/json` |
+| 2 | `Content-Disposition: attachment`。ファイル名は**案件番号を正規化**したもの |
+| 3 | `Cache-Control: no-store` ／ `X-Content-Type-Options: nosniff` |
+| 4 | **allowlist 方式**で組み立てる（DBの行をそのまま渡さない） |
+| 5 | **書き出す直前にサーバー側で再検証**する。未提出・不正な案件は書き出さない |
+| 6 | 一時ファイルを公開領域へ作らない（メモリ上で組み立てて直接返す） |
+| 7 | ダウンロードを監査へ残す（`export_generated`）。**JSON 本文をログへ出さない** |
+| 8 | 本文の SHA-256 を `X-Intake-Export-Sha256` ヘッダーで返す（取込側の検証用・独自ヘッダー） |
+
+> ★規則8 は独自仕様である。**README に明記**し、取込側（OPS-4）が使うかどうかは
+> OPS-4 で判断する。ヘッダーが無くても取込が壊れない形にしておくこと。
+
+**`reviewed_at` について（列を増やさない判断）**
+
+`intake_cases` には `submitted_at` / `locked_at` / `closed_at` はあるが **`reviewed_at` は無い**。
+書き出しのためだけに列を足すことはせず、**`intake_submission_history` の
+`event_type = 'reviewed'` の行の `submitted_at`**（＝その操作が起きた時刻）から導く。
+
+- 履歴に `reviewed` の行が無ければ `null` を出す（推測して埋めない）
+- 複数あれば**最も新しいもの**を採る（`needs_revision` を挟んで再確認した場合）
+- 同じ理由で `needs_revision` の時刻も履歴側（`revision_requested`）が持つ
 
 ---
 
@@ -1464,7 +1642,7 @@ error_log              = <public_html の外のパス>
 
 **データモデル上の矛盾は残していない。以下は運用値と実装手段の未確定である。**
 
-### 12.1 R2 / R3 で確定した事項（未確定から外したもの）
+### 12.1 R2 / R3 / R4 で確定した事項（未確定から外したもの）
 
 | 旧# | 事項 | 確定内容 | 反映先 |
 |---|---|---|---|
@@ -1478,18 +1656,37 @@ error_log              = <public_html の外のパス>
 | **—（R3）** | 提出の冪等化 | **`submission_id`（UUID v4）を `/submit` の必須入力**とし、<br>`intake_submission_history` へ保存・部分一意索引で重複を防ぐ | §2.4・§6.4 |
 | **—（R3）** | 自動保存の方式 | **最終変更から30秒後／ステップ移動時／手動保存ボタン**の3契機。<br>変更された分類だけを送る。409 では上書きしない | §6.1 |
 | **—（R3）** | session Cookie の有効期間 | **Max-Age 24時間を維持**（確定事項）。<br>4C で「入力を終了する」ボタン＋`POST /session/logout` を必須とする | §2.6 |
+| **1（R4）** | **管理画面の認証方式** | **代表1名・`private/intake-config.php` の ID ＋ `password_hash()` の hash**（Argon2id 優先）。<br>アカウント表は作らない。session は **`intake_admin_sessions`（7表目）**。<br>idle 30分／絶対8時間／ログイン時に再生成／CSRF は hash で server 保持 | §2.7・§10.8 |
+| **—（R4）** | 検証済み書き出しの形 | **allowlist 方式の JSON**（`export_schema_version` / `answers` / `rights` /<br>`submission_summary` 等）。token・session・IP・鍵・Drive URL・内部IDを**含めない** | §11.3 |
+| **—（R4）** | 対応ブラウザ | **現行 Chrome / Edge / Firefox / Safari**。`Sec-Fetch-Site` 非対応はサポート対象外。<br>`Referrer-Policy: no-referrer` のため「Referer で通る」前提に依存しない | §10.9 |
 
 ### 12.2 残る未確定事項
 
 | # | 事項 | 影響 | 確定させる工程 |
 |---|---|---|---|
-| 1 | **管理画面の認証方式** | §10.8。管理画面用のセッション/アカウント表も未定義のまま<br>（§2.6 `intake_sessions` は**店舗向け**であり管理画面用ではない） | **4D 着手前** |
+| ~~1~~ | ~~**管理画面の認証方式**~~ | **R4 で確定**（§10.8・§2.7・§12.1）。番号は参照の互換のため空けてある | ~~4D 着手前~~ |
 | 2 | **intake.smartlaboworks.com のサブドメイン・SSL 設定** | 到達性そのもの。現状は未設定（ワイルドカードDNSで到達するのみ・証明書は `*.xserver.jp`） | 4H（代表作業） |
 | ~~3~~ | ~~**Google Drive の実フォルダ命名規則**~~ | **R3 で確定**（§7.1・§12.1）。番号は参照の互換のため空けてある | ~~4C 着手前~~ |
 | 4 | **本番バックアップ先の具体パス** | §9.5。domain root が書込可であることは実測済み（§0.2） | 4G |
 | 5 | **mail() の実送信確認** | 関数・sendmail 設定の存在までを実測。**実送信は未確認** | 4H（宛先は当社 info@ のみ） |
 | 6 | **1案件あたりの配列上限値** | §3 に**設計既定値**（menus 60 / staff 30 / images 60 等）を置いた。<br>運用実績で調整する余地を残す | 4B（既定値のまま進めてよい） |
 | 7 | **ローカル開発環境の php.ini** | ローカルは `php.ini` 未読込のため pdo_sqlite / openssl / mbstring が無効。<br>DLL は同梱済みで、有効化すれば解決する | 4B 冒頭（代表判断は不要） |
+| **8（R4）** | **`needs_revision` の理由の伝え方** | 構造化して保持する正式列が無い。**回答欄へ押し込まない**（§2.8）。<br>4D では **status 変更のみ**を実装し、理由は担当者からの連絡で伝える（運用課題） | 4E 以降（必要になった時点で列を設計する） |
+| **9（R4）** | **店舗画面への Drive リンク表示** | §7.2 は表示を**許している**が、必要な文言<br>「このフォルダは○○（指定メール）にのみ共有しています」の**共有先メールを保持する列が無い**。<br>正確に書けないため 4D では表示しない（§7.2 の条件を満たせないため） | 4E 以降（共有先を持つか、文言を見直す） |
+| **10（R4）** | **`reviewed` から `needs_revision` へ戻せない** | §5.1 の遷移表は `reviewed` → `locked` / `closed` のみを許している。<br>4D の指示は「submitted / reviewed → needs_revision」を求めたが、<br>**遷移表を変えることは状態機械そのものの改定**にあたるため、4D では行わなかった。<br>4D は **`submitted` → `needs_revision`** だけを実装し、`reviewed` では<br>**押しても必ず失敗するボタンを画面に出さない**（下の枠に改定案） | **代表判断**（4E 着手前） |
+
+**改定案：`reviewed` → `needs_revision` を許すかどうか（未承認）**
+
+現状の運用では、**確認済みにしたあとで不備に気づいた場合に戻す手段が無い**。
+戻せるようにするなら §5.1 の遷移表へ1行足すことになる。
+
+| 案 | 内容 | 影響 |
+|---|---|---|
+| **A（現状維持）** | `reviewed` からは戻せない。やり直しは案件を作り直す | 遷移表を変えない。運用の手戻りが大きい |
+| **B（1行追加）** | `'reviewed' => ['needs_revision', 'locked', 'closed']` へ変更 | 状態機械の改定。`intake_submission_history` は<br>`revision_requested` を既に語彙に持つため**表の変更は不要** |
+
+> ★**本書は A のままである。** B を採るかどうかは代表が決める。
+> 決まるまで、実装は A に従う（4D はそのように作ってある）。
 
 > ★§12.2-6 について: 本書の上限値は**実装既定値として確定**しており、
 > これに従えばモデルは成立する。Phase 1 の運用記録（仕様書 §20）を見て
@@ -1575,3 +1772,4 @@ HP-ONBOARDING-4A-R1 で次の順序へ変更した。
 | **v1.1（R1）** | 2026-08-26 | 改定（HP-ONBOARDING-4A-R1・代表承認）。**AI Sales を保存先・連携先とする記述をすべて撤回**し、契約後管理先を内部専用 **Smart Labo Operations**（社内管理上の仮称・未実装）へ置き換えた。§0.1 に R1 の正式決定10件を追加。§1 の系を **HP Intake / Smart Labo 管理 / Google Drive / Smart Labo Operations / Stripe / AI Sales** へ再定義し、AI Sales は**営業支援専用・連携しない**という境界説明のみに限定。§1.1 の越えてはならない線を7条へ。§1.2 Operations の位置づけ／§1.3 Operations 未実装時の標準管理票運用（GitHubへ保存しない・intake自由記述へ押し込まない・AI Salesへ入力しない）／§1.4 AI Sales の位置づけ を新設。§3.11・§3.12・§5.4・§8・§9.3・§9.4・§10.7・§11.2・§13 の該当記述を Operations へ是正。**§14 今後の工程順序**（4B〜4F → OPS-1〜OPS-4。OPS-4 は検証済み書き出しデータの取込から開始）と **§15 AI Sales の商品化境界**（参考節）を新設。旧 §14 変更履歴を **§16** へ繰り下げ。**intake 5テーブル・JSON 11分類・token 規則・状態遷移・途中保存・Drive 運用・保持削除・セキュリティ要件は一切変更していない。** |
 | **v1.2（R2）** | 2026-08-27 | 改定（HP-ONBOARDING-4A-R2・代表承認）。**XServer 実測（-4B-PRE / 2026-08-27）を反映**。§0.2 に実測値・確定運用値・本番環境の記録を新設。**`VACUUM INTO` を撤回**し（本番 SQLite **3.26.0** のため使用不可）、**`SQLite3::backup()` を第一手段**へ変更（§9.6・§9.6.1 新設）。**§2.0.1 SQLite 3.26.0 互換サブセット**を新設（使用禁止機能・使用可機能・起動時ガード・4E での静的チェック）。**§2.6 `intake_sessions` を追加**（5表 → **6表**）。旧 §2.6 を §2.7 へ繰り下げ。**token 初回交換方式を正式採用**（`/start#<token>` → `POST /session/start` → Secure / HttpOnly / SameSite=Strict Cookie。§4.2 全面書き換え・§4.5 を (A)(B) の2段へ・§4.7 を「設計候補」から「正式採用」へ）。**§10.4.1 PHP 設定（display_errors=Off / display_startup_errors=Off / log_errors=On / error_log は public_html 外）を本番必須要件として新設**し、§10.6 へ反映。§10.7 のマスク対象へ session secret を追加。§12 を §12.1（R2 で確定：SQLite/PDO・contact.php 配置済み・mail() 採用・rate limit 値・token 交換方式・display_errors）と §12.2（残る未確定7件）へ再編。§13 へ2行追加。**JSON 11分類・§3 の全データパス・状態遷移・途中保存・Google Drive 運用・保持削除規則・保存禁止15種は一切変更していない。** |
 | **v1.3（R3）** | 2026-08-27 | 改定（HP-ONBOARDING-4B-R1・代表承認）。**最終提出の冪等化を確定**した。**§2.4 へ `submission_id TEXT NULL` を追加**（クライアント生成 UUID v4・保存先はこの1列のみ・`UNIQUE(intake_case_id, submission_id) WHERE submission_id IS NOT NULL` の部分一意索引・既存行との互換のため NULL 許容・HTTP `/submit` では必須・ログ／監査／エラー本文へ出さない）。**§6.4 を全面改定**し、`status` だけの冪等化を4層（画面／`submission_id`／`status`／DB一意制約）へ拡張。`/submit` の挙動を表で確定した（欠落・不正形式=**400**／初回=履歴1件＋監査1件＋`submitted` 遷移／**同一 `submission_id` の再送=履歴も監査も増やさず同じ結果**／**異なる `submission_id` で `submitted`・`reviewed` の案件へ提出=409**・既存 `submission_id` も提出済み内容も返さない／競合は固定応答へ変換）。**履歴追加と状態遷移を同一トランザクション**とすることを明記。`submission_id` の生成契約（送信のたびに新規・再試行のときだけ同一・検証エラー修正後は新規）を 4C の義務として追加。**§2.6 へ Cookie `Max-Age` 24時間の維持を確定事項として明記**し、4C の「入力を終了する」ボタン＋`POST /session/logout` を必須化（規則12・判断根拠5点）。**§6.1 へ自動保存の方式を確定**（最終変更から30秒後／ステップ移動時／手動保存ボタン・変更分類のみ送信・成功後に `version` 更新・409 では上書きせず利用者へ確認）。これにより §6.1 の「間隔は未確定」という記述と §12.1-8 の「自動保存30秒で確定」との食い違いを解消した。**§7.1 へ Drive フォルダ命名規則を追加**（規則12〜14。最上位は**案件番号のみ**／固定サブフォルダ `01_images`・`02_logo`・`03_documents`・`04_references`／店舗名・氏名・電話番号・住所・メールをフォルダ名へ入れない）。§10.7 の「出さない」へ `submission_id` を追加し、**ログのキーを許可制（allowlist）**とする方針を明記。§12.1 へ R3 の確定4件を追加し、§12.2-3（Drive 命名規則）を確定済みへ。**JSON 11分類・§3 の全データパス・token 規則・状態遷移6状態・楽観ロック・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは一切変更していない。** DB変更は `intake_submission_history` への**列1つの追加と索引1つの追加のみ**で、既存の6テーブル構成は変わらない。 |
+| **v1.4（R4）** | 2026-08-27 | 改定（HP-ONBOARDING-4D・代表承認）。**管理画面の認証方式を確定**し、§12.2-1 を未確定から外した。**§10.8 を全面改定**（資格情報は `private/intake-config.php` の管理者ID＋`password_hash()` の hash のみ・**Argon2id 優先**・実値をGitへ入れない・**未設定なら fail closed**・IDの存在有無で応答も時間も変えない／session は idle 30分・絶対8時間・**ログイン成功時に再生成**／ログイン防御は **HMAC化IP で10分5回**・固定文言・`admin_login` へIDもパスワードも記録しない／CSRF は `random_bytes(32)` を **server 側 session へ hash で保持**し `hash_equals()` で照合・URLとログへ出さない・Origin 検査を併用・**GET で状態を変えない**）。**§2.7 `intake_admin_sessions` を新設**（6表 → **7表**。店舗の §2.6 とは別表・平文列を作らない・`csrf_hash` を同居させる・ロール列を作らない）。旧 §2.7 を **§2.8** へ繰り下げ、**アカウント表と修正理由テーブルを「作らない」判断**として記録。**§2.5 へ監査イベント4種を追加**（`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`。ログイン系は `intake_case_id` を NULL とし、**入力された管理者IDを記録しない**）。**§11.3 検証済み書き出しを新設**（allowlist 方式・含める11キーと**含めない16種**を明記・`Content-Disposition: attachment`・`no-store`・書き出し直前の再検証・未提出案件を出さない・一時ファイルを公開領域へ作らない・`X-Intake-Export-Sha256` は**独自ヘッダーとして README へ明記**）。**§10.9 対応ブラウザを新設**（現行 Chrome / Edge / Firefox / Safari。**`Sec-Fetch-Site` 非対応はサポート対象外**。`Referrer-Policy: no-referrer` のため「Referer で通る」前提に依存しないことを明記し、**4C 報告の当該説明を訂正**。`GET /case` の受理は **4E で再検証**。**POST の Origin 検査は変更しない**）。§11.2-11 を「代表1名」へ具体化。§12.2 へ **-8（修正理由の伝え方）** と **-9（店舗画面への Drive リンク表示）** を新規の未確定として追加。**JSON 11分類・§3 の全データパス・token 規則・状態遷移6状態・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは一切変更していない。** |

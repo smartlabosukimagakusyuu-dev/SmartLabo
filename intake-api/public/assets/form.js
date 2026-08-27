@@ -395,13 +395,76 @@ function driveGuide() {
       { class: 'missing-list' },
       folders.map(([name, note]) => el('li', { text: `${name} … ${note}` })),
     ),
-    el('p', {
-      class: 'field__hint',
-      text: store.driveConfirmed
-        ? 'アップロード完了のご連絡を受け付けています。'
-        : 'アップロードが終わりましたら、担当者へお知らせください。',
-    }),
+    driveConfirmBlock(),
   ]);
+}
+
+/**
+ * 素材アップロードの完了申告（SSOT §11.1-9）。
+ *
+ * ★チェックを入れて確定ボタンを押したときだけ送る（誤操作で送らない）。
+ * ★取消は用意しない。同じ申告を何度押しても結果は変わらない（サーバー側で冪等）。
+ */
+function driveConfirmBlock() {
+  if (store.driveConfirmed) {
+    return el('p', { class: 'field__hint', text: '✓ アップロード完了のご連絡を承っています。' });
+  }
+
+  const checkId = 'drive-confirm-check';
+  const check = el('input', { id: checkId, type: 'checkbox' });
+
+  const button = el('button', {
+    type: 'button',
+    class: 'btn btn--outline btn--small',
+    text: 'アップロード完了を伝える',
+    disabled: true,
+    onClick: () => void sendDriveConfirm(button),
+  });
+
+  check.addEventListener('change', () => {
+    button.disabled = !check.checked;
+  });
+
+  return el('div', {}, [
+    el('label', { class: 'checkline', for: checkId }, [
+      check,
+      el('span', {
+        class: 'checkline__text',
+        text: '写真・ロゴ・資料を指定フォルダへアップロードしました',
+      }),
+    ]),
+    button,
+  ]);
+}
+
+async function sendDriveConfirm(button) {
+  button.disabled = true; // 二重送信を防ぐ
+
+  const result = await api.post('/drive/confirm', { confirmed: true });
+
+  if (result.outcome === OUTCOME.OK) {
+    store.markDriveConfirmed();
+    clearAlert();
+    renderStepView();
+
+    return;
+  }
+
+  if (result.outcome === OUTCOME.OFFLINE) {
+    setAlert(
+      alertBox('warn', 'お伝えできませんでした', '接続を確認のうえ、もう一度お試しください。'),
+    );
+  } else if (result.status === 404) {
+    goToStartNotice();
+
+    return;
+  } else if (result.status === 429) {
+    setAlert(alertBox('warn', '少し時間をおいてください', rateLimitText(result)));
+  } else {
+    setAlert(alertBox('error', 'お伝えできませんでした', result.message));
+  }
+
+  button.disabled = false;
 }
 
 /* ------------------------------------------------------------ 提出 */

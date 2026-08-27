@@ -376,6 +376,27 @@ final class AnswerService
         ]);
     }
 
+    /**
+     * 提出履歴の明細（管理画面の表示用）。
+     * ★`submission_id` を返さない（操作の識別子であり、画面にもログにも出さない）。
+     * @return list<array<string,mixed>>
+     */
+    public function historyRows(int $caseId, int $limit = 50): array
+    {
+        $stmt = $this->db->pdo()->prepare(
+            'SELECT event_type, submitted_at, result_code, field_count, missing_count
+               FROM intake_submission_history
+              WHERE intake_case_id = :id
+              ORDER BY submitted_at DESC, id DESC
+              LIMIT :limit'
+        );
+        $stmt->bindValue(':id', $caseId, \PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
     public function historyCount(int $caseId): int
     {
         $stmt = $this->db->pdo()->prepare(

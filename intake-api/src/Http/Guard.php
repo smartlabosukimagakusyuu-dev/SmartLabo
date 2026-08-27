@@ -122,4 +122,39 @@ final class Guard
 
         return in_array($scheme . '://' . $host, $this->config->allowedOrigins, true);
     }
+
+    /**
+     * 管理画面の form 送信（POST）を受け付けてよいか。
+     *
+     * ★JavaScript を使わない**画面遷移としての form 送信**では、ブラウザは
+     *   `Origin: null` を送る（Chrome で実測。Referrer-Policy を変えても直らない）。
+     *   そのため Origin だけでは同一オリジンかどうかを判定できない。
+     *
+     * 判定:
+     *   1. Origin が付いていて `null` でなければ → **許可一覧と厳格に照合**する
+     *   2. Origin が無い／`null` のときだけ → `Sec-Fetch-Site: same-origin` を見る
+     *
+     * `Sec-Fetch-*` は**禁止ヘッダー名**でありページ内 JavaScript から偽装できない。
+     * 他サイトからの送信では `cross-site` になるため、CSRF の判定として成立する。
+     * さらに管理画面は **CSRF token（server 側 session に hash で保持）を必須**にしており、
+     * この判定は多層防御の1枚である。
+     *
+     * ★これは**管理画面の form 専用**である。
+     *   店舗向けの JSON POST（checkJsonPost）は従来どおり Origin の厳格検査だけで守る。
+     *   そちらは fetch() からの呼び出しであり、正しい Origin が必ず付く。
+     */
+    public function adminPostAllowed(Request $req): bool
+    {
+        $origin = trim((string)$req->header('Origin'));
+
+        if ($origin !== '' && strtolower($origin) !== 'null') {
+            return in_array($origin, $this->config->allowedOrigins, true);
+        }
+
+        // ★form 送信は Sec-Fetch-Mode: navigate になる。
+        //   sameOriginFetch() は navigate を弾くので、ここでは使えない。
+        $site = $req->header('Sec-Fetch-Site');
+
+        return $site !== null && strtolower(trim($site)) === 'same-origin';
+    }
 }

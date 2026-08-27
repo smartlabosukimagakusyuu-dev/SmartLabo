@@ -19,6 +19,22 @@ const PREVIEW_IP_HMAC_KEY = 'preview-only-ip-hmac-key-0123456789abcdef';
 const PREVIEW_ENC_KEY     = 'preview-only-enc-key-0123456789abcdefghij';
 
 /**
+ * ローカル確認用の管理者（SSOT v1.4 §10.8）。
+ *
+ * ★使い捨て。**本番の資格情報ではない**。
+ * ★hash は毎回その場で作る（Git へ hash も入れないため）。
+ */
+const PREVIEW_ADMIN_ID       = 'preview-admin';
+const PREVIEW_ADMIN_PASSWORD = 'preview-only-password-0123456789';
+
+function previewAdminHash(): string
+{
+    $algo = defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_BCRYPT;
+
+    return password_hash(PREVIEW_ADMIN_PASSWORD, $algo);
+}
+
+/**
  * 使い捨てDBの置き場所。
  *
  * ★`tests/.tmp/` へ置いてはならない。
@@ -48,4 +64,8 @@ function previewPutEnv(): void
     putenv('INTAKE_LOG_PATH=' . $base . '/intake.log');
     // ★ローカルは http。この指定があるときだけ 127.0.0.1 の http を許す（Config 参照）
     putenv('INTAKE_REQUIRE_HTTPS=0');
+
+    // 内部確認画面（使い捨て。hash はその場で作るので Git に残らない）
+    putenv('INTAKE_ADMIN_ID=' . PREVIEW_ADMIN_ID);
+    putenv('INTAKE_ADMIN_PASSWORD_HASH=' . previewAdminHash());
 }

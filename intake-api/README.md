@@ -1,8 +1,8 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B / -4B-R1 / -4C）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B / -4B-R1 / -4C / -4D）
 
 ```text
-STATUS : ローカル実装（受付API＋店舗入力画面）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.3**
+STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面）。**本番未配置**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.4**
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -21,7 +21,7 @@ SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.3**
 | `contact-api/` | 会社サイトの問い合わせ（`form.smartlaboworks.com`） | **本番稼働中**。触らない |
 | `signup-api/` | セルフ申し込みAPI | 本番未配置 |
 | `xserver-form/` | 問い合わせの旧系統（SMTP・reCAPTCHA） | 本番未使用 |
-| **`intake-api/`** | **店舗向けHP導入フォームの受付と入力画面**（本ディレクトリ） | ローカル実装 |
+| **`intake-api/`** | **店舗向けHP導入フォームの受付・入力画面・内部確認画面**（本ディレクトリ） | ローカル実装 |
 
 - 設定・DB・レート制限の記録は**それぞれ独立**させる。既存APIと共有しない。
 - 既存APIのコードを import しない（考え方だけを踏襲する）。
@@ -38,15 +38,18 @@ intake-api/
 ├── dev/                     ローカル専用（★本番へ配置しない）
 │   ├── php.ini.example      php.ini のテンプレート（php.ini 実体は追跡しない）
 │   ├── preview-env.php      ローカル確認の設定（使い捨て鍵・使い捨てDB）
-│   ├── preview-seed.php     架空の案件とご案内リンクを1本つくる
+│   ├── preview-seed.php     架空の案件・ご案内リンク・管理者を1組つくる
 │   └── router.php           PHP内蔵サーバー用の振り分け（本番は .htaccess）
 ├── public/                  ドキュメントルートへ置く
-│   ├── index.php            受付API のフロントコントローラ
+│   ├── index.php            受付API・内部確認画面のフロントコントローラ
 │   ├── start.html           ご案内リンクの入口（4C）
 │   ├── form.html            入力画面（4C）
 │   └── assets/              CSS / JS（外部CDNを使わない）
 ├── private/                 ★public_html の外へ置く（設定・DB・ログ・ratelimit）
 ├── src/                     アプリ本体
+│   ├── Admin/               内部確認画面（4D）。HTML の組み立ては View に集約
+│   ├── Http/ Service/ Support/
+│   └── ...
 └── tests/                   自動テスト（外部ライブラリなし）
     ├── test-*.php           サーバー側 ＋ 画面の静的な取り決め
     └── js/                  画面のふるまい（Node で実行。npm install 不要）
@@ -97,9 +100,10 @@ php -c intake-api/dev/php.ini -S 127.0.0.1:8788 -t intake-api/public intake-api/
 | POST | `/answers/save` | 途中保存（楽観ロック） |
 | POST | `/submit` | 最終提出。**`submission_id`（UUID v4）が必須**（下の §7） |
 | POST | `/session/logout` | session の個別失効 |
+| POST | `/drive/confirm` | 素材アップロード完了の申告（4D）。`{"confirmed": true}` のみ受理・冪等 |
 
 > ★同一オリジンの **GET には `Origin` が付かない**（ブラウザの仕様）。
-> さらに画面は `Referrer-Policy: no-referrer`（SSOT §10.4）なので `Referer` も付かない。
+> さらに画面は `Referrer-Policy: no-referrer`（SSOT §10.4）なので **`Referer` も付かない**。
 > そのため GET だけは `Sec-Fetch-Site: same-origin`（**禁止ヘッダー名**でありJSから偽装できない）
 > でも受け付ける。**POST は従来どおり `Origin` の厳格検査だけで守る。**
 
@@ -119,6 +123,52 @@ php -c intake-api/dev/php.ini -S 127.0.0.1:8788 -t intake-api/public intake-api/
 - 自動保存は「**最終変更から30秒**」「**ステップ移動**」「**保存ボタン**」の3契機だけ
 - 保存は**直列**。409 は上書きせず利用者に選ばせる。**429 で自動再試行しない**
 - 「入力を終了する」→ `POST /session/logout` → Cookie 失効 → 終了画面（SSOT §2.6-12）
+
+## 4.2 対応ブラウザ（SSOT v1.4 §10.9）
+
+| # | 決まり |
+|---|---|
+| 1 | 対応対象は**現行の Chrome / Edge / Firefox / Safari** |
+| 2 | `Sec-Fetch-Site` に対応しない古いブラウザは**サポート対象外** |
+| 3 | `Referrer-Policy: no-referrer` のため、**`Referer` は同一オリジンでも送られない**。<br>「Sec-Fetch-Site 非対応でも Referer 経由で通る」とは限らない。**この前提に依存しない** |
+| 4 | `GET /case` の `Sec-Fetch-Site` 受理は **4E で改めて検証**する |
+| 5 | **POST の Origin 厳格検査は変更しない**（対応ブラウザの整理を理由に緩めない） |
+
+## 4.3 内部確認画面（4D の範囲）
+
+| method | path | 内容 |
+|---|---|---|
+| GET / POST | `/admin/login` | ログイン |
+| POST | `/admin/logout` | ログアウト（★GET では受けない） |
+| GET | `/admin/` | 案件一覧（**回答本文を出さない**） |
+| GET | `/admin/case?case=…` | 案件詳細（11分類・不足項目・提出履歴） |
+| POST | `/admin/status` | `reviewed` / `needs_revision` への変更 |
+| GET | `/admin/export?case=…` | 検証済み JSON のダウンロード |
+
+- 代表1名のみ。資格情報は `private/intake-config.php`（**hash だけ**。§6）
+- **未設定なら管理画面ごと 404**（fail closed）。店舗向けAPIはそのまま動く
+- session は `intake_admin_sessions`（7表目）。**idle 30分 / 絶対 8時間**／ログイン時に再生成
+- 店舗の session を管理画面へ流用しない。逆も行わない
+- 状態を変える操作は**すべて POST ＋ CSRF ＋ Origin 検査**。GET で状態を変えない
+- ログインは **HMAC化IP で 10分5回**。失敗の文言は常に同じ（IDの存在を漏らさない）
+- 画面に JavaScript を持ち込まない（`script-src 'self'` と噛み合わせる）
+
+### 検証済み書き出し（SSOT v1.4 §11.3）
+
+allowlist 方式で組み立て、`Content-Disposition: attachment` で返す。
+**含めないもの**: token / token_hash / session secret / session_hash / CSRF /
+生IP / ip_hmac / Cookie / 暗号鍵 / password hash / rate limit /
+**Drive URL** / **DBの内部ID** / Stripe / Operations / AI Sales / 内部ログ / 監査明細。
+
+```text
+X-Intake-Export-Sha256: <本文の SHA-256>
+```
+
+★これは**独自ヘッダー**である。取込側（OPS-4）の検証用に付けているが、
+**このヘッダーが無くても取込が壊れない形**にしておくこと。
+
+`reviewed_at` は `intake_cases` に列が無い。**`intake_submission_history` の
+`reviewed` 行の時刻から導いている**（書き出しのためだけに列を増やさない）。
 
 ## 5. 守っている決まり（SSOT からの抜粋）
 
@@ -147,7 +197,15 @@ php -c intake-api/dev/php.ini -S 127.0.0.1:8788 -t intake-api/public intake-api/
    php -r "echo bin2hex(random_bytes(32));"   # ip_hmac_key 用
    php -r "echo bin2hex(random_bytes(32));"   # enc_key 用
    ```
-6. `mail()` の実送信テスト（宛先は当社 info@ のみ）
+6. **管理者の資格情報を設定する**（SSOT v1.4 §10.8）
+   ```bash
+   php -r "echo password_hash('ここに決めたパスワード', PASSWORD_ARGON2ID), PHP_EOL;"
+   ```
+   - `admin_id` と `admin_password_hash` を `private/intake-config.php` へ置く
+   - **平文パスワードを書かない。** 平文を置いた場合は hash として受け付けず、
+     管理画面は動かない（fail closed）
+   - **実パスワード・実 hash を Git へ入れない**
+7. `mail()` の実送信テスト（宛先は当社 info@ のみ）
 
 ## 7. 最終提出の冪等化（4B-R1 で実装済み）
 
@@ -181,18 +239,20 @@ DBは `PRAGMA user_version` で版を持つ（**v2**）。migration は**再実�
 `ALTER TABLE ADD COLUMN` は `PRAGMA table_info` で列の有無を見てから実行する。
 既存行の `submission_id` は **NULL のまま**残る（部分索引の対象外）。
 
-## 8. 4B / 4B-R1 / 4C で実装していないもの
+## 8. 4B / 4B-R1 / 4C / 4D で実装していないもの
 
-管理画面とその認証（4D）／案件作成・ご案内リンク発行の画面（4D）／
+案件作成・ご案内リンク発行の画面（管理画面からは行えない。CLI と `dev/preview-seed.php` のみ）／
+`locked` / `closed` への遷移（画面から行わない）／
 Google Drive 実連携（**案内文だけ**。API へ接続しない・SSOT §7.1）／
 画像ファイルの受け取り（intake は本体を持たない）／通知メールの実送信／
-Smart Labo Operations との連携（OPS-4）／Stripe（一切）／
-本番配置・サブドメイン・SSL（4H）
+Smart Labo Operations との連携（OPS-4。**書き出しファイルの受け渡しまで**）／
+Stripe（一切）／本番配置・サブドメイン・SSL（4H）
 
-### 残っている宿題（4D 以降）
+### 残っている宿題（4E 以降）
 
-`intake_cases.drive_upload_confirmed_at` を**店舗側から立てる経路が無い**。
-`CaseService::confirmDriveUpload()` はあるが、これを呼ぶ endpoint が未実装のため、
-4C の画面では「アップロードが終わったら担当者へお知らせください」という案内に留めている。
-Drive フォルダの URL も `GET /case` は返さない（`drive_confirmed` の真偽のみ）ので、
-画面にリンクは出さず、**案件番号のフォルダ名と固定サブフォルダ4つの説明だけ**を出す。
+| # | 事項 | いまの扱い |
+|---|---|---|
+| 1 | **修正依頼の理由を店舗へ伝える経路**が無い | 構造化して保持する正式列が無いため、`needs_revision` は**状態変更のみ**。<br>理由は担当者からの連絡で伝える（SSOT §12.2-8）。**回答欄へ押し込まない** |
+| 2 | **店舗画面への Drive リンク表示** | SSOT §7.2 は表示を許しているが、必要な文言<br>「このフォルダは○○（指定メール）にのみ共有しています」の**共有先メールを持つ列が無い**。<br>正確に書けないため表示しない（SSOT §12.2-9）。案内文のみ |
+| 3 | `GET /case` の `Sec-Fetch-Site` 受理 | **4E でセキュリティ再検証**（SSOT §10.9-4） |
+| 4 | 管理画面からの**案件作成・ご案内リンク発行** | 4D の範囲外。現状は CLI |

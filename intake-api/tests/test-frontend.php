@@ -236,7 +236,7 @@ test('画面: 提出キーを URL・保存領域へ出す経路が無い', funct
 
 /* ------------------------------------------------------------ 画面と API */
 
-test('画面: 4B の endpoint だけを呼ぶ', function (): void {
+test('画面: 実装済みの endpoint だけを呼ぶ', function (): void {
     $called = [];
     foreach (frontendSources('js') as $code) {
         preg_match_all('#\.(?:get|post)\(\s*[\'"](/[a-z/]+)[\'"]#', stripJsComments($code), $m);
@@ -245,7 +245,8 @@ test('画面: 4B の endpoint だけを呼ぶ', function (): void {
         }
     }
 
-    $allowed = ['/session/start', '/session/logout', '/case', '/answers/save', '/submit'];
+    // 4B の5つ ＋ 4D の素材完了申告
+    $allowed = ['/session/start', '/session/logout', '/case', '/answers/save', '/submit', '/drive/confirm'];
     foreach (array_keys($called) as $path) {
         assertTrue(in_array($path, $allowed, true), '未実装の endpoint を呼んでいる: ' . $path);
     }
@@ -391,6 +392,88 @@ test('設定: http のオリジンは require_https を切らない限り起動�
         $thrown = true;
     }
     assertTrue($thrown, 'HTTPS 強制のまま http のオリジンを受け入れている');
+});
+
+/* ------------------------------------------------ 対応ブラウザの記録（4D） */
+
+test('記録: 対応ブラウザの要件が SSOT と README に書かれている', function (): void {
+    $ssot   = (string)file_get_contents(__DIR__ . '/../../docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md');
+    $readme = (string)file_get_contents(__DIR__ . '/../README.md');
+
+    // 対応対象の4ブラウザ
+    foreach (['Chrome', 'Edge', 'Firefox', 'Safari'] as $browser) {
+        assertTrue(str_contains($ssot, $browser), 'SSOT に ' . $browser . ' の記載が無い');
+        assertTrue(str_contains($readme, $browser), 'README に ' . $browser . ' の記載が無い');
+    }
+
+    // 「Referer で通る」前提に依存しないことを明記している
+    assertTrue(str_contains($ssot, 'サポート対象外'), 'SSOT に対象外の記載が無い');
+    assertTrue(
+        str_contains($ssot, 'とは**限らない**') || str_contains($ssot, 'とは限らない'),
+        'SSOT に Referer 前提を否定する記載が無い'
+    );
+    assertTrue(str_contains($ssot, '4E'), 'SSOT に 4E での再検証の記載が無い');
+});
+
+test('記録: 「Referer 経路で通る」を、否定せずに書いていない', function (): void {
+    // 4C 報告の誤りをそのまま残さない。
+    // 「Referer で通る」に触れてよいのは、**否定するときだけ**である。
+    foreach ([
+        'README.md'  => (string)file_get_contents(__DIR__ . '/../README.md'),
+        'SSOT'       => (string)file_get_contents(__DIR__ . '/../../docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md'),
+    ] as $label => $text) {
+        preg_match_all('/[^。\n]*Referer[^。\n]*(?:経由|経路)で通[^。\n]*/u', $text, $m);
+
+        foreach ($m[0] as $sentence) {
+            $negated = str_contains($sentence, '限らない')
+                || str_contains($sentence, '依存しない')
+                || str_contains($sentence, 'ない）');
+            assertTrue($negated, $label . ' に否定なしの「Referer で通る」が残っている: ' . $sentence);
+        }
+    }
+});
+
+/* ------------------------------------------------ 管理画面の静的な取り決め */
+
+test('管理: 画面のスタイルが外部を読み込まない', function (): void {
+    $css = (string)file_get_contents(publicDir() . '/assets/admin.css');
+
+    assertTrue(!str_contains($css, '@import'), 'admin.css が @import を使っている');
+    preg_match_all('/url\(\s*[\'"]?([^\'")]+)/i', $css, $m);
+    foreach ($m[1] as $url) {
+        assertTrue(!preg_match('#^(https?:)?//#i', $url), 'admin.css が外部を参照している: ' . $url);
+    }
+});
+
+test('管理: 画面を組み立てる場所を1か所に閉じている', function (): void {
+    $adminApp = (string)file_get_contents(__DIR__ . '/../src/Admin/AdminApp.php');
+    $view     = (string)file_get_contents(__DIR__ . '/../src/Admin/View.php');
+
+    // 値の出力は必ず View::esc / View::escLines / View::orDash / View::link を通す
+    assertTrue(str_contains($view, 'htmlspecialchars'), 'エスケープの実装が無い');
+    assertTrue(str_contains($view, 'ENT_QUOTES'), 'ENT_QUOTES を使っていない');
+
+    // AdminApp が直接 htmlspecialchars を呼ばない（View へ集約する）
+    assertTrue(
+        !str_contains($adminApp, 'htmlspecialchars'),
+        'AdminApp が直接エスケープしている（View へ集約する）'
+    );
+    // 管理画面に JavaScript を持ち込まない
+    assertTrue(!str_contains($adminApp, '<script'), 'AdminApp が script を出している');
+    assertTrue(!str_contains($view, '<script'), 'View が script を出している');
+});
+
+test('管理: JSON の endpoint と form の endpoint を混ぜない', function (): void {
+    $request = (string)file_get_contents(__DIR__ . '/../src/Http/Request.php');
+
+    // form を読むのは Content-Type が form のときだけ
+    assertTrue(
+        str_contains($request, 'application/x-www-form-urlencoded'),
+        'form の Content-Type を確かめていない'
+    );
+    // 店舗向けの JSON endpoint が form を読まないこと
+    $app = (string)file_get_contents(__DIR__ . '/../src/App.php');
+    assertTrue(!str_contains($app, 'formFields('), '店舗向け API が form を読んでいる');
 });
 
 test('設定: ローカル確認用の設定は public の外にある', function (): void {

@@ -169,10 +169,110 @@ final class CaseService
         return $this->crypto->decrypt((string)$case['drive_folder_url_enc']);
     }
 
-    public function confirmDriveUpload(int $caseId): void
+    /**
+     * 店舗による素材アップロード完了の申告（SSOT §11.1-9 / v1.4 §2.5）。
+     *
+     * ★冪等。すでに申告済みなら**時刻を上書きせず、監査も増やさない**。
+     * ★取消は作らない（4D の範囲外）。
+     *
+     * @return bool 今回あらたに記録したら true（＝監査を1件だけ増やした）
+     */
+    public function confirmDriveUpload(int $caseId): bool
     {
+        $stmt = $this->db->pdo()->prepare(
+            'UPDATE intake_cases
+                SET drive_upload_confirmed_at = :now, updated_at = :now
+              WHERE id = :id AND drive_upload_confirmed_at IS NULL'
+        );
+        $stmt->execute([':now' => $this->clock->iso(), ':id' => $caseId]);
+
+        if ($stmt->rowCount() === 0) {
+            return false; // すでに申告済み。同じ結果を返すだけ
+        }
+
+        $this->audit->record($caseId, 'drive_upload_confirmed', 'ok');
+
+        return true;
+    }
+
+    /**
+     * 管理者による状態変更（SSOT §5.1 / v1.4 §2.5）。
+     *
+     * ★冪等。すでにその状態なら**何もせず成功**を返す（履歴も監査も増やさない）。
+     * ★現在状態を条件に入れた UPDATE で、同時操作の取りこぼしを防ぐ。
+     * ★独自の status を作らない。許可された遷移だけを通す。
+     *
+     * @return array{ok:bool,error?:string,changed:bool}
+     */
+    public function adminChangeStatus(int $caseId, string $next, string $historyEvent): array
+    {
+        $case = $this->find($caseId);
+        if ($case === null) {
+            return ['ok' => false, 'error' => 'not_found', 'changed' => false];
+        }
+
+        $current = (string)$case['status'];
+        if ($current === $next) {
+            // 同じ操作の再送。成功扱いにして、記録は増やさない
+            return ['ok' => true, 'changed' => false];
+        }
+        if (!in_array($next, self::TRANSITIONS[$current] ?? [], true)) {
+            return ['ok' => false, 'error' => 'invalid_transition', 'changed' => false];
+        }
+
+        $now = $this->clock->iso();
+
+        $stmt = $this->db->pdo()->prepare(
+            'UPDATE intake_cases SET status = :next, updated_at = :now
+              WHERE id = :id AND status = :current'
+        );
+        $stmt->execute([':next' => $next, ':now' => $now, ':id' => $caseId, ':current' => $current]);
+
+        if ($stmt->rowCount() === 0) {
+            // 判定してから UPDATE するまでの間に、別の操作が状態を変えた
+            return ['ok' => false, 'error' => 'conflict', 'changed' => false];
+        }
+
         $this->db->pdo()->prepare(
-            'UPDATE intake_cases SET drive_upload_confirmed_at = :now, updated_at = :now WHERE id = :id'
-        )->execute([':now' => $this->clock->iso(), ':id' => $caseId]);
+            'INSERT INTO intake_submission_history
+                (intake_case_id, event_type, schema_version, submitted_at, result_code)
+             VALUES (:id, :event, :schema_version, :now, :ok)'
+        )->execute([
+            ':id'             => $caseId,
+            ':event'          => $historyEvent,
+            ':schema_version' => Migrator::ANSWER_SCHEMA_VERSION,
+            ':now'            => $now,
+            ':ok'             => 'ok',
+        ]);
+
+        $this->audit->record($caseId, 'case_status_changed', 'ok');
+
+        return ['ok' => true, 'changed' => true];
+    }
+
+    /** 管理画面の一覧（回答本文・PII を持ち出さない。SSOT §7 の一覧要件） */
+    public function listForAdmin(int $limit = 200): array
+    {
+        $stmt = $this->db->pdo()->prepare(
+            'SELECT case_number, status, created_at, submitted_at,
+                    drive_upload_confirmed_at, updated_at, retention_delete_due
+               FROM intake_cases
+              ORDER BY (submitted_at IS NULL), submitted_at DESC, created_at DESC
+              LIMIT :limit'
+        );
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    /** @return array<string,mixed>|null */
+    public function findByNumber(string $caseNumber): ?array
+    {
+        $stmt = $this->db->pdo()->prepare('SELECT * FROM intake_cases WHERE case_number = :n');
+        $stmt->execute([':n' => $caseNumber]);
+        $row = $stmt->fetch();
+
+        return $row === false ? null : $row;
     }
 }

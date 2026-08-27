@@ -17,6 +17,18 @@ final class Config
     /** Cookie 名。★店舗名・案件番号を含めない（SSOT §2.6-9） */
     public const COOKIE_NAME = 'sl_intake_sid';
 
+    /**
+     * 管理画面の Cookie 名（SSOT §2.7-4）。
+     * ★`admin` の語・店舗名・案件番号を含めない。店舗向けとも別名にする。
+     */
+    public const ADMIN_COOKIE_NAME = 'sl_op_sid';
+
+    /** 管理 session の idle 期限（秒）＝30分（SSOT §10.8） */
+    public const ADMIN_SESSION_IDLE_TTL = 30 * 60;
+
+    /** 管理 session の絶対期限（秒）＝8時間（SSOT §10.8） */
+    public const ADMIN_SESSION_ABSOLUTE_TTL = 8 * 60 * 60;
+
     /** token / session secret の平文長（base64url 43文字。SSOT §4.1） */
     public const SECRET_CHARS = 43;
 
@@ -37,6 +49,9 @@ final class Config
         'token_start' => [5, 600],
         'answer_save' => [60, 600],
         'submit'      => [5, 600],
+        'drive_confirm' => [5, 600],
+        // 管理ログイン: HMAC化IP単位で 10分5回（SSOT §10.8）
+        'admin_login' => [5, 600],
     ];
 
     public function __construct(
@@ -47,7 +62,26 @@ final class Config
         public readonly string $rateLimitDir,
         public readonly ?string $logPath,
         public readonly bool $requireHttps,
+        /**
+         * 管理者ID（SSOT §10.8-1）。未設定なら null。
+         * ★null のときは管理画面を一切動かさない（fail closed）。
+         */
+        public readonly ?string $adminId = null,
+        /**
+         * password_hash() が作った hash（SSOT §10.8-2）。未設定なら null。
+         * ★平文パスワードをここへ入れてはならない。
+         */
+        public readonly ?string $adminPasswordHash = null,
     ) {
+    }
+
+    /** 管理画面を動かしてよいか。★資格情報が揃っていなければ動かさない */
+    public function adminEnabled(): bool
+    {
+        return $this->adminId !== null
+            && $this->adminId !== ''
+            && $this->adminPasswordHash !== null
+            && $this->adminPasswordHash !== '';
     }
 
     /**
@@ -111,7 +145,33 @@ final class Config
             rateLimitDir: (string)($pick('rate_limit_dir', 'INTAKE_RATELIMIT_DIR') ?? __DIR__ . '/../private/ratelimit'),
             logPath: $pick('log_path', 'INTAKE_LOG_PATH'),
             requireHttps: $requireHttps,
+            adminId: self::nonEmptyOrNull($pick('admin_id', 'INTAKE_ADMIN_ID')),
+            adminPasswordHash: self::validAdminHashOrNull($pick('admin_password_hash', 'INTAKE_ADMIN_PASSWORD_HASH')),
         );
+    }
+
+    private static function nonEmptyOrNull(mixed $value): ?string
+    {
+        return is_string($value) && trim($value) !== '' ? trim($value) : null;
+    }
+
+    /**
+     * 管理者パスワードの hash を受け取る。
+     *
+     * ★平文を設定してしまった事故を通さない。
+     *   `password_get_info()` が既知のアルゴリズムを返すものだけを受け入れ、
+     *   それ以外は **null（＝管理画面を動かさない）** にする。
+     *   ここで例外を投げないのは、店舗向けの受付APIまで止めないため。
+     */
+    private static function validAdminHashOrNull(mixed $value): ?string
+    {
+        $hash = self::nonEmptyOrNull($value);
+        if ($hash === null) {
+            return null;
+        }
+        $info = password_get_info($hash);
+
+        return ($info['algo'] ?? null) ? $hash : null;
     }
 
     /**

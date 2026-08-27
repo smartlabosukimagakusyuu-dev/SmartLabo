@@ -15,6 +15,7 @@ final class Request
     /**
      * @param array<string,string> $headers
      * @param array<string,string> $cookies
+     * @param array<string,string> $query URL の query（★PII を入れない。SSOT §10.4）
      */
     public function __construct(
         public readonly string $method,
@@ -24,6 +25,7 @@ final class Request
         public readonly array $cookies = [],
         public readonly bool $isHttps = true,
         public readonly string $clientIp = '203.0.113.10',
+        public readonly array $query = [],
     ) {
         $normalized = [];
         foreach ($headers as $name => $value) {
@@ -47,6 +49,33 @@ final class Request
         return strlen($this->body);
     }
 
+    /**
+     * `application/x-www-form-urlencoded` の body を読む（管理画面の form 用）。
+     *
+     * ★JSON の endpoint では使わない。form を受けるのは /admin/ 配下だけである。
+     * ★Content-Type が form でなければ**何も返さない**（誤って JSON を form として読まない）。
+     * @return array<string,string>
+     */
+    public function formFields(): array
+    {
+        $ctype = strtolower(trim(explode(';', (string)$this->header('Content-Type'))[0]));
+        if ($ctype !== 'application/x-www-form-urlencoded') {
+            return [];
+        }
+
+        $out = [];
+        parse_str($this->body, $out);
+
+        $flat = [];
+        foreach ($out as $key => $value) {
+            if (is_string($value)) {
+                $flat[(string)$key] = $value;
+            }
+        }
+
+        return $flat;
+    }
+
     /** スーパーグローバルから組み立てる（public/index.php 専用） */
     public static function fromGlobals(): self
     {
@@ -65,6 +94,13 @@ final class Request
 
         $path = (string)parse_url((string)($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
 
+        $query = [];
+        foreach ($_GET as $key => $value) {
+            if (is_string($value)) {
+                $query[(string)$key] = $value;
+            }
+        }
+
         return new self(
             method: (string)($_SERVER['REQUEST_METHOD'] ?? 'GET'),
             path: $path === '' ? '/' : $path,
@@ -73,6 +109,7 @@ final class Request
             cookies: array_map('strval', $_COOKIE),
             isHttps: $https,
             clientIp: self::clientIpFromGlobals(),
+            query: $query,
         );
     }
 

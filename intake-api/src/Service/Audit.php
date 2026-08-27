@@ -20,6 +20,8 @@ final class Audit
         'token_issued', 'token_revoked', 'token_accepted', 'token_rejected',
         'session_revoked', 'answer_saved', 'submitted', 'admin_viewed',
         'export_generated', 'drive_url_set', 'answers_deleted', 'rate_limited',
+        // 4D（SSOT v1.4 §2.5）
+        'drive_upload_confirmed', 'case_status_changed', 'admin_login', 'admin_logout',
     ];
 
     public function __construct(
@@ -45,5 +47,28 @@ final class Audit
             ':ip_hmac'     => $ipHmac,
             ':created_at'  => $this->clock->iso(),
         ]);
+    }
+
+    /** 監査イベントの件数（冪等性の検証に使う） */
+    public function countFor(?int $caseId, ?string $eventType = null): int
+    {
+        $sql    = 'SELECT COUNT(*) FROM intake_audit_events WHERE ';
+        $params = [];
+
+        if ($caseId === null) {
+            $sql .= 'intake_case_id IS NULL';
+        } else {
+            $sql .= 'intake_case_id = :case_id';
+            $params[':case_id'] = $caseId;
+        }
+        if ($eventType !== null) {
+            $sql .= ' AND event_type = :event_type';
+            $params[':event_type'] = $eventType;
+        }
+
+        $stmt = $this->db->pdo()->prepare($sql);
+        $stmt->execute($params);
+
+        return (int)$stmt->fetchColumn();
     }
 }

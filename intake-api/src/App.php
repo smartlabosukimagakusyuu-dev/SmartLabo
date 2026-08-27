@@ -44,18 +44,25 @@ final class App
         private readonly Audit $audit,
         private readonly Logger $logger,
         private readonly Clock $clock,
+        private readonly ?\SmartLabo\Intake\Admin\AdminApp $admin = null,
     ) {
     }
 
     public function handle(Request $req): Response
     {
         try {
+            // 管理画面（4D）。店舗向けとパスを分ける（SSOT §10.8）
+            if ($this->admin !== null && str_starts_with($req->path, '/admin')) {
+                return $this->admin->handle($req);
+            }
+
             return match ($req->path) {
                 '/session/start'  => $this->sessionStart($req),
                 '/session/logout' => $this->sessionLogout($req),
                 '/case'           => $this->getCase($req),
                 '/answers/save'   => $this->saveAnswers($req),
                 '/submit'         => $this->submit($req),
+                '/drive/confirm'  => $this->driveConfirm($req),
                 default           => Response::unavailable(),
             };
         } catch (\Throwable $e) {
@@ -307,6 +314,57 @@ final class App
         ]);
 
         return Response::ok(['submitted' => true, 'already_submitted' => false]);
+    }
+
+    /**
+     * POST /drive/confirm
+     * body: { "confirmed": true }
+     *
+     * 店舗による素材アップロード完了の申告（SSOT §11.1-9 / v1.4 §2.5）。
+     *
+     * ★冪等。すでに申告済みなら状態も監査も変えず、同じ結果を返す。
+     * ★取消は作らない。Drive URL は受け取らないし返さない（SSOT §7.1-7）。
+     */
+    private function driveConfirm(Request $req): Response
+    {
+        [$fail, $payload] = $this->guard->checkJsonPost($req);
+        if ($fail !== null) {
+            return $fail;
+        }
+        $auth = $this->authenticate($req);
+        if ($auth === null) {
+            return Response::unavailable();
+        }
+        $case   = $auth['case'];
+        $caseId = (int)$case['id'];
+        $ipHmac = $this->rateLimiter->ipHmac($req->clientIp);
+
+        $identity = $ipHmac . ':' . substr((string)$auth['session']['session_hash'], 0, 16);
+        if (!$this->rateLimiter->allow('drive_confirm', $identity)) {
+            $this->audit->record($caseId, 'rate_limited', 'rate_limited', $ipHmac);
+
+            return Response::error('rate_limited', 429);
+        }
+
+        if (!in_array((string)$case['status'], CaseService::EDITABLE, true)) {
+            return Response::error('not_editable', 409);
+        }
+
+        // ★明示的に true のときだけ受理する（取消の経路を作らない）
+        if (($payload['confirmed'] ?? null) !== true) {
+            return Response::error('bad_request', 400);
+        }
+
+        $recorded = $this->cases->confirmDriveUpload($caseId);
+
+        $this->logger->info('drive_upload_confirmed', [
+            'case_number' => (string)$case['case_number'],
+            'result_code' => 'ok',
+            'ip_hmac'     => $ipHmac,
+            'http_status' => 200,
+        ]);
+
+        return Response::ok(['confirmed' => true, 'newly_recorded' => $recorded]);
     }
 
     /**
