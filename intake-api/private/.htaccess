@@ -1,0 +1,3 @@
+# 設定・DB・ログの置き場所。本来はドキュメントルートの外へ置くが、
+# 誤配置に備えて全拒否しておく（contact-api/private/.htaccess と同じ方針）。
+Require all denied

@@ -23,5 +23,15 @@ contact-api/private/ratelimit/
 signup-api/private/signup-config.php
 signup-api/private/ratelimit/
 
+# intake-api（HP導入フォーム受付API）
+# 実設定（HMAC鍵・暗号鍵）・DB実体・実行時生成物・環境固有の絶対パスを含む php.ini は入れない。
+intake-api/private/intake-config.php
+intake-api/private/ratelimit/
+intake-api/private/logs/
+intake-api/private/*.sqlite
+intake-api/private/*.sqlite-journal
+intake-api/dev/php.ini
+intake-api/tests/.tmp/
+
 # Logs
 *.log

@@ -1,0 +1,12 @@
+# ローカル開発専用の php.ini（extension_dir に環境固有の絶対パスを含むため追跡しない）
+dev/php.ini
+
+# 実設定（HMAC鍵・暗号鍵・受信先）。サーバーにのみ置き、Gitへは入れない。
+private/intake-config.php
+
+# 実行時に生成されるもの
+private/ratelimit/
+private/*.sqlite
+private/*.sqlite-journal
+private/logs/
+tests/.tmp/

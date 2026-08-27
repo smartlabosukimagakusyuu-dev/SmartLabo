@@ -1,0 +1,33 @@
+; ============================================================================
+; HP Intake API — ローカル開発専用 php.ini（テンプレート）
+; ============================================================================
+; 使い方:
+;   1. このファイルを同じディレクトリへ php.ini としてコピーする
+;   2. extension_dir を、自分の環境のPHPの ext ディレクトリの絶対パスへ書き換える
+;      （絶対パスは環境ごとに異なるため、php.ini 実体は .gitignore で除外している）
+;   3. 実行時に -c で明示する:
+;        php -c intake-api/dev/php.ini intake-api/tests/run-tests.php
+;
+; ★これは開発用であり、本番（XServer）の設定ではない。
+;   本番の必須設定は docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md §10.4.1 を参照。
+; ============================================================================
+
+; ここを自分の環境の絶対パスへ書き換える（末尾の ext まで）
+extension_dir = "C:\path\to\php\ext"
+
+extension = pdo_sqlite
+extension = sqlite3
+extension = openssl
+extension = mbstring
+
+; --- 開発時の表示設定（本番は §10.4.1 のとおり display_errors=Off） ---
+display_errors         = On
+display_startup_errors = On
+error_reporting        = E_ALL
+log_errors             = On
+
+; --- 本番と揃える上限（SSOT §0.2: 最大body 1MB / 画像アップロードなし） ---
+post_max_size       = 2M
+upload_max_filesize = 0
+memory_limit        = 128M
+date.timezone       = Asia/Tokyo
