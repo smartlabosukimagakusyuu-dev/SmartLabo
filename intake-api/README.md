@@ -319,6 +319,16 @@ Stripe（一切）／本番配置・サブドメイン・SSL（4H）
 | 5 | **案件 ＋ HMAC化IP で 10分5回**。6回目は 429（自動再試行しない） |
 | 6 | 通信断で応答を受け取れなくても、**もう一度再発行できる**（直前の token も失効し、監査が1件増える） |
 
+### セキュリティ検査（4E）
+
+総合検査の結果・endpoint 権限マトリクス・状態遷移マトリクス・Cookie 一覧・
+rate limit 一覧・書き出しの allowlist / denylist・本番前の残存課題は
+**`intake-api/docs/SECURITY_AUDIT_4E.md`** にまとめている。
+
+- **P0 / P1 / P2 は 0件。** P3（本番前の hardening）が4件
+- 検査で追加した自動テスト: `tests/test-security.php` ／ `tests/test-security-static.php`
+- 仕様は SSOT が正。検査レポートは SSOT を上書きしない
+
 ### 残っている宿題（4E 以降）
 
 | # | 事項 | いまの扱い |
