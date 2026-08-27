@@ -2,9 +2,12 @@
 
 ```text
 STATUS      : APPROVED / IMPLEMENTATION NOT STARTED
-VERSION     : v1.1（R1）
-DATE        : 2026-08-26
-工程        : HP-ONBOARDING-4A ／ HP-ONBOARDING-4A-R1（AI Sales 分離・Operations 境界確定）
+VERSION     : v1.2（R2）
+DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2 R2 改定）
+工程        : HP-ONBOARDING-4A ／ -4A-R1（AI Sales 分離・Operations 境界確定）
+              ／ -4B-PRE（XServer 実行環境の実測）／ -4A-R2（実測反映・本改定）
+本番環境    : XServer 共用（PHP 8.3.33 / **SQLite 3.26.0** / pdo_sqlite・OpenSSL・mbstring 有効）
+              ★実測日 2026-08-27。**VACUUM INTO は使用不可**（§2.0.1・§9.6）
 対象        : intake.smartlaboworks.com（店舗向けHP導入フォーム）
 構成        : HP-ONBOARDING-3 の **案C**（受付を Website側へ分離）
 契約後管理  : 内部専用 **Smart Labo Operations**（社内管理上の仮称・未実装）
@@ -57,6 +60,50 @@ DATE        : 2026-08-26
 
 > ★v1.0 に存在した「AI Sales を契約後管理の保存先・連携先とする記述」は、
 > 本 R1 で**すべて撤回**した。撤回後の保存先は Smart Labo Operations である。
+
+### 0.2 HP-ONBOARDING-4B-PRE の実測にもとづき確定した事項（2026-08-27）
+
+**本番環境の実測値（XServer サーバーパネル／代表による手動確認）**
+
+| 項目 | 実測 | 本書への影響 |
+|---|---|---|
+| PHP_VERSION | **8.3.33** | 前提を満たす |
+| PDO / pdo_sqlite | **true / true** | **SQLite 採用を維持**（§2） |
+| SQLite3 拡張 | **true** | **バックアップAPIに使用**（§9.6） |
+| **SQLite library version** | **3.26.0** | **§2.0.1 の互換サブセットを適用** |
+| **VACUUM INTO** | **false**（3.27.0 未満） | **§9.6 で撤回**。`SQLite3::backup()` へ変更 |
+| JSON / OpenSSL / mbstring | true / **true** / true | AES-256-GCM（§7.3）・UTF-8検証（§3.0）が成立 |
+| sodium | true | **使用しない**（ローカルとの環境差を作らないため。暗号は OpenSSL に統一） |
+| random_bytes | true | token / session secret（§4） |
+| mail() / sendmail_path | true / 設定あり | Phase 1 通知メール（**実送信は 4H で確認**） |
+| session.save_path | 設定あり | Cookie セッション |
+| domain root exists / writable | **true / true** | **public_html 外に private を配置できる**（§2.0-1） |
+| .htaccess / HTTPS detection | true / true | HTTPS強制・直アクセス拒否（§10.4） |
+| display_errors | **ON → 2026-08-27 に OFF へ変更済み** | §10.4・§10.6 に必須要件として明記 |
+
+**確定した運用値**
+
+| 項目 | 確定値 |
+|---|---|
+| 通知メール | Phase 1 は XServer の **mail()**。内容は **案件番号・提出日時・イベント種別のみ** |
+| 通知に含めない | 回答本文／店舗名／氏名／メール／電話／住所／token／session secret／Drive URL |
+| 自動保存 | **最終変更から30秒後** ＋ **ステップ移動時** ＋ **手動保存ボタン** |
+| rate limit（無効token試行） | **HMAC化IP単位で 10分 5回** |
+| rate limit（有効案件の保存） | **token/session ＋ HMAC化IP単位で 10分 60回** |
+| rate limit（最終提出） | **10分 5回** |
+| CORS | **許可しない** |
+| 最大 body | **1MB** |
+| 画像アップロード | **受けない**（写真本体は Google Drive・§7） |
+| token 初回交換 | **`/start#<token>` → POST → Cookie 方式を正式採用**（§4.2・§4.7） |
+
+**本番環境に関する記録（2026-08-27）**
+
+- 代表が XServer サーバーパネルから **`smartlaboworks.com` の `display_errors` を ON → OFF** へ変更した。
+  `display_startup_errors` は OFF を維持。**その他の php.ini 項目は変更していない。**
+  管理画面の一覧で `display_errors=OFF` を確認済み。
+- 実測に用いた一時診断PHPは、代表が XServer 上で作成・保存・実行し、**結果取得後に削除済み**（残存0）。
+- ★**intake サブドメインの本番配置時にも、`display_errors=Off` /
+  `log_errors=On` / `error_log` を **public_html 外**へ置く設定を必須とする**（§10.4・§10.6）。
 
 ---
 
@@ -133,8 +180,47 @@ Smart Labo Operations の完成前に契約が発生した場合、
 | 4 | 真偽値は **INTEGER 0/1**（SQLite に boolean 型は無い） |
 | 5 | `PRAGMA foreign_keys = ON` を接続ごとに実行する |
 | 6 | 破壊的な `DROP` / 既存行への一括 `UPDATE` は運用で行わない |
-| 7 | **平文 token 列を作らない**（§4） |
+| 7 | **平文 token 列を作らない**（§4）。**平文 session secret 列も作らない**（§2.6） |
 | 8 | **カード情報・秘密値・Stripe情報・公開承認の列を作らない**（§8） |
+| 9 | **SQLite 3.26.0 互換サブセットの範囲でのみ実装する**（§2.0.1） |
+| 10 | private の実配置は **public_html の外**（domain root 直下）。実測で書込可を確認済み（§0.2） |
+
+### 2.0.1 SQLite 3.26.0 互換サブセット（本番実測にもとづく制約）
+
+本番の SQLite は **3.26.0**（2018-12）である。**ローカル開発環境はこれより新しい**ため、
+「ローカルでは通るが本番だけ失敗する」事故が起こりうる。これを構造的に防ぐため、
+**使用してよい機能を 3.26.0 の範囲へ明示的に限定する。**
+
+**使用禁止（3.26.0 に存在しない）**
+
+| 機能 | 必要版 | 代替 |
+|---|---|---|
+| **`VACUUM INTO`** | 3.27.0 | **`SQLite3::backup()`**（§9.6） |
+| `RETURNING` 句 | 3.35.0 | `lastInsertId()` ／ 直後に SELECT |
+| **STRICT テーブル** | 3.37.0 | 型はアプリ側で検証する（§3.0） |
+| `ALTER TABLE ... DROP COLUMN` | 3.35.0 | 新テーブル作成 → コピー → 差し替え |
+| 生成列（GENERATED ALWAYS AS） | 3.31.0 | アプリ側で算出 |
+| `PRAGMA table_xinfo` の一部挙動 | 3.26+ 依存 | `PRAGMA table_info` を使う |
+
+**使用してよい（3.26.0 で利用可）**
+
+`UPSERT`（ON CONFLICT DO UPDATE, 3.24）／窓関数（3.25）／部分索引（3.8）／
+`ALTER TABLE ... RENAME COLUMN`（3.25）／`PRAGMA foreign_keys`／
+**`PRAGMA integrity_check`**／**`PRAGMA foreign_key_check`**（3.7.16 以前・§9.7）
+
+**SQL側の JSON 関数（`json_extract` 等）は使用しない**
+- 本書の JSON 列は **TEXT として保存し、PHP 側でパースする**設計である（§2.3）。
+- したがって JSON1 拡張が 3.26.0 に組み込まれているか否かに**依存しない**。
+- 検索・集計を SQL の JSON 関数で行いたくなった場合は、**本書を改定してから**行う。
+
+**実装時のガード（4B で実装）**
+
+| # | 規則 |
+|---|---|
+| 1 | 起動時に `SELECT sqlite_version()` を取得し、**3.27.0 未満なら VACUUM INTO 系の経路へ入らない** |
+| 2 | ローカル開発でも**意図的に 3.26.0 相当の制約で書く**（新機能を使わない） |
+| 3 | **4E（セキュリティテスト）に「3.26.0 互換性チェック」を含める**。使用している全SQLを静的に確認する |
+| 4 | 本番版数が上がった場合も、**本書を改定するまで新機能を使わない** |
 
 ### 2.1 A. intake_cases（案件）
 
@@ -256,12 +342,50 @@ Smart Labo Operations の完成前に契約が発生した場合、
 > 区別して**記録する**が、**利用者へ返す画面は §4.6 のとおり常に同一文言**にする。
 > 記録の粒度と、外部へ見せる粒度を分ける。
 
-### 2.6 提案：追加しないテーブル（判断の記録）
+### 2.6 F. intake_sessions（Cookie セッション）
+
+`/start#<token>` で受け取った token を**一度だけ**検証し、以後は Cookie の
+session secret で継続する（§4.2・§4.7）。**token を URL に残さないための表**である。
+
+| 列 | 型 | NULL | 内容 |
+|---|---|---|---|
+| `id` | INTEGER PK AUTOINCREMENT | — | |
+| `intake_case_id` | INTEGER NOT NULL REFERENCES intake_cases(id) | 不可 | |
+| `token_id` | INTEGER NOT NULL REFERENCES intake_tokens(id) | 不可 | どの token から発行されたか |
+| `session_hash` | TEXT NOT NULL | 不可 | **SHA-256(session secret) の16進64文字**。★平文列は作らない |
+| `expires_at` | TEXT NOT NULL | 不可 | **最終利用から24時間**を保持（利用のたびに延長） |
+| `absolute_expires_at` | TEXT NOT NULL | 不可 | **発行から7日**。延長しない |
+| `revoked_at` | TEXT | 可 | 失効日時 |
+| `last_seen_at` | TEXT | 可 | 最終利用日時（**利用元IPは保存しない**） |
+| `created_at` | TEXT NOT NULL | 不可 | |
+
+索引: `UNIQUE(session_hash)` ／ `INDEX(intake_case_id)` ／ `INDEX(token_id)` ／ `INDEX(expires_at)`
+
+**規則**
+
+| # | 規則 |
+|---|---|
+| 1 | session secret は **`random_bytes(32)`**（base64url 43文字） |
+| 2 | DBには **SHA-256 hash のみ**保存する。**平文を保存する列を作らない** |
+| 3 | **Cookie 以外へ平文を保存しない**（ファイル・ログ・localStorage・sessionStorage を含む） |
+| 4 | **token 再発行・失効時に、その token から発行された session をすべて失効させる** |
+| 5 | **`locked` / `closed` へ遷移した時にも全 session を失効させる**（§5） |
+| 6 | 有効期限は**最終利用から24時間**（`expires_at` を都度延長） |
+| 7 | **絶対有効期限は発行から7日**（`absolute_expires_at`。延長しない） |
+| 8 | ログアウト・管理者操作で**個別に失効できる**（`revoked_at`） |
+| 9 | **Cookie 名に店舗名・案件番号を含めない**（固定の一般名を使う） |
+| 10 | Cookie 属性は **Secure / HttpOnly / SameSite=Strict**（§4.7） |
+| 11 | 照合は `hash_equals()` 等の**定数時間比較**で行う |
+
+> ★session は token の**下位**にある。token が無効なら session も無効。
+> 「session があるから token 失効を無視してよい」という経路を作らない。
+
+### 2.7 提案：追加しないテーブル（判断の記録）
 
 | 候補 | 判断 | 理由 |
 |---|---|---|
 | メニュー・スタッフ・写真の正規化テーブル | **作らない** | 案件内でしか使わず横断集計もしない。JSON で足りる（§2.3） |
-| 管理画面のセッション/アカウント表 | **本工程では定義しない** | 管理画面の認証方式が未確定（§12-1）。4D で確定してから定義する |
+| 管理画面のセッション/アカウント表 | **本工程では定義しない** | 管理画面の認証方式が未確定（§12-1）。4D で確定してから定義する<br>★§2.6 の `intake_sessions` は**店舗向け**であり、管理画面用ではない |
 | 不足項目テーブル | **作らない** | 判定は回答から都度算出する。保存すると回答と二重管理になり必ず食い違う |
 | Drive ファイル一覧テーブル | **作らない** | Drive API を使わない（§11）。件数・種類は `image_metadata_json` が持つ |
 | Stripe 参照テーブル | **作らない** | §8 により intake は Stripe 情報を一切持たない |
@@ -595,15 +719,20 @@ Smart Labo Operations の完成前に契約が発生した場合、
 | 6 | 当社側に平文の控えを残さない。紛失時は**再発行**で対応する |
 | 7 | 照合は「受け取った token を SHA-256 → `token_hash` で検索」。平文比較をしない |
 
-### 4.2 URL の形
+### 4.2 URL の形（正式採用・4B-PRE で確定）
 
 ```text
-https://intake.smartlaboworks.com/f/<token>
+https://intake.smartlaboworks.com/start#<token>
 （<token> は base64url 43文字。案件番号・店舗名をURLへ含めない）
 ```
 
+**`/f/<token>` 方式は採用しない。** Webサーバーのアクセスログに token が残るため。
+
+- **URL fragment（`#` 以降）は HTTPリクエストへ送信されない。**
+  したがって nginx のアクセスログにも、プロキシにも、Referer にも token が載らない。
 - **案件番号や店舗名をURLへ入れない**（列挙・推測の手がかりを与えない）。
 - token 単体から案件を解決する（`token_hash` で検索）。
+- 交換手順の全体は §4.7 に定める。
 
 ### 4.3 有効期限・本数
 
@@ -623,16 +752,38 @@ https://intake.smartlaboworks.com/f/<token>
 
 ### 4.5 検証の順序（4B で実装）
 
+**(A) 初回交換 `POST /session/start`（body で token を受け取る）**
+
 ```text
 1. HTTPS か（違えば 301）
-2. token が 43文字の base64url か（形式不一致は即 reject）
-3. rate limit（IP単位・token検証失敗は別枠で厳しく）
-4. SHA-256 → token_hash 検索
-5. revoked_at が NULL か
-6. expires_at > 現在時刻か
-7. 案件の status が操作を許すか（§5）
-→ すべて満たしたときのみ last_used_at を更新して続行
+2. Origin を厳格検査（https://intake.smartlaboworks.com 以外は即 reject）
+3. token が 43文字の base64url か（形式不一致は即 reject）
+4. rate limit（HMAC化IP単位・10分5回。§0.2）
+5. SHA-256 → token_hash 検索
+6. revoked_at が NULL か
+7. expires_at > 現在時刻か
+8. 案件の status が操作を許すか（§5）
+→ すべて満たしたときのみ
+   ・token.last_used_at を更新
+   ・session secret を発行し、SHA-256 hash を intake_sessions へ保存
+   ・Cookie（Secure / HttpOnly / SameSite=Strict）を設定して /form へ
 ```
+
+**(B) 2回目以降（Cookie の session secret で継続）**
+
+```text
+1. HTTPS か（違えば 301）
+2. Origin / Referer を検査
+3. rate limit（token/session ＋ HMAC化IP単位・10分60回。§0.2）
+4. SHA-256(Cookie値) → session_hash 検索（hash_equals 等の定数時間比較）
+5. revoked_at が NULL か
+6. expires_at > 現在時刻 かつ absolute_expires_at > 現在時刻 か
+7. **紐づく token が有効か**（revoked / expired なら session も無効・§2.6）
+8. 案件の status が操作を許すか（§5）
+→ すべて満たしたときのみ expires_at を延長（最終利用から24時間）して続行
+```
+
+★(A)(B) いずれの失敗も、外部へは §4.6 の**同一文言・404**で返す。
 
 ### 4.6 エラー文言（外部へ返すもの）
 
@@ -655,19 +806,39 @@ https://intake.smartlaboworks.com/f/<token>
 | **Referer ヘッダー** | 外部リンクを踏むと遷移先へURLが渡る | 全ページに **`Referrer-Policy: no-referrer`**。外部リンクは `rel="noopener noreferrer"` |
 | **ブラウザ履歴・共有端末** | 端末を共有していると残る | 提出後7日でロック／`Cache-Control: no-store` |
 | **プロキシ・中間キャッシュ** | URL がキャッシュされる | `Cache-Control: no-store, no-cache, must-revalidate` ／ `Pragma: no-cache` ／ HTTPS 必須 |
-| **Webサーバのアクセスログ** | URL パスに token が残る | **URL から token を除いた形へ書き換える**（後述） |
-| **アプリログ** | 実装ミスで平文が出る | ログ出力関数で `/f/[A-Za-z0-9_-]{43}` を `[REDACTED]` へ置換する共通処理を必須にする |
+| **Webサーバのアクセスログ** | URL パスに token が残る | **`/start#<token>` 方式を採用。fragment はリクエストへ送られないため、そもそもログに載らない**（§4.2） |
+| **アプリログ** | 実装ミスで平文が出る | ログ出力関数で base64url 43文字の連続を `[REDACTED]` へ置換する共通処理を必須にする |
 | **外部解析・外部画像・第三者スクリプト** | Referer や計測でURLが外部へ出る | **intake の画面に外部リソースを一切読み込まない**（自ドメインのみ。CSPで強制。§10.5） |
 | **エラー画面・スタックトレース** | 例外表示にURLが混ざる | 詳細を外部へ出さない。固定文言のみ（§10.6） |
 
-**アクセスログ対策の具体（4B で実装）**
-- token を**URLパスから受け取った直後**に、アプリ側で「案件を特定できない形」へ正規化した
-  パス（例 `/f/-`）でのみ内部処理・ログ記録を行う。
-- XServer 側のアクセスログはアプリから制御できないため、
-  **token をパスではなく POST body で受け渡す2段構成**を 4B の設計候補とする。
-  （`/f/<token>` はワンタイムで受け、直ちに Cookie（HttpOnly / Secure / SameSite=Lax）へ
-   セッション識別子を移し、以後のURLに token を含めない）
-  ★この2段構成の採否は 4B で確定する。**データモデルはどちらでも成立する**。
+**token 初回交換方式（正式採用・4B-PRE で確定）**
+
+XServer 側のアクセスログはアプリから制御できない。したがって
+**token を URL パス・query のどこにも置かない**構成を採る。
+
+```text
+ 1. 店舗へ渡すURLは  https://intake.smartlaboworks.com/start#<token>
+ 2. URL fragment は HTTPリクエストへ送信されない（ログ・Referer・プロキシに残らない）
+ 3. 同一オリジンのローカルJSが fragment を読む
+ 4. POST /session/start の body で token を送る
+ 5. Origin を厳格検査する
+ 6. token を hash 化して DB 照合する（§4.5-A）
+ 7. 有効ならランダムな session secret を発行する（random_bytes(32)）
+ 8. DBには session secret の SHA-256 hash だけを保存する（§2.6）
+ 9. Cookie へ平文 session secret を設定する
+10. Cookie は Secure / HttpOnly / SameSite=Strict
+11. history.replaceState で fragment を即時削除する
+12. /form へ遷移する
+13. 以後、店舗画面では元 token を使用しない
+```
+
+| # | 遵守事項 |
+|---|---|
+| 1 | **token・session secret を アプリログ・PHPエラーログ・通知メールへ出さない**（§10.7） |
+| 2 | fragment は `history.replaceState` で**即時削除**する（履歴・共有端末対策） |
+| 3 | Cookie は **Secure / HttpOnly / SameSite=Strict**。JS から読めない |
+| 4 | **JS無効時は、秘密値をURLパスやqueryへ移さない。**<br>「このフォームを利用するにはJavaScriptを有効にしてください」と表示して終了する |
+| 5 | `/start` 自体は token を持たないため、単独でアクセスされても情報を返さない |
 
 ### 4.8 noindex の位置づけ
 
@@ -730,6 +901,18 @@ draft ──submit──> submitted ──┬── request_revision ──> nee
 | `revoked` | `revoked_at IS NOT NULL` |
 
 ★利用者へは3状態を**区別せず**、常に §4.6 の同一文言を返す。
+
+**session の状態も同じ方式で導出する**（§2.6）。
+
+| session状態 | 判定 |
+|---|---|
+| `active` | `revoked_at IS NULL` かつ `expires_at > now` かつ `absolute_expires_at > now` <br>**かつ 紐づく token が active** |
+| `expired` | 上記の期限いずれかを過ぎている |
+| `revoked` | `revoked_at IS NOT NULL`、または**紐づく token が revoked** |
+
+★**token が失効したら session も必ず失効する。**
+　`locked` / `closed` への遷移時、token 再発行時、漏えい判明時は、
+　当該案件の **token と session を同一トランザクションで失効**させる。
 
 ### 5.4 公開承認は含めない
 
@@ -972,8 +1155,26 @@ UPDATE intake_answers
 | 1 | journal mode は **`delete`（既定）を採用する**。WAL にしない |
 | 2 | 理由: 共有レンタルサーバー環境では `-wal` / `-shm` の権限・削除漏れが事故になりやすく、<br>1〜5店舗の書き込み頻度では WAL の利点が無いため |
 | 3 | バックアップ時に `-journal` が存在する場合は**コピーしない**。<br>先に接続を閉じ、`-journal` が消えた状態でコピーする |
-| 4 | ファイルコピーではなく **`VACUUM INTO 'backup.sqlite'`** を第一手段とする<br>（実行中でも整合したコピーを1ファイルで得られる） |
-| 5 | `VACUUM INTO` が使えない環境では、`.backup` 相当の手順を用いる。<br>**稼働中の生ファイルコピーは行わない** |
+| 4 | **`VACUUM INTO` は使用しない。** 本番の SQLite は **3.26.0** であり、<br>`VACUUM INTO` は **3.27.0 以降**の構文のため利用できない（§0.2・§2.0.1） |
+| 5 | **稼働中の生ファイルコピーは行わない。** 取得方式は §9.6.1 に定める |
+
+### 9.6.1 バックアップの取得方式（SQLite 3.26.0 対応）
+
+| 優先 | 方式 | 根拠・注意 |
+|---|---|---|
+| **第一** | **`SQLite3::backup()`** | SQLite の **Online Backup API**（`sqlite3_backup_*`）を使う。<br>API は **SQLite 3.6.11 以降**で利用可＝**3.26.0 で動作する**。<br>PHP 側は **7.4.0 以降**で利用可＝本番 **8.3.33** で利用可。<br>**稼働中でも整合したコピーを1ファイルで取得できる**（`VACUUM INTO` の代替として等価） |
+| 第二 | `BEGIN IMMEDIATE` で書込ロック取得 → ファイルコピー → `ROLLBACK` | ロック中にコピーする。§9.6-3（`-journal` があるときはコピーしない）は維持 |
+| 最終 | 全行を読み出して **SQL ダンプ**を書き出す | 1〜5案件の規模では現実的。**SQLite の版数に依存しない**利点がある |
+
+**実装上の注意（4B で実装）**
+
+| # | 注意 |
+|---|---|
+| 1 | `SQLite3::backup()` は **SQLite3 クラス**の機能である。通常クエリは PDO を使うため、<br>**バックアップ時のみ別接続で SQLite3 を開く**（本番の `sqlite3` 拡張は true・§0.2） |
+| 2 | 書込トランザクション中は `backup_step` が待たされる。**busy timeout を設定し、再試行**する |
+| 3 | 取得先は **public_html の外**（§9.5-2） |
+| 4 | 取得後に必ず §9.7 の整合性確認を行う |
+| 5 | **`VACUUM INTO` を呼ぶ経路をコードに残さない**（§2.0.1 の起動時ガードで二重に防ぐ） |
 
 ### 9.7 バックアップの整合性確認
 
@@ -983,6 +1184,9 @@ UPDATE intake_answers
 PRAGMA integrity_check;    -- 期待値: ok
 PRAGMA foreign_key_check;  -- 期待値: 0行
 ```
+
+★どちらも **SQLite 3.26.0 で利用できる**（`foreign_key_check` は 3.7.16 で追加）。
+　`VACUUM INTO` の撤回による影響はここには及ばない。
 
 - どちらかが期待値でない場合、そのバックアップを**採用しない**。
   直前の正常なバックアップを保持したまま、原因を調査する。
@@ -1038,8 +1242,33 @@ Pragma: no-cache
 Strict-Transport-Security: max-age=31536000
 ```
 
-- **HTTPS を強制**する（HTTP は 301 で HTTPS へ）。
+- **HTTPS を強制**する（HTTP は 301 で HTTPS へ）。HTTPS 判定は `$_SERVER` の実測値による（§0.2）。
 - **CORS ヘッダーを出さない**（他オリジンから使えない構成にする）。
+- Cookie は **Secure / HttpOnly / SameSite=Strict**（§2.6・§4.7）。
+
+### 10.4.1 PHP 設定（本番配置の必須要件）
+
+**intake サブドメインの本番配置時に、次を必ず設定する。**
+
+```text
+display_errors         = Off
+display_startup_errors = Off
+log_errors             = On
+error_log              = <public_html の外のパス>
+```
+
+| # | 規則 |
+|---|---|
+| 1 | **`display_errors = Off`。** ON のままだと、致命的エラーが**レスポンス本文へ出力**され、<br>絶対パス（ホスティングのアカウント名を含む）・SQL・設定値が露出する。<br>経路によっては **token / session secret がトレースに載りうる**（§10.6 と矛盾する） |
+| 2 | **`display_startup_errors = Off`** も維持する |
+| 3 | **`log_errors = On`** とし、`error_log` は **public_html の外**へ置く（Webから到達させない） |
+| 4 | 設定経路は **`.user.ini`**（既存 form サブドメインで運用実績あり）または<br>XServer サーバーパネルの php.ini 設定 |
+| 5 | `.user.ini` は即時反映されない（`user_ini.cache_ttl` 既定300秒）。**反映を待って確認する** |
+| 6 | **4H の配置チェックリストに含め、確認できるまで公開しない**（§11.1） |
+
+> ★参考記録: `smartlaboworks.com` 側は **2026-08-27 に代表が
+> `display_errors` を ON → OFF へ変更済み**（`display_startup_errors` は OFF を維持）。
+> intake サブドメインは**別途、同じ設定を行う必要がある**。
 
 ### 10.5 外部リソースの禁止
 
@@ -1052,14 +1281,18 @@ Strict-Transport-Security: max-age=31536000
 
 - 外部（店舗）へは**固定文言のみ**。例外メッセージ・スタックトレース・
   SQL・ファイルパス・設定値を出さない。
+- **`display_errors = Off` を前提とする**（§10.4.1）。
+  アプリの try/catch では捕捉できない致命的エラー（parse error・メモリ超過等）が
+  露出するのを、PHP 設定の側で塞ぐ。**アプリ側の対策だけに依存しない。**
 - token 関連は §4.6 の同一文言・404 に統一する。
 - 詳細はサーバーのエラーログへ**識別子のみ**を残す（本文・PIIを出さない）。
+  エラーログ自体も **public_html の外**へ置く（§10.4.1-3）。
 
 ### 10.7 ログに出してはいけない情報
 
 | 出さない | 出してよい |
 |---|---|
-| token 平文 | case_number |
+| token 平文／**session secret 平文** | case_number |
 | 回答本文（全JSON） | event_type |
 | 氏名・掲載名・実名 | result_code |
 | メールアドレス（公開用・内部用とも） | 発生日時 |
@@ -1068,8 +1301,9 @@ Strict-Transport-Security: max-age=31536000
 | Drive フォルダURL | 件数（充足数・不足数） |
 | 同意記録の内容 | HTTPステータス |
 
-- ログ出力の共通関数で `/f/[A-Za-z0-9_-]{43}` と既知の秘密値パターンを
-  `[REDACTED]` へ置換する（マスクは出力の直前に一箇所で行い、実装ごとに散らさない）。
+- ログ出力の共通関数で **base64url 43文字の連続**（token / session secret）と
+  既知の秘密値パターンを `[REDACTED]` へ置換する
+  （マスクは出力の直前に一箇所で行い、実装ごとに散らさない）。
 - 通知メールにも**案件番号のみ**を書く。本文・個人情報・Drive URL を入れない。
 
 ### 10.8 管理画面
@@ -1119,21 +1353,36 @@ Strict-Transport-Security: max-age=31536000
 
 **データモデル上の矛盾は残していない。以下は運用値と実装手段の未確定である。**
 
+### 12.1 R2 で確定した事項（未確定から外したもの）
+
+| 旧# | 事項 | 確定内容 | 反映先 |
+|---|---|---|---|
+| 2 | XServer の SQLite / PDO 対応 | **pdo_sqlite=true / SQLite3=true / SQLite 3.26.0 / VACUUM INTO 不可** | §0.2・§2.0.1・§9.6・§9.6.1 |
+| 4 | 既存 contact.php の本番配置状況 | **配置済み**（405 / Allow: POST・Origin検査が実効） | §0.2（記録） |
+| 7 | メール送信方式 | **mail() を採用**（Phase 1）。内容は案件番号・提出日時・イベント種別のみ | §0.2 |
+| 8 | rate limit 値・自動保存間隔 | **確定**（無効token 10分5回／保存 10分60回／提出 10分5回／自動保存30秒） | §0.2 |
+| — | token 初回交換方式 | **`/start#<token>` → POST → Cookie 方式を正式採用** | §4.2・§4.7・§2.6 |
+| — | display_errors | **本番の必須要件として明文化**（Off / log_errors On / error_log は public_html 外） | §10.4.1・§10.6 |
+
+### 12.2 残る未確定事項
+
 | # | 事項 | 影響 | 確定させる工程 |
 |---|---|---|---|
-| 1 | **管理画面の認証方式** | §10.8。テーブル定義（セッション/アカウント）も未定義のまま | **4D 着手前** |
-| 2 | **XServer の SQLite / PDO 対応の実測** | `pdo_sqlite` 拡張の有無・`VACUUM INTO` の可否 | 4B 着手前（代表のサーバーパネル確認） |
-| 3 | **intake.smartlaboworks.com のサブドメイン・SSL 設定** | 到達性そのもの | 4H（代表作業） |
-| 4 | **既存 contact.php の本番配置状況** | 会社サイトの問い合わせが機能しているか。intake より優先度が高い可能性 | 代表確認（本件と独立） |
-| 5 | **Google Drive の実フォルダ命名規則** | `drive_folder_label` の中身 | 4C 着手前 |
-| 6 | **本番バックアップ先** | §9.5 の具体（XServer 内／代表PC／その他） | 4G |
-| 7 | **メール送信方式** | mail() か SMTP か（contact-api / xserver-form のどちらの方式に寄せるか） | 4B |
-| 8 | **具体的な rate limit 値・自動保存間隔** | §10.2・§6.1。**データモデルは値に依存しない** | 4B |
-| 9 | **1案件あたりの配列上限値** | §3 に**設計既定値**（menus 60 / staff 30 / images 60 等）を置いた。<br>運用実績で調整する余地を残す | 4B（既定値のまま進めてよい） |
+| 1 | **管理画面の認証方式** | §10.8。管理画面用のセッション/アカウント表も未定義のまま<br>（§2.6 `intake_sessions` は**店舗向け**であり管理画面用ではない） | **4D 着手前** |
+| 2 | **intake.smartlaboworks.com のサブドメイン・SSL 設定** | 到達性そのもの。現状は未設定（ワイルドカードDNSで到達するのみ・証明書は `*.xserver.jp`） | 4H（代表作業） |
+| 3 | **Google Drive の実フォルダ命名規則** | `drive_folder_label` の中身 | 4C 着手前 |
+| 4 | **本番バックアップ先の具体パス** | §9.5。domain root が書込可であることは実測済み（§0.2） | 4G |
+| 5 | **mail() の実送信確認** | 関数・sendmail 設定の存在までを実測。**実送信は未確認** | 4H（宛先は当社 info@ のみ） |
+| 6 | **1案件あたりの配列上限値** | §3 に**設計既定値**（menus 60 / staff 30 / images 60 等）を置いた。<br>運用実績で調整する余地を残す | 4B（既定値のまま進めてよい） |
+| 7 | **ローカル開発環境の php.ini** | ローカルは `php.ini` 未読込のため pdo_sqlite / openssl / mbstring が無効。<br>DLL は同梱済みで、有効化すれば解決する | 4B 冒頭（代表判断は不要） |
 
-> ★#9 について: 本書の上限値は**実装既定値として確定**しており、
+> ★§12.2-6 について: 本書の上限値は**実装既定値として確定**しており、
 > これに従えばモデルは成立する。Phase 1 の運用記録（仕様書 §20）を見て
 > 次版で見直す、という意味での「未確定」である。
+>
+> ★**データモデル上の矛盾は残していない。**
+> v1.1 に残っていた唯一の矛盾（`VACUUM INTO` を第一手段とする記述と
+> 本番 SQLite 3.26.0 の非対応）は、本 R2 で解消した。
 
 ---
 
@@ -1153,6 +1402,8 @@ Strict-Transport-Security: max-age=31536000
 | Stripe | 価格SSOT §12-5（お金は Stripe、管理は案件管理） | §1・§8 で intake から完全に分離 |
 | 画像受領 | 仕様書 §12.7（クラウド共有フォルダ・1店舗1フォルダ） | §7 で Google Drive として具体化 |
 | 5営業日の起算 | 仕様書 §1（着手可能日） | 本書は起算日を定義しない（仕様書に従う） |
+| 確認用URLの秘匿 | 仕様書 §18.1（noindex は認証ではない） | §4.2 で **token を URL fragment に置き、リクエストへ送らない**方式を採用。<br>ログ・Referer・プロキシに残さない |
+| エラー詳細の非表示 | 仕様書 §10.6 相当（詳細を外部へ出さない） | §10.4.1 で **`display_errors=Off` を本番必須要件**として明文化 |
 
 ---
 
@@ -1207,3 +1458,4 @@ HP-ONBOARDING-4A-R1 で次の順序へ変更した。
 |---|---|---|
 | **v1.0** | 2026-08-26 | 制定（HP-ONBOARDING-4A）。システム境界5系／SQLite 5テーブル（intake_cases・intake_tokens・intake_answers・intake_submission_history・intake_audit_events）／JSON 11カテゴリのデータパス・型・上限・公開内部区分・HTML出力処理・空値／token 規則（random_bytes(32)・base64url 43文字・SHA-256 hash のみ保存・14日・1案件1本・失効・同一エラー文言・漏えい経路と対策）／状態遷移6状態と操作許可表／途中保存と楽観ロック／Google Drive 運用／保存禁止15種／保持削除バックアップ／セキュリティ／Phase 1 境界／未確定9件 を確定 |
 | **v1.1（R1）** | 2026-08-26 | 改定（HP-ONBOARDING-4A-R1・代表承認）。**AI Sales を保存先・連携先とする記述をすべて撤回**し、契約後管理先を内部専用 **Smart Labo Operations**（社内管理上の仮称・未実装）へ置き換えた。§0.1 に R1 の正式決定10件を追加。§1 の系を **HP Intake / Smart Labo 管理 / Google Drive / Smart Labo Operations / Stripe / AI Sales** へ再定義し、AI Sales は**営業支援専用・連携しない**という境界説明のみに限定。§1.1 の越えてはならない線を7条へ。§1.2 Operations の位置づけ／§1.3 Operations 未実装時の標準管理票運用（GitHubへ保存しない・intake自由記述へ押し込まない・AI Salesへ入力しない）／§1.4 AI Sales の位置づけ を新設。§3.11・§3.12・§5.4・§8・§9.3・§9.4・§10.7・§11.2・§13 の該当記述を Operations へ是正。**§14 今後の工程順序**（4B〜4F → OPS-1〜OPS-4。OPS-4 は検証済み書き出しデータの取込から開始）と **§15 AI Sales の商品化境界**（参考節）を新設。旧 §14 変更履歴を **§16** へ繰り下げ。**intake 5テーブル・JSON 11分類・token 規則・状態遷移・途中保存・Drive 運用・保持削除・セキュリティ要件は一切変更していない。** |
+| **v1.2（R2）** | 2026-08-27 | 改定（HP-ONBOARDING-4A-R2・代表承認）。**XServer 実測（-4B-PRE / 2026-08-27）を反映**。§0.2 に実測値・確定運用値・本番環境の記録を新設。**`VACUUM INTO` を撤回**し（本番 SQLite **3.26.0** のため使用不可）、**`SQLite3::backup()` を第一手段**へ変更（§9.6・§9.6.1 新設）。**§2.0.1 SQLite 3.26.0 互換サブセット**を新設（使用禁止機能・使用可機能・起動時ガード・4E での静的チェック）。**§2.6 `intake_sessions` を追加**（5表 → **6表**）。旧 §2.6 を §2.7 へ繰り下げ。**token 初回交換方式を正式採用**（`/start#<token>` → `POST /session/start` → Secure / HttpOnly / SameSite=Strict Cookie。§4.2 全面書き換え・§4.5 を (A)(B) の2段へ・§4.7 を「設計候補」から「正式採用」へ）。**§10.4.1 PHP 設定（display_errors=Off / display_startup_errors=Off / log_errors=On / error_log は public_html 外）を本番必須要件として新設**し、§10.6 へ反映。§10.7 のマスク対象へ session secret を追加。§12 を §12.1（R2 で確定：SQLite/PDO・contact.php 配置済み・mail() 採用・rate limit 値・token 交換方式・display_errors）と §12.2（残る未確定7件）へ再編。§13 へ2行追加。**JSON 11分類・§3 の全データパス・状態遷移・途中保存・Google Drive 運用・保持削除規則・保存禁止15種は一切変更していない。** |
