@@ -67,6 +67,8 @@ UI アイコン（線画のピクトグラム）は Claude Code が inline SVG �
 
 ## 判断に迷ったときの順序
 
+0. **MASTER COMP（`references/MASTER_COMP.md`）を見たか** → デザインはこれが最優先。
+   ただし掲載内容は営業SSOTが優先。カンプに描かれていても未提供機能は載せない
 1. **正式素材はあるか** → あればそれを主役に据える
 2. **参考画像・カンプはあるか** → その情報密度とレイアウトを再構築する
 3. **どちらも無いか不足か** → 勝手に埋めない。placeholder として明示し、素材待ちを報告する
@@ -80,9 +82,13 @@ UI アイコン（線画のピクトグラム）は Claude Code が inline SVG �
 
 | ファイル | 読むべき場面 |
 |---|---|
+| **`references/MASTER_COMP.md`** | **最優先。デザインを決める前に必ず読む。** 代表承認の完成カンプ（DESIGN SSOT）の役割、継承する要素、コピー禁止の内容、カンプ→正式仕様の変換表 |
 | `references/DESIGN_PRINCIPLES.md` | 配色・情報密度・人物の扱い・吹き出し・非対称レイアウト・モバイル方針を決めるとき |
 | `references/PAGE_STRUCTURE.md` | セクション構成を決めるとき、各セクションの見せ方を選ぶとき |
 | `references/IMPLEMENTATION_RULES.md` | 実装・画像最適化・アクセシビリティ・namespace・確認手順 |
+
+素材計画・再構築ロードマップは
+`docs/reviews/SALON_MASTER_COMP_REBUILD_PLAN.md` にある。
 
 ---
 
