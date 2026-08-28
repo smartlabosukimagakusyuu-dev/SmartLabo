@@ -60,6 +60,11 @@
 <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
 
+<!-- HERO画像はこのページのLCP要素。CSSの解析を待たずに取得を始めるため先読みする。
+     ★Salonページ限定・HERO画像1点のみ。他の画像へは preload を付けない
+       （増やすと帯域を奪い、かえってLCPが悪化する）。 -->
+<link rel="preload" as="image" href="assets/images/salon/lp/salon-lp-hero-staff.webp" fetchpriority="high">
+
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Smart Labo">
 <meta property="og:title" content="Smart Labo Salon｜予約・顧客カルテ・再来店をひとつに">
@@ -193,13 +198,12 @@
 <main id="main">
 
   <!-- ============================== 02. ファーストビュー ==============================
-       ★左：コピー／3メリット／CTA　右：サロンスタッフのビジュアル＋浮遊UI
-       ★右のビジュアルは、正式な人物写真が入るまでの間も「白い箱」にしないため、
-         インラインSVGのフラットイラストで完成形を作っている。
-         正式写真への差し替え手順：
-           .sa-hv__art の中の <svg class="sa-hv__illust"> を
-           <img src="assets/images/salon/hero-staff.webp" width="640" height="620" alt="..."> に置き換える。
-           浮遊UI（.sa-chip / .sa-hv__badge）と枠・角丸・影はそのまま使える。
+       ★Phase 4B で正式素材へ切り替えた面。
+         左：ブランド表示／H1／短い説明／3メリット／CTA2件／補助説明
+         右：正式HEROビジュアル（assets/images/salon/lp/salon-lp-hero-staff.webp）
+       ★Phase 3 の人物 inline SVG（.sa-hv__illust）と浮遊チップ4種（.sa-chip）は、
+         正式画像に同じ情報（予約・カルテ・WEB予約・接客メモ・LINE）が含まれるため撤去した。
+         HERO以外のセクションのSVGには触れていない。
        ★効果の断定（売上◯%アップ等）は書かない。営業SSOT §18 の禁止表現に該当するため。 -->
   <section class="sa-hero" id="hero" aria-labelledby="hero-title">
     <div class="container sa-hero__inner">
@@ -215,9 +219,12 @@
           <span class="sa-nb">もっと</span><span class="sa-nb sa-mark">スマートに。</span>
         </h1>
 
+        <!-- ★参考コピーの「HP・集客・予約…」は、営業SSOT §13・§18 が
+             「HP制作」を Salon 標準商品として表現することを禁じているため
+             「店舗ページ」に置き換えている（独自ドメインHP制作は別サービス）。 -->
         <p class="sa-hero__sub">
-          予約・カルテ・接客メモのAI整理・LINEでの再来店のご案内まで。<br>
-          サロンの毎日をひとつにまとめる、オールインワンの店舗運営サービス。
+          店舗ページ・集客・予約・接客・リピートまでを<br>
+          ひとつにつなぐ、サロンのためのサービス。
         </p>
 
         <ul class="sa-merits">
@@ -229,9 +236,9 @@
           </li>
           <li>
             <span class="sa-merits__ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-6M22 19H2"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
             </span>
-            売上につなげる
+            リピーターにつなげる
           </li>
           <li>
             <span class="sa-merits__ico" aria-hidden="true">
@@ -248,91 +255,33 @@
         <p class="sa-note">実際の画面をご覧いただきながらご説明します。無理な営業は行いません。</p>
       </div>
 
-      <!-- 右：一枚の広告ビジュアル（イラスト＋浮遊UI） -->
+      <!-- 右：正式HEROビジュアル（ChatGPT制作・Phase 4B で inline SVG から差し替え）
+           ★この画像は明るいサロン・タブレットを操作するスタッフ・予約カレンダー・
+             顧客カルテ・WEB予約・接客メモ・LINE配信のUIを含む完成ビジュアル。
+             Phase 3 でHTML側に置いていた浮遊チップ（AIサポート／予約／カルテ／LINE）は
+             画像内と二重になるため撤去した。
+           ★画像はPNG由来の透過付きWebP。四辺がフェードしているため、
+             背景のグラデーションに自然に溶ける。枠線・角丸・切り抜きは掛けない。
+           ★LCP要素。loading属性を付けず fetchpriority="high"、head で preload している。
+             width/height を実寸で書きCLSを防ぐ。object-fit は使わない（顔・タブレットが切れるため）。 -->
       <div class="sa-hero__visual">
         <div class="sa-hv">
-          <div class="sa-hv__art">
-            <svg class="sa-hv__illust" viewBox="0 0 520 500" role="img"
-                 aria-label="タブレットで Smart Labo Salon を操作するサロンスタッフのイラスト">
-              <!-- 背景の丸と鏡 -->
-              <circle cx="262" cy="240" r="196" fill="#FBE1E8"/>
-              <rect x="118" y="72" width="288" height="248" rx="140" fill="#FFF4EC"/>
-              <rect x="146" y="98" width="232" height="196" rx="112" fill="#FFFFFF" opacity=".72"/>
-              <!-- 観葉植物 -->
-              <path d="M62 430c0-42 14-74 30-74s30 32 30 74z" fill="#EAD9C6"/>
-              <path d="M92 356c-26-18-30-52-16-78 22 10 34 44 16 78z" fill="#D9BFA6"/>
-              <path d="M92 356c24-20 26-54 10-78-22 12-30 46-10 78z" fill="#E8D2BC"/>
-              <!-- 人物：体 -->
-              <path d="M180 500c0-58 36-100 82-100s82 42 82 100z" fill="#C2415F"/>
-              <path d="M228 404h68v34c0 18-15 30-34 30s-34-12-34-30z" fill="#F2C9D3"/>
-              <!-- エプロン -->
-              <path d="M228 442h68l16 58H212z" fill="#FFF4EC"/>
-              <path d="M244 442h36v18h-36z" fill="#EAD9C6"/>
-              <!-- 首・顔 -->
-              <rect x="246" y="376" width="32" height="40" rx="16" fill="#F6D9C4"/>
-              <circle cx="262" cy="342" r="56" fill="#F9E3D2"/>
-              <!-- 髪 -->
-              <path d="M262 280c40 0 62 26 62 60 0 12-4 22-8 28-4-24-14-38-30-44-16 24-52 26-70 8-6 12-8 24-6 36-6-8-10-18-10-28 0-34 22-60 62-60z" fill="#4A3A34"/>
-              <!-- 目・口 -->
-              <path d="M243 340c3-4 9-4 12 0M269 340c3-4 9-4 12 0" stroke="#4A3A34" stroke-width="4" stroke-linecap="round" fill="none"/>
-              <path d="M254 362c5 5 13 5 18 0" stroke="#C2415F" stroke-width="4" stroke-linecap="round" fill="none"/>
-              <!-- 腕とタブレット -->
-              <path d="M196 452c-14-16-14-40 2-52l30-20 20 28-28 20c-6 4-6 12-2 18z" fill="#A8324E"/>
-              <g transform="rotate(-9 330 420)">
-                <rect x="286" y="366" width="150" height="112" rx="12" fill="#3A2E33"/>
-                <rect x="294" y="374" width="134" height="96" rx="7" fill="#FFFFFF"/>
-                <rect x="302" y="382" width="52" height="9" rx="4.5" fill="#C2415F"/>
-                <rect x="302" y="398" width="118" height="8" rx="4" fill="#F2C9D3"/>
-                <rect x="302" y="412" width="94" height="8" rx="4" fill="#EFE3D8"/>
-                <rect x="302" y="426" width="106" height="8" rx="4" fill="#EFE3D8"/>
-                <rect x="302" y="444" width="44" height="16" rx="8" fill="#C2415F"/>
-                <rect x="354" y="444" width="44" height="16" rx="8" fill="#F6D9C4"/>
-              </g>
-              <!-- 反対の腕 -->
-              <path d="M330 448c16-8 26-24 22-42l-8-34-32 8 8 32c2 8-2 14-10 16z" fill="#A8324E"/>
-              <!-- はさみ（小物） -->
-              <g stroke="#A8511F" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85">
-                <circle cx="424" cy="150" r="11"/><circle cx="424" cy="188" r="11"/>
-                <path d="M416 142l-48 54M416 196l-48-54"/>
-              </g>
-            </svg>
+          <img class="sa-hv__img"
+               src="assets/images/salon/lp/salon-lp-hero-staff.webp"
+               width="1536" height="1024"
+               fetchpriority="high"
+               alt="Smart Labo Salon をタブレットで利用するサロンスタッフと、予約カレンダー・顧客カルテ・WEB予約・接客メモ・LINE配信の画面イメージ">
 
-            <!-- 浮遊UI：一枚の広告ビジュアルに見せるための重ね要素 -->
-            <p class="sa-hv__badge" aria-label="先着20店舗 創業メンバー募集中">
-              <b>先着<em>20</em>店舗</b>
-              <span>創業メンバー<br>募集中</span>
-            </p>
-
-            <p class="sa-chip sa-chip--ai">
-              <span class="sa-chip__ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.4L18.5 9l-4.6 1.6L12 15l-1.9-4.4L5.5 9l4.6-1.6z"/><path d="M18 16l.8 1.9 2 .8-2 .8L18 21.5l-.8-2-2-.8 2-.8z"/></svg>
-              </span>
-              AIがサロン業務をサポート
-            </p>
-
-            <p class="sa-chip sa-chip--book">
-              <span class="sa-chip__ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg>
-              </span>
-              予約
-            </p>
-
-            <p class="sa-chip sa-chip--karte">
-              <span class="sa-chip__ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6v2H9z"/><path d="M15 5h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3"/><path d="M8 12h8M8 16h5"/></svg>
-              </span>
-              カルテ
-            </p>
-
-            <p class="sa-chip sa-chip--line">
-              <span class="sa-chip__ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v10H9l-4 3.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
-              </span>
-              LINE
-            </p>
-          </div>
+          <!-- 「先着20店舗」だけはHTMLで維持する（検索性・更新性のため画像に焼かない）。
+               ★画像の右上には「24時間予約受付」の丸バッジが描かれているため、
+                 右上へ置くとバッジ同士が重なる。人物の顔・タブレット・右側のUIも隠さない
+                 左上（ぼかしたサロン背景の余白）へ配置している。 -->
+          <p class="sa-hv__badge">
+            <b>先着<em>20</em>店舗</b>
+            <span>創業メンバー募集中</span>
+          </p>
         </div>
-        <p class="sa-hv__note">※イラストはイメージです。</p>
+        <p class="sa-hv__note">※画像はイメージです。掲載しているUIはデモ用の架空データです。</p>
       </div>
 
     </div>
