@@ -168,13 +168,11 @@
     </a>
 
     <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
-      <!-- ↓CTA2件はスマホドロワー用の相談導線（1081px以上ではrenewal.cssで非表示） -->
       <a class="site-nav__cta" href="#screens">実際の画面を見る</a>
-      <a href="#features">機能</a>
-      <a href="#benefits">変わること</a>
+      <a href="#features">機能紹介</a>
+      <a href="#benefits">導入メリット</a>
       <a href="#screens">実際の画面</a>
-      <a href="#revisit">攻める集客</a>
-      <a href="#pricing">料金</a>
+      <a href="#pricing">料金プラン</a>
       <a href="#faq">よくある質問</a>
       <a class="site-nav__cta" href="contact.html?type=consult&amp;topic=salon#interests">無料で相談してみる</a>
     </nav>
@@ -403,101 +401,80 @@
   </section>
 
 
-  <!-- ============================== 05. できること／実画面 ==============================
-       ★Phase D0: 「白いフレーム＋3列カード」をやめ、MASTER COMP の
-         「左に説明・右に実画面」の非対称レイアウトへ作り替えた。
-         行ごとに左右を入れ替え、均一グリッドに見えないようにしている。
-       ★実画面を小さなカードへ閉じ込めない。1行につき1枚を大きく見せる。
-       ★実画面は既存の正式スクリーンショット4点をそのまま使用している。
-         未取得の画面（予約管理カレンダー・オーナー件数表示）について
-         代替SVGは作らない。文章で補い、素材が届いたら差し込む。
+  <!-- ============================== 05. Smart Labo Salonでできること ==============================
+       ★MASTER COMP 準拠: 左に番号付きの機能説明（約32%）、右に実画面を2x2で
+         まとめて大きく見せる（約68%）。実画面1枚ごとに巨大なブロックを作らない。
+       ★正式スクリーンショット4点をそのまま使用。不足する画面（予約管理カレンダー・
+         オーナー件数表示）について架空UIは作らない。文章で補っている。
        ★実画面はデモ用の架空データ。節の末尾に必ず明示する。 -->
-  <section class="sa-section sa-section--fadein" id="screens" aria-labelledby="screens-title">
-    <div class="container">
+  <section class="sa-section" id="screens" aria-labelledby="screens-title">
+    <div class="sa-wrap">
 
-      <div class="sa-scr__head">
-        <p class="sa-eyebrow">実際の画面</p>
-        <h2 class="sa-h2 sa-h2--left" id="screens-title">これが、<span class="sa-mark">実際に使う画面</span>です。</h2>
-        <p class="sa-lead">お客様が予約する入口から、接客の記録、次のご来店のご案内までが1本につながります。</p>
-      </div>
+      <p class="sa-deco-h2" aria-hidden="true">✦</p>
+      <h2 class="sa-h2 sa-h2--center sa-h2--pink" id="screens-title">Smart Labo Salon でできること</h2>
 
-      <!-- 01 店舗ページ：左に説明＋吹き出し／右に大きな実画面 -->
-      <div class="sa-scr reveal">
-        <div class="sa-scr__text">
-          <p class="sa-scr__no"><span aria-hidden="true">01</span>お客様の入口</p>
-          <h3 class="sa-scr__title">店舗ページから、24時間WEB予約。</h3>
-          <ul class="sa-scr__points">
-            <li><b>24時間WEB予約</b>営業時間外でも予約が入ります</li>
-            <li><b>写真・メニュー</b>店舗の管理画面から自分で更新</li>
-            <li><b>予約が入ると通知</b>店舗宛てにメールが届きます</li>
-          </ul>
+      <div class="sa-can2">
+
+        <ol class="sa-can2__list">
+          <li>
+            <span class="sa-can2__no" aria-hidden="true">1</span>
+            <b>お客様の入口をひとつに</b>
+            <span>店舗ページから24時間WEB予約を受付。写真・メニュー・営業時間は管理画面から更新できます。</span>
+          </li>
+          <li>
+            <span class="sa-can2__no" aria-hidden="true">2</span>
+            <b>予約・管理をラクに</b>
+            <span>WEB予約・手動での予約登録・予約なしのご来店を同じ画面へ。予約を受けない時間帯も設定できます。</span>
+          </li>
+          <li>
+            <span class="sa-can2__no" aria-hidden="true">3</span>
+            <b>接客をもっと質の高いものに</b>
+            <span>接客後の30秒メモをAIが整理し、スタッフが確認して保存。次回来店前に前回の内容が並びます。</span>
+          </li>
+          <li>
+            <span class="sa-can2__no" aria-hidden="true">4</span>
+            <b>再来店のきっかけをつくる</b>
+            <span>最終来店日や利用メニューで対象を絞り、LINEでスタッフが確認して1名ずつお送りします。</span>
+          </li>
+          <li>
+            <span class="sa-can2__no" aria-hidden="true">5</span>
+            <b>お店の状況を数字で把握</b>
+            <span>予約・来店・新規／再来店などを件数で確認。PIN保護・CSV書き出し。※売上金額の分析は含まれていません。</span>
+          </li>
+        </ol>
+
+        <div class="sa-can2__grid">
+          <figure class="sa-ui">
+            <figcaption class="sa-ui__cap">店舗ページ（例）</figcaption>
+            <div class="sa-ui__frame">
+              <img src="assets/images/salon/salon-public-shop.webp" width="1040" height="1803" loading="lazy" decoding="async"
+                   alt="店舗の紹介・メニュー・スタッフ・写真が掲載された、お客様から見える店舗ページ">
+            </div>
+          </figure>
+          <figure class="sa-ui">
+            <figcaption class="sa-ui__cap">30秒メモ（例）</figcaption>
+            <div class="sa-ui__frame">
+              <img src="assets/images/salon/salon-ui-memo-phone.webp" width="1040" height="1726" loading="lazy" decoding="async"
+                   alt="接客のあとにスマートフォンから短い接客メモを入力している画面">
+            </div>
+          </figure>
+          <figure class="sa-ui">
+            <figcaption class="sa-ui__cap">AIが整理した内容の確認（例）</figcaption>
+            <div class="sa-ui__frame">
+              <img src="assets/images/salon/salon-ui-ai-review.webp" width="1360" height="1581" loading="lazy" decoding="async"
+                   alt="AIが整理した接客内容を項目ごとに表示し、残すかどうかをスタッフが確認して選ぶ画面">
+            </div>
+          </figure>
+          <figure class="sa-ui">
+            <figcaption class="sa-ui__cap">次回来店の接客準備（例）</figcaption>
+            <div class="sa-ui__frame">
+              <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128" loading="lazy" decoding="async"
+                   alt="前回のポイント・前回の会話・今回の提案候補をまとめて表示した、次回来店前の接客準備の画面">
+            </div>
+          </figure>
         </div>
-        <figure class="sa-scr__shot">
-          <div class="sa-shot__chrome" aria-hidden="true"><span></span><span></span><span></span><b>お客様から見える店舗ページ</b></div>
-          <img src="assets/images/salon/salon-public-shop.webp" width="1040" height="1803" loading="lazy" decoding="async"
-               alt="店舗の紹介・メニュー・スタッフ・写真が掲載された、お客様から見える店舗ページ">
-        </figure>
+
       </div>
-
-      <p class="sa-scr__bridge">接客のあとの30秒が、次のご来店の準備になります。</p>
-
-      <!-- 02 30秒メモ：右に説明／左に実画面（左右を入れ替えて均一に見せない） -->
-      <div class="sa-scr sa-scr--flip reveal">
-        <div class="sa-scr__text">
-          <p class="sa-scr__no"><span aria-hidden="true">02</span>接客のあと</p>
-          <h3 class="sa-scr__title">スマホで、その場で30秒。</h3>
-          <p class="sa-scr__desc">接客直後に短いメモを残すだけ。あとから思い出して書く必要がありません。</p>
-        </div>
-        <figure class="sa-scr__shot sa-scr__shot--phone">
-          <div class="sa-shot__chrome" aria-hidden="true"><span></span><span></span><span></span><b>30秒メモ</b></div>
-          <img src="assets/images/salon/salon-ui-memo-phone.webp" width="1040" height="1726" loading="lazy" decoding="async"
-               alt="接客のあとにスマートフォンから短い接客メモを入力している画面">
-        </figure>
-      </div>
-
-      <!-- 03 AI整理 -->
-      <div class="sa-scr reveal">
-        <div class="sa-scr__text">
-          <p class="sa-scr__no"><span aria-hidden="true">03</span>AIが整理</p>
-          <h3 class="sa-scr__title">残す内容は、人が決める。</h3>
-          <p class="sa-scr__desc">AIが読みやすい形に整理し、スタッフが1件ずつ確認して選びます。自動で記録されたり公開されたりすることはありません。</p>
-        </div>
-        <figure class="sa-scr__shot">
-          <div class="sa-shot__chrome" aria-hidden="true"><span></span><span></span><span></span><b>AIが整理した内容の確認</b></div>
-          <img src="assets/images/salon/salon-ui-ai-review.webp" width="1360" height="1581" loading="lazy" decoding="async"
-               alt="AIが整理した接客内容を項目ごとに表示し、残すかどうかをスタッフが確認して選ぶ画面">
-        </figure>
-      </div>
-
-      <!-- 04 接客準備 -->
-      <div class="sa-scr sa-scr--flip reveal">
-        <div class="sa-scr__text">
-          <p class="sa-scr__no"><span aria-hidden="true">04</span>次のご来店前</p>
-          <h3 class="sa-scr__title">思い出すところから、始めない。</h3>
-          <p class="sa-scr__desc">前回のポイント・前回の会話・今回の提案候補が来店前に並びます。担当が変わっても引き継げます。</p>
-        </div>
-        <figure class="sa-scr__shot">
-          <div class="sa-shot__chrome" aria-hidden="true"><span></span><span></span><span></span><b>次回来店の接客準備</b></div>
-          <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128" loading="lazy" decoding="async"
-               alt="前回のポイント・前回の会話・今回の提案候補をまとめて表示した、次回来店前の接客準備の画面">
-        </figure>
-      </div>
-
-      <!-- 画面を持たない機能も、ここで漏れなく伝える（カードにしない） -->
-      <ul class="sa-scr__more">
-        <li>
-          <b>予約・来店をひとつの画面で</b>
-          <span>WEB予約・手動での予約登録・予約なしのご来店をまとめて管理。受付から接客終了までの状態が一覧で分かり、予約を受けない時間帯も設定できます。</span>
-        </li>
-        <li>
-          <b>再来店候補の件数と一覧</b>
-          <span>最終来店日・ご来店回数・受けたメニュー・担当・今後のご予約の有無などで対象を絞れます。<a href="#revisit">くわしくは「攻める集客」へ</a></span>
-        </li>
-        <li>
-          <b>オーナー向けの件数表示</b>
-          <span>予約・来店・新規／再来店・人気メニュー・スタッフ別の担当状況などを件数で確認。PINで保護され、CSVで書き出せます。※売上金額の分析・離脱予測・多店舗比較は含まれていません。</span>
-        </li>
-      </ul>
 
       <p class="sa-demo-note">※掲載画面はデモ用の架空データです。</p>
     </div>
@@ -647,94 +624,72 @@
 
 
   <!-- ============================== 08. 料金プラン ==============================
-       ★創業メンバープランを主役にし、月額を大きく、先着20店舗を円形バッジで示す。
-         Standard は基準として読めるが控えめ。打ち消し線・割引率は使わない。
-       ★ホームページ制作は Salon とは別商品であることが見た目で分かるよう、
-         暖色の別ブロックに分けている。
-       ★掲載値は代表承認済み（Phase 2 から変更なし）。 -->
+       ★MASTER COMP 準拠: 3プランを横一列で比較。色付きヘッダーバーで役割を示す。
+         創業メンバー=ピンク（主役） / Standard=ピンク / HP制作=オレンジ（別商品）。
+       ★縦に大きくせず、高密度の料金表にする。
+       ★価格・条件は正式SSOTのみ。打ち消し線・割引率・値引き表現は使わない。 -->
   <section class="sa-section sa-section--ivory" id="pricing" aria-labelledby="pricing-title">
-    <div class="container">
-      <p class="sa-eyebrow">料金プラン</p>
-      <h2 class="sa-h2 sa-h2--center" id="pricing-title">料金プラン</h2>
-      <p class="sa-lead sa-lead--center">
-        ご利用いただける機能は、どちらのプランも同じです。
-      </p>
+    <div class="sa-wrap">
 
-      <div class="sa-price">
+      <p class="sa-deco-h2" aria-hidden="true">✦</p>
+      <h2 class="sa-h2 sa-h2--center sa-h2--pink" id="pricing-title">料金プラン</h2>
 
-        <!-- 主役：創業メンバー -->
-        <div class="sa-price__main reveal">
-          <p class="sa-price__ribbon">先行導入プラン</p>
-          <p class="sa-price__circle" aria-hidden="true"><b>先着</b><em>20</em><span>店舗限定</span></p>
+      <div class="sa-plan3">
 
-          <h3 class="sa-price__name">創業メンバープラン</h3>
-          <p class="sa-price__big">
-            <span class="sa-price__mo">月額</span>
-            <span class="sa-price__num">14,800</span>
-            <span class="sa-price__yen">円</span>
-            <span class="sa-price__tax">（税別）</span>
-          </p>
-          <p class="sa-price__inc">税込 16,280円</p>
-
-          <ul class="sa-price__spec">
-            <li><span>Salon初期費用</span><b>0円</b></li>
-            <li><span>価格保証</span><b>24ヶ月</b></li>
-            <li><span>年間一括</span><b>148,000円（税別）</b></li>
-            <li><span>年間一括の目安</span><b>月払い10ヶ月分相当</b></li>
-            <li><span>最低契約期間</span><b>6ヶ月</b></li>
-          </ul>
-          <p class="sa-price__note">25ヶ月目以降は、その時点の Standard 通常価格へ移行します。</p>
-          <p class="sa-price__cta">
-            <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">創業メンバープランを相談する</a>
-          </p>
+        <div class="sa-plan3__col sa-plan3__col--main">
+          <p class="sa-plan3__bar">創業メンバープラン<span>先行導入・先着20店舗</span></p>
+          <div class="sa-plan3__body">
+            <p class="sa-plan3__price"><span class="u">月額</span><b>14,800</b><span class="y">円</span><span class="t">（税別）</span></p>
+            <p class="sa-plan3__tax">（税込16,280円）</p>
+            <ul class="sa-plan3__list">
+              <li>Salon初期費用：<b>0円</b></li>
+              <li>価格保証：<b>24ヶ月</b></li>
+              <li>25ヶ月目以降はその時点の Standard 通常価格へ移行</li>
+              <li>年間一括：<b>148,000円（税別）</b>（月払い10ヶ月分相当）</li>
+              <li>最低契約期間：6ヶ月</li>
+            </ul>
+            <p class="sa-plan3__cta"><a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary">このプランを相談する</a></p>
+          </div>
+          <p class="sa-plan3__badge" aria-hidden="true">先着<em>20</em>店舗限定</p>
         </div>
 
-        <!-- 基準：Standard（控えめ） -->
-        <div class="sa-price__sub reveal">
-          <p class="sa-price__label">通常価格</p>
-          <h3 class="sa-price__name sa-price__name--sub">Standard</h3>
-          <p class="sa-price__big sa-price__big--sub">
-            <span class="sa-price__mo">月額</span>
-            <span class="sa-price__num">19,800</span>
-            <span class="sa-price__yen">円</span>
-            <span class="sa-price__tax">（税別）</span>
-          </p>
-          <p class="sa-price__inc">税込 21,780円</p>
-          <ul class="sa-price__spec">
-            <li><span>Salon初期費用</span><b>30,000円（税別）</b></li>
-            <li><span>年間一括</span><b>198,000円（税別）</b></li>
-            <li><span>年間一括の目安</span><b>月払い10ヶ月分相当</b></li>
-            <li><span>最低契約期間</span><b>6ヶ月</b></li>
-          </ul>
-          <p class="sa-price__cta">
-            <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--secondary">料金について相談する</a>
-          </p>
+        <div class="sa-plan3__col">
+          <p class="sa-plan3__bar sa-plan3__bar--std">Standardプラン<span>通常価格</span></p>
+          <div class="sa-plan3__body">
+            <p class="sa-plan3__price"><span class="u">月額</span><b>19,800</b><span class="y">円</span><span class="t">（税別）</span></p>
+            <p class="sa-plan3__tax">（税込21,780円）</p>
+            <ul class="sa-plan3__list">
+              <li>Salon初期費用：<b>30,000円（税別）</b></li>
+              <li>年間一括：<b>198,000円（税別）</b>（月払い10ヶ月分相当）</li>
+              <li>最低契約期間：6ヶ月</li>
+              <li>ご利用いただける機能は創業メンバープランと同じです</li>
+            </ul>
+            <p class="sa-plan3__cta"><a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--secondary">料金について相談する</a></p>
+          </div>
         </div>
+
+        <div class="sa-plan3__col sa-plan3__col--hp">
+          <p class="sa-plan3__bar sa-plan3__bar--hp">ホームページ制作<span>別サービス</span></p>
+          <div class="sa-plan3__body">
+            <p class="sa-plan3__price sa-plan3__price--hp"><b>50,000</b><span class="y">円〜</span><span class="t">（税別）</span></p>
+            <p class="sa-plan3__tax">Salon初期費用とは別です</p>
+            <ul class="sa-plan3__list sa-plan3__list--hp">
+              <li>5〜10程度の標準デザインパターン</li>
+              <li>スマホ対応・SSL対応・SEO基本対策</li>
+              <li>Salonとの導線設計</li>
+              <li>最大5ページ相当・修正2回まで</li>
+              <li>標準範囲を超える構成・機能・個別デザインは追加見積り</li>
+            </ul>
+            <p class="sa-plan3__cta"><a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--secondary">制作について相談する</a></p>
+          </div>
+        </div>
+
       </div>
 
-      <!-- 別商品であることが分かる、暖色の別ブロック -->
-      <div class="sa-hpprice reveal">
-        <div class="sa-hpprice__head">
-          <span class="sa-hpprice__tag">別サービス</span>
-          <h3 class="sa-hpprice__name">ホームページ制作</h3>
-          <p class="sa-hpprice__price"><b>50,000</b>円〜<span>（税別）</span></p>
-          <p class="sa-hpprice__sub">Salon初期費用とは別です</p>
-        </div>
-        <ul class="sa-hpprice__list">
-          <li>5〜10程度の標準デザインパターン</li>
-          <li>スマホ対応</li>
-          <li>SSL対応</li>
-          <li>SEO基本対策</li>
-          <li>Salonとの導線設計</li>
-          <li>最大5ページ相当・修正2回まで</li>
-        </ul>
-        <p class="sa-hpprice__note">標準範囲を超えるページ構成・機能・個別デザイン等は、追加見積りとなります。</p>
-      </div>
-
-      <p class="sa-note">
-        ※お支払いは、クレジットカードによる月額自動決済を標準としています。初月の日割りはありません。<br>
-        ※LINE公式アカウントのご契約料金・メッセージ通数の料金は、月額には含まれず店舗のご負担となります。<br>
-        ※契約条件の詳細は、ご契約前に契約書と料金確認書でご説明します。
+      <p class="sa-note sa-note--center">
+        ※お支払いはクレジットカードによる月額自動決済を標準としています。初月の日割りはありません。
+        LINE公式アカウントのご契約料金・メッセージ通数の料金は月額に含まれず店舗のご負担となります。
+        契約条件の詳細は、ご契約前に契約書と料金確認書でご説明します。
       </p>
     </div>
   </section>
@@ -743,7 +698,7 @@
   <!-- ============================== 09. ホームページから、集客の仕組みをつくる ==============================
        ★「HP制作」を Salon 標準商品として書かない（営業SSOT §13・§18）。
          別サービスとして案内し、Salon とつながることを図で示す。 -->
-  <section class="sa-section sa-section--warm" id="website" aria-labelledby="web-title">
+  <section class="sa-section sa-section--pinktint" id="website" aria-labelledby="web-title">
     <div class="container">
       <p class="sa-eyebrow">ホームページ制作</p>
       <h2 class="sa-h2 sa-h2--left" id="web-title">ホームページから、<span class="sa-nb"><span class="sa-mark">集客の仕組み</span>をつくる。</span></h2>
@@ -790,7 +745,7 @@
 
 
   <!-- ============================== 10. 導入までの流れ（6STEP） ============================== -->
-  <section class="sa-section sa-section--fadeout" id="flow" aria-labelledby="flow-title">
+  <section class="sa-section" id="flow" aria-labelledby="flow-title">
     <div class="container">
       <p class="sa-eyebrow">導入までの流れ</p>
       <h2 class="sa-h2 sa-h2--left" id="flow-title">ご相談から、<span class="sa-nb">運用開始まで。</span></h2>
