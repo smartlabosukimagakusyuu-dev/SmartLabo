@@ -30,6 +30,10 @@ final class Audit
         'retention_due_set', 'retention_purged', 'audit_purged', 'admin_sessions_purged',
         // 4F-R3（SSOT v1.9 §3.12）
         'admin_settings_saved',
+        // 4G（SSOT v1.11 §2.5 / §9.5）
+        // ★バックアップの処理状態も**この表**へ残す。新しい表は作らない。
+        //   記録するのは種別と結果コードだけで、ファイル名・パス・件数は書かない。
+        'backup_created', 'backup_restore_drill', 'backup_cleanup', 'backup_generations_purged',
     ];
 
     public function __construct(

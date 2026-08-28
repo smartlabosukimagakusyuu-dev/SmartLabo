@@ -80,11 +80,22 @@ final class Config
          */
         public readonly bool $retentionActionsEnabled = false,
         /**
-         * 本番バックアップの世代・削除方針が確定済みか（SSOT v1.7 §9.8-2）。
-         * ★既定は **false**。4G でバックアップ方針を確定するまで削除を通さない。
-         *   古いバックアップから消したはずの回答が復活する運用を作らないため。
+         * 本番バックアップの世代・削除方針が確定済みか（SSOT v1.7 §9.8-2 / v1.11 §9.9）。
+         * ★既定は **false**。4G のローカル実装だけでは true にしない。
+         *   4H で XServer 上の絶対パス・権限・実測が済むまで false のままにする
+         *   （SSOT v1.11 §9.9-3）。古いバックアップから、消したはずの回答が
+         *   復元できてしまう運用を作らないため。
          */
         public readonly bool $backupPolicyConfirmed = false,
+        /**
+         * バックアップの保存先ディレクトリ（SSOT v1.11 §9.5）。
+         * ★既定は **null（未設定）**。未設定ならバックアップ経路そのものを動かさない。
+         * ★**絶対パスのみ**。相対パス・public_html 配下・ホーム直下・ルートは
+         *   `BackupPaths::checkDir()` が拒否する。ここでは値を持つだけで検査しない
+         *   （検査は使う直前に必ずやり直す）。
+         * ★本番の正確な絶対パスは 4H で XServer 実機を確認してから確定する。
+         */
+        public readonly ?string $backupDir = null,
     ) {
     }
 
@@ -171,6 +182,7 @@ final class Config
             adminPasswordHash: self::validAdminHashOrNull($pick('admin_password_hash', 'INTAKE_ADMIN_PASSWORD_HASH')),
             retentionActionsEnabled: self::explicitTrue($pick('retention_actions_enabled', 'INTAKE_RETENTION_ACTIONS_ENABLED')),
             backupPolicyConfirmed: self::explicitTrue($pick('backup_policy_confirmed', 'INTAKE_BACKUP_POLICY_CONFIRMED')),
+            backupDir: self::nonEmptyOrNull($pick('backup_dir', 'INTAKE_BACKUP_DIR')),
         );
     }
 

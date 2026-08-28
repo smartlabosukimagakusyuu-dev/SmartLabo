@@ -1,8 +1,9 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F-R4）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4G）
 
 ```text
-STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.10**
+STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除＋バックアップ）。**本番未配置**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.11**
+手順書  : docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md v1.0（バックアップ・復元）
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -40,6 +41,8 @@ intake-api/
 │   ├── preview-env.php      ローカル確認の設定（使い捨て鍵・使い捨てDB）
 │   ├── preview-seed.php     架空の案件・ご案内リンク・管理者を1組つくる
 │   └── router.php           PHP内蔵サーバー用の振り分け（本番は .htaccess）
+├── bin/                     管理CLI（★public_html の外。Web から実行できない）
+│   └── intake-backup.php    バックアップ作成・一覧・検証・復元確認・削除（4G）
 ├── public/                  ドキュメントルートへ置く
 │   ├── index.php            受付API・内部確認画面のフロントコントローラ
 │   ├── start.html           ご案内リンクの入口（4C）
@@ -212,7 +215,8 @@ X-Intake-Export-Sha256: <本文の SHA-256>
   DROP COLUMN / 生成列 / SQL側JSON関数を使わない）。
   部分一意索引は 3.8.0 以降で使えるため**使用可**
 - 最終提出は **`submission_id`（UUID v4）で冪等化**する（§7）
-- バックアップは `SQLite3::backup()`。取得後に `integrity_check` / `foreign_key_check`
+- バックアップは `SQLite3::backup()`。取得後に `integrity_check` / `foreign_key_check`。
+  一時ファイル → 検証 → **同一ディレクトリ内 atomic rename**。30日 / 最大60世代（4G）
 - ログへ回答本文・氏名・メール・電話・住所・token・session secret・Drive URL を出さない
 
 ## 6. 本番配置前に必要なこと（4H）
@@ -241,9 +245,18 @@ X-Intake-Export-Sha256: <本文の SHA-256>
 7. `mail()` の実送信テスト（宛先は当社 info@ のみ）
 8. **保持期限による削除は、既定のまま（無効）で配置する**（SSOT v1.7 §9.8）
    - `retention_actions_enabled` と `backup_policy_confirmed` は**既定 false**
-   - **`backup_policy_confirmed` を 4G より前に true にしない。**
+   - **`backup_policy_confirmed` を SSOT §9.9 の条件が揃う前に true にしない。**
      バックアップの世代・削除方針が決まる前に削除すると、
      古い世代から**消したはずの回答が復元できてしまう**
+9. **バックアップの保存先を確定する**（SSOT v1.11 §9.5・**4G から 4H へ残した作業**）
+   - `${DOMAIN_ROOT}/private/intake/backups` を作り、**正確な絶対パスを実機で確認**する
+   - それが **public_html の外**であることを確認する
+   - ディレクトリ **700** / ファイル **600** を確認する
+   - `private/intake-config.php` の `backup_dir` へ絶対パスを設定する
+   - **XServer 上で `SQLite3::backup()` が動くことを実測**する
+   - 作成 → 検証 → restore drill → cleanup を実機で1周する
+   - `bin/` を **public_html へ置かない**
+   - ここまで済んでから、`backup_policy_confirmed` の true 化を**別承認**で判断する
 
 ## 7. 最終提出の冪等化（4B-R1 で実装済み）
 
@@ -472,6 +485,84 @@ php -c intake-api/dev/php.ini intake-api/dev/retention-walkthrough.php
 毎回新しい使い捨てDBを作り、**終わったら消す**。
 `dev/.preview/` を含む**既存DBへは一切接続しない**。
 
+### バックアップ・復元確認（4G・SSOT v1.11 §9.5）
+
+**方式**
+
+- 取得は **`SQLite3::backup()`**（Online Backup API）。**DBファイルの単純コピーを通常手段にしない**
+- `VACUUM INTO` は使わない（本番 SQLite 3.26.0 に無い構文）
+- 取得後に **`integrity_check` / `foreign_key_check`**。期待値でなければ正式扱いにせず削除
+- 順序は **排他ロック → 一時ファイル → 検証 → SHA-256 → 権限600 → 同一ディレクトリ内 atomic rename → 控え記録**
+- ファイル名は `intake-YYYYMMDD-HHMMSS-<random8>.sqlite`（**PII・token・秘密値を含めない**）
+- 控えは保存先の **`manifest.json`**（ファイル名・作成日時・サイズ・SHA-256・版のみ。**DB内へ持たない**）
+- 保持は **30日 / 最大60世代**。**cron を作らない。ページ表示から実行しない**
+
+**設定**
+
+```php
+// private/intake-config.php
+'backup_dir' => '/絶対パス/private/intake/backups',
+```
+
+- **未設定なら経路そのものが動かない**（fail closed）
+- 相対パス・`..`・`public_html` 等の公開領域・ホーム直下・ルート直下・symlink は拒否される
+- **本番の正確な絶対パスは 4H で XServer 実機を確認してから確定する**
+
+**管理CLI（正式な第一手段。`bin/` は public_html の外・Web から実行できない）**
+
+```bash
+php -c intake-api/dev/php.ini intake-api/bin/intake-backup.php backup:create
+php -c intake-api/dev/php.ini intake-api/bin/intake-backup.php backup:list
+php -c intake-api/dev/php.ini intake-api/bin/intake-backup.php backup:verify --name=<ファイル名>
+php -c intake-api/dev/php.ini intake-api/bin/intake-backup.php backup:restore-drill --name=<ファイル名>
+php -c intake-api/dev/php.ini intake-api/bin/intake-backup.php backup:cleanup
+php -c intake-api/dev/php.ini intake-api/bin/intake-backup.php backup:purge-preceding-generations
+```
+
+- **削除系は dry-run が既定。** 実削除には `--apply` と確認文字列の完全一致が要る
+  - cleanup … `--confirm="DELETE OLD BACKUPS"`
+  - purge連動 … `--confirm="DELETE PRE-PURGE BACKUPS"`
+- 出力に **DB の中身・PII・保存先の絶対パスは出ない**（保存先は `<backup_dir>` と表示）
+- **管理画面へは追加していない**（Web から届く面を増やさない。SSOT v1.11 §9.5.7）
+
+**復元確認（restore drill）**
+
+- **稼働DBへ書き戻す restore 機能は作らない。** 本番復元は **4H 以降の別承認工程**
+- 使い捨ての一時DBへ復元し、`integrity_check` / `foreign_key_check` / `user_version` /
+  **必須8表** / 回答スキーマ版 / 案件行の形式を確かめ、**一時DBを消す**
+- 元DBとの件数比較は**報告するだけ**。一致しなくても異常ではない（ある時点の写しであるため）
+
+**保持削除との連動（いちばん大事なところ）**
+
+案件を DB から物理削除しても、**削除前のバックアップが残っている間は
+そこから PII を復元できてしまう**。DB から消しただけでは運用上まだ完了していない。
+
+```text
+purge → 新しいバックアップを作る → restore drill を通す
+      → purge 前の全世代を削除 → 再走査して 0 件を確認
+```
+
+- purge 後バックアップの**作成または検証に失敗したら、古い世代を1件も消さない**
+- その状態は「**バックアップ側未完了**」。runbook の再実行手順に従う
+- この処理は**冪等**。途中で止まっても同じコマンドの再実行で完了する
+- DB のトランザクションとファイル削除は**ひとつの原子操作にならない**。
+  段階・状態確認・冪等な再実行・runbook で担保する
+
+**通し確認（使い捨てDBだけで動く）**
+
+```bash
+php -c intake-api/dev/php.ini intake-api/dev/backup-walkthrough.php
+```
+
+作成から復元確認・世代管理・purge 連動までの28段を確かめる。
+毎回新しい使い捨てDBとバックアップ置き場を作り、**終わったら消す**。
+
+**手順書**
+
+`docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md`
+（通常バックアップ / verify / restore drill / cleanup / purge 連動 /
+各失敗時の STOP 条件 / 本番復元は別承認）
+
 ### 全工程の通し確認（4F）
 
 ```bash
@@ -503,7 +594,7 @@ H リンク再発行／I 確定／J 保持期限／K closed 後の拒否／L 保
 | 4 | 中止案件を `closed` にする経路 | 未定（SSOT §12.2-12）。運用が固まってから決める |
 | 5 | 管理 session 清掃の自動化 | Phase 1 は保守画面からの明示操作（SSOT §2.7-10） |
 | 6 | `expose_php` が実機で効くか | **4H で確認**。ローカルの PHP 内蔵サーバーでは<br>`.user.ini`（`PHP_INI_SYSTEM`）も `.htaccess`（Apache）も適用されないため、<br>**この2つの対策はローカルでは検証できない**（4F で実測） |
-| 7 | 本番バックアップの世代・削除方針 | **4G**。確定するまで `backup_policy_confirmed` を true にしない |
+| ~~7~~ | ~~本番バックアップの世代・削除方針~~ | **4G で確定**（SSOT v1.11 §9.5）。<br>残るのは **XServer 上の絶対パス・権限・`SQLite3::backup()` の実測**（4H）。<br>★**§9.9 の条件が揃うまで `backup_policy_confirmed` を true にしない。**<br>　**4G 終了時点でも false のまま**である |
 | ~~8~~ | ~~分類の中の**未知キー**が書き出しへ通る~~ | **4F-R1 で是正**（SSOT v1.8 §3.0.1）。<br>保存は**要求全体を拒否**、読み出し・書き出しは**出力しない** |
 | ~~9~~ | ~~補助ボタンの高さが 40px~~ | **4F-R1 で是正**（SSOT v1.8 §10.10）。店舗・管理とも 48px |
 | 10 | 既存DBに残った未知キーの**清掃機能** | **作らない**（SSOT v1.9 §3.0.1）。読み出しで除くだけで、既存行は触らない。<br>必要になったら本書を改定してから作る |

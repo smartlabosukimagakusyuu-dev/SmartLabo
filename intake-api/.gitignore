@@ -7,6 +7,9 @@ dev/.preview/
 # 保持削除の通し確認が作る使い捨てDB。正常終了すれば消えるが、途中で落ちたときの保険
 dev/.walkthrough-*/
 
+# バックアップの通し確認が作る使い捨てDB・使い捨てバックアップ（4G）
+dev/.backup-walkthrough-*/
+
 # 実設定（HMAC鍵・暗号鍵・受信先）。サーバーにのみ置き、Gitへは入れない。
 private/intake-config.php
 
@@ -15,4 +18,6 @@ private/ratelimit/
 private/*.sqlite
 private/*.sqlite-journal
 private/logs/
+# バックアップの実体（4G）。★DB本体と同じ中身が入る。絶対に追跡しない
+private/backups/
 tests/.tmp/

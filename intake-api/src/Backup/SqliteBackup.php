@@ -1,13 +1,17 @@
 <?php
 /**
- * HP Intake API — バックアップ（SSOT §9.6 / §9.6.1）。
+ * HP Intake API — バックアップの取得そのもの（SSOT §9.6 / §9.6.1 / v1.11 §9.5.3）。
  *
  * ★本番の SQLite は 3.26.0。**VACUUM INTO は使わない。呼ぶ経路をコードに残さない。**
  * ★第一手段は SQLite3::backup()（Online Backup API・SQLite 3.6.11 以降で利用可）。
  *   通常クエリは PDO だが、バックアップ時のみ SQLite3 で別接続を開く。
+ * ★**DBファイルの単純コピーを通常のバックアップ手段にしない。**
+ *   稼働中のコピーは、書き込みの途中を切り取った壊れたファイルになりうる。
  * ★取得後に必ず integrity_check / foreign_key_check を行う。
  *   期待値でなければ**不完全ファイルを正式バックアップ扱いにせず削除**する。
  * ★public_html を想定した場所へ出力しない。
+ *
+ * 世代・保持・cleanup・復元確認は `BackupService` の担当。ここは1ファイル分だけを見る。
  */
 declare(strict_types=1);
 
@@ -25,6 +29,11 @@ final class SqliteBackup
     }
 
     /**
+     * 指定パスへ1件取得する（取得 → 検証 → 権限）。
+     *
+     * ★`BackupService` はこれを**一時ファイル名**で呼び、検証が通ってから
+     *   同一ディレクトリ内で正式名へ rename する。ここでは rename しない。
+     *
      * @return array{ok:bool,path:string,integrity:string,foreign_key_violations:int}
      * @throws \RuntimeException
      */
@@ -71,6 +80,7 @@ final class SqliteBackup
             @unlink($destPath);
             throw new \RuntimeException('backup verification failed');
         }
+        self::flushToDisk($destPath);
         @chmod($destPath, 0600);
 
         return ['ok' => true, 'path' => $destPath] + $check;
@@ -78,6 +88,15 @@ final class SqliteBackup
 
     /** @return array{integrity:string,foreign_key_violations:int} */
     public function verify(string $path): array
+    {
+        return self::verifyFile($path);
+    }
+
+    /**
+     * ファイル単体を SQLite として開いて検査する（元DBに触れない）。
+     * @return array{integrity:string,foreign_key_violations:int}
+     */
+    public static function verifyFile(string $path): array
     {
         $pdo = new \PDO('sqlite:' . $path, null, null, [
             \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
@@ -89,6 +108,26 @@ final class SqliteBackup
         $fk        = $pdo->query('PRAGMA foreign_key_check')->fetchAll();
 
         return ['integrity' => $integrity, 'foreign_key_violations' => count($fk)];
+    }
+
+    /**
+     * 書き込んだ内容をディスクへ落とす（できる範囲で）。
+     *
+     * ★PHP から fsync できるのは 8.1 以降。使えない環境では fflush までで諦める。
+     *   ここは「できる範囲で」と割り切る。整合性の保証は rename 後の
+     *   verify と SHA-256 の控えで担保する（SSOT v1.11 §9.5.3-6）。
+     */
+    public static function flushToDisk(string $path): void
+    {
+        $fh = @fopen($path, 'r+b');
+        if ($fh === false) {
+            return;
+        }
+        @fflush($fh);
+        if (function_exists('fsync')) {
+            @fsync($fh);
+        }
+        @fclose($fh);
     }
 
     private function assertDestinationAllowed(string $destPath): void

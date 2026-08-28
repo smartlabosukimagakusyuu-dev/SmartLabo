@@ -66,4 +66,19 @@ return [
     // ------------------------------------------------------------------
     'retention_actions_enabled' => false,
     'backup_policy_confirmed'   => false,
+
+    // ------------------------------------------------------------------
+    // バックアップの保存先（SSOT v1.11 §9.5・4G で実装）
+    //
+    // ★**絶対パス**で書く。public_html の外・ホーム直下でない専用ディレクトリ。
+    //   ディレクトリ 700 / ファイル 600。
+    // ★本番の正確な絶対パスは **4H で XServer 実機を確認してから**確定する。
+    //   本番の候補は ${DOMAIN_ROOT}/private/intake/backups である。
+    // ★未設定（null）ならバックアップ経路そのものが動かない（fail closed）。
+    // ★相対パス・public_html 配下・ルート直下・ホーム直下は拒否される。
+    // ★作成・検証・復元確認・削除は**管理CLI**から行う。cron を作らない。
+    //     php bin/intake-backup.php backup:create
+    //   手順は docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md を参照。
+    // ------------------------------------------------------------------
+    'backup_dir' => __DIR__ . '/backups',
 ];

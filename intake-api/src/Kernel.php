@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace SmartLabo\Intake;
 
 use SmartLabo\Intake\Admin\AdminApp;
+use SmartLabo\Intake\Backup\BackupService;
 use SmartLabo\Intake\Http\Guard;
 use SmartLabo\Intake\Service\AdminAuth;
 use SmartLabo\Intake\Service\AnswerService;
@@ -36,6 +37,7 @@ final class Kernel
     public readonly AnswerService $answers;
     public readonly RevisionRequestService $revisions;
     public readonly RetentionService $retention;
+    public readonly BackupService $backup;
     public readonly AdminAuth $adminAuth;
     public readonly ExportService $export;
     public readonly AdminApp $admin;
@@ -65,6 +67,8 @@ final class Kernel
         $this->answers     = new AnswerService($this->db, $this->clock, $this->audit);
         $this->revisions   = new RevisionRequestService($this->db, $this->clock);
         $this->retention   = new RetentionService($this->db, $this->clock, $this->audit);
+        // 4G。★入り口は管理CLIだけ。App / AdminApp へは渡さない（Web から実行させない）
+        $this->backup      = new BackupService($this->db, $this->clock, $this->audit, $config->backupDir);
 
         $guard = new Guard($config);
 
