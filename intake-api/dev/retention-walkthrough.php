@@ -176,7 +176,7 @@ $submit = $kernel->app->handle($post('/submit', ['submission_id' => (function ()
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($b), 4));
 })()], $cookies));
 $kernel->answers->saveAdminSettings($caseId, [
-    'web_links' => ['salon_booking_url' => null],
+    'web_links' => ['salon_booking_url' => ''],
     'privacy'   => [
         'destination' => '架空の送信先', 'storage' => '架空の保管方法',
         'external_services' => [], 'consent_checkbox' => true,

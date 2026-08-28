@@ -465,3 +465,16 @@ code {
     flex: 1 1 100%;
   }
 }
+
+/* 必須・任意のしるし（4F-R4）。★色だけに頼らず文字でも示す */
+.req {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--c-err-bg);
+  border: 1px solid #fbd5d1;
+  color: var(--c-err);
+}

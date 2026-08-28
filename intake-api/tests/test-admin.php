@@ -971,11 +971,13 @@ test('export: 必須が欠けた案件は書き出さない（直前に再検証
         ['cookies' => $login['cookie'], 'query' => ['case' => 'HP-2026-0653']]));
 
     assertSame(409, $res->status, '不足があるのに書き出せてしまう');
-    assertSame(1, $k->audit->countFor($caseId, 'export_generated'), '監査が残っていない');
-    $code = (string)$k->db->pdo()->query(
-        "SELECT result_code FROM intake_audit_events WHERE event_type = 'export_generated'"
-    )->fetchColumn();
-    assertSame('invalid', $code, '失敗が監査へ ok として残っている');
+
+    // ★4F-R4 で契約を変えた。**失敗した書き出しは痕跡を残さない**。
+    //   「書き出した」という記録は、実際に外へ出したときだけ残す
+    //   （本文・SHA-256・Content-Disposition・監査・一時ファイルのいずれも作らない）。
+    assertSame(0, $k->audit->countFor($caseId, 'export_generated'), '失敗が監査に残っている');
+    assertTrue(!isset($res->headers['X-Intake-Export-Sha256']), 'SHA-256 が出ている');
+    assertTrue(!isset($res->headers['Content-Disposition']), 'Content-Disposition が出ている');
 });
 
 test('export: 秘密値・内部情報を含めない（allowlist）', function (): void {

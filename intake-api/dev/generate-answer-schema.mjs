@@ -100,6 +100,8 @@ const storePaths = [];
 const adminPaths = [];
 /** 語彙が決まっている項目（SELECT / CHECKS）。path -> 正式な値 */
 const enums = {};
+/** Smart Labo 設定の内容条件（4F-R4）。path -> 規則 */
+const adminValueRules = {};
 
 for (const step of STEPS) {
   paths.push(step.key);
@@ -125,6 +127,19 @@ for (const step of STEPS) {
       adminPaths.push(full);
       if (field.adminRequired) {
         adminRequiredForExport.push(full);
+
+        // ★「キーがあること」だけでは足りない。中身の条件もここで持たせる（4F-R4）。
+        //   型・上限は SSOT §3.7 / §3.9 の表と同じ値を schema.js から取る。
+        const rule = field.adminRule || {};
+        const node = nodeFor(field);
+        adminValueRules[full] = {
+          type: node.type,
+          allow_empty: rule.allowEmpty === true ? '1' : '0',
+          ...(rule.url === true ? { url: '1' } : {}),
+          ...(field.max ? { max: String(field.max) } : {}),
+          ...(field.cap ? { cap: String(field.cap) } : {}),
+          ...(field.itemMax ? { item_max: String(field.itemMax) } : {}),
+        };
       }
       continue;
     }
@@ -266,6 +281,19 @@ final class AnswerSchema
 
     /** 上のどれにも入らないパス（欠落してよい） */
     public const OPTIONAL_PATHS = ${phpList(optionalPaths, 4, 3)};
+
+    /**
+     * Smart Labo 設定の**内容**条件（SSOT v1.10 §3.12）。
+     *
+     * ★\`ADMIN_REQUIRED_FOR_EXPORT\` は「キーがあること」だけを見る種別ではない。
+     *   空でよい項目と、空では困る項目が混ざっている。
+     *     allow_empty=1 … 空が正式な回答（「予約URLなし」「外部サービスなし」）
+     *     allow_empty=0 … 空・空白だけは不可（プライバシーポリシーへ載る本文）
+     *   \`url=1\` は https のみ（§3.7 の検証）。
+     *
+     * @var array<string,array<string,string>>
+     */
+    public const ADMIN_VALUE_RULES = ${phpArray(adminValueRules, 4)};
 
     /**
      * 語彙が決まっている項目。**正式な値以外は保存できない**。

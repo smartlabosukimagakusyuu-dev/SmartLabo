@@ -19,6 +19,7 @@
  *   F 管理確認・export          L maintenance
  *                               M 回答の正式構造（4F-R1）
  *                               N 必須契約・Smart Labo 設定（4F-R3）
+ *                               O null拒否・設定の内容条件（4F-R4）
  *
  * ★J の「削除が成功すること」の確認は dev/retention-walkthrough.php が担当する
  *   （別の使い捨てDBで、override したときだけ動く）。ここでは
@@ -184,7 +185,7 @@ $uuid4 = static function (): string {
 /** Smart Labo の制作設定（SSOT v1.9 §3.12）を埋める。書き出しの前に要る */
 $setSettings = static function (Kernel $k, int $caseId): void {
     $k->answers->saveAdminSettings($caseId, [
-        'web_links' => ['salon_booking_url' => null],
+        'web_links' => ['salon_booking_url' => ''],
         'privacy'   => [
             'destination'       => '架空の送信先',
             'storage'           => '架空の保管方法',
@@ -1176,12 +1177,129 @@ $check('制作設定の値をログにも監査にも出さない',
         return (int)$stmt->fetchColumn() === 0;
     })());
 
+/* ================================================================ O */
+
+$head('O. null 保存の拒否と制作設定の内容条件（4F-R4 / SSOT v1.10 §3.0.2 / §3.12）');
+
+$oClock = new E2eClock();
+[$o, $baseValues] = $makeEnv('values', $oClock, false);
+
+$oNumber = 'HP-202608-0031';
+$oId     = $o->cases->create($oNumber, E2E_SHOP . ' ' . E2E_MARKER);
+$oToken  = $o->tokens->issue($oId);
+$oShop   = [Config::COOKIE_NAME => (string)$o->app->handle(
+    $json('POST', '/session/start', ['token' => $oToken])
+)->cookies[0]['value']];
+
+// 二択を未選択のまま保存する（キーを送らない ＝ 未回答）
+$noChoice = $answered;
+unset($noChoice['contact_form']['enabled']);
+$o->app->handle($json('POST', '/answers/save', ['version' => 1, 'sections' => $noChoice], $oShop));
+$check('お問い合わせフォームを未選択のままだと不足になる',
+    in_array('contact_form.enabled', $o->answers->evaluate($oId)['missing'], true));
+
+// null を送ると保存そのものを拒否する
+$beforeNull = $o->answers->get($oId);
+$nullTry    = $o->app->handle($json('POST', '/answers/save', [
+    'version'  => $beforeNull['version'],
+    'sections' => ['contact_form' => ['enabled' => null, 'topics' => ['架空の種類']]],
+], $oShop));
+$afterNull  = $o->answers->get($oId);
+
+$check('null は 400 で拒否される（欠落・null・false の3状態を作らない）',
+    $nullTry->status === 400 && ($nullTry->body['error'] ?? '') === 'bad_request');
+$check('拒否のときDBも version も動かない（部分保存なし）',
+    $beforeNull['version'] === $afterNull['version']
+    && $beforeNull['sections'] === $afterNull['sections']);
+
+foreach ([['"false"', 'false'], ['0', 0], ['1', 1], ['[]', []]] as [$label, $bad]) {
+    $res = $o->app->handle($json('POST', '/answers/save', [
+        'version' => $o->answers->get($oId)['version'], 'sections' => ['contact_form' => ['enabled' => $bad]],
+    ], $oShop));
+    $check('真偽以外（' . $label . '）も保存できない', $res->status === 400);
+}
+
+// false を選んで提出する
+$withFalse = $o->app->handle($json('POST', '/answers/save', [
+    'version' => $o->answers->get($oId)['version'], 'sections' => ['contact_form' => ['enabled' => false]],
+], $oShop));
+$check('「設置しない」（false）を保存できる',
+    $withFalse->status === 200 && $o->answers->evaluate($oId)['missing'] === []);
+$check('提出できる',
+    $o->app->handle($json('POST', '/submit', ['submission_id' => $uuid4()], $oShop))->status === 200
+    && (string)$o->cases->find($oId)['status'] === 'submitted');
+
+// 制作設定の内容条件
+$o->cases->adminChangeStatus($oId, 'reviewed', 'reviewed');
+$oLogin = $o->app->handle($adminPost('/admin/login', ['admin_id' => E2E_ADMIN_ID, 'password' => E2E_ADMIN_PW]));
+$oAdmin = [Config::ADMIN_COOKIE_NAME => (string)$oLogin->cookies[0]['value']];
+
+$post = static function (array $fields) use ($o, $oAdmin, $oNumber, $adminGet, $adminPost, $csrfOf) {
+    $form = $o->app->handle($adminGet('/admin/settings', $oAdmin, ['case' => $oNumber]));
+
+    return $o->app->handle($adminPost('/admin/settings/save', array_merge([
+        'csrf_token'        => $csrfOf($form->rawBody),
+        'case'              => $oNumber,
+        'confirm_case'      => $oNumber,
+        'salon_booking_url' => '',
+        'destination'       => '架空の送信先',
+        'storage'           => '架空の保管方法',
+        'external_services' => '',
+        'consent_checkbox'  => 'true',
+    ], $fields), $oAdmin));
+};
+
+$emptyDest = $post(['destination' => '']);
+$check('送信先を空にすると保存を拒否する',
+    $emptyDest->status === 400 && count($o->answers->missingAdminSettings($oId)) === 5);
+
+$blankStore = $post(['storage' => '   ']);
+$check('保管方法が空白だけでも保存を拒否する',
+    $blankStore->status === 400 && count($o->answers->missingAdminSettings($oId)) === 5);
+
+$badUrl = $post(['salon_booking_url' => 'javascript:alert("E2EREFLECT0001")']);
+$check('危険なURLを拒否し、入力値を画面へ反射しない',
+    $badUrl->status === 400
+    && !str_contains((string)$badUrl->rawBody, 'E2EREFLECT0001')
+    && !str_contains((string)$badUrl->rawBody, 'javascript:'));
+
+$okSave = $post(['consent_checkbox' => 'false']);
+$check('予約URL空・外部サービス0件・同意チェック false で保存できる',
+    $okSave->status === 303 && $o->answers->missingAdminSettings($oId) === []);
+
+$oExport = $o->app->handle($adminGet('/admin/export', $oAdmin, ['case' => $oNumber]));
+$oBody   = (string)$oExport->rawBody;
+$oJson   = json_decode($oBody, true);
+$check('書き出せる。SHA-256 が本文と一致する',
+    $oExport->status === 200
+    && hash('sha256', $oBody) === ($oExport->headers['X-Intake-Export-Sha256'] ?? ''));
+$check('false と空と0件が、そのまま書き出しへ出る',
+    ($oJson['answers']['privacy']['consent_checkbox'] ?? null) === false
+    && ($oJson['answers']['privacy']['external_services'] ?? null) === []
+    && ($oJson['answers']['contact_form']['enabled'] ?? null) === false);
+
+$oCase = $o->app->handle($shopGet('/case', $oShop));
+$leak  = [];
+foreach ([['web_links', 'salon_booking_url'], ['privacy', 'destination'], ['privacy', 'storage'],
+          ['privacy', 'external_services'], ['privacy', 'consent_checkbox']] as [$sec, $key]) {
+    if (array_key_exists($key, $oCase->body['sections'][$sec] ?? [])) {
+        $leak[] = $sec . '.' . $key;
+    }
+}
+$check('店舗の復元に制作設定が出ない' . ($leak === [] ? '' : '（出た: ' . implode(',', $leak) . '）'), $leak === []);
+
+$check('設定値をログにも監査にも出さない',
+    !str_contains($log($baseValues), '架空の送信先')
+    && !str_contains($log($baseValues), '架空の保管方法')
+    && !str_contains($log($baseValues), 'E2EREFLECT0001')
+    && $o->audit->countFor($oId, 'admin_settings_saved') === 1);
+
 /* ================================================================ 後始末 */
 
 $head('後始末');
 
 $dbFiles = [];
-foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema, $baseContract] as $b) {
+foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema, $baseContract, $baseValues] as $b) {
     $dbFiles[$b] = (string)file_get_contents($b . '/intake.sqlite');
 }
 $check('削除済みDBの生ファイルに架空 PII が残っていない',
@@ -1191,7 +1309,7 @@ $check('削除済みDBの生ファイルに架空 PII が残っていない',
     && str_contains($dbFiles[$baseClosed], $cNumber));
 
 $leak = [];
-foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema, $baseContract] as $b) {
+foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema, $baseContract, $baseValues] as $b) {
     foreach ([E2E_MARKER, E2E_EMAIL, E2E_TEL, E2E_REVISION, 'drive.google.com',
               $token, $token2, $sid, $cToken, E2E_ADMIN_PW] as $needle) {
         if ($needle !== '' && str_contains($log($b), $needle)) {
@@ -1199,7 +1317,7 @@ foreach ([$baseMain, $baseMaint, $baseClosed, $baseSchema, $baseContract] as $b)
         }
     }
 }
-$check('5つのログに PII・token・session・パスワードが1つも出ていない'
+$check('6つのログに PII・token・session・パスワードが1つも出ていない'
     . ($leak === [] ? '' : '（残: ' . implode(',', $leak) . '）'), $leak === []);
 $check('ログは空ではない（検査が空振りしていない）',
     str_contains($log($baseMain), 'export_generated') && str_contains($log($baseMain), $number));
@@ -1209,7 +1327,8 @@ $m->db->close();
 $c->db->close();
 $w->db->close();
 $n->db->close();
-unset($k, $m, $c, $w, $n, $dbFiles, $ins, $stmt);
+$o->db->close();
+unset($k, $m, $c, $w, $n, $o, $dbFiles, $ins, $stmt);
 gc_collect_cycles();
 
 $left = [];
@@ -1226,7 +1345,7 @@ foreach ($roots as $b) {
         $left[] = $b;
     }
 }
-$check('使い捨てDBを5つとも削除した' . ($left === [] ? '' : '（残: ' . implode(',', $left) . '）'), $left === []);
+$check('使い捨てDBを6つとも削除した' . ($left === [] ? '' : '（残: ' . implode(',', $left) . '）'), $left === []);
 
 echo "\n" . str_repeat('=', 66) . "\n";
 printf("  %d 項目 / NG %d 件\n", $step, count($bad));

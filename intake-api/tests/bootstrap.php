@@ -166,7 +166,8 @@ function newSubmissionId(): string
 function setAdminSettings(object $k, int $caseId): void
 {
     $k->answers->saveAdminSettings($caseId, [
-        'web_links' => ['salon_booking_url' => null],
+        // ★空欄は**空文字**で保存する（4F-R4）。null は保存できない
+        'web_links' => ['salon_booking_url' => ''],
         'privacy'   => [
             'destination'       => '架空の送信先',
             'storage'           => '架空の保管方法',

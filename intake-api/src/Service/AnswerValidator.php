@@ -105,6 +105,101 @@ final class AnswerValidator
         return true;
     }
 
+    /**
+     * Smart Labo 設定の**中身**を検査する（SSOT v1.10 §3.12 / 4F-R4）。
+     *
+     * ★「キーがあること」だけでは足りない。空でよい項目と、空では困る項目がある。
+     * ★返すのは**パスだけ**。入力された値を返さない（画面へ反射させない）。
+     *
+     * @param array<string,mixed> $sections 分類名 => 値
+     * @return list<string> 条件を満たさないパス
+     */
+    public static function adminValueErrors(array $sections): array
+    {
+        $bad = [];
+        foreach (AnswerSchema::ADMIN_VALUE_RULES as $path => $rule) {
+            [$section, $key] = explode('.', $path, 2);
+            if (!is_array($sections[$section] ?? null) || !array_key_exists($key, $sections[$section])) {
+                continue;   // 存在しないことは「不足」側が見る
+            }
+            if (!self::adminValueOk($sections[$section][$key], $rule)) {
+                $bad[] = $path;
+            }
+        }
+
+        return $bad;
+    }
+
+    /** @param array<string,string> $rule */
+    private static function adminValueOk(mixed $value, array $rule): bool
+    {
+        $allowEmpty = ($rule['allow_empty'] ?? '0') === '1';
+
+        if ($rule['type'] === 'bool') {
+            return is_bool($value);      // ★null も文字列も数値も通さない
+        }
+
+        if ($rule['type'] === 'list') {
+            if (!is_array($value) || !array_is_list($value)) {
+                return false;
+            }
+            if ($value === []) {
+                return $allowEmpty;      // 0件が「なし」の正式な回答か
+            }
+            if (isset($rule['cap']) && count($value) > (int)$rule['cap']) {
+                return false;
+            }
+            foreach ($value as $item) {
+                if (!is_string($item) || trim($item) === '') {
+                    return false;
+                }
+                if (isset($rule['item_max']) && mb_strlen($item, 'UTF-8') > (int)$rule['item_max']) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // scalar
+        if (!is_string($value)) {
+            return false;                // null・数値・真偽・配列・object は通さない
+        }
+        $text = trim($value);
+        if ($text === '') {
+            return $allowEmpty;          // 空白だけも「空」として扱う
+        }
+        if (isset($rule['max']) && mb_strlen($value, 'UTF-8') > (int)$rule['max']) {
+            return false;
+        }
+        if (($rule['url'] ?? '0') === '1' && !self::isSafeHttpsUrl($text)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 公開してよい https URL か。
+     * ★`javascript:` / `data:` / 相対 / userinfo / 制御文字を通さない。
+     *   §7.3 の Drive URL 検査と同じ考え方（ホストの限定だけが違う）。
+     */
+    public static function isSafeHttpsUrl(string $url): bool
+    {
+        if (strncmp($url, 'https://', 8) !== 0) {
+            return false;
+        }
+        if (preg_match('/[[:cntrl:]\s]/', $url) === 1) {
+            return false;
+        }
+        $parts = parse_url($url);
+        if ($parts === false || ($parts['scheme'] ?? '') !== 'https' || ($parts['host'] ?? '') === '') {
+            return false;
+        }
+
+        return !isset($parts['user']) && !isset($parts['pass']);
+    }
+
     /** その分類の直下キーが、送り主の書ける範囲に収まっているか */
     private static function audienceOk(string $section, array $value, string $audience): bool
     {
@@ -206,7 +301,10 @@ final class AnswerValidator
 
         return match ($node['type']) {
             'scalar'  => self::isScalarValue($value),
-            'bool'    => is_bool($value) || $value === null,
+            // ★真偽は `true` / `false` だけ。**`null` を保存させない**（4F-R4）。
+            //   欠落・null・false の3状態を作ると「未回答と false の区別」が
+            //   必要以上に複雑になる。未回答は**キーが無いこと**で表す。
+            'bool'    => is_bool($value),
             'list'    => self::isScalarList($value),
             'object'  => self::matchesObject($value, $node['fields'], $depth),
             'objects' => self::matchesObjects($value, $node['item'], $depth),

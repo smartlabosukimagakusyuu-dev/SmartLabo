@@ -397,16 +397,25 @@ test('save: 正式パスでも型が違えば拒否する', function (): void {
     }
 });
 
-test('save: null は正式パスであれば受け付ける（未入力の表現）', function (): void {
+test('save: 文字の項目は null を受け付ける（未入力の表現）', function (): void {
     [$k, $caseId, $cookies] = schemaCase('HP-202608-9340');
     unset($caseId);
 
     $res = saveSections($k, $cookies, [
-        'basic'        => ['legal_name' => null, 'public_phone' => null],
-        'contact_form' => ['enabled' => null],
+        'basic' => ['legal_name' => null, 'public_phone' => null],
     ], 1);
 
     assertSame(200, $res->status, 'null が拒否されている');
+});
+
+test('save: 真偽の項目は null を受け付けない（4F-R4）', function (): void {
+    // ★欠落・null・false の3状態を作らない。未回答は**キーが無いこと**で表す
+    [$k, $caseId, $cookies] = schemaCase('HP-202608-9341');
+
+    $res = saveSections($k, $cookies, ['contact_form' => ['enabled' => null]], 1);
+
+    assertSame(400, $res->status, 'null が保存できてしまった');
+    assertSame(1, (int)$k->answers->get($caseId)['version'], 'version が動いた');
 });
 
 /* ==================================================== 既存DBの未知キー */

@@ -310,11 +310,20 @@ final class AnswerService
         $missing  = [];
 
         foreach (AnswerSchema::ADMIN_REQUIRED_FOR_EXPORT as $path) {
-            [$type] = self::nodeOf($path);
             foreach (self::collect($sections, $path) as [$label, $value, $exists]) {
-                if (!$exists || ($type === 'bool' && !self::isAnswered($value, 'bool'))) {
+                unset($value);
+                if (!$exists) {
                     $missing[] = $label;
                 }
+            }
+        }
+
+        // ★キーがあるだけでは足りない（4F-R4）。中身の条件も見る。
+        //   空でよい項目（予約URL・外部サービス）と、空では困る項目
+        //   （送信先・保管方法）が混ざっているため、規則は生成物が持つ。
+        foreach (AnswerValidator::adminValueErrors($sections) as $path) {
+            if (!in_array($path, $missing, true)) {
+                $missing[] = $path;
             }
         }
 
@@ -358,6 +367,13 @@ final class AnswerService
         }
         if (AnswerValidator::check($sections, AnswerValidator::AUDIENCE_ADMIN)['ok'] !== true) {
             return ['ok' => false, 'error' => 'bad_request'];
+        }
+
+        // ★中身の条件（SSOT v1.10 §3.12）。1件でも満たさなければ**5件とも保存しない**。
+        //   ★どのパスが悪かったかは返すが、**入力された値は返さない**。
+        $bad = AnswerValidator::adminValueErrors($sections);
+        if ($bad !== []) {
+            return ['ok' => false, 'error' => 'invalid_value', 'paths' => $bad];
         }
 
         $current = $this->get($caseId)['sections'];

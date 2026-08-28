@@ -260,12 +260,55 @@ test('enabled: 真偽以外は保存を拒否する', function (): void {
     }
 });
 
-test('enabled: null は回答として認めない', function (): void {
-    [$k, $caseId] = contractCase('HP-202608-9459', ['contact_form.enabled' => null]);
+test('enabled: null は保存できない（4F-R4）', function (): void {
+    // ★欠落・null・false の3状態を作らない。未回答は**キーが無いこと**で表す
+    $k       = adminKernel();
+    $caseId  = $k->cases->create('HP-202608-9459', '架空サロン ハルカゼ');
+    $token   = $k->tokens->issue($caseId);
+    $secret  = (string)$k->app->handle(jsonPost('/session/start', ['token' => $token]))->cookies[0]['value'];
+    $cookies = ['cookies' => [Config::COOKIE_NAME => $secret]];
 
-    // null は保存できる（未入力の表現）が、提出条件は満たさない
+    $sections = completeSections();
+    $sections['contact_form']['enabled'] = null;
+
+    $res = $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => $sections], $cookies));
+
+    assertSame(400, $res->status, 'null が保存できてしまった');
+    assertSame('bad_request', $res->body['error'] ?? '', '理由が固定でない');
+    assertSame(1, (int)$k->answers->get($caseId)['version'], 'version が動いた');
+    assertSame(0, $k->audit->countFor($caseId, 'answer_saved'), '監査が増えた');
+});
+
+test('enabled: 既存DBに null が残っていても回答済みにしない', function (): void {
+    // ★4F-R4 より前に入った行の再現。読み出しでは未回答として扱い、
+    //   勝手に false へ変換しない。
+    $k       = adminKernel();
+    $caseId  = $k->cases->create('HP-202608-9458', '架空サロン ハルカゼ');
+    $token   = $k->tokens->issue($caseId);
+    $secret  = (string)$k->app->handle(jsonPost('/session/start', ['token' => $token]))->cookies[0]['value'];
+    $cookies = ['cookies' => [Config::COOKIE_NAME => $secret]];
+    $k->app->handle(jsonPost('/answers/save', ['version' => 1, 'sections' => completeSections()], $cookies));
+    // ★提出できた案件へ、あとから null が入った状態を作る
+    $k->app->handle(jsonPost('/submit', ['submission_id' => newSubmissionId()], $cookies));
+
+    // 保存 API を通さずに直接 null を入れる
+    $k->db->pdo()->prepare('UPDATE intake_answers SET contact_form_json = :j WHERE intake_case_id = :i')
+        ->execute([':j' => json_encode(['enabled' => null]), ':i' => $caseId]);
+
     assertTrue(in_array('contact_form.enabled', $k->answers->evaluate($caseId)['missing'], true),
         'null が回答済みになっている');
+
+    // 店舗の復元は落ちない。false へ変換もしない
+    $res = $k->app->handle(jsonGet('/case', $cookies));
+    assertSame(200, $res->status, '復元が落ちている');
+    // ★`??` は null も既定値へ倒すので array_key_exists で見る
+    $section = $res->body['sections']['contact_form'] ?? [];
+    assertTrue(!array_key_exists('enabled', $section) || $section['enabled'] === null,
+        'false へ変換されている');
+
+    // 書き出しは不足として拒否
+    setAdminSettings($k, $caseId);
+    assertSame('incomplete', $k->export->export($caseId)['error'] ?? '', '書き出せてしまった');
 });
 
 test('enabled: 画面が既定でどちらも選ばない', function (): void {

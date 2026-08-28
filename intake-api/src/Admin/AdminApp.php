@@ -1320,7 +1320,34 @@ final class AdminApp
         );
     }
 
-    /** 破壊的操作が無効化されているときの固定応答（SSOT v1.7 §9.8） */
+    /**
+     * 制作設定のエラー文言（4F-R4）。
+     * ★固定の案内だけを組み立てる。**入力された値を反射しない**。
+     * @param list<string> $paths
+     */
+    private static function settingsErrorText(array $paths): string
+    {
+        $labels = [
+            'web_links.salon_booking_url' => 'サロン共通の予約URL（空欄にするか、https から始まるURLをご入力ください）',
+            'privacy.destination'         => '情報の送信先（空欄にはできません）',
+            'privacy.storage'             => '情報の保管方法（空欄にはできません）',
+            'privacy.external_services'   => '利用する外部サービス（1行1件・10件まで・各60文字まで）',
+            'privacy.consent_checkbox'    => '同意チェックの表示',
+        ];
+
+        $named = [];
+        foreach ($paths as $path) {
+            if (isset($labels[$path])) {
+                $named[] = $labels[$path];
+            }
+        }
+
+        return $named === []
+            ? '設定を保存できませんでした。入力内容をご確認ください。'
+            : '次の欄をご確認ください: ' . implode(' ／ ', $named);
+    }
+
+    /** 破壊的操作が無効化されているときの固定応答（SSOT §9.8） */
     private function retentionDisabled(): Response
     {
         return Response::html(
@@ -1426,28 +1453,27 @@ final class AdminApp
             }
         }
 
-        $trimOrNull = static function (mixed $value): ?string {
-            $text = trim((string)$value);
-
-            return $text === '' ? null : $text;
-        };
+        // ★空欄も**文字列として**保存する。null にしない（4F-R4）。
+        //   「まだ設定していない（キーが無い）」と「なしと決めた（空文字）」を分ける。
+        $text = static fn (mixed $value): string => trim((string)$value);
 
         $result = $this->answers->saveAdminSettings((int)$case['id'], [
             'web_links' => [
-                'salon_booking_url' => $trimOrNull($form['salon_booking_url'] ?? ''),
+                'salon_booking_url' => $text($form['salon_booking_url'] ?? ''),
             ],
             'privacy' => [
-                'destination'       => $trimOrNull($form['destination'] ?? ''),
-                'storage'           => $trimOrNull($form['storage'] ?? ''),
+                'destination'       => $text($form['destination'] ?? ''),
+                'storage'           => $text($form['storage'] ?? ''),
                 'external_services' => $services,
                 'consent_checkbox'  => $consent === 'true',
             ],
         ]);
 
         if ($result['ok'] !== true) {
+            // ★入力された値を画面へ返さない。どの欄かだけを案内する
             return $this->settingsForm(
                 $this->sameOriginGet('/admin/settings', ['case' => $number], $req),
-                '設定を保存できませんでした。入力内容をご確認ください。'
+                self::settingsErrorText((array)($result['paths'] ?? []))
             );
         }
 
@@ -1483,12 +1509,14 @@ final class AdminApp
         $result = $this->export->export($caseId);
 
         if ($result['ok'] !== true) {
-            $this->audit->record($caseId, 'export_generated', 'invalid');
-
+            // ★失敗したときは痕跡を残さない（4F-R4 §5）。
+            //   本文・SHA-256・Content-Disposition・監査・一時ファイルのいずれも作らない。
+            //   「書き出した」という記録は、実際に外へ出したときだけ残す。
             return Response::html(
                 View::page('書き出せません', View::notice(
                     'warn',
-                    'この案件はまだ書き出せません。提出と必須項目をご確認ください。'
+                    'この案件はまだ書き出せません。'
+                    . '店舗の提出と必須項目、そして制作設定をご確認ください。'
                 )),
                 409
             );

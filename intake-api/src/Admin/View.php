@@ -279,10 +279,23 @@ final class View
             : self::notice('warn', '未設定の項目が ' . count($missing) . ' 件あります。'
                 . '設定するまで検証済みJSONを書き出せません。');
 
-        $text = static function (string $name, string $label, mixed $value, int $max, string $hint): string {
+        // ★型に合った入力欄を使う。必須・任意も**文字で**書く（4F-R4）
+        $text = static function (
+            string $name,
+            string $label,
+            mixed $value,
+            int $max,
+            string $hint,
+            bool $required = true,
+            string $type = 'text',
+        ): string {
             return '<div class="field">'
-                . '<label class="field__label" for="s-' . self::esc($name) . '">' . self::esc($label) . '</label>'
-                . '<input id="s-' . self::esc($name) . '" name="' . self::esc($name) . '" type="text" '
+                . '<label class="field__label" for="s-' . self::esc($name) . '">' . self::esc($label)
+                . ($required ? '<span class="req">必須</span>' : '<span class="muted">空欄可</span>')
+                . '</label>'
+                . '<input id="s-' . self::esc($name) . '" name="' . self::esc($name) . '" '
+                . 'type="' . self::esc($type) . '" '
+                . ($required ? 'aria-required="true" ' : '')
                 . 'maxlength="' . self::esc($max) . '" value="' . self::esc($value ?? '') . '">'
                 . '<p class="lead">' . self::esc($hint) . '</p></div>';
         };
@@ -297,27 +310,31 @@ final class View
             . '<input type="hidden" name="case" value="' . self::esc($caseNumber) . '">'
             . $text('salon_booking_url', 'サロン共通の予約URL（W-05）',
                 $current['web_links']['salon_booking_url'] ?? null, 500,
-                '該当が無い場合は空のままにしてください。')
+                '該当が無い場合は空のままにしてください。入れる場合は https から始まるURLだけです。',
+                false, 'url')
             . $text('destination', '情報の送信先（PR-03）',
                 $current['privacy']['destination'] ?? null, 200,
-                'プライバシーポリシーに載る送信先です。')
+                'プライバシーポリシーに載る送信先です。空欄にはできません。')
             . $text('storage', '情報の保管方法（PR-04）',
                 $current['privacy']['storage'] ?? null, 200,
-                'プライバシーポリシーに載る保管方法です。')
+                'プライバシーポリシーに載る保管方法です。空欄にはできません。')
             . '<div class="field">'
             . '<label class="field__label" for="s-services">利用する外部サービス（PR-07）</label>'
             . '<textarea id="s-services" name="external_services" rows="4">'
             . self::esc(is_array($services) ? implode("\n", array_map('strval', $services)) : '')
             . '</textarea>'
-            . '<p class="lead">1行に1つ。無い場合は空のままにしてください（10件まで）。</p></div>'
+            . '<p class="lead">1行に1つ。無い場合は空のままにしてください'
+            . '（0件が「外部サービスなし」の正式な設定です。10件まで・各60文字まで）。</p></div>'
             . '<div class="field">'
-            . '<label class="field__label" for="s-consent">同意チェックの表示（PR-09）</label>'
+            . '<label class="field__label" for="s-consent">同意チェックの表示（PR-09）'
+            . '<span class="req">必須</span></label>'
             . '<select id="s-consent" name="consent_checkbox" aria-required="true">'
             . '<option value=""' . ($consent === null ? ' selected' : '') . '>選択してください</option>'
             . '<option value="true"' . ($consent === true ? ' selected' : '') . '>表示する</option>'
             . '<option value="false"' . ($consent === false ? ' selected' : '') . '>表示しない</option>'
             . '</select>'
-            . '<p class="lead">お問い合わせフォームに同意チェックを置くかどうかです。</p></div>'
+            . '<p class="lead">お問い合わせフォームに同意チェックを置くかどうかです。'
+            . '「表示しない」も正式な設定です。</p></div>'
             . '<div class="field">'
             . '<label class="field__label" for="s-confirm">確認のため、案件番号をご入力ください</label>'
             . '<input id="s-confirm" name="confirm_case" type="text" autocomplete="off" '

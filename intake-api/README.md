@@ -1,8 +1,8 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F-R3）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4F-R4）
 
 ```text
 STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.9**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.10**
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -366,6 +366,8 @@ rate limit 一覧・書き出しの allowlist / denylist・本番前の残存課
 | `OPTIONAL` | — | 欠落してよい | 89 |
 
 - **`false` は「欠落」ではない。**「掲載しない」「予約を受けない」は答えである
+- **真偽の未回答は「キーが無いこと」だけ**（4F-R4）。`null` は保存できない（400）。
+  `""` / `"true"` / `"false"` / `0` / `1` / 配列 / object も同じく拒否
 - **`null` / `""` / 語彙外は未回答。** enum は店舗が選ぶまで未回答（`none` / `no` も、選べば回答）
 - **`address_visibility` の `full` と `map_display` の `show` を自動で選ばない。**
   住所と地図を、本人の能動的な選択なしに公開側へ回さない
@@ -410,7 +412,20 @@ node intake-api/dev/generate-answer-schema.mjs
 - 設定は管理画面 `/admin/settings` から。**認証・CSRF・Origin・案件番号の再入力**が要る
 - 設定できるのは **`reviewed` / `locked`**。`closed`・削除済みは変更しない
 - **店舗の提出は妨げない。** 効くのは**検証済みJSONの書き出し直前**だけ
-- 「設定した」＝**キーがあること**。該当が無い場合も空のまま保存して記録を残す
+- 「設定した」＝**キーがあり、かつ中身が条件を満たすこと**（4F-R4）
+
+| パス | 空の扱い | そのほか |
+|---|---|---|
+| `web_links.salon_booking_url` | **空が正式**（予約URLなし） | 値があるときは `https://` のみ・500文字まで |
+| `privacy.destination` | **空にできない** | 200文字まで |
+| `privacy.storage` | **空にできない** | 200文字まで |
+| `privacy.external_services` | **`[]` が正式**（外部サービスなし） | 10件まで・各60文字まで |
+| `privacy.consent_checkbox` | — | `true` / `false` のみ（`false` も正式な判断） |
+
+- **1件でも満たさなければ5件とも保存しない。** 満たさないパスだけを案内し、
+  **入力された値を画面へ反射しない**
+- 書き出しが失敗したときは**痕跡を残さない**
+  （本文・SHA-256・`Content-Disposition`・監査・一時ファイルのいずれも作らない）
 - **値をログにも監査にも出さない**（監査は `admin_settings_saved` / `ok` だけ）
 - 保存先は既存の `intake_answers` の JSON 内。**新しい表も列も作らない**
 
@@ -494,4 +509,5 @@ H リンク再発行／I 確定／J 保持期限／K closed 後の拒否／L 保
 | 10 | 既存DBに残った未知キーの**清掃機能** | **作らない**（SSOT v1.9 §3.0.1）。読み出しで除くだけで、既存行は触らない。<br>必要になったら本書を改定してから作る |
 | ~~11~~ | ~~必須が SSOT と実装で食い違う~~ | **4F-R3 で是正**（SSOT v1.9 §3.0.2）。<br>必須は生成物ひとつ。画面・API・管理・書き出しが同じ集合を見る |
 | 12 | `promotion.industry`（業種別） | **Phase 1 対象外**（SSOT v1.9 §3.5）。Phase 2 以降で扱うかを判断する |
-| 13 | `ADMIN_REQUIRED_FOR_EXPORT` の厳しさ | いまは**キーの存在**で満たす。<br>「送信先・保管方法は空にできない」等の内容条件を課すかは、<br>Operations（OPS-4）の取込要件が決まってから判断する |
+| ~~13~~ | ~~`ADMIN_REQUIRED_FOR_EXPORT` の厳しさ~~ | **4F-R4 で確定**（SSOT v1.10 §3.12）。<br>空でよい項目と空にできない項目を型ごとに定めた |
+| 14 | 真偽の項目に残る `null`（既存DB） | **自動で直さない**。読み出しで未回答として扱い、書き出しは拒否する。<br>本番は未配置のため該当データは存在しない |

@@ -702,6 +702,46 @@ final class AnswerSchema
     ];
 
     /**
+     * Smart Labo 設定の**内容**条件（SSOT v1.10 §3.12）。
+     *
+     * ★`ADMIN_REQUIRED_FOR_EXPORT` は「キーがあること」だけを見る種別ではない。
+     *   空でよい項目と、空では困る項目が混ざっている。
+     *     allow_empty=1 … 空が正式な回答（「予約URLなし」「外部サービスなし」）
+     *     allow_empty=0 … 空・空白だけは不可（プライバシーポリシーへ載る本文）
+     *   `url=1` は https のみ（§3.7 の検証）。
+     *
+     * @var array<string,array<string,string>>
+     */
+    public const ADMIN_VALUE_RULES = [
+        'web_links.salon_booking_url' => [
+            'type' => 'scalar',
+            'allow_empty' => '1',
+            'url' => '1',
+            'max' => '500',
+        ],
+        'privacy.destination' => [
+            'type' => 'scalar',
+            'allow_empty' => '0',
+            'max' => '200',
+        ],
+        'privacy.storage' => [
+            'type' => 'scalar',
+            'allow_empty' => '0',
+            'max' => '200',
+        ],
+        'privacy.external_services' => [
+            'type' => 'list',
+            'allow_empty' => '1',
+            'cap' => '10',
+            'item_max' => '60',
+        ],
+        'privacy.consent_checkbox' => [
+            'type' => 'bool',
+            'allow_empty' => '0',
+        ],
+    ];
+
+    /**
      * 語彙が決まっている項目。**正式な値以外は保存できない**。
      * ★未入力（`null` / `""`）は語彙の検査をしない。回答済みかどうかは必須側で見る。
      * @var array<string,list<string>>

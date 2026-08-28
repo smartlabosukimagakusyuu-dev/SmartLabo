@@ -399,6 +399,8 @@ export const STEPS = [
         inputType: 'url',
         audience: 'admin',
         adminRequired: true,
+        // ★空は「予約URLなし」という正式な設定。値があるときは https のみ（§3.7 の検証）
+        adminRule: { allowEmpty: true, url: true },
         hint: 'Smart Labo が設定します（W-05）。該当が無い場合は空のまま設定してください。',
       }),
       f('map_display', '地図の表示', KIND.SELECT, {
@@ -489,12 +491,15 @@ export const STEPS = [
         audience: 'admin',
         adminRequired: true,
         internal: true,
+        // ★プライバシーポリシーへ載る本文。空のままでは「検証済み」と呼べない
+        adminRule: { allowEmpty: false },
         hint: 'Smart Labo が設定します（PR-03）。',
       }),
       f('storage', '情報の保管方法', KIND.TEXT, {
         max: 200,
         audience: 'admin',
         adminRequired: true,
+        adminRule: { allowEmpty: false },
         hint: 'Smart Labo が設定します（PR-04）。',
       }),
       f('external_services', '利用する外部サービス', KIND.LIST, {
@@ -502,6 +507,8 @@ export const STEPS = [
         itemMax: 60,
         audience: 'admin',
         adminRequired: true,
+        // ★SSOT §3.9 は string[]・空値 []。0件が「外部サービスなし」の正式な回答
+        adminRule: { allowEmpty: true },
         addLabel: '外部サービスを追加',
         hint: 'Smart Labo が設定します（PR-07）。無い場合は0件のまま設定してください。',
       }),
