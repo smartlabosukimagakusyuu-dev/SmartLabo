@@ -600,115 +600,35 @@
   </section>
 
 
-  <!-- ============================== 07. 漫画（Phase 3 もプレースホルダ構造） ==============================
-       ★「漫画4枚を並べる箱」にしないため、見出し→コマ→解決への導線を1本の流れにした。
-         各コマはフキダシ付きのコマ枠として作ってあり、正式漫画を入れても浮かない。
-       ★差し替え手順： .sa-koma__art（svg）を
-         <img src="assets/images/salon/manga-1.webp" width="..." height="..." alt="..."> に置き換える。
-         コマ枠・番号・キャプションはそのまま使える。
-       ★漫画専用ページはまだ存在しないため、そこへのリンクは作らない（空リンク禁止）。 -->
-  <section class="sa-section sa-section--beige" id="manga" aria-labelledby="manga-title">
-    <div class="container">
-      <p class="sa-eyebrow">サロンオーナーの本音</p>
-      <h2 class="sa-h2 sa-h2--center" id="manga-title">
-        サロンオーナーの<br><span class="sa-mark">こんなお悩み</span>、ありませんか？
-      </h2>
+  <!-- ============================== 07. サロンオーナーのお悩み（正式漫画） ==============================
+       ★Phase C: 黒枠4カード・番号1〜4・Claude自作の人物SVG4点・均等4列グリッドを撤去し、
+         ChatGPT制作の正式漫画素材へ全面置換した。
+       ★漫画そのものがセクションの主要ビジュアル。カードに入れない・黒枠を付けない・
+         影や角丸で囲まない。画像の暖色背景とセクション背景を一致させて継ぎ目を消す。
+       ★PC(1536x1024) と Mobile(864x1821) は別素材。<picture> の media で出し分け、
+         1ビューポートにつき1リクエストに収める（display:none による二重ロードはしない）。
+       ★画像内に「サロンオーナーの こんなお悩み、ありませんか？」と
+         「そのお悩み、Smart Labo Salonでもっとシンプルに。」が入っている。
+         HTML側で同じ文言を二重表示しない。見出しは階層維持のため h2 を置くが視覚的には隠す。
+       ★375px 実測：見出し33.9px／悩み見出し 20.0・19.1・16.5・14.8px／
+         下部コピー21.3px。重要文字はすべて14px以上。
+       ★掲載内容の確認：4項目はいずれもサロンの現状の悩みの描写であり、
+         未提供機能の主張・効果保証・架空実績は含まれていない。 -->
+  <section class="sa-section sa-problems" id="manga" aria-labelledby="manga-title">
 
-      <ul class="sa-komas">
-        <li class="sa-koma reveal">
-          <span class="sa-koma__no" aria-hidden="true">1</span>
-          <div class="sa-koma__art">
-            <svg viewBox="0 0 200 190" role="img" aria-label="毎月の広告費に頭を抱えるサロンオーナーの漫画コマ">
-              <rect width="200" height="190" fill="#FFF8F2"/>
-              <path d="M0 150h200v40H0z" fill="#F6EBE0"/>
-              <circle cx="100" cy="96" r="30" fill="#F9E3D2"/>
-              <path d="M100 60c22 0 34 14 34 33 0 6-2 12-4 16-2-13-7-21-16-25-9 13-28 14-38 4-3 6-4 13-3 20-4-5-5-10-5-15 0-19 10-33 32-33z" fill="#4A3A34"/>
-              <path d="M88 92l10 8M112 92l-10 8" stroke="#4A3A34" stroke-width="3" stroke-linecap="round"/>
-              <path d="M92 114c5-4 11-4 16 0" stroke="#A8324E" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M48 190c0-30 23-52 52-52s52 22 52 52z" fill="#C2415F"/>
-              <path d="M24 34h58v34H44l-14 12V68h-6z" fill="#FFFFFF" stroke="#C2415F" stroke-width="3"/>
-              <text x="53" y="56" text-anchor="middle" font-size="21" font-weight="700" fill="#C2415F">¥¥¥</text>
-              <path d="M150 24l6 14 14 6-14 6-6 14-6-14-14-6 14-6z" fill="#F2C9D3"/>
-            </svg>
-          </div>
-          <p class="sa-koma__cap"><b>広告費が高い</b>新規のお客様を集める費用が、毎月重くのしかかる。</p>
-        </li>
+    <h2 class="visually-hidden" id="manga-title">サロンオーナーの こんなお悩み、ありませんか？</h2>
 
-        <li class="sa-koma reveal">
-          <span class="sa-koma__no" aria-hidden="true">2</span>
-          <div class="sa-koma__art">
-            <svg viewBox="0 0 200 190" role="img" aria-label="電話とWEBと当日来店の予約が混ざって慌てるスタッフの漫画コマ">
-              <rect width="200" height="190" fill="#FFF8F2"/>
-              <path d="M0 150h200v40H0z" fill="#F6EBE0"/>
-              <circle cx="100" cy="96" r="30" fill="#F9E3D2"/>
-              <path d="M100 60c24 0 34 14 34 32 0 8-2 14-5 19-1-14-6-22-15-26-9 13-28 14-38 4-3 6-4 13-3 20-4-6-6-12-6-18 0-18 10-31 33-31z" fill="#6B4A38"/>
-              <path d="M88 92c2-3 6-3 8 0M104 92c2-3 6-3 8 0" stroke="#6B4A38" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <ellipse cx="100" cy="114" rx="7" ry="6" fill="#A8324E"/>
-              <path d="M48 190c0-30 23-52 52-52s52 22 52 52z" fill="#A8511F"/>
-              <rect x="14" y="20" width="46" height="34" rx="6" fill="#FFFFFF" stroke="#A8511F" stroke-width="3"/>
-              <path d="M22 32h30M22 42h20" stroke="#A8511F" stroke-width="3" stroke-linecap="round"/>
-              <circle cx="160" cy="34" r="19" fill="#FFFFFF" stroke="#C2415F" stroke-width="3"/>
-              <path d="M152 30c4-6 12-6 16 0-2 6-6 6-8 12" stroke="#C2415F" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M160 46h.01" stroke="#C2415F" stroke-width="4" stroke-linecap="round"/>
-              <path d="M96 22v-10M76 30l-7-8M124 30l7-8" stroke="#C2415F" stroke-width="3.4" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <p class="sa-koma__cap"><b>予約管理が大変</b>電話・WEB・当日のご来店がバラバラで、確認に手間がかかる。</p>
-        </li>
-
-        <li class="sa-koma reveal">
-          <span class="sa-koma__no" aria-hidden="true">3</span>
-          <div class="sa-koma__art">
-            <svg viewBox="0 0 200 190" role="img" aria-label="前回の内容を思い出せずに困るスタッフの漫画コマ">
-              <rect width="200" height="190" fill="#FFF8F2"/>
-              <path d="M0 150h200v40H0z" fill="#F6EBE0"/>
-              <circle cx="100" cy="96" r="30" fill="#F9E3D2"/>
-              <path d="M100 60c22 0 34 14 34 33 0 6-2 12-4 16-2-13-7-21-16-25-9 13-28 14-38 4-3 6-4 13-3 20-4-5-5-10-5-15 0-19 10-33 32-33z" fill="#4A3A34"/>
-              <path d="M88 92c2-3 6-3 8 0M104 92c2-3 6-3 8 0" stroke="#4A3A34" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M92 116c5 3 11 3 16 0" stroke="#A8324E" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M48 190c0-30 23-52 52-52s52 22 52 52z" fill="#C2415F"/>
-              <circle cx="150" cy="40" r="8" fill="#F2C9D3"/>
-              <circle cx="166" cy="24" r="5" fill="#F2C9D3"/>
-              <rect x="112" y="8" width="76" height="46" rx="14" fill="#FFFFFF" stroke="#C2415F" stroke-width="3"/>
-              <text x="150" y="40" text-anchor="middle" font-size="26" font-weight="700" fill="#C2415F">？</text>
-            </svg>
-          </div>
-          <p class="sa-koma__cap"><b>お客様の情報がバラバラ</b>前回の内容が担当者の記憶頼み。引き継ぎができない。</p>
-        </li>
-
-        <li class="sa-koma reveal">
-          <span class="sa-koma__no" aria-hidden="true">4</span>
-          <div class="sa-koma__art">
-            <svg viewBox="0 0 200 190" role="img" aria-label="空いた予約枠を見て誰に声をかけるか迷うオーナーの漫画コマ">
-              <rect width="200" height="190" fill="#FFF8F2"/>
-              <path d="M0 150h200v40H0z" fill="#F6EBE0"/>
-              <rect x="118" y="14" width="70" height="62" rx="8" fill="#FFFFFF" stroke="#C2415F" stroke-width="3"/>
-              <path d="M118 30h70" stroke="#C2415F" stroke-width="3"/>
-              <rect x="126" y="38" width="16" height="12" rx="3" fill="#F2C9D3"/>
-              <rect x="148" y="38" width="16" height="12" rx="3" fill="#EFE3D8"/>
-              <rect x="170" y="38" width="10" height="12" rx="3" fill="#F2C9D3"/>
-              <rect x="126" y="56" width="16" height="12" rx="3" fill="#EFE3D8"/>
-              <rect x="148" y="56" width="16" height="12" rx="3" fill="#EFE3D8"/>
-              <circle cx="100" cy="96" r="30" fill="#F9E3D2"/>
-              <path d="M100 60c26 0 36 14 34 34-5-4-9-12-11-19-12 13-32 16-46 8-2 8-2 16 0 22-6-6-9-14-9-22 0-14 8-23 32-23z" fill="#3A2A22"/>
-              <path d="M88 92c2-3 6-3 8 0M104 92c2-3 6-3 8 0" stroke="#3A2A22" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M92 116c5 2 11 2 16 0" stroke="#A8324E" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M48 190c0-30 23-52 52-52s52 22 52 52z" fill="#A8511F"/>
-              <path d="M14 44h54v32H36l-12 10V76h-10z" fill="#FFFFFF" stroke="#A8511F" stroke-width="3"/>
-              <text x="41" y="66" text-anchor="middle" font-size="20" font-weight="700" fill="#A8511F">…</text>
-            </svg>
-          </div>
-          <p class="sa-koma__cap"><b>空き時間を埋めたい</b>リピーターを増やしたいが、誰に声をかければいいか分からない。</p>
-        </li>
-      </ul>
-
-      <p class="sa-koma__note">※コマは制作中のイメージです。現在制作している漫画に差し替えます。</p>
-
-      <div class="sa-koma__bridge">
-        <p>その4つ、<b>Smart Labo Salon で変わります。</b></p>
-        <a href="#revisit" class="btn btn--primary btn--lg">どう変わるかを見る</a>
-      </div>
+    <div class="sa-problems__art">
+      <picture>
+        <source media="(max-width: 860px)"
+                srcset="assets/images/salon/lp/salon-owner-problems-mobile.webp"
+                width="864" height="1821">
+        <img src="assets/images/salon/lp/salon-owner-problems-pc.webp"
+             width="1536" height="1024" loading="lazy" decoding="async"
+             alt="広告費や予約管理、前回の接客内容、しばらく来ていないお客様への声かけに悩むサロンオーナーを描いたイラスト">
+      </picture>
     </div>
+
   </section>
 
 

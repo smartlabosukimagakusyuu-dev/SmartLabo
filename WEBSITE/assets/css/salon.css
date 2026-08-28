@@ -1096,93 +1096,40 @@
 
 
 /* ==========================================================================
-   09. 漫画（コマ枠として作る。正式漫画を入れても浮かない構造）
+   09. サロンオーナーのお悩み（正式漫画がセクションそのもの）
+   --------------------------------------------------------------------------
+   ★Phase C: 黒枠4カード（.sa-koma 系）を全廃した。他セクションで使っていない
+     ことを確認したうえで削除している。
+   ★漫画は「セクションの主要ビジュアル」。カード枠・黒枠・角丸・影・
+     画像まわりの大きな白余白は付けない。全幅の帯として置く。
+   ★画像の地色とセクション背景を一致させて継ぎ目を消す。
+     PC素材の縁は #FEF0DC、Mobile素材の縁は #FEFCF9 と異なるため、
+     表示中の素材に合わせて背景色をブレークポイントで切り替える。
+     ★画像そのものは加工していない（背景色を焼き替えていない）。
    ========================================================================== */
 
-.sa-komas {
-  list-style: none;
-  margin: 26px 0 0;
+/* ★.salon-theme .sa-section が clamp(48px,7.5vw,92px) の上下余白を持つため、
+     同じ詳細度(0,2,0)で打ち消す。漫画自体に余白が描かれており、
+     セクション側で余白を足すと巨大な空白になる。 */
+.salon-theme .sa-problems {
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-.sa-koma {
-  position: relative;
-  background: #fff;
-  border: 3px solid var(--sa-ink);
-  border-radius: 6px;
+  background: #FEFCF9;             /* Mobile素材の縁の色。861px以上で PC素材の色へ切替 */
   overflow: hidden;
-  box-shadow: var(--sa-sh-md);
 }
-.sa-koma__no {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  display: grid;
-  place-content: center;
-  width: 32px;
-  height: 32px;
-  background: var(--sa-ink);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 800;
-  border-bottom-right-radius: 10px;
-}
-.sa-koma__art { border-bottom: 3px solid var(--sa-ink); }
-.sa-koma__art svg,
-.sa-koma__art img { display: block; width: 100%; height: auto; }
-.sa-koma__cap {
-  margin: 0;
-  padding: 14px 15px;
-  font-size: var(--sa-fs-sm);
-  line-height: 1.7;
-  color: var(--sa-ink-2);
-}
-.sa-koma__cap b {
+
+.sa-problems__art { line-height: 0; }   /* 画像下の行間由来の隙間を出さない */
+
+.sa-problems__art img {
   display: block;
-  margin-bottom: 4px;
-  font-size: var(--sa-fs-body);
-  font-weight: 800;
-  color: var(--sa-ink);
-}
-.sa-koma__note {
-  margin: 14px 0 0;
-  text-align: center;
-  font-size: var(--sa-fs-note);
-  color: var(--sa-ink-3);
+  width: 100%;
+  height: auto;                    /* 縦横比を維持。crop しない */
+  max-width: 1536px;               /* 原寸を超えて拡大しない */
+  margin-inline: auto;
 }
 
-/* 漫画から解決へつなぐ帯 */
-.sa-koma__bridge {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 16px 24px;
-  margin-top: 26px;
-  padding: 22px 26px;
-  border-radius: var(--sa-r-lg);
-  background: #fff;
-  border: 2px solid var(--sa-pink-line);
-  box-shadow: var(--sa-sh-md);
+@media (min-width: 861px) {
+  .salon-theme .sa-problems { background: #FEF0DC; }   /* PC素材の縁の色に合わせる */
 }
-.sa-koma__bridge p {
-  margin: 0;
-  font-size: clamp(17px, 2.2vw, 21px);
-  font-weight: 700;
-  color: var(--sa-ink-2);
-}
-.sa-koma__bridge b { color: var(--sa-pink-deep); font-weight: 800; }
-
-@media (max-width: 1080px) { .sa-komas { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px) {
-  .sa-komas { grid-template-columns: 1fr; }
-  .sa-koma__bridge { flex-direction: column; text-align: center; }
-  .sa-koma__bridge .btn { width: 100%; justify-content: center; }
-}
-
 
 /* ==========================================================================
    10. 料金（創業メンバーを主役に）
