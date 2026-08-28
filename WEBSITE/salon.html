@@ -403,83 +403,97 @@
   </section>
 
 
-  <!-- ============================== 05. できること（管理画面が主役） ==============================
-       ★実画面 > 説明文。大きな画面を中央に置き、周りに短い吹き出しを配置する。
-         Salon が実在するシステムであることを見せる面。
-       ★吹き出しはPCでは画面の周囲に絶対配置、スマホでは画面の下へ並ぶ（読み順は同じ）。
-       ★実画面はデモ用の架空データ（SALON SOLEIL）。節の末尾に必ず明示する。 -->
-  <section class="sa-section" id="screens" aria-labelledby="screens-title">
+  <!-- ============================== 05. できること／実画面 ==============================
+       ★Phase D0: 「白いフレーム＋3列カード」をやめ、MASTER COMP の
+         「左に説明・右に実画面」の非対称レイアウトへ作り替えた。
+         行ごとに左右を入れ替え、均一グリッドに見えないようにしている。
+       ★実画面を小さなカードへ閉じ込めない。1行につき1枚を大きく見せる。
+       ★実画面は既存の正式スクリーンショット4点をそのまま使用している。
+         未取得の画面（予約管理カレンダー・オーナー件数表示）について
+         代替SVGは作らない。文章で補い、素材が届いたら差し込む。
+       ★実画面はデモ用の架空データ。節の末尾に必ず明示する。 -->
+  <section class="sa-section sa-section--fadein" id="screens" aria-labelledby="screens-title">
     <div class="container">
-      <p class="sa-eyebrow">実際の画面</p>
-      <h2 class="sa-h2 sa-h2--center" id="screens-title">これが、<span class="sa-mark">実際に使う画面</span>です。</h2>
-      <p class="sa-lead sa-lead--center">お客様が予約する入口から、接客の記録、次のご来店のご案内までが1本につながります。</p>
 
-      <!-- ステージ1：店舗ページ -->
-      <div class="sa-stage reveal">
-        <div class="sa-stage__frame">
-          <div class="sa-stage__bar" aria-hidden="true">
-            <span></span><span></span><span></span>
-            <b>お客様から見える店舗ページ</b>
-          </div>
-          <img src="assets/images/salon/salon-public-shop.webp" width="1040" height="1803" loading="lazy"
-               alt="店舗の紹介・メニュー・スタッフ・写真が掲載された、お客様から見える店舗ページ">
+      <div class="sa-scr__head">
+        <p class="sa-eyebrow">実際の画面</p>
+        <h2 class="sa-h2 sa-h2--left" id="screens-title">これが、<span class="sa-mark">実際に使う画面</span>です。</h2>
+        <p class="sa-lead">お客様が予約する入口から、接客の記録、次のご来店のご案内までが1本につながります。</p>
+      </div>
+
+      <!-- 01 店舗ページ：左に説明＋吹き出し／右に大きな実画面 -->
+      <div class="sa-scr reveal">
+        <div class="sa-scr__text">
+          <p class="sa-scr__no"><span aria-hidden="true">01</span>お客様の入口</p>
+          <h3 class="sa-scr__title">店舗ページから、24時間WEB予約。</h3>
+          <ul class="sa-scr__points">
+            <li><b>24時間WEB予約</b>営業時間外でも予約が入ります</li>
+            <li><b>写真・メニュー</b>店舗の管理画面から自分で更新</li>
+            <li><b>予約が入ると通知</b>店舗宛てにメールが届きます</li>
+          </ul>
         </div>
-        <ul class="sa-stage__notes">
-          <li class="sa-note-b sa-note-b--1"><b>24時間WEB予約</b>営業時間外でも予約が入ります</li>
-          <li class="sa-note-b sa-note-b--2"><b>写真・メニュー</b>店舗の管理画面から自分で更新</li>
-          <li class="sa-note-b sa-note-b--3"><b>予約が入ると通知</b>店舗宛てにメールが届きます</li>
-        </ul>
-      </div>
-
-      <!-- ステージ2：メモ → AI整理 → 接客準備 -->
-      <p class="sa-flowlabel">接客のあとの30秒が、次のご来店の準備になります。</p>
-
-      <div class="sa-trio reveal">
-        <figure class="sa-trio__item">
-          <span class="sa-trio__step" aria-hidden="true">1</span>
-          <div class="sa-stage__frame sa-stage__frame--phone">
-            <div class="sa-stage__bar" aria-hidden="true"><span></span><span></span><span></span><b>30秒メモ</b></div>
-            <img src="assets/images/salon/salon-ui-memo-phone.webp" width="1040" height="1726" loading="lazy"
-                 alt="接客のあとにスマートフォンから短い接客メモを入力している画面">
-          </div>
-          <figcaption><b>スマホで短く入力</b>接客直後に、その場で30秒。</figcaption>
-        </figure>
-
-        <figure class="sa-trio__item">
-          <span class="sa-trio__step" aria-hidden="true">2</span>
-          <div class="sa-stage__frame">
-            <div class="sa-stage__bar" aria-hidden="true"><span></span><span></span><span></span><b>AIが整理した内容の確認</b></div>
-            <img src="assets/images/salon/salon-ui-ai-review.webp" width="1360" height="1581" loading="lazy"
-                 alt="AIが整理した接客内容を項目ごとに表示し、残すかどうかをスタッフが確認して選ぶ画面">
-          </div>
-          <figcaption><b>残す内容は人が決める</b>AIが整理し、スタッフが1件ずつ確認します。</figcaption>
-        </figure>
-
-        <figure class="sa-trio__item">
-          <span class="sa-trio__step" aria-hidden="true">3</span>
-          <div class="sa-stage__frame">
-            <div class="sa-stage__bar" aria-hidden="true"><span></span><span></span><span></span><b>次回来店の接客準備</b></div>
-            <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128" loading="lazy"
-                 alt="前回のポイント・前回の会話・今回の提案候補をまとめて表示した、次回来店前の接客準備の画面">
-          </div>
-          <figcaption><b>次回来店前に確認</b>前回のポイント・会話・提案候補が並びます。</figcaption>
+        <figure class="sa-scr__shot">
+          <div class="sa-shot__chrome" aria-hidden="true"><span></span><span></span><span></span><b>お客様から見える店舗ページ</b></div>
+          <img src="assets/images/salon/salon-public-shop.webp" width="1040" height="1803" loading="lazy" decoding="async"
+               alt="店舗の紹介・メニュー・スタッフ・写真が掲載された、お客様から見える店舗ページ">
         </figure>
       </div>
 
-      <!-- 画面を持たない機能も、ここで漏れなく伝える -->
-      <ul class="sa-more">
+      <p class="sa-scr__bridge">接客のあとの30秒が、次のご来店の準備になります。</p>
+
+      <!-- 02 30秒メモ：右に説明／左に実画面（左右を入れ替えて均一に見せない） -->
+      <div class="sa-scr sa-scr--flip reveal">
+        <div class="sa-scr__text">
+          <p class="sa-scr__no"><span aria-hidden="true">02</span>接客のあと</p>
+          <h3 class="sa-scr__title">スマホで、その場で30秒。</h3>
+          <p class="sa-scr__desc">接客直後に短いメモを残すだけ。あとから思い出して書く必要がありません。</p>
+        </div>
+        <figure class="sa-scr__shot sa-scr__shot--phone">
+          <div class="sa-shot__chrome" aria-hidden="true"><span></span><span></span><span></span><b>30秒メモ</b></div>
+          <img src="assets/images/salon/salon-ui-memo-phone.webp" width="1040" height="1726" loading="lazy" decoding="async"
+               alt="接客のあとにスマートフォンから短い接客メモを入力している画面">
+        </figure>
+      </div>
+
+      <!-- 03 AI整理 -->
+      <div class="sa-scr reveal">
+        <div class="sa-scr__text">
+          <p class="sa-scr__no"><span aria-hidden="true">03</span>AIが整理</p>
+          <h3 class="sa-scr__title">残す内容は、人が決める。</h3>
+          <p class="sa-scr__desc">AIが読みやすい形に整理し、スタッフが1件ずつ確認して選びます。自動で記録されたり公開されたりすることはありません。</p>
+        </div>
+        <figure class="sa-scr__shot">
+          <div class="sa-shot__chrome" aria-hidden="true"><span></span><span></span><span></span><b>AIが整理した内容の確認</b></div>
+          <img src="assets/images/salon/salon-ui-ai-review.webp" width="1360" height="1581" loading="lazy" decoding="async"
+               alt="AIが整理した接客内容を項目ごとに表示し、残すかどうかをスタッフが確認して選ぶ画面">
+        </figure>
+      </div>
+
+      <!-- 04 接客準備 -->
+      <div class="sa-scr sa-scr--flip reveal">
+        <div class="sa-scr__text">
+          <p class="sa-scr__no"><span aria-hidden="true">04</span>次のご来店前</p>
+          <h3 class="sa-scr__title">思い出すところから、始めない。</h3>
+          <p class="sa-scr__desc">前回のポイント・前回の会話・今回の提案候補が来店前に並びます。担当が変わっても引き継げます。</p>
+        </div>
+        <figure class="sa-scr__shot">
+          <div class="sa-shot__chrome" aria-hidden="true"><span></span><span></span><span></span><b>次回来店の接客準備</b></div>
+          <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128" loading="lazy" decoding="async"
+               alt="前回のポイント・前回の会話・今回の提案候補をまとめて表示した、次回来店前の接客準備の画面">
+        </figure>
+      </div>
+
+      <!-- 画面を持たない機能も、ここで漏れなく伝える（カードにしない） -->
+      <ul class="sa-scr__more">
         <li>
-          <span class="sa-more__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h9"/><circle cx="18.5" cy="17" r="2.5"/></svg></span>
           <b>予約・来店をひとつの画面で</b>
           <span>WEB予約・手動での予約登録・予約なしのご来店をまとめて管理。受付から接客終了までの状態が一覧で分かり、予約を受けない時間帯も設定できます。</span>
         </li>
         <li>
-          <span class="sa-more__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span>
           <b>再来店候補の件数と一覧</b>
           <span>最終来店日・ご来店回数・受けたメニュー・担当・今後のご予約の有無などで対象を絞れます。<a href="#revisit">くわしくは「攻める集客」へ</a></span>
         </li>
         <li>
-          <span class="sa-more__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 15v-3M12 15V9M16 15v-5"/></svg></span>
           <b>オーナー向けの件数表示</b>
           <span>予約・来店・新規／再来店・人気メニュー・スタッフ別の担当状況などを件数で確認。PINで保護され、CSVで書き出せます。※売上金額の分析・離脱予測・多店舗比較は含まれていません。</span>
         </li>
@@ -732,8 +746,8 @@
   <section class="sa-section sa-section--warm" id="website" aria-labelledby="web-title">
     <div class="container">
       <p class="sa-eyebrow">ホームページ制作</p>
-      <h2 class="sa-h2 sa-h2--center" id="web-title">ホームページから、<span class="sa-nb"><span class="sa-mark">集客の仕組み</span>をつくる。</span></h2>
-      <p class="sa-lead sa-lead--center">
+      <h2 class="sa-h2 sa-h2--left" id="web-title">ホームページから、<span class="sa-nb"><span class="sa-mark">集客の仕組み</span>をつくる。</span></h2>
+      <p class="sa-lead">
         「作って終わり」にはしません。お客様が見つけてから、また来ていただくまでを1本につなげます。
       </p>
 
@@ -776,11 +790,11 @@
 
 
   <!-- ============================== 10. 導入までの流れ（6STEP） ============================== -->
-  <section class="sa-section" id="flow" aria-labelledby="flow-title">
+  <section class="sa-section sa-section--fadeout" id="flow" aria-labelledby="flow-title">
     <div class="container">
       <p class="sa-eyebrow">導入までの流れ</p>
-      <h2 class="sa-h2 sa-h2--center" id="flow-title">ご相談から、<span class="sa-nb">運用開始まで。</span></h2>
-      <p class="sa-lead sa-lead--center">初期設定は当社が行います。パソコンの設定作業をお願いすることはありません。</p>
+      <h2 class="sa-h2 sa-h2--left" id="flow-title">ご相談から、<span class="sa-nb">運用開始まで。</span></h2>
+      <p class="sa-lead">初期設定は当社が行います。パソコンの設定作業をお願いすることはありません。</p>
 
       <ol class="sa-steps">
         <li class="sa-step reveal">

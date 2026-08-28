@@ -174,11 +174,25 @@
    03. セクションの型（色面の使い分け）
    ========================================================================== */
 
-.salon-theme .sa-section { padding: clamp(48px, 7.5vw, 92px) 0; }
+/* ★Phase D0: セクション余白を clamp(48px,7.5vw,92px) から圧縮した。
+     1440px で 92px -> 64px。MASTER COMP の情報密度に寄せ、
+     「1セクション＝1画面」になるのを避ける。 */
+.salon-theme .sa-section { padding: clamp(40px, 4.6vw, 64px) 0; }
+
+/* ★背景は白セクションの連続にしない。前後がつながるよう、
+     セクションの端でアイボリー/暖色へ溶けるグラデーションを使う。 */
 .salon-theme .sa-section--ivory { background: var(--sa-bg-ivory); }
 .salon-theme .sa-section--beige { background: var(--sa-bg-beige); }
 .salon-theme .sa-section--warm {
   background: linear-gradient(180deg, #FBF0E4 0%, var(--sa-bg-beige) 100%);
+}
+/* 上端で暖色から白へ溶ける面（直前のセクションから続いて見せる） */
+.salon-theme .sa-section--fadein {
+  background: linear-gradient(180deg, #FFF6F0 0%, #FFFFFF 26%, #FFFFFF 100%);
+}
+/* 下端で白からアイボリーへ溶ける面（次のセクションへ続いて見せる） */
+.salon-theme .sa-section--fadeout {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 62%, var(--sa-bg-ivory) 100%);
 }
 
 .sa-eyebrow {
@@ -205,6 +219,9 @@
   color: var(--sa-ink);
 }
 .sa-h2--center { text-align: center; }
+/* ★すべてのセクションを「小ラベル→中央巨大H2→余白」にしない。
+     左寄せの見出しも使い、リズムを作る。 */
+.sa-h2--left { text-align: left; }
 .sa-h2--center + .sa-lead--center { margin-inline: auto; }
 .sa-mark {
   background: linear-gradient(transparent 60%, var(--sa-pink-line) 60%);
@@ -212,7 +229,7 @@
 }
 
 .sa-lead {
-  margin: 0 0 28px;
+  margin: 0 0 22px;
   max-width: 62ch;
   font-size: var(--sa-fs-lead);
   line-height: 1.85;
@@ -443,14 +460,19 @@
      ファーストビュー＋この帯だけで商品全体像が分かることを狙う。
    ========================================================================== */
 
+/* ★Phase D0: 白い大カード（枠＋強い影＋大きな角丸）をやめ、
+     HERO直下の「機能帯」にした。薄いSalon背景・細い区切り線だけで、
+     HEROから地続きに見えるようにしている。8枚カードへは分割しない。 */
 .sa-fbar {
   position: relative;
-  margin-top: clamp(16px, 2.4vw, 28px);
-  padding: 22px clamp(16px, 2.4vw, 30px);
-  background: #fff;
-  border: 1px solid var(--sa-pink-line);
-  border-radius: var(--sa-r-lg);
-  box-shadow: var(--sa-sh-lg);
+  margin-top: clamp(10px, 1.6vw, 20px);
+  padding: 16px clamp(12px, 2vw, 22px) 14px;
+  background: rgba(255, 255, 255, .62);
+  border: 0;
+  border-top: 1px solid var(--sa-pink-line);
+  border-bottom: 1px solid var(--sa-pink-line);
+  border-radius: 0;
+  box-shadow: none;
 }
 .sa-fbar__lead {
   margin: 0 0 16px;
@@ -478,7 +500,7 @@
   text-align: center;
   transition: background-color .18s ease;
 }
-.sa-fbar__list li:hover { background: var(--sa-bg-ivory); }
+.sa-fbar__list li:hover { background: rgba(253, 239, 242, .8); }
 .sa-fbar__ico {
   display: grid;
   place-content: center;
@@ -709,35 +731,106 @@
 
 
 /* ==========================================================================
-   07. できること（管理画面が主役）
+   07. できること／実画面（左右非対称・実画面を大きく）
+   --------------------------------------------------------------------------
+   ★Phase D0: 白いフレーム＋3列カード（.sa-stage / .sa-trio / .sa-more）を廃止。
+     MASTER COMP の「左に説明・右に実画面」の非対称レイアウトへ作り替えた。
+     行ごとに左右を入れ替え（.sa-scr--flip）、均一グリッドに見せない。
+   ★実画面は1行につき1枚を大きく。小さなカードへ閉じ込めない。
+   ★画面の枠は「ブラウザ/アプリの窓」を示す最小限のクローム（バー＋3点）だけ。
+     影は弱く、外枠の線は引かない。
    ========================================================================== */
 
-/* --- 大きな1枚：PCは画面の周りに吹き出しを絶対配置 --- */
-.sa-stage {
-  position: relative;
-  margin-top: 30px;
+.sa-scr__head { margin-bottom: clamp(20px, 3vw, 32px); max-width: 46em; }
+
+.sa-scr {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 26px;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: clamp(20px, 3.4vw, 48px);
   align-items: center;
+  padding: clamp(16px, 1.8vw, 24px) 0;
 }
-.sa-stage__frame {
-  background: #fff;
-  border: 1px solid var(--sa-line);
-  border-radius: var(--sa-r-lg);
+/* 行ごとに左右を入れ替える（同じ形の反復に見せない） */
+.sa-scr--flip .sa-scr__text { order: 2; }
+.sa-scr--flip .sa-scr__shot { order: 1; }
+
+.sa-scr__no {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+  font-size: var(--sa-fs-note);
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--sa-pink-deep);
+}
+.sa-scr__no span {
+  display: grid;
+  place-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--sa-r-pill);
+  background: var(--sa-pink);
+  color: #fff;
+  font-size: 14px;
+}
+.sa-scr__title {
+  margin: 0 0 10px;
+  font-size: clamp(20px, 2.6vw, 27px);
+  font-weight: 800;
+  line-height: 1.4;
+  color: var(--sa-ink);
+}
+.sa-scr__desc { margin: 0; font-size: var(--sa-fs-sm); line-height: 1.9; color: var(--sa-ink-2); }
+
+/* 要点は箇条書き。カードにしない（枠も影も付けない） */
+.sa-scr__points { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.sa-scr__points li {
+  position: relative;
+  padding-left: 26px;
+  font-size: var(--sa-fs-sm);
+  line-height: 1.75;
+  color: var(--sa-ink-2);
+}
+.sa-scr__points li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: .5em;
+  width: 10px;
+  height: 6px;
+  border-left: 2.5px solid var(--sa-pink);
+  border-bottom: 2.5px solid var(--sa-pink);
+  transform: rotate(-45deg);
+}
+.sa-scr__points b { display: block; color: var(--sa-ink); font-size: var(--sa-fs-body); }
+
+/* --- 実画面。窓のクロームだけを付け、外枠の線は引かない --- */
+.sa-scr__shot {
+  margin: 0;
+  border-radius: var(--sa-r-md);
   overflow: hidden;
-  box-shadow: var(--sa-sh-lg);
+  background: #fff;
+  box-shadow: var(--sa-sh-md);
 }
-.sa-stage__bar {
+.sa-scr__shot img { display: block; width: 100%; height: auto; }
+/* ★縦に長いページのスクショは、窓の中で上端から一定の高さだけ見せる。
+     620px幅だと1枚で1,000pxを超え、セクションが4画面近くになるため。
+     ★この切り抜きは実画面スクショ専用。人物・漫画には適用しない。 */
+.sa-scr__shot img { max-height: 480px; object-fit: cover; object-position: top center; }
+/* スマホ画面は端末の形が意味を持つので切らない */
+.sa-scr__shot--phone { max-width: 320px; margin-inline: auto; }
+.sa-scr__shot--phone img { max-height: none; object-fit: fill; }
+
+.sa-shot__chrome {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 14px;
+  padding: 9px 13px;
   background: var(--sa-bg-ivory);
-  border-bottom: 1px solid var(--sa-line);
 }
-.sa-stage__bar span { width: 8px; height: 8px; border-radius: 50%; background: var(--sa-line-strong); }
-.sa-stage__bar b {
+.sa-shot__chrome span { width: 8px; height: 8px; border-radius: 50%; background: var(--sa-line-strong); }
+.sa-shot__chrome b {
   margin-left: 8px;
   font-size: var(--sa-fs-note);
   font-weight: 700;
@@ -746,158 +839,49 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.sa-stage__frame img { display: block; width: 100%; height: auto; }
-.sa-stage__frame--phone { max-width: 280px; margin-inline: auto; border-radius: var(--sa-r-lg); }
 
-/* 画面のまわりの短い吹き出し */
-.sa-stage__notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-.sa-note-b {
-  position: relative;
-  padding: 14px 18px 14px 20px;
-  border-radius: 16px;
-  background: #fff;
-  border: 2px solid var(--sa-pink-line);
-  box-shadow: var(--sa-sh-md);
-  font-size: var(--sa-fs-sm);
-  line-height: 1.7;
-  color: var(--sa-ink-2);
-}
-.sa-note-b b {
-  display: block;
-  margin-bottom: 3px;
-  font-size: var(--sa-fs-body);
-  font-weight: 800;
-  color: var(--sa-pink-deep);
-}
-/* PCでは画面側へ向いたしっぽを出す */
-@media (min-width: 861px) {
-  .sa-note-b::after {
-    content: "";
-    position: absolute;
-    left: -10px;
-    top: 26px;
-    width: 16px;
-    height: 16px;
-    background: #fff;
-    border-left: 2px solid var(--sa-pink-line);
-    border-bottom: 2px solid var(--sa-pink-line);
-    transform: rotate(45deg);
-  }
-}
-
-@media (max-width: 860px) {
-  .sa-stage { grid-template-columns: 1fr; gap: 16px; margin-top: 22px; }
-}
-
-/* --- 3枚の流れ（メモ → AI整理 → 接客準備） --- */
-.sa-flowlabel {
-  margin: 44px 0 18px;
-  text-align: center;
-  font-size: clamp(17px, 2.2vw, 21px);
+/* 節の中の区切りコピー */
+.sa-scr__bridge {
+  margin: clamp(14px, 2vw, 24px) 0 0;
+  font-size: clamp(17px, 2.1vw, 21px);
   font-weight: 800;
   color: var(--sa-ink);
+  text-align: center;
 }
-.sa-flowlabel::after {
+.sa-scr__bridge::after {
   content: "";
   display: block;
-  width: 56px;
+  width: 52px;
   height: 4px;
-  margin: 12px auto 0;
+  margin: 10px auto 0;
   border-radius: 2px;
   background: var(--sa-pink);
 }
 
-.sa-trio {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  align-items: start;
-}
-.sa-trio__item { position: relative; margin: 0; }
-.sa-trio__step {
-  position: absolute;
-  z-index: 2;
-  top: -12px;
-  left: -10px;
-  display: grid;
-  place-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: var(--sa-r-pill);
-  background: var(--sa-pink);
-  color: #fff;
-  font-size: 17px;
-  font-weight: 800;
-  box-shadow: var(--sa-sh-md);
-}
-/* PCでは項目間に矢印を描く */
-@media (min-width: 861px) {
-  .sa-trio__item + .sa-trio__item::before {
-    content: "";
-    position: absolute;
-    left: -14px;
-    top: 74px;
-    width: 10px;
-    height: 10px;
-    border-top: 3px solid var(--sa-pink);
-    border-right: 3px solid var(--sa-pink);
-    transform: rotate(45deg);
-  }
-}
-.sa-trio figcaption {
-  margin-top: 12px;
-  font-size: var(--sa-fs-sm);
-  line-height: 1.75;
-  color: var(--sa-ink-2);
-}
-.sa-trio figcaption b {
-  display: block;
-  margin-bottom: 3px;
-  font-size: var(--sa-fs-body);
-  font-weight: 800;
-  color: var(--sa-ink);
-}
-
-@media (max-width: 860px) {
-  .sa-trio { grid-template-columns: 1fr; gap: 26px; }
-  .sa-trio__step { left: 0; }
-}
-
-/* --- 画面を持たない機能 --- */
-.sa-more {
+/* 画面を持たない機能。カードにせず、細い区切り線だけで並べる */
+.sa-scr__more {
   list-style: none;
-  margin: 34px 0 0;
+  margin: clamp(20px, 3vw, 30px) 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 0 clamp(18px, 2.4vw, 30px);
 }
-.sa-more li {
-  display: grid;
-  grid-template-columns: 44px 1fr;
-  gap: 4px 14px;
-  padding: 18px;
-  border-radius: var(--sa-r-md);
-  background: var(--sa-bg-ivory);
-  border: 1px solid var(--sa-line);
+.sa-scr__more li {
+  padding: 16px 0 0;
+  border-top: 2px solid var(--sa-pink-line);
 }
-.sa-more__ico {
-  grid-row: span 2;
-  display: grid;
-  place-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--sa-r-md);
-  background: #fff;
-  border: 1px solid var(--sa-pink-line);
-  color: var(--sa-pink-deep);
-}
-.sa-more__ico svg { width: 22px; height: 22px; }
-.sa-more b { font-size: var(--sa-fs-body); font-weight: 800; color: var(--sa-ink); align-self: center; }
-.sa-more span { font-size: var(--sa-fs-sm); line-height: 1.75; color: var(--sa-ink-2); }
-.sa-more a { color: var(--sa-pink-deep); text-decoration: underline; text-underline-offset: 3px; }
+.sa-scr__more b { display: block; margin-bottom: 5px; font-size: var(--sa-fs-body); font-weight: 800; color: var(--sa-ink); }
+.sa-scr__more span { font-size: var(--sa-fs-sm); line-height: 1.75; color: var(--sa-ink-2); }
+.sa-scr__more a { color: var(--sa-pink-deep); text-decoration: underline; text-underline-offset: 3px; }
 
-@media (max-width: 1080px) { .sa-more { grid-template-columns: 1fr; } }
+@media (max-width: 860px) {
+  .sa-scr { grid-template-columns: 1fr; gap: 16px; padding: 16px 0; }
+  /* 1列では常に「説明 → 実画面」の順にする（flip を打ち消す） */
+  .sa-scr--flip .sa-scr__text { order: 0; }
+  .sa-scr--flip .sa-scr__shot { order: 0; }
+  .sa-scr__more { grid-template-columns: 1fr; gap: 16px 0; }
+}
 
 
 /* ==========================================================================
@@ -963,17 +947,19 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
 }
+/* ★Phase D0: 白カード（枠＋影）をやめ、背景の面に直接乗せる。
+     枠を外しても番号バッジとアイコンで区切りは読める。 */
 .sa-cycle__node {
   position: relative;
   display: grid;
   justify-items: center;
   align-content: start;
   gap: 7px;
-  padding: 20px 16px 18px;
+  padding: 18px 14px 14px;
   border-radius: var(--sa-r-md);
-  background: rgba(255, 255, 255, .94);
-  border: 1px solid var(--sa-pink-line);
-  box-shadow: var(--sa-sh-sm);
+  background: rgba(255, 255, 255, .5);
+  border: 0;
+  box-shadow: none;
   text-align: center;
 }
 .sa-cycle__num {
@@ -1006,10 +992,11 @@
 .sa-cycle__desc em { font-style: normal; font-weight: 800; color: var(--sa-pink-deep); }
 
 /* 人が確認する工程を強調 */
+/* 人が確認する工程だけは、面の中で明確に浮かせる（意味のある強調） */
 .sa-cycle__node--human {
   background: #fff;
   border: 2px solid var(--sa-pink);
-  box-shadow: var(--sa-sh-md);
+  box-shadow: none;
 }
 .sa-cycle__node--human .sa-cycle__ico { background: var(--sa-pink); color: #fff; }
 /* ★塗りと文字色の組み合わせは実測で決めている。
@@ -1231,12 +1218,15 @@
 .sa-price__cta .btn { width: 100%; justify-content: center; }
 
 /* --- 控えめカード --- */
+/* ★Phase D0: 3プランの色役割を明確にする。
+     創業メンバー=ピンク（主役） / Standard=Salon Pink系の淡色 / HP制作=オレンジ（別商品）。
+     カード自体は「並列で比較する対象」なので残す（Skill の許容範囲）。 */
 .sa-price__sub {
   padding: 26px 22px;
   border-radius: var(--sa-r-lg);
-  background: #fff;
-  border: 1px solid var(--sa-line);
-  box-shadow: var(--sa-sh-sm);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FDF6F8 100%);
+  border: 1px solid var(--sa-pink-line);
+  box-shadow: none;
 }
 .sa-price__label {
   margin: 0 0 8px;
@@ -1324,16 +1314,18 @@
   grid-template-columns: repeat(6, 1fr);
   gap: 30px 22px;
 }
+/* ★Phase D0: 白カード＋影＋枠をやめる。正式素材が届くまでの暫定表示なので、
+     ページの中で過度に目立たせない。人物やデバイスのイラストは新規に描かない。 */
 .sa-chain__item {
   position: relative;
   display: grid;
   justify-items: center;
-  gap: 9px;
-  padding: 18px 10px;
+  gap: 8px;
+  padding: 12px 8px;
   border-radius: var(--sa-r-md);
-  background: #fff;
-  border: 1px solid var(--sa-beige-line);
-  box-shadow: var(--sa-sh-sm);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   font-size: var(--sa-fs-sm);
   font-weight: 800;
   color: var(--sa-ink);
@@ -1349,9 +1341,9 @@
   color: var(--sa-ink-2);
 }
 .sa-chain__ico svg { width: 23px; height: 23px; }
-.sa-chain__item.is-key { background: var(--sa-pink); border-color: var(--sa-pink); color: #fff; }
+.sa-chain__item.is-key { background: var(--sa-pink); color: #fff; }
 .sa-chain__item.is-key .sa-chain__ico { background: rgba(255,255,255,.22); color: #fff; }
-.sa-chain__item.is-loop { background: #fff; border: 2px dashed var(--sa-pink); color: var(--sa-pink-deep); }
+.sa-chain__item.is-loop { border: 2px dashed var(--sa-pink); color: var(--sa-pink-deep); }
 .sa-chain__item.is-loop .sa-chain__ico { background: var(--sa-bg-pink); color: var(--sa-pink-deep); }
 
 /* 項目間の矢印 */
@@ -1393,41 +1385,63 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
+/* ★Phase D0: 白い箱が3つ並ぶ印象を弱め、番号と線で「流れ」として見せる。
+     枠と影を外し、番号の下に伸びる細い線でステップをつなぐ。 */
 .sa-step {
   position: relative;
-  background: #fff;
-  border: 1px solid var(--sa-line);
-  border-radius: var(--sa-r-md);
-  padding: 20px 18px;
-  box-shadow: var(--sa-sh-sm);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0 14px 0 0;
+  box-shadow: none;
 }
+/* 番号どうしをつなぐ横線（各行の最後の項目には引かない） */
+.sa-step::after {
+  content: "";
+  position: absolute;
+  left: 44px;
+  top: 19px;
+  right: -6px;
+  height: 2px;
+  background: var(--sa-pink-line);
+  z-index: 0;
+}
+.sa-steps > .sa-step:nth-child(3n)::after { display: none; }
 .sa-step__num {
+  position: relative;
+  z-index: 1;
   display: inline-grid;
   place-content: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   margin-bottom: 10px;
   border-radius: var(--sa-r-pill);
-  background: var(--sa-bg-pink);
-  color: var(--sa-pink-deep);
-  font-size: 17px;
+  background: var(--sa-pink);
+  color: #fff;
+  border: 3px solid var(--sa-bg-ivory);
+  font-size: 16px;
   font-weight: 800;
 }
 .sa-step__title { margin: 0 0 5px; font-size: var(--sa-fs-h3); font-weight: 800; color: var(--sa-ink); }
 .sa-step__text { margin: 0; font-size: var(--sa-fs-sm); line-height: 1.8; color: var(--sa-ink-2); }
 
 @media (max-width: 860px) { .sa-steps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 860px) { .sa-steps > .sa-step:nth-child(3n)::after { display: block; } .sa-steps > .sa-step:nth-child(2n)::after { display: none; } }
 @media (max-width: 520px) {
-  .sa-steps { grid-template-columns: 1fr; gap: 10px; }
+  .sa-steps { grid-template-columns: 1fr; gap: 16px; }
   .sa-step {
     display: grid;
-    grid-template-columns: 40px 1fr;
+    grid-template-columns: 38px 1fr;
     gap: 0 14px;
     align-items: start;
-    padding: 16px 15px;
+    padding: 0;
   }
   .sa-step__num { margin-bottom: 0; grid-row: span 2; }
   .sa-step__title { align-self: center; }
+  /* 1列では番号の下へ縦線を引いて流れを示す */
+  .sa-step::after { left: 18px; top: 38px; right: auto; bottom: -16px; width: 2px; height: auto; }
+  .sa-steps > .sa-step::after { display: block; }
+  .sa-steps > .sa-step:last-child::after { display: none; }
 }
 
 
@@ -1649,7 +1663,7 @@
   .sa-operator a,
   .sa-cta__price a,
   .sa-note a,
-  .sa-more a {
+  .sa-scr__more a {
     display: inline-flex;
     align-items: center;
     min-height: var(--sa-tap);
@@ -1661,10 +1675,16 @@
    店舗ページ・スマホメモの画像は縦長（1040x1803 等）で、
    375px 幅だと1枚で450px前後を占める。上端から一定の高さだけ見せる。
    ★画像そのものは差し替えていない。alt は画面全体を説明したままにしている。 */
+/* ★実画面スクショのみ、スマホで上端から一定の高さを見せる。
+     Phase D0 で実画面を大きく見せる方針にしたため、上限を 340px から 420px へ広げた。
+     ★この切り抜きは実画面スクショ専用。人物・漫画には絶対に適用しない
+       （顔・吹き出しが切れるため）。 */
 @media (max-width: 860px) {
-  .sa-stage__frame img {
-    max-height: 340px;
+  .sa-scr__shot img {
+    max-height: 420px;
     object-fit: cover;
     object-position: top center;
   }
+  /* スマホ縦長の画面は切らずに全体を見せる */
+  .sa-scr__shot--phone img { max-height: none; object-fit: fill; }
 }
