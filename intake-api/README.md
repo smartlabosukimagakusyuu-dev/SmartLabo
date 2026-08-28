@@ -1,9 +1,9 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4G）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4H-R0）
 
 ```text
-STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除＋バックアップ）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.11**
-手順書  : docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md v1.0（バックアップ・復元）
+STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除＋バックアップ＋配置境界＋提出通知）。**本番未配置**
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.12**
+手順書  : docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md v1.1（バックアップ・復元）
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
@@ -42,15 +42,21 @@ intake-api/
 │   ├── preview-seed.php     架空の案件・ご案内リンク・管理者を1組つくる
 │   └── router.php           PHP内蔵サーバー用の振り分け（本番は .htaccess）
 ├── bin/                     管理CLI（★public_html の外。Web から実行できない）
-│   └── intake-backup.php    バックアップ作成・一覧・検証・復元確認・削除（4G）
+│   ├── .htaccess            Require all denied（誤配置時の二重防御・4H-R0）
+│   ├── intake-backup.php    バックアップ作成・一覧・検証・復元確認・削除（4G）
+│   └── intake-preflight.php preflight 領域の確認・削除（4H-R0）
 ├── public/                  ドキュメントルートへ置く
 │   ├── index.php            受付API・内部確認画面のフロントコントローラ
 │   ├── start.html           ご案内リンクの入口（4C）
 │   ├── form.html            入力画面（4C）
 │   └── assets/              CSS / JS（外部CDNを使わない）
 ├── private/                 ★public_html の外へ置く（設定・DB・ログ・ratelimit）
-├── src/                     アプリ本体
+├── src/                     アプリ本体（★本番では public_html の外）
+│   ├── .htaccess            Require all denied（誤配置時の二重防御・4H-R0）
 │   ├── Admin/               内部確認画面（4D）。HTML の組み立ては View に集約
+│   ├── Backup/              バックアップ・世代管理・復元確認（4G）
+│   ├── Notify/              提出通知（4H-R0）。mail() はこの下の1ファイルだけ
+│   ├── Preflight/           preflight 専用領域の検査と削除（4H-R0）
 │   ├── Http/ Service/ Support/
 │   └── ...
 └── tests/                   自動テスト（外部ライブラリなし）
@@ -218,6 +224,9 @@ X-Intake-Export-Sha256: <本文の SHA-256>
 - バックアップは `SQLite3::backup()`。取得後に `integrity_check` / `foreign_key_check`。
   一時ファイル → 検証 → **同一ディレクトリ内 atomic rename**。30日 / 最大60世代（4G）
 - ログへ回答本文・氏名・メール・電話・住所・token・session secret・Drive URL を出さない
+- **APP_ROOT は Web の入力から変えられない**。不正・公開領域内なら起動しない（4H-R0）
+- **提出通知は3項目だけ**。`mail()` を使ってよいのは1ファイルだけ（4H-R0）
+- **本番確認は preflight 専用領域**で行い、正式DBを使わない（4H-R0）
 
 ## 6. 本番配置前に必要なこと（4H）
 
@@ -228,7 +237,13 @@ X-Intake-Export-Sha256: <本文の SHA-256>
    - ★`expose_php` は `PHP_INI_SYSTEM` のため、共用サーバーでは `.user.ini` から
      **効かないことがある**。`X-Powered-By` が消えたかを**実機で確認**する。
      消えない場合は `.htaccess` の `Header always unset X-Powered-By` が受け止める
-4. `private/` をドキュメントルートの**1つ上**へ配置（権限 700 / 設定ファイル 600）
+4. **APP_ROOT を public_html の外へ作る**（SSOT v1.12 §10.11・4H-R0 で確定）
+   - `smartlaboworks.com/private/hp-intake/` に `src/` `bin/` `private/` を置く
+   - docroot は `public_html/intake.smartlaboworks.com/`（`public/` の中身19ファイル）
+   - `auto_prepend_file` で非公開 bootstrap を読ませる（雛形
+     `private/app-root-bootstrap.example.php`）。**使えるかは実機で確認**する
+   - 使えない場合は代替方式（docroot の祖先の `private/hp-intake/` を自動探索）で動く
+   - 権限は ディレクトリ 700 / 設定ファイル 600
 5. `private/intake-config.php` を作成し、**別々に生成した**鍵を設定する
    ```bash
    php -r "echo bin2hex(random_bytes(32));"   # ip_hmac_key 用
@@ -242,13 +257,21 @@ X-Intake-Export-Sha256: <本文の SHA-256>
    - **平文パスワードを書かない。** 平文を置いた場合は hash として受け付けず、
      管理画面は動かない（fail closed）
    - **実パスワード・実 hash を Git へ入れない**
-7. `mail()` の実送信テスト（宛先は当社 info@ のみ）
+7. **提出通知の設定と実送信テスト**（SSOT v1.12 §9.11・4H-R0 で実装済み）
+   - `notification_recipient` と `notification_from` を設定する
+     （**1宛先のみ**。差出人は XServer で正式に使える自社ドメイン）
+   - **実送信は当社 info@ 宛て1通のみ。代表の直前承認が必要**
+   - 送られるのは**案件番号・イベント種別・発生日時の3項目だけ**であることを実機で確認する
 8. **保持期限による削除は、既定のまま（無効）で配置する**（SSOT v1.7 §9.8）
    - `retention_actions_enabled` と `backup_policy_confirmed` は**既定 false**
    - **`backup_policy_confirmed` を SSOT §9.9 の条件が揃う前に true にしない。**
      バックアップの世代・削除方針が決まる前に削除すると、
      古い世代から**消したはずの回答が復元できてしまう**
-9. **バックアップの保存先を確定する**（SSOT v1.11 §9.5・**4G から 4H へ残した作業**）
+9. **preflight で通し確認する**（SSOT v1.12 §9.10・4H-R0 で確定）
+   - `preflight_root` を設定し、**正式DBを使わずに**通し確認する
+   - 確認後に `preflight:remove --apply` で領域ごと削除し、**残存0**を確認する
+   - **そのあとで**正式DBを新規作成し、正式な空DBバックアップを取得する
+10. **バックアップの保存先を確定する**（SSOT v1.11 §9.5・**4G から 4H へ残した作業**）
    - `${DOMAIN_ROOT}/private/intake/backups` を作り、**正確な絶対パスを実機で確認**する
    - それが **public_html の外**であることを確認する
    - ディレクトリ **700** / ファイル **600** を確認する
@@ -485,6 +508,120 @@ php -c intake-api/dev/php.ini intake-api/dev/retention-walkthrough.php
 毎回新しい使い捨てDBを作り、**終わったら消す**。
 `dev/.preview/` を含む**既存DBへは一切接続しない**。
 
+### 配置境界（4H-R0・SSOT v1.12 §10.11）
+
+**docroot と APP_ROOT は別階層でよい。**
+
+XServer のサブドメインは `smartlaboworks.com/public_html/<sub>/` の下に作られる。
+つまり docroot の親は `public_html` であり、そこへ `src/` と `private/` は置けない。
+そこで「アプリ本体がどこにあるか」を、公開領域の外から教える形にした。
+
+```text
+smartlaboworks.com/
+├── public_html/
+│   └── intake.smartlaboworks.com/   ← docroot（公開・19ファイル）
+└── private/
+    └── hp-intake/                    ← APP_ROOT（公開しない）
+        ├── src/  bin/  private/  preflight/
+```
+
+APP_ROOT の解決順（**どの経路でも同じ検査**を通る）
+
+1. 定数 `INTAKE_APP_ROOT` … `.user.ini` の `auto_prepend_file` が読む**非公開 bootstrap**
+   （雛形 `private/app-root-bootstrap.example.php`）。**第一候補**
+2. 環境変数 `INTAKE_APP_ROOT` … CLI・ローカル確認
+3. `docroot/../src` … リポジトリのままの配置
+4. docroot の祖先の `private/hp-intake/src` … `auto_prepend_file` が使えない環境の代替方式
+
+- **Web の入力から APP_ROOT を変えられない**（解決コードはスーパーグローバルを読まない）
+- **docroot 内に APP_ROOT を書いたファイルを置かない**（`.app-root.php` 方式は不採用）
+- public 側へ**絶対パスを直接書かない**
+- 未設定・相対・`..`・`public_html` 内・ホーム直下・ルート直下・symlink 逸脱・
+  `src/Autoload.php` 不在は **fail closed**（既定へ黙って落ちない）
+- 絶対パスを**応答・ログ・HTML・JSON へ出さない**
+- `src/` と `bin/` に `Require all denied` の `.htaccess`（誤配置時の二重防御）
+- **公開領域に置く PHP は `index.php` の1つだけ**
+
+設定は APP_ROOT / src_root / private_root / db_path / log_path /
+rate_limit_dir / backup_dir / preflight_root を**分けて**持つ。
+実設定は `APP_ROOT/private/intake-config.php` から読む
+（`private_root` はデータの置き場所だけを移す）。
+
+### 提出通知メール（4H-R0・SSOT v1.12 §9.11）
+
+**送るのは3項目だけ。**
+
+| 送る | 案件番号 ／ イベント種別（`submitted`）／ 発生日時（UTC） |
+|---|---|
+| **送らない** | 回答本文・店舗名・氏名・メール・電話・住所・token・session・<br>**submission_id**・Drive URL・共有先メール・修正依頼本文・IP・内部ID |
+
+**送る契機**
+
+- **最終提出が初めて成功し、トランザクションが commit された後だけ**
+- `validation_error` / 同一 `submission_id` の再送 / `already_submitted` では送らない
+- 保存・Drive 申告・管理者の状態変更でも送らない
+- 宛先と差出人が**両方そろったときだけ**送る（fail closed）
+
+**実装**
+
+- 業務コードから `mail()` を直接呼ばない（`Notifier` インターフェースで隔離）
+- **`mail()` を使ってよいのは `src/Notify/ProductionMailNotifier.php` だけ**。
+  静的検査が、それ以外での使用を失敗させる
+- テストは `FakeNotifier`。**実メールを1通も送らない**
+- ヘッダー・件名は固定 allowlist。text/plain・UTF-8。追加パラメータを使わない
+- 宛先は**1つだけ**。改行・カンマ・セミコロン・山括弧・引用符・
+  バックスラッシュ等を拒否（ヘッダー注入対策）
+
+**失敗したとき**
+
+- **提出は成功のまま維持する。** トランザクションを巻き戻さない
+- 店舗へメール失敗を返さない（応答の形を変えない）
+- 監査へ `submission_notification_failed` を1件。宛先・件名・本文は書かない
+- **自動再送しない**
+
+```php
+// private/intake-config.php（実値は 4H で代表が設定する）
+'notification_recipient' => 'ops@example.invalid',
+'notification_from'      => 'no-reply@example.invalid',
+```
+
+★**実送信テストは 4H で当社 info@ 宛て1通のみ。代表の直前承認が必要。**
+
+### preflight 専用環境（4H-R0・SSOT v1.12 §9.10）
+
+**本番配置後の通し確認を、正式DBで行わない。**
+
+```text
+APP_ROOT/preflight/
+├── intake-config.php  intake.sqlite  logs/  ratelimit/  backups/
+```
+
+- 正式DB・正式バックアップと**完全に別実体**
+- 架空データ・`example.invalid` のみ。**実メールを送らない**（通知は Null）
+- `retention_actions_enabled` / `backup_policy_confirmed` は **false**
+- 正式 `private_root` と同一・内側・外側から包む位置は、**設定の時点で拒否**される
+- **preflight を削除してから、正式DBを新規作成する**（順序を入れ替えない）
+- 正式な空DBバックアップは**正式DB作成後**に取得する
+- **正式DBをテスト目的で削除・作り直す運用にしない**
+
+```bash
+php -c intake-api/dev/php.ini intake-api/bin/intake-preflight.php preflight:status
+php -c intake-api/dev/php.ini intake-api/bin/intake-preflight.php preflight:remove
+php -c intake-api/dev/php.ini intake-api/bin/intake-preflight.php preflight:remove --apply --confirm="DELETE PREFLIGHT AREA"
+```
+
+- **dry-run が既定**。`--apply` と確認文字列の完全一致が無ければ1件も消さない
+- symlink をたどらない。**preflight 領域の外を1バイトも消さない**
+- 削除後に**残存0**を確認する
+
+**通し確認（使い捨て領域だけで動く）**
+
+```bash
+php -c intake-api/dev/php.ini intake-api/dev/boundary-walkthrough.php
+```
+
+配置境界・提出通知・preflight 分離を、本番相当の分離構成で確かめる。
+
 ### バックアップ・復元確認（4G・SSOT v1.11 §9.5）
 
 **方式**
@@ -593,6 +730,11 @@ H リンク再発行／I 確定／J 保持期限／K closed 後の拒否／L 保
 | 3 | `closed` への通常遷移 | **作らない**。`closed` は削除完了時に設定される（SSOT §9.3-3） |
 | 4 | 中止案件を `closed` にする経路 | 未定（SSOT §12.2-12）。運用が固まってから決める |
 | 5 | 管理 session 清掃の自動化 | Phase 1 は保守画面からの明示操作（SSOT §2.7-10） |
+| ~~15~~ | ~~docroot と APP_ROOT が同一親でないと動かない~~ | **4H-R0 で是正**（SSOT v1.12 §10.11）。<br>配置境界を可変化し、`public_html` 内・不正・不在は fail closed |
+| ~~16~~ | ~~SSOT が確定した提出通知が未実装~~ | **4H-R0 で実装**（SSOT v1.12 §9.11）。<br>3項目のみ・1宛先・`mail()` は1ファイル限定・失敗しても提出は成功 |
+| ~~17~~ | ~~本番確認の架空案件を正式DBへ入れる計画~~ | **4H-R0 で是正**（SSOT v1.12 §9.10）。<br>preflight 専用領域で確認し、削除してから正式DBを作る |
+| 18 | `auto_prepend_file` が XServer で使えるか | **4H で実機確認**。使えない場合は代替方式（祖先探索）で動く |
+| 19 | 未通知の把握を管理画面に出すか | 未実装。非PIIの最小限の表示を検討する（SSOT v1.12 §9.11-7） |
 | 6 | `expose_php` が実機で効くか | **4H で確認**。ローカルの PHP 内蔵サーバーでは<br>`.user.ini`（`PHP_INI_SYSTEM`）も `.htaccess`（Apache）も適用されないため、<br>**この2つの対策はローカルでは検証できない**（4F で実測） |
 | ~~7~~ | ~~本番バックアップの世代・削除方針~~ | **4G で確定**（SSOT v1.11 §9.5）。<br>残るのは **XServer 上の絶対パス・権限・`SQLite3::backup()` の実測**（4H）。<br>★**§9.9 の条件が揃うまで `backup_policy_confirmed` を true にしない。**<br>　**4G 終了時点でも false のまま**である |
 | ~~8~~ | ~~分類の中の**未知キー**が書き出しへ通る~~ | **4F-R1 で是正**（SSOT v1.8 §3.0.1）。<br>保存は**要求全体を拒否**、読み出し・書き出しは**出力しない** |

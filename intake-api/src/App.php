@@ -22,6 +22,8 @@ namespace SmartLabo\Intake;
 use SmartLabo\Intake\Http\Guard;
 use SmartLabo\Intake\Http\Request;
 use SmartLabo\Intake\Http\Response;
+use SmartLabo\Intake\Notify\Notifier;
+use SmartLabo\Intake\Notify\SubmissionNotice;
 use SmartLabo\Intake\Service\AnswerService;
 use SmartLabo\Intake\Service\Audit;
 use SmartLabo\Intake\Service\CaseService;
@@ -47,6 +49,11 @@ final class App
         private readonly Logger $logger,
         private readonly Clock $clock,
         private readonly ?\SmartLabo\Intake\Admin\AdminApp $admin = null,
+        /**
+         * 提出通知の送り口（SSOT v1.12 §9.11）。
+         * ★渡されなければ通知しない。`mail()` をここから直接呼ばない。
+         */
+        private readonly ?Notifier $notifier = null,
     ) {
     }
 
@@ -267,6 +274,37 @@ final class App
     }
 
     /**
+     * 提出通知を送る（SSOT v1.12 §9.11）。
+     *
+     * ★送ってよいのは **案件番号・イベント種別・発生日時**だけ。
+     *   組み立ては `SubmissionNotice` が行い、それ以外を載せる経路が無い。
+     * ★失敗しても**提出は成功のまま**。トランザクションを巻き戻さない。
+     *   店舗への応答も変えない（受付は済んでいるため）。
+     * ★監査に残すのは成否だけ。宛先・件名・本文・submission_id を書かない。
+     * ★自動再送しない。
+     */
+    private function notifySubmitted(int $caseId, string $caseNumber): void
+    {
+        if ($this->notifier === null || !$this->notifier->enabled()) {
+            return; // 設定されていない環境では何もしない（監査も増やさない）
+        }
+
+        $notice = SubmissionNotice::forSubmitted($caseNumber, $this->clock->iso());
+        if ($notice === null) {
+            $this->audit->record($caseId, 'submission_notification_failed', 'invalid');
+
+            return;
+        }
+
+        $sent = $this->notifier->notifySubmitted($notice);
+        $this->audit->record(
+            $caseId,
+            $sent ? 'submission_notification_sent' : 'submission_notification_failed',
+            $sent ? 'ok' : 'send_failed'
+        );
+    }
+
+    /**
      * POST /submit
      * body: { "submission_id": "<UUID v4>" }
      *
@@ -343,6 +381,12 @@ final class App
             'ip_hmac'     => $ipHmac,
             'http_status' => 200,
         ]);
+
+        // 4H-R0（SSOT v1.12 §9.11）。
+        // ★ここへ来るのは「初回の提出が成功し、トランザクションが commit された後」だけ。
+        //   検証エラー・同一 submission_id の再送・already_submitted は上で返しており通らない。
+        // ★通知の成否で提出の結果を変えない。店舗へも知らせない。
+        $this->notifySubmitted($caseId, (string)$case['case_number']);
 
         return Response::ok(['submitted' => true, 'already_submitted' => false]);
     }

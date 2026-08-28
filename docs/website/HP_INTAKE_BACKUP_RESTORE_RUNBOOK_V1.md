@@ -1,11 +1,12 @@
 # HP Intake — バックアップ・復元 運用手順書 v1
 
 ```text
-STATUS      : APPROVED / HP-ONBOARDING-4G 実装済み（**ローカル検証のみ。本番未実施**）
-VERSION     : v1.0
-DATE        : 2026-08-28
+STATUS      : APPROVED / HP-ONBOARDING-4H-R0 まで反映（**ローカル検証のみ。本番未実施**）
+VERSION     : v1.1
+DATE        : 2026-08-28（v1.0 制定 / v1.1 改定）
 工程        : HP-ONBOARDING-4G（SQLiteバックアップ・復元・世代管理・保持削除整合性）
-SSOT        : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.11** §9.5
+              ／ -4H-R0（配置境界の可変化・preflight 分離を反映）
+SSOT        : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.12** §9.5 / §9.10 / §10.11
 実装         : intake-api/src/Backup/ ／ intake-api/bin/intake-backup.php
 本番配置     : **未実施**。パス確定・実測・権限確認は **4H** で行う
 ```
@@ -33,12 +34,36 @@ SSOT        : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.11** §9.5
 
 ## 1. 前提
 
+### 1.0 配置（v1.1 で改定・SSOT v1.12 §10.11）
+
+docroot と APP_ROOT は**別階層でよい**。XServer のサブドメインは
+`public_html` の下に作られるため、正式配置は次のとおりとする。
+
+```text
+smartlaboworks.com/
+├── public_html/
+│   └── intake.smartlaboworks.com/   ← docroot（公開）
+└── private/
+    └── hp-intake/                    ← APP_ROOT（公開しない）
+        ├── src/        （+ .htaccess: Require all denied）
+        ├── bin/        （+ .htaccess: Require all denied）
+        ├── private/    ← 設定・DB・logs・ratelimit・backups
+        └── preflight/  ← 通し確認専用（§6.5）
+```
+
+| # | 条件 |
+|---|---|
+| 1 | APP_ROOT は `.user.ini` の `auto_prepend_file` が読む**非公開 bootstrap** が教える（第一候補）。<br>雛形: `intake-api/private/app-root-bootstrap.example.php` |
+| 2 | それが使えない環境では、docroot の祖先の `private/hp-intake/` を自動で探す（代替方式） |
+| 3 | **どちらを正式採用するかは 4H で実機確認して決める** |
+| 4 | APP_ROOT が未設定・不正・`public_html` 内なら**起動しない**（fail closed） |
+
 ### 1.1 設定
 
-`private/intake-config.php`（Git に入れない・権限 600）に次を置く。
+`APP_ROOT/private/intake-config.php`（Git に入れない・権限 600）に次を置く。
 
 ```php
-'backup_dir' => '/絶対パス/private/intake/backups',
+'backup_dir' => '/絶対パス/private/hp-intake/private/backups',
 ```
 
 | # | 条件 |
@@ -49,6 +74,7 @@ SSOT        : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.11** §9.5
 | 4 | ディレクトリ **700** / ファイル **600** |
 | 5 | symlink で公開領域へ逃げている場合も拒否される |
 | 6 | **本番の正確な絶対パスは 4H で XServer 実機を確認してから確定する** |
+| 7 | **preflight の backups と混ぜない**（§6.5）。別実体・別ディレクトリである |
 
 ### 1.2 実行場所
 
@@ -253,7 +279,30 @@ php intake-api/bin/intake-backup.php backup:list
 > ★このコマンドは**何度実行してもよい**。すでに消えている世代は数えられない。
 > 途中で電源が落ちても、もう一度実行すれば残りを消せる。
 
-### 6.4 DB と filesystem を跨ぐことについて
+### 6.4 preflight の世代を本番へ混ぜない（v1.1 で追加・SSOT v1.12 §9.10）
+
+本番配置後の通し確認は **preflight 専用領域**で行う（正式DBで行わない）。
+
+| # | 規則 |
+|---|---|
+| 1 | preflight の `backups/` と正式の `backups/` は**別実体**である |
+| 2 | preflight の世代を**正式 backups へ移さない** |
+| 3 | preflight の `manifest.json` を**正式側へ移さない** |
+| 4 | 正式な**空DBバックアップは、preflight を削除して正式DBを作ったあと**に取得する |
+| 5 | `backup:list` の結果に preflight の世代が混ざっていたら **STOP** し、原因を調べる |
+
+```bash
+php bin/intake-preflight.php preflight:status
+php bin/intake-preflight.php preflight:remove
+php bin/intake-preflight.php preflight:remove --apply --confirm="DELETE PREFLIGHT AREA"
+```
+
+- **dry-run が既定**。`--apply` と確認文字列の完全一致が無ければ1件も消さない
+- 正式 `private_root` と同一・内側・外側から包む位置は、**設定の時点で拒否**される
+- symlink はたどらない。**preflight 領域の外を1バイトも消さない**
+- 削除後に**残存0**を確認する
+
+### 6.5 DB と filesystem を跨ぐことについて
 
 DB の削除（トランザクション）とバックアップファイルの削除（filesystem）は
 **ひとつの原子操作にならない**。したがって次の中間状態がありうる。
@@ -273,7 +322,8 @@ DB の削除（トランザクション）とバックアップファイルの�
 
 | # | 事項 |
 |---|---|
-| 1 | XServer 上の**正確な絶対パス**を確定する（`${DOMAIN_ROOT}/private/intake/backups` 候補） |
+| 1 | XServer 上の**正確な絶対パス**を確定する（`${DOMAIN_ROOT}/private/hp-intake/private/backups` 候補） |
+| 1.1 | `auto_prepend_file` が使えるかを実機で確認する（使えなければ代替方式を採る） |
 | 2 | そのパスが **public_html の外**であることを実機で確認する |
 | 3 | ディレクトリ 700 / ファイル 600 を実機で確認する |
 | 4 | XServer 上で `SQLite3::backup()` が動くことを実測する |
@@ -291,3 +341,4 @@ DB の削除（トランザクション）とバックアップファイルの�
 | 版 | 日付 | 変更 |
 |---|---|---|
 | v1.0 | 2026-08-28 | HP-ONBOARDING-4G で新規作成。SSOT v1.11 §9.5 に対応 |
+| v1.1 | 2026-08-28 | HP-ONBOARDING-4H-R0 を反映。§1.0 配置（docroot と APP_ROOT の分離）を新設。<br>backup_dir の候補パスを新配置へ更新。§6.4 preflight の世代を本番へ混ぜない を新設<br>（旧 §6.4 は §6.5 へ繰り下げ）。§7 へ `auto_prepend_file` の実機確認を追加。<br>SSOT 参照を v1.12（§9.5 / §9.10 / §10.11）へ更新 |

@@ -10,6 +10,9 @@ namespace SmartLabo\Intake;
 use SmartLabo\Intake\Admin\AdminApp;
 use SmartLabo\Intake\Backup\BackupService;
 use SmartLabo\Intake\Http\Guard;
+use SmartLabo\Intake\Notify\NullNotifier;
+use SmartLabo\Intake\Notify\Notifier;
+use SmartLabo\Intake\Notify\ProductionMailNotifier;
 use SmartLabo\Intake\Service\AdminAuth;
 use SmartLabo\Intake\Service\AnswerService;
 use SmartLabo\Intake\Service\Audit;
@@ -38,14 +41,20 @@ final class Kernel
     public readonly RevisionRequestService $revisions;
     public readonly RetentionService $retention;
     public readonly BackupService $backup;
+    public readonly Notifier $notifier;
     public readonly AdminAuth $adminAuth;
     public readonly ExportService $export;
     public readonly AdminApp $admin;
     public readonly App $app;
 
+    /**
+     * @param Notifier|null $notifier テスト・preflight は Fake / Null を渡す。
+     *                                ★渡さなければ設定から組み立てる（未設定なら送らない）。
+     */
     public function __construct(
         public readonly Config $config,
         ?Clock $clock = null,
+        ?Notifier $notifier = null,
     ) {
         $this->clock       = $clock ?? new Clock();
         $this->db          = new Db($config->dbPath);
@@ -69,6 +78,16 @@ final class Kernel
         $this->retention   = new RetentionService($this->db, $this->clock, $this->audit);
         // 4G。★入り口は管理CLIだけ。App / AdminApp へは渡さない（Web から実行させない）
         $this->backup      = new BackupService($this->db, $this->clock, $this->audit, $config->backupDir);
+
+        // 4H-R0。★宛先と差出人が両方そろったときだけ実送信する（fail closed）
+        $this->notifier = $notifier ?? (
+            $config->notificationEnabled()
+                ? new ProductionMailNotifier(
+                    (string)$config->notificationRecipient,
+                    (string)$config->notificationFrom,
+                )
+                : new NullNotifier()
+        );
 
         $guard = new Guard($config);
 
@@ -103,6 +122,7 @@ final class Kernel
             $this->logger,
             $this->clock,
             $this->admin,
+            $this->notifier,
         );
     }
 }

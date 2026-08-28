@@ -13,6 +13,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/../src/Autoload.php';
 
 use SmartLabo\Intake\Config;
+use SmartLabo\Intake\Notify\Notifier;
+use SmartLabo\Intake\Notify\SubmissionNotice;
 use SmartLabo\Intake\Http\Request;
 use SmartLabo\Intake\Kernel;
 use SmartLabo\Intake\Support\Clock;
@@ -35,6 +37,58 @@ final class TestClock extends Clock
     public function advance(int $seconds): void
     {
         $this->offset += $seconds;
+    }
+}
+
+/**
+ * テスト用の通知（4H-R0）。
+ * ★**実メールを1通も送らない。** 送られた内容を控えるだけである。
+ *   `mail()` を呼ばないので、静的検査の allowlist にも触れない。
+ */
+final class FakeNotifier implements Notifier
+{
+    /** @var list<array{case_number:string,occurred_at:string,subject:string,body:string}> */
+    public array $sent = [];
+
+    public bool $enabledFlag = true;
+
+    /** 送信に失敗する状況を作るための切り替え */
+    public bool $failNext = false;
+
+    public function enabled(): bool
+    {
+        return $this->enabledFlag;
+    }
+
+    public function notifySubmitted(SubmissionNotice $notice): bool
+    {
+        if ($this->failNext) {
+            return false;
+        }
+        $this->sent[] = [
+            'case_number' => $notice->caseNumber,
+            'occurred_at' => $notice->occurredAt,
+            'subject'     => $notice->subject(),
+            'body'        => $notice->body(),
+        ];
+
+        return true;
+    }
+
+    public function count(): int
+    {
+        return count($this->sent);
+    }
+
+    /** 送った全文（件名＋本文）をつないで返す。混入検査に使う */
+    public function dump(): string
+    {
+        $out = '';
+        foreach ($this->sent as $item) {
+            $out .= $item['subject'] . "\n" . $item['body'] . "\n";
+        }
+
+        return $out;
     }
 }
 
@@ -82,7 +136,7 @@ function tmpDir(): string
 }
 
 /** 使い捨てのテスト環境を作る（DB・ratelimit・ログをテストごとに分離） */
-function makeKernel(?TestClock $clock = null, array $overrides = []): Kernel
+function makeKernel(?TestClock $clock = null, array $overrides = [], ?Notifier $notifier = null): Kernel
 {
     static $seq = 0;
     ++$seq;
@@ -101,7 +155,7 @@ function makeKernel(?TestClock $clock = null, array $overrides = []): Kernel
         'require_https'   => true,
     ], $overrides));
 
-    return new Kernel($config, $clock ?? new TestClock());
+    return new Kernel($config, $clock ?? new TestClock(), $notifier);
 }
 
 /** JSON POST リクエストを組み立てる */

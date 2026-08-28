@@ -1,0 +1,5 @@
+# HP Intake API — アプリ本体（src/）。
+# ★本番では **public_html の外**へ置く（SSOT v1.12 §10.11）。
+#   この .htaccess は「誤って公開領域へ置いてしまった」ときの二重防御である。
+# ★Apache 2.4 の書き方。実コード・秘密値を含めない。
+Require all denied

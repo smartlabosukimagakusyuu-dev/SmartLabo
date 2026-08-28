@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace SmartLabo\Intake\Backup;
 
+use SmartLabo\Intake\Support\PathPolicy;
+
 final class BackupPaths
 {
     /** バックアップファイルの接頭辞（SSOT v1.11 §9.5.1） */
@@ -47,150 +49,40 @@ final class BackupPaths
 
     /**
      * この語をパスの構成要素に含む場所へは置かない。
-     * ★Web から到達できる可能性のある名前を、部分一致ではなく**構成要素の完全一致**で見る
-     *   （`/home/user/publications/` を誤って拒否しないため）。
+     * ★実体は `Support\PathPolicy::FORBIDDEN_SEGMENTS`（4H-R0 で集約）。
+     *   ここは「バックアップの言葉」で参照できる別名を残すだけである。
      */
-    public const FORBIDDEN_SEGMENTS = ['public_html', 'public', 'htdocs', 'www', 'wwwroot', 'web'];
+    public const FORBIDDEN_SEGMENTS = PathPolicy::FORBIDDEN_SEGMENTS;
 
     /**
-     * 保存先ディレクトリを検査する。
+     * 保存先ディレクトリを検査する（実体は PathPolicy）。
      *
-     * 通す条件（すべて満たすこと）:
-     *   1. 設定されている（空でない）
-     *   2. 絶対パス
-     *   3. `..` を含まない
-     *   4. 公開領域を思わせる構成要素を含まない
-     *   5. ルート直下・ホーム直下でない（深さ2以上）
-     *   6. 実在するディレクトリで、symlink でない
-     *   7. realpath でも 2〜5 を満たす（symlink で外へ逃げていない）
+     * ★4H-R0 から、パスの安全規則は `Support\PathPolicy` に集約した。
+     *   APP_ROOT・バックアップ置き場・preflight 領域が**同じ規則**で守られる。
+     *   ここは「バックアップの言葉」で呼べる入口を残すだけである。
      *
      * @return array{ok:bool,error?:string,dir?:string}
      */
     public static function checkDir(?string $raw): array
     {
-        if ($raw === null || trim($raw) === '') {
-            return ['ok' => false, 'error' => 'not_configured'];
-        }
-        $value = trim($raw);
-
-        // 制御文字・NUL を含む値は設定事故。開かずに落とす
-        if (preg_match('/[\x00-\x1f]/', $value) === 1) {
-            return ['ok' => false, 'error' => 'invalid'];
-        }
-
-        $textual = self::checkTextualDir($value);
-        if ($textual['ok'] !== true) {
-            return $textual;
-        }
-
-        if (!is_dir($value)) {
-            return ['ok' => false, 'error' => 'missing'];
-        }
-        if (is_link(rtrim($value, '/\\'))) {
-            return ['ok' => false, 'error' => 'symlink'];
-        }
-
-        $real = realpath($value);
-        if ($real === false) {
-            return ['ok' => false, 'error' => 'missing'];
-        }
-
-        // ★symlink を経由して公開領域・ホーム直下へ出ていないかを、解決後の実体でも見る
-        $resolved = self::checkTextualDir($real);
-        if ($resolved['ok'] !== true) {
-            return $resolved;
-        }
-        if (!is_writable($real)) {
-            return ['ok' => false, 'error' => 'not_writable'];
-        }
-
-        return ['ok' => true, 'dir' => self::normalize($real)];
-    }
-
-    /**
-     * 文字列としての検査だけを行う（存在確認をしない）。
-     * @return array{ok:bool,error?:string}
-     */
-    private static function checkTextualDir(string $value): array
-    {
-        $path = self::normalize($value);
-
-        if (!self::isAbsolute($path)) {
-            return ['ok' => false, 'error' => 'relative'];
-        }
-
-        $segments = self::segments($path);
-        foreach ($segments as $segment) {
-            if ($segment === '..' || $segment === '.') {
-                return ['ok' => false, 'error' => 'traversal'];
-            }
-            if (in_array(strtolower($segment), self::FORBIDDEN_SEGMENTS, true)) {
-                return ['ok' => false, 'error' => 'public_area'];
-            }
-        }
-
-        // ★ホーム直下を先に見る。`/root` のように深さ1でもあるため、
-        //   「浅い」より「ホーム」の方が理由として正確である
-        if (self::looksLikeHomeRoot($path)) {
-            return ['ok' => false, 'error' => 'home_root'];
-        }
-        // ルート（`/` `C:/`）と、その直下1階層は認めない
-        if (count($segments) < 2) {
-            return ['ok' => false, 'error' => 'too_shallow'];
-        }
-
-        return ['ok' => true];
-    }
-
-    /**
-     * ホームディレクトリそのもの（`/home/xxx` `/root` `/Users/xxx` `C:/Users/xxx`）か。
-     * ★ホーム**直下**は、うっかり同期・共有の対象になりやすい。配下の専用ディレクトリを使う。
-     */
-    private static function looksLikeHomeRoot(string $path): bool
-    {
-        $lower = strtolower(rtrim($path, '/'));
-        foreach (['#^/home/[^/]+$#', '#^/root$#', '#^/users/[^/]+$#', '#^[a-z]:/users/[^/]+$#'] as $re) {
-            if (preg_match($re, $lower) === 1) {
-                return true;
-            }
-        }
-        foreach (['HOME', 'USERPROFILE'] as $env) {
-            $home = getenv($env);
-            if (is_string($home) && $home !== ''
-                && strtolower(rtrim(self::normalize($home), '/')) === $lower) {
-                return true;
-            }
-        }
-
-        return false;
+        return PathPolicy::checkDir($raw);
     }
 
     /** 区切りを `/` に揃え、重複と末尾を落とす（値の意味は変えない） */
     public static function normalize(string $path): string
     {
-        $p = preg_replace('#[\\\\/]+#', '/', $path) ?? $path;
-        if (strlen($p) > 1) {
-            $p = rtrim($p, '/');
-        }
-        // `C:` だけになった場合は `C:/` に戻す（ルート判定を壊さない）
-        if (preg_match('#^[A-Za-z]:$#', $p) === 1) {
-            $p .= '/';
-        }
-
-        return $p;
+        return PathPolicy::normalize($path);
     }
 
     public static function isAbsolute(string $path): bool
     {
-        return strncmp($path, '/', 1) === 0 || preg_match('#^[A-Za-z]:/#', $path) === 1;
+        return PathPolicy::isAbsolute($path);
     }
 
     /** ルートを除いた構成要素 @return list<string> */
     public static function segments(string $normalizedPath): array
     {
-        $rest = preg_replace('#^([A-Za-z]:)?/#', '', $normalizedPath) ?? $normalizedPath;
-
-        return $rest === '' ? [] : array_values(array_filter(explode('/', $rest), static fn ($s) => $s !== ''));
+        return PathPolicy::segments($normalizedPath);
     }
 
     /**
@@ -233,16 +125,7 @@ final class BackupPaths
      */
     public static function isInside(string $dir, string $path): bool
     {
-        $d = rtrim(self::normalize($dir), '/') . '/';
-        $p = self::normalize($path);
-
-        // Windows は大文字小文字を区別しないため、比較だけ小文字へ落とす
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $d = strtolower($d);
-            $p = strtolower($p);
-        }
-
-        return strncmp($p, $d, strlen($d)) === 0 && strlen($p) > strlen($d);
+        return PathPolicy::isInside($dir, $path);
     }
 
     /**

@@ -10,8 +10,17 @@ dev/.walkthrough-*/
 # バックアップの通し確認が作る使い捨てDB・使い捨てバックアップ（4G）
 dev/.backup-walkthrough-*/
 
+# 配置境界・通知・preflight の通し確認が作る使い捨て領域（4H-R0）
+dev/.boundary-walkthrough-*/
+
 # 実設定（HMAC鍵・暗号鍵・受信先）。サーバーにのみ置き、Gitへは入れない。
 private/intake-config.php
+
+# APP_ROOT の実パスを書く非公開 bootstrap（4H-R0）。実体はサーバーにのみ置く。
+private/app-root-bootstrap.php
+
+# preflight 専用領域（本番配置後の通し確認・架空データのみ）。追跡しない。
+private/preflight/
 
 # 実行時に生成されるもの
 private/ratelimit/

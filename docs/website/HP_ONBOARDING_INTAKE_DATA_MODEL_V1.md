@@ -1,9 +1,9 @@
 # 店舗向けHP導入フォーム データモデル・token設計 v1
 
 ```text
-STATUS      : APPROVED / 4G 実装済み（受付API・店舗入力画面・内部確認画面・運用フロー・保持削除・バックアップ）
-VERSION     : v1.11（R11）
-DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.10 改定）／ 2026-08-28（v1.11 改定）
+STATUS      : APPROVED / 4H-R0 実装済み（受付API・店舗入力画面・内部確認画面・運用フロー・保持削除・バックアップ・配置境界・提出通知）
+VERSION     : v1.12（R12）
+DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.10 改定）／ 2026-08-28（v1.11・v1.12 改定）
 工程        : HP-ONBOARDING-4A ／ -4A-R1（AI Sales 分離・Operations 境界確定）
               ／ -4B-PRE（XServer 実行環境の実測）／ -4A-R2（実測反映）
               ／ -4B（受付API 実装）／ -4B-R1（提出の冪等化）
@@ -16,7 +16,9 @@ DATE        : 2026-08-26（v1.0 制定）／ 2026-08-27（v1.2〜v1.10 改定）
               ／ -4F-R2（必須定義の差分調査・STOP）
               ／ -4F-R3（必須契約の統一・Smart Labo管理設定5項目）
               ／ -4F-R4（null保存の拒否・管理設定の内容条件）
-              ／ **-4G（バックアップ・復元確認・世代管理・保持削除整合性・本改定）**
+              ／ -4G（バックアップ・復元確認・世代管理・保持削除整合性）
+              ／ -4H-PRE（本番配置前の統合状態・配置物・作業手順の確定）
+              ／ **-4H-R0（配置境界の可変化・提出通知・preflight 分離・本改定）**
 本番環境    : XServer 共用（PHP 8.3.33 / **SQLite 3.26.0** / pdo_sqlite・OpenSSL・mbstring 有効）
               ★実測日 2026-08-27。**VACUUM INTO は使用不可**（§2.0.1・§9.6）
 対象        : intake.smartlaboworks.com（店舗向けHP導入フォーム）
@@ -361,7 +363,7 @@ Smart Labo Operations の完成前に契約が発生した場合、
 |---|---|---|---|
 | `id` | INTEGER PK AUTOINCREMENT | — | |
 | `intake_case_id` | INTEGER REFERENCES intake_cases(id) | 可 | token 不一致時など、案件を特定できない場合は NULL |
-| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加）<br>／ **`token_reissued`**（v1.6 で追加。§4.4.1）<br>／ **`retention_due_set` / `retention_purged` / `audit_purged` / `admin_sessions_purged`**（v1.7 で追加。§9.3）<br>／ **`admin_settings_saved`**（v1.9 で追加。§3.12。**設定値を書かない**）<br>／ **`backup_created` / `backup_restore_drill` / `backup_cleanup` / `backup_generations_purged`**（v1.11 で追加。§9.5。**ファイル名もパスも件数も書かない**） |
+| `event_type` | TEXT NOT NULL | 不可 | `token_issued` / `token_revoked` / `token_accepted` / `token_rejected` / `answer_saved` / `submitted` / `admin_viewed` / `export_generated` / `drive_url_set` / `answers_deleted`<br>／ `session_revoked` / `rate_limited`（4B で追加）<br>／ **`drive_upload_confirmed` / `case_status_changed` / `admin_login` / `admin_logout`**（v1.4 で追加）<br>／ **`token_reissued`**（v1.6 で追加。§4.4.1）<br>／ **`retention_due_set` / `retention_purged` / `audit_purged` / `admin_sessions_purged`**（v1.7 で追加。§9.3）<br>／ **`admin_settings_saved`**（v1.9 で追加。§3.12。**設定値を書かない**）<br>／ **`backup_created` / `backup_restore_drill` / `backup_cleanup` / `backup_generations_purged`**（v1.11 で追加。§9.5。**ファイル名もパスも件数も書かない**）<br>／ **`submission_notification_sent` / `submission_notification_failed`**（v1.12 で追加。§9.11。**宛先も件名も本文も submission_id も書かない**） |
 | `result_code` | TEXT NOT NULL | 不可 | `ok` / `invalid` / `expired` / `revoked` / `not_found` / `rate_limited` / `conflict` |
 | `ip_hmac` | TEXT | 可 | **HMAC-SHA256(IP, ip_hash_secret) の先頭32文字**。生IPを保存しない |
 | `created_at` | TEXT NOT NULL | 不可 | |
@@ -410,6 +412,15 @@ Smart Labo Operations の完成前に契約が発生した場合、
 | `backup_restore_drill` | 復元確認を行ったとき | **NULL** | `result_code` は `ok` または失敗の固定コード。<br>**稼働DBへ書き戻していないことの記録**でもある |
 | `backup_cleanup` | 30日超・60世代超を**実際に削除**したとき | **NULL** | dry-run では記録しない。**削除件数を書かない** |
 | `backup_generations_purged` | 保持削除より前の世代を**実際に削除**したとき | **NULL** | `result_code` は `ok` / `incomplete`。<br>dry-run では記録しない。**削除件数を書かない**（§9.5.6） |
+
+**v1.12 で追加した2種（4H-R0）**
+
+| event_type | いつ | `intake_case_id` | 備考 |
+|---|---|---|---|
+| `submission_notification_sent` | 提出通知を**送れた**とき | 案件 | `result_code` は `ok`。<br>**宛先・件名・本文・submission_id を書かない** |
+| `submission_notification_failed` | 提出通知を**送れなかった**とき | 案件 | `result_code` は `send_failed` / `invalid`。<br>**提出そのものは成功のまま**である（§9.11-5）。<br>通知が設定されていない環境では**どちらも記録しない** |
+
+> ★通知の成否を `submission_id` で記録しない。冪等化キーは監査へ出さない（§10.7）。
 
 > ★バックアップのメタデータ（作成日時・サイズ・SHA-256）は**DBへ保存しない**。
 > DB ごと失った場面で読めなければ意味がないため、保存先の manifest ファイルが持つ（§9.5.2）。
@@ -2174,6 +2185,120 @@ PRAGMA foreign_key_check;  -- 期待値: 0行
 | 3 | ローカル確認では override してよい（使い捨てDBのみ・§9.8-5） |
 | 4 | 手順書: `docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md` |
 
+### 9.10 preflight 専用環境（v1.12 で新設・4H-R0）
+
+**本番配置後の通し確認を、正式DBで行わない。**
+
+4H-PRE で次の問題が分かった。確認用の架空案件を正式DBへ入れると、
+`retention_actions_enabled` と `backup_policy_confirmed` が false のため
+**purge で消せない**。かといって確認のために正式DBを作り直す運用にすると、
+「正式DBはいつでも消してよい」という誤った習慣が残る。
+
+そこで、確認は**専用の領域**で行う。
+
+```text
+APP_ROOT/preflight/
+├── intake-config.php
+├── intake.sqlite
+├── logs/
+├── ratelimit/
+└── backups/
+```
+
+| # | 規則 |
+|---|---|
+| 1 | `public_html` の外に置く |
+| 2 | **正式DB・正式バックアップと完全に分ける**（別実体） |
+| 3 | 架空データのみ。メールは `example.invalid` のみ |
+| 4 | **実メールを送らない**（通知は Null / Fake。§9.11） |
+| 5 | `retention_actions_enabled` / `backup_policy_confirmed` は **false** |
+| 6 | 公開入口を一般公開する**前**に実施する |
+| 7 | preflight 実行中は**実顧客の token を発行しない** |
+| 8 | 本番設定へ切り替える前に preflight の完了を確認する |
+| 9 | **preflight 領域を削除してから、正式DBを新規作成する**（順序を入れ替えない） |
+| 10 | 正式な空DBバックアップは、**正式DB作成後**に取得する |
+| 11 | preflight のバックアップ世代を**正式 backups へ移さない** |
+| 12 | preflight の manifest を**正式側へ移さない** |
+| 13 | **正式DBをテスト目的で削除・作り直す運用にしない** |
+
+**削除の安全条件**
+
+| # | 規則 |
+|---|---|
+| 1 | 削除対象を**明示パスで事前確認**する（件数と相対名のみ表示） |
+| 2 | 削除前に**正式領域でないこと**を二重に確かめる<br>（正式 private_root と同一・内側・外側から包む位置・稼働DBを含むものはすべて拒否） |
+| 3 | 設定の時点でも、正式領域と重なる `preflight_root` を**受け付けない**（fail closed） |
+| 4 | symlink を拒否する（たどらず、リンク自体だけを外す） |
+| 5 | **preflight 領域の外を再帰削除しない** |
+| 6 | **dry-run が既定**。実削除には明示フラグと確認文字列の完全一致が要る |
+| 7 | 削除後に**残存0**を確認する |
+
+### 9.11 提出通知メール（v1.12 で新設・4H-R0）
+
+§0.2 と §12.1-7 で「Phase 1 の通知は XServer の `mail()`」と確定していたが、
+4H-PRE の調査で**実装が1件も無い**ことが分かった。v1.12 で実装方針を確定する。
+
+**送信の契機**
+
+| # | 規則 |
+|---|---|
+| 1 | **最終提出が初めて成功し、トランザクションが commit された後だけ**送る |
+| 2 | `validation_error`（不足あり）では送らない |
+| 3 | **同一 `submission_id` の再送では送らない**（冪等。§6.4） |
+| 4 | `already_submitted` では送らない |
+| 5 | 保存・Drive 申告・管理者の状態変更では送らない |
+| 6 | 宛先と差出人が**両方そろったときだけ**送る。片方でも欠ければ送らない（fail closed） |
+
+**本文に含めてよいもの（allowlist・3項目）**
+
+| # | 項目 |
+|---|---|
+| 1 | 案件番号 |
+| 2 | イベント種別（`submitted`） |
+| 3 | 発生日時（**UTC**。時間帯を本文へ明記する） |
+
+**含めてはいけないもの**
+
+回答本文／店舗名／氏名／メールアドレス／電話番号／住所／
+token／token hash／session／**`submission_id`**／Drive URL／共有先メール／
+修正依頼本文／生IP／HMAC化IP／DBの内部ID／秘密値／書き出し JSON 本文。
+
+**宛先・差出人**
+
+| # | 規則 |
+|---|---|
+| 1 | 設定キーは `notification_recipient` と `notification_from` |
+| 2 | Git 上の雛形は **`example.invalid`**。実値は 4H で代表が設定する |
+| 3 | **1宛先のみ。** 複数宛先を受け付けない |
+| 4 | 改行（CR/LF）・制御文字・空白・カンマ・セミコロン・山括弧・引用符・<br>バックスラッシュ・丸括弧・角括弧・コロンを含む値を**拒否**する（ヘッダー注入対策） |
+| 5 | 差出人は XServer で正式に使える**自社ドメイン**のアドレスを 4H で設定する |
+| 6 | `Reply-To` へ店舗情報を入れない（そもそも設定しない） |
+
+**実装**
+
+| # | 規則 |
+|---|---|
+| 1 | 業務コードから `mail()` を直接呼ばない。`Notifier` インターフェースで隔離する |
+| 2 | `mail()` を使ってよいのは **`ProductionMailNotifier` の1ファイルだけ**。<br>静的検査が、それ以外での `mail()` 使用を失敗させる |
+| 3 | テストは `FakeNotifier` を使い、**実メールを1通も送らない** |
+| 4 | ヘッダーは**固定の allowlist**（`From` / `Content-Type` / `Content-Transfer-Encoding` /<br>`X-Auto-Response-Suppress` / `Auto-Submitted`）。呼び出し側から追加できない |
+| 5 | 件名も**固定形式**。MIME encoded-word にして改行が混ざらないようにする |
+| 6 | 本文は **text/plain・UTF-8**。HTML メールにしない |
+| 7 | `mail()` の追加パラメータ（第5引数）を使わない |
+| 8 | 本文・宛先・件名を**ログにも監査にも書かない** |
+
+**失敗したとき**
+
+| # | 規則 |
+|---|---|
+| 1 | **提出そのものは成功のまま維持する** |
+| 2 | トランザクションを巻き戻さない |
+| 3 | 店舗へメール失敗を返さない（応答の形を変えない） |
+| 4 | 固定の `result_code` で監査する（§2.5） |
+| 5 | 秘密値・本文・宛先を監査へ書かない |
+| 6 | **自動再送しない。** 再送機能が必要なら別工程で設計する |
+| 7 | 未通知の把握は、管理画面の**非PIIの最小限の表示**で検討する（v1.12 では未実装） |
+
 ---
 
 ## 10. セキュリティ
@@ -2432,6 +2557,89 @@ expose_php             = Off
 | 10 | 無効状態は**色だけで示さない**。`disabled` 属性と文言でも伝える |
 | 11 | **管理画面も同じ基準**で点検する（店舗画面だけの規則にしない） |
 
+### 10.11 配置境界（v1.12 で新設・4H-R0）
+
+**docroot と APP_ROOT が兄弟である必要をなくす。**
+
+4H-PRE で次の問題が分かった。それまでの実装は
+`public/index.php` が `__DIR__/../src` を読み、設定も `src/../private` から読んでいた。
+つまり **docroot の親が APP_ROOT** であることを強制していた。
+XServer のサブドメインは `smartlaboworks.com/public_html/<sub>/` の下に作られるため、
+この形だと `src/` と `private/` を **public_html の中**へ置くことになる。
+
+> ★XServer の「サブドメイン設定」と「独自ドメイン設定」は別機能である。
+> `intake.smartlaboworks.com` を独立ドメインとして追加できる保証は確認できていない。
+> 既存の `form.smartlaboworks.com` も `smartlaboworks.com/public_html` 配下にある。
+> **特殊な配置に賭けず、コード側を対応させる。**
+
+**正式な配置**
+
+```text
+smartlaboworks.com/
+├── public_html/
+│   └── intake.smartlaboworks.com/   ← docroot（公開）
+└── private/
+    └── hp-intake/                    ← APP_ROOT（公開しない）
+        ├── src/
+        ├── bin/
+        ├── private/
+        └── preflight/
+```
+
+**APP_ROOT の与え方**
+
+| 優先 | 方式 | 説明 |
+|---|---|---|
+| **第一** | `.user.ini` の `auto_prepend_file` が読む**非公開 bootstrap** が定数 `INTAKE_APP_ROOT` を定義する | docroot には何も置かない。雛形は `private/app-root-bootstrap.example.php` |
+| 第二 | 環境変数 `INTAKE_APP_ROOT` | CLI・ローカル確認 |
+| 第三 | `docroot/../src`（リポジトリのままの配置） | ローカル確認・簡易配置 |
+| 代替 | docroot の祖先の `private/hp-intake/src` を探す | `auto_prepend_file` が使えない環境。<br>**絶対パスではなく相対の約束**であり、公開側に実パスを書かない |
+
+> ★どちらを正式採用するかは、**4H で XServer 実機を確認して決める**。
+> どちらの経路でも、下の検査は同じものが働く。
+
+**規則**
+
+| # | 規則 |
+|---|---|
+| 1 | **docroot の中に APP_ROOT を書いたファイルを置かない**（`.app-root.php` 方式は不採用） |
+| 2 | **URL・query・POST・Cookie・ヘッダーから APP_ROOT を受け取らない。**<br>解決を担うコードはスーパーグローバルを読まない |
+| 3 | **Web リクエストから APP_ROOT を変更できない** |
+| 4 | docroot 内に秘密値を置かない |
+| 5 | public 側のコードへ**絶対パスを直接書かない** |
+| 6 | 未設定・不正・不在・`public_html` 内・相対・`..` 入り・symlink 逸脱は<br>**fail closed**（例外。既定へ黙って落ちない） |
+| 7 | 絶対パスを**エラー・ログ・HTML・JSON へ出さない** |
+| 8 | Windows のローカルと Linux の本番の**両方で検証できる**ようにする |
+
+**Config が分けて持つもの**
+
+| キー | 内容 | 既定 |
+|---|---|---|
+| `APP_ROOT` | アプリ本体の親 | 解決結果（設定不可） |
+| `src_root` | `APP_ROOT/src` | 固定 |
+| `private_root` | 設定・DB・ログ・rate limit の親 | `APP_ROOT/private` |
+| `db_path` | SQLite の実体 | `private_root/intake.sqlite` |
+| `log_path` | アプリログ | 未設定なら出力しない |
+| `rate_limit_dir` | レート制限の記録 | `private_root/ratelimit` |
+| `backup_dir` | バックアップ置き場（§9.5） | 未設定なら経路を動かさない |
+| `preflight_root` | 通し確認専用（§9.10） | 未設定なら経路を動かさない |
+
+> ★実設定ファイルは **`APP_ROOT/private/intake-config.php`** から読む。
+> `private_root` は**データの置き場所**だけを移すものであり、
+> 設定ファイル自身の位置は動かせない（読む前に決まらないため）。
+> ★**設定値の実パスを Git へ入れない。**
+
+**誤配置防御**
+
+| # | 規則 |
+|---|---|
+| 1 | `src/` と `bin/` は本番では **public_html の外**へ置く |
+| 2 | それぞれに `Require all denied` の `.htaccess` を置く（**誤配置時の二重防御**） |
+| 3 | 公開領域から `src/` `bin/` へ HTTP で到達できない |
+| 4 | `bin/` の CLI は **`PHP_SAPI` が `cli` のときだけ**動く |
+| 5 | `.htaccess` は Apache 2.4 の書き方。**実コード・秘密値を含めない** |
+| 6 | 公開領域に置く PHP は **`index.php` の1つだけ** |
+
 ---
 
 ## 11. Phase 1 の境界
@@ -2449,6 +2657,7 @@ expose_php             = Off
 | 7 | Smart Labo 確認（管理画面・充足判定の表示） |
 | 8 | データ書き出し（仕様書 §17 の店舗データ構造。**内部項目は別セクション**） |
 | 9 | Drive 受領確認（`drive_upload_confirmed_at` の記録・枚数種類の確認） |
+| 10 | **提出通知メール**（v1.12 で追加・4H-R0。案件番号・イベント種別・発生日時の3項目のみ。§9.11） |
 
 ### 11.2 実装しない
 
@@ -2607,8 +2816,8 @@ Stripe 情報 ／ Operations 情報 ／ AI Sales 情報 ／ 内部ログ ／ 監
 | ~~1~~ | ~~**管理画面の認証方式**~~ | **R4 で確定**（§10.8・§2.7・§12.1）。番号は参照の互換のため空けてある | ~~4D 着手前~~ |
 | 2 | **intake.smartlaboworks.com のサブドメイン・SSL 設定** | 到達性そのもの。現状は未設定（ワイルドカードDNSで到達するのみ・証明書は `*.xserver.jp`） | 4H（代表作業） |
 | ~~3~~ | ~~**Google Drive の実フォルダ命名規則**~~ | **R3 で確定**（§7.1・§12.1）。番号は参照の互換のため空けてある | ~~4C 着手前~~ |
-| 4 | **本番バックアップ先の具体パス** | §9.5。**世代・削除方針・命名・cleanup・復元確認は v1.11（4G）で確定**した。<br>残るのは **XServer 上の正確な絶対パス・権限・`SQLite3::backup()` の実測**だけである。<br>★**§9.9 の条件が揃うまで `backup_policy_confirmed` を真にしない**（4G 終了時点も false のまま） | 4H（実機確認） |
-| 5 | **mail() の実送信確認** | 関数・sendmail 設定の存在までを実測。**実送信は未確認** | 4H（宛先は当社 info@ のみ） |
+| 4 | **本番バックアップ先の具体パス**／**APP_ROOT の絶対パス** | §9.5・§10.11。世代・削除方針・命名・cleanup・復元確認は v1.11（4G）で、配置境界は v1.12（4H-R0）で確定した。<br>残るのは **XServer 上の正確な絶対パス・権限・`auto_prepend_file` の可否・`SQLite3::backup()` の実測**だけである。<br>★**§9.9 の条件が揃うまで `backup_policy_confirmed` を真にしない** | 4H（実機確認） |
+| 5 | **mail() の実送信確認** | v1.12（4H-R0）で提出通知を実装した（§9.11）。<br>関数・sendmail 設定の存在までは実測済み。**実送信は未確認**。<br>★4H で**当社 info@ 宛て1通のみ**。**代表の直前承認**が要る | 4H |
 | 6 | **1案件あたりの配列上限値** | §3 に**設計既定値**（menus 60 / staff 30 / images 60 等）を置いた。<br>運用実績で調整する余地を残す | 4B（既定値のまま進めてよい） |
 | 7 | **ローカル開発環境の php.ini** | ローカルは `php.ini` 未読込のため pdo_sqlite / openssl / mbstring が無効。<br>DLL は同梱済みで、有効化すれば解決する | 4B 冒頭（代表判断は不要） |
 | ~~8~~ | ~~**`needs_revision` の理由の伝え方**~~ | **R5 で確定**（§2.8 `intake_revision_requests`）。番号は参照の互換のため空けてある | ~~4E 以降~~ |
@@ -2725,3 +2934,4 @@ HP-ONBOARDING-4A-R1 で次の順序へ変更した。
 | **v1.9（R9）** | 2026-08-27 | 改定（HP-ONBOARDING-4F-R3・代表承認）。**必須定義を SSOT §3 へ統一**した。4F-R2 の差分調査で、§3 が必須と定める **39件**に対し実装は **22件**しか見ておらず、画面（45件）だけが厳しく、**API を直接呼べば17件を欠いたまま提出できた**ことが判明したため。原因は「必須」を1種類として扱っていたことにある。**§3.0.2 を新設**し、必須を5種へ分けた（`STORE_REQUIRED_NON_EMPTY` ／ `STORE_REQUIRED_KEY_ALLOW_EMPTY` ／ `ADMIN_REQUIRED_FOR_EXPORT` ／ `ARRAY_ELEMENT_REQUIRED` ／ `OPTIONAL`。条件付きは §3 に条件が明記されているものだけ）。**空値の扱いを型ごとに明記**（string は `null` / `""` が未回答／enum は `null` / `""` / 語彙外が未回答で、**正式な語彙は `none` / `no` でも回答**／boolean は**キー無し・`null`・`"false"`・`0`・`1` が未回答**で **`false` は回答**／配列は §3 が1件以上を求めるときだけ `[]` が未回答／object はキー無しと `{}` が未回答）。**`false` を欠落と同じ扱いにしない**ことを明記した（「掲載しない」「予約を受けない」は答えである）。**能動選択が必要な enum 7件**（`basic.address_visibility` / `business_hours.irregular_notice` / `privacy.third_party` / `privacy.marketing_use` / `design.logo` / `design.emphasis` / `web_links.map_display`）を確定し、画面の初期状態を「選択してください」とし、**既定の語彙を選択済みにしない**・未選択（`""`）を正式値として保存しない・API でも同じ・**語彙外は保存そのものを拒否**・語彙自体は変えない、を規定した。とくに **`address_visibility` の `full` と `map_display` の `show` を自動で選ばない**（住所と地図を、本人の能動的な選択なしに公開側へ回さない）。あわせて「§3 の**空値欄は未入力の表し方**であり、既定値として入れてよい値ではない」ことを明記した（v1.8 まではこの2つを混同していた）。**必須の実装元を一本化**（PHP へ手書きしない／`schema.js` から機械生成／画面・API・管理画面・書き出しが**同じ集合**を見る／「画面では止まるのに API では通る」状態を作らない／一致と生成の冪等性を自動テストで固定）。**`promotion.industry` を Phase 1 の対象外**とした（代表判断 Q1。正式パスへ含めない・画面/DB/書き出しへ追加しない・**「任意」ではなく対象外**として明示・Phase 2 以降。§3.5 の表を取り消し線つきで残し、参考記述はそのまま置く）。**§3.12 を改定し、Smart Labo 設定5件を正式パスへ追加**（`web_links.salon_booking_url` / `privacy.destination` / `privacy.storage` / `privacy.external_services` / `privacy.consent_checkbox`。**129 → 134**）。15条を規定した（既存の `intake_answers` JSON 内へ保存し**新しい表も列も作らない**／**migration 版・回答スキーマ版も変えない**／店舗の入力項目にしない／**店舗の提出条件に含めない**／**`GET /case` で店舗へ返さない**／**`POST /answers/save` から変更できない**／逆に店舗が分類をまるごと保存しても**この5件が消えない**／管理者認証・管理 session・CSRF・Origin 検査・**案件番号の再入力**を必須／設定できるのは **`reviewed` / `locked`**・`closed` と削除済みは不可／**書き出しの前に検証**し不足なら拒否／「設定した」＝**キーが存在すること**で該当が無い場合も空のまま保存して記録を残す／**値をログ・監査へ出さない**／Operations・AI Sales へ保存しない／token・session・Drive 情報と同じ画面に混ぜない／型・上限・語彙は §3.7・§3.9 の表に従う）。**管理設定の不足だけで店舗を `needs_revision` へ戻さない**こと、管理画面では**店舗回答の不足と管理設定の不足を別々に表示**することも明記した。**§11.3 へ規則8を追加**（書き出し前に Smart Labo 設定が揃っていることを検査し、不足なら拒否して**不足パスだけ**を管理者へ示す。店舗へは返さない）。**§2.5 へ監査 `admin_settings_saved` を追加**（**設定値を書かない**）。§12.1 へ R9 の確定6件。**JSON 11分類・§3 の店舗パス129件・token 規則・6状態・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマ・migration 版・回答スキーマ版の変更も無い（8表・`PRAGMA user_version` 4・回答スキーマ 1 のまま）。** |
 | **v1.10（R10）** | 2026-08-27 | 改定（HP-ONBOARDING-4F-R4・代表承認）。v1.9 に残っていた**契約上の不整合2件**を訂正した。**(1) 真偽の項目の3状態を解消**。v1.9 までは真偽へ `null` を**保存できた**ため、「キーが無い」「`null`」「`false`」の3状態が生まれ、v1.9 で決めた「未回答と `false` を区別する」という契約が必要以上に複雑になっていた。**§3.0.2 を改定**し、**未回答は「キーが存在しないこと」だけ**とした。規則6条を明記（真偽へ **`null` を保存させず要求ごと 400**／`""` / `"true"` / `"false"` / `0` / `1` / 配列 / object も同じく拒否／未回答は**キーを送らない**ことで表す／拒否は**要求全体**で部分保存せず `version` も監査も動かさない／既存DBに `null` が残っていても**回答済みにせず、自動で `false` へ変換しない**／画面は「する／しない」の二択で**既定ではどちらも選ばない**）。`null` が「未入力」を表せるのは文字列の項目だけであることも併記した。**(2) Smart Labo 設定5件の内容条件を確定**。v1.9 では5件とも「キーがあれば設定済み」だったため、**送信先も保管方法も空のまま**「検証済み JSON」を書き出せてしまっていた。**§3.12 へ内容条件の表と規則4条を追加**（`web_links.salon_booking_url` は **空が正式**〔「予約URLなし」〕で値があるときは **`https://` のみ**・userinfo/制御文字/空白を含まない・500文字まで／`privacy.destination` と `privacy.storage` は **空・空白だけを許さず** 200文字まで／`privacy.external_services` は **`[]` が正式**〔「外部サービスなし」〕で10件まで・各60文字まで・要素の空を許さない／`privacy.consent_checkbox` は **`true` / `false` のみ**で `false` は「同意チェックを設置しない」という管理者の明示判断。**1件でも満たさなければ5件とも保存しない**／満たさない**パスだけ**を案内し**入力値を画面へ反射しない**／型・上限は §3.7・§3.9 の表と同じ値／画面は型に合った入力欄を使い必須・空欄可を**文字でも示す**）。あわせて §3.12-11 の「設定した」の定義を「**キーが存在し、かつ内容条件を満たすこと**」へ厳格化した。**§11.3 へ規則9を追加**（**失敗した書き出しは痕跡を残さない**。JSON 本文・`X-Intake-Export-Sha256`・`Content-Disposition`・`export_generated` 監査・一時ファイルの**いずれも作らない**。「書き出した」という記録は**実際に外へ出したときだけ**残す）。規則8へ「キーの存在だけでなく中身も見る」を追記。§12.1 へ R10 の確定3件。**JSON 11分類・正式パス134件（店舗129＋管理5）・必須39件・token 規則・6状態・楽観ロック・`submission_id` の冪等化・保持削除規則・保存禁止15種・SQLite 3.26.0 互換サブセットは変更していない。DBスキーマ・migration 版・回答スキーマ版の変更も無い（8表・`PRAGMA user_version` 4・回答スキーマ 1 のまま）。** |
 | **v1.11（R11）** | 2026-08-28 | 改定（HP-ONBOARDING-4G・代表承認）。**バックアップ・復元確認・世代管理・保持削除との整合性を確定**した。**§9.5 を全面改定**し、取得方式（`SQLite3::backup()` 第一手段・単純コピーを通常手段にしない）／本番配置候補 `${DOMAIN_ROOT}/private/intake/backups`（**正確な絶対パスは 4H で確定**）／保存先として受け付けない値（未設定・相対・`..`・公開領域・ホーム直下・ルート直下・symlink・realpath 解決後の再検査）を表で確定。**§9.5.1 ファイル名**（`intake-YYYYMMDD-HHMMSS-<random8>.sqlite`・PII と秘密値を含めない・連番だけにしない）、**§9.5.2 メタデータ**（DB内へ保存しない・非PII の `manifest.json` に ファイル名/作成日時/サイズ/SHA-256/版 のみ・控えの無いファイルは検証を通さない）、**§9.5.3 取得手順**（排他ロック → 一時ファイル → integrity_check / foreign_key_check → SHA-256 → fsync 相当 → 権限600 → **同一ディレクトリ内 atomic rename** → 控え記録。上書き禁止・失敗時に一時ファイルを残さない・絶対パス全文を出さない）、**§9.5.4 世代**（30日・最大60世代・1日1世代・自動 cron 禁止・cleanup は 30日超 → 60世代超の古い順・稼働DBとディレクトリ外を対象にしない・**dry-run 既定**・実削除に明示フラグと確認文字列）、**§9.5.5 復元確認**（本番DBへ書き戻す restore を作らない。一時DBへ復元して integrity / foreign_key / user_version / 8表 / 回答スキーマ版 / 案件行の形式 / 非PII指標比較 → 一時DB削除。件数不一致は異常ではない。**本番復元は 4H 以降の別承認**）、**§9.5.6 保持削除との連動**（purge 前世代を30日保持より優先して削除／purge 後バックアップの作成・検証に失敗したら旧世代を1件も消さない＝「バックアップ側未完了」／冪等な再実行／**DB と filesystem を跨ぐため完全な atomic ではないと明記**し、段階・状態確認・再実行・runbook で担保）、**§9.5.7 管理CLIと管理画面**（CLI 6コマンドを第一手段。public_html 外・Web 実行不可・秘密値を引数に取らない・DB内容を出さない・パス全文を出さない・dry-run 既定。管理画面は 4G では追加しない）を新設。**§2.5 へ監査4種**（`backup_created` / `backup_restore_drill` / `backup_cleanup` / `backup_generations_purged`）を追加。**新しいDB表は追加していない**（`PRAGMA user_version` は 4 のまま・JSON 11分類・回答スキーマ版 1 も不変）。**§9.9 を新設**し、`backup_policy_confirmed` を true にしてよい9条件（4H の実機確認・実測・代表確認を含む）と、**4G 終了時点では false のまま**であることを確定。別文書 `docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md` v1.0 を新設。**受付API・店舗入力画面・必須契約・書き出し契約・保持削除の規則は一切変更していない。** |
+| **v1.12（R12）** | 2026-08-28 | 改定（HP-ONBOARDING-4H-R0・代表承認）。4H-PRE で判明した**本番配置上の3つの問題**を、XServer へ接続する前に解消した。**(1) §10.11 配置境界を新設**し、docroot と APP_ROOT が**兄弟である必要をなくした**。XServer のサブドメインは `public_html` の下に作られるため、従来の `docroot/../src` 前提では **src と private を公開領域へ置くことになる**という問題があった。正式配置を `public_html/intake.smartlaboworks.com/`（docroot）と `private/hp-intake/`（APP_ROOT）に分離し、APP_ROOT の与え方を **auto_prepend_file の非公開 bootstrap（第一候補）／環境変数／リポジトリ配置／docroot 祖先の相対探索（代替）** の4経路に定め、**どの経路でも同じ検査**（未設定・相対・`..`・public_html 内・ホーム直下・ルート直下・symlink 逸脱・`src/Autoload.php` の実在）を通すこととした。**Web の入力から APP_ROOT を変更できない**こと（解決コードはスーパーグローバルを読まない）、**docroot 内に APP_ROOT を書いたファイルを置かない**こと、**public 側へ絶対パスを書かない**こと、**絶対パスを応答・ログ・HTML・JSON へ出さない**こと、不正なら**既定へ落とさず fail closed** とすることを明記。Config を **APP_ROOT / src_root / private_root / db_path / log_path / rate_limit_dir / backup_dir / preflight_root** へ分離し、実設定ファイルは `APP_ROOT/private/intake-config.php` から読む（`private_root` はデータの置き場所だけを移す）ことを確定。**誤配置防御**として `src/.htaccess` と `bin/.htaccess`（`Require all denied`）を必須化し、公開領域に置く PHP は `index.php` 1つだけと定めた。**(2) §9.11 提出通知メールを新設**し、§0.2・§12.1-7 で確定済みだったのに**実装が無かった**通知を実装した。送信は**最終提出が初めて成功し commit された後だけ**（validation_error・同一 submission_id の再送・already_submitted・保存・Drive 申告・状態変更では送らない）。本文の allowlist は**案件番号・イベント種別・発生日時（UTC）の3項目だけ**で、回答本文・店舗名・氏名・メール・電話・住所・token・session・**submission_id**・Drive URL・修正依頼本文・IP・内部IDを含めない。宛先は**1つだけ**で、改行・制御文字・空白・カンマ・セミコロン・山括弧・引用符・バックスラッシュ等を拒否（ヘッダー注入対策）。業務コードから `mail()` を直接呼ばず `Notifier` で隔離し、**`mail()` を使ってよいのは `ProductionMailNotifier` の1ファイルだけ**（静的検査で固定）。テストは `FakeNotifier` で**実メール0通**。ヘッダーと件名は固定 allowlist、text/plain・UTF-8、追加パラメータ不使用。**送信に失敗しても提出は成功のまま維持**し、トランザクションを巻き戻さず、店舗へ知らせず、固定 result_code で監査し、**自動再送しない**。**(3) §9.10 preflight 専用環境を新設**し、本番配置後の通し確認を**正式DBで行わない**ことを確定。`APP_ROOT/preflight/` に専用の設定・DB・logs・ratelimit・backups を持ち、正式領域と**別実体**とする。設定の時点で正式 private_root と同一・内側・外側から包む位置を**受け付けない**（fail closed）。削除は**明示パスの事前確認・正式領域でないことの二重確認・symlink 拒否・領域外の再帰削除禁止・dry-run 既定・確認文字列の完全一致・残存0の確認**を必須とし、**preflight 削除 → 正式DB新規作成 → 正式な空DBバックアップ取得**の順序を固定した。**正式DBをテスト目的で削除・作り直す運用にしない。****§2.5 へ監査2種**（`submission_notification_sent` / `submission_notification_failed`）を追加。**§11.1 へ提出通知を追加**。**新しいDB表は追加していない**（`PRAGMA user_version` は 4 のまま・JSON 11分類・回答スキーマ版 1 も不変）。**受付API・店舗入力画面・必須契約・書き出し契約・保持削除・バックアップの規則は一切変更していない。** |

@@ -120,10 +120,18 @@ test('静的: 危険な関数を使っていない', function (): void {
 
         // 外部へ出ていく関数（このアプリは外部通信しない）。
         // ★単語境界で見る。driveSharedEmail( の "mail(" のような部分一致を拾わない
-        foreach (['curl_init', 'curl_exec', 'fsockopen', 'stream_socket_client', 'mail'] as $banned) {
+        $banned = ['curl_init', 'curl_exec', 'fsockopen', 'stream_socket_client', 'mail'];
+
+        // ★4H-R0: 提出通知の実送信だけは mail() を使う（SSOT v1.12 §9.11）。
+        //   使ってよいのは **この1ファイルだけ**である。他が使えば失敗させる。
+        if (str_ends_with($path, 'src/Notify/ProductionMailNotifier.php')) {
+            $banned = array_values(array_diff($banned, ['mail']));
+        }
+
+        foreach ($banned as $name) {
             assertTrue(
-                preg_match('/(?<![a-zA-Z0-9_>])' . $banned . '\s*\(/', $body) !== 1,
-                basename($path) . ' が ' . $banned . '() を使っている'
+                preg_match('/(?<![a-zA-Z0-9_>])' . $name . '\s*\(/', $body) !== 1,
+                basename($path) . ' が ' . $name . '() を使っている'
             );
         }
         // http(s) を直接取りに行かない
@@ -373,8 +381,8 @@ test('静的: SSOT の版とコードの版が揃っている', function (): voi
 
     preg_match('/VERSION\s+:\s+v(\d+\.\d+)/', $ssot, $m);
     $version = $m[1] ?? '';
-    assertSame('1.11', $version, 'SSOT の版が想定と違う');
-    assertTrue(str_contains($readme, 'v1.11'), 'README が SSOT の版を指していない');
+    assertSame('1.12', $version, 'SSOT の版が想定と違う');
+    assertTrue(str_contains($readme, 'v1.12'), 'README が SSOT の版を指していない');
 
     // 8表・スキーマ版4
     assertSame(4, Migrator::SCHEMA_VERSION, 'スキーマ版が想定と違う');

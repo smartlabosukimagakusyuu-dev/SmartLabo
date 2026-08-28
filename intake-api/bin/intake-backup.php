@@ -19,6 +19,8 @@ if (PHP_SAPI !== 'cli') {
     exit(1);
 }
 
+// ★CLI の APP_ROOT は自明である（bin/ は APP_ROOT の直下に置く）。
+//   Web と違い、ここを外から差し替えられる経路は無い。
 require_once __DIR__ . '/../src/Autoload.php';
 
 use SmartLabo\Intake\Backup\BackupCli;
@@ -27,6 +29,7 @@ use SmartLabo\Intake\ConfigException;
 use SmartLabo\Intake\Kernel;
 
 try {
+    // ★APP_ROOT は Config::load() の中で検査する（不正なら例外・fail closed）
     $kernel = new Kernel(Config::load());
 } catch (ConfigException $e) {
     // ★例外文をそのまま出さない（設定値が混ざりうる）。固定文だけを出す

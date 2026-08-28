@@ -34,6 +34,9 @@ final class Audit
         // ★バックアップの処理状態も**この表**へ残す。新しい表は作らない。
         //   記録するのは種別と結果コードだけで、ファイル名・パス・件数は書かない。
         'backup_created', 'backup_restore_drill', 'backup_cleanup', 'backup_generations_purged',
+        // 4H-R0（SSOT v1.12 §2.5 / §9.11）
+        // ★通知の成否だけを残す。宛先・件名・本文・submission_id を書かない。
+        'submission_notification_sent', 'submission_notification_failed',
     ];
 
     public function __construct(
