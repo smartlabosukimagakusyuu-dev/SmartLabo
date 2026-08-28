@@ -1,0 +1,31 @@
+# SmartLabo — 改行の契約（HP-ONBOARDING-4H-M1-R1）
+#
+# ★ここへ書くのは「生成スクリプトが出力するファイル」だけである。
+#   リポジトリ全体・拡張子まとめ（`* text=auto` や `*.php text`）は**書かない**。
+#   WEBSITE/ や Salon 関連を含む既存ファイルの改行を、この宣言で変えない。
+#
+# なぜ必要か:
+#   この端末の Git は `core.autocrlf = true` である。
+#   そのため checkout（branch 切替・clone・fast-forward など）のたびに、
+#   追跡ファイルの改行が **LF → CRLF** へ書き換えられる。
+#   一方、生成スクリプト（Node）は **LF** で書き出す。
+#   結果、`tests/test-answer-schema.php` の
+#   「生成を再実行しても差分が出ない」というバイト比較が、
+#   **コードを1行も変えていないのに** 失敗する
+#   （2026-08-28・4H-M1 の master 統合後に実測）。
+#
+#   生成物は「スクリプトの出力と一致すること」自体が契約である。
+#   その契約を成立させるため、生成物の改行を **LF に固定**する。
+#
+# 対象の決め方:
+#   `intake-api/dev/generate-answer-schema.mjs` が `writeFileSync` で
+#   書き出すのは **`intake-api/src/AnswerSchema.php` の1ファイルだけ**である
+#   （調査で確認）。`AnswerPaths.php` は生成物ではなく、
+#   生成された定数を参照するだけの手書きファイルなので**対象にしない**。
+#
+#   生成スクリプトを増やしたときは、その出力ファイルを**明示パスで**ここへ足す。
+#   まとめ指定にしない。
+
+# 回答 JSON の正式構造（生成物）。
+#   作り直し方: node intake-api/dev/generate-answer-schema.mjs
+/intake-api/src/AnswerSchema.php text eol=lf
