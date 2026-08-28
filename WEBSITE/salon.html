@@ -342,80 +342,44 @@
       <p class="sa-eyebrow">導入メリット</p>
       <h2 class="sa-h2 sa-h2--center" id="benefits-title">導入すると、<span class="sa-nb">こんなに変わります。</span></h2>
 
+      <!-- ★Phase 4C: 3点の人物 inline SVG を、ChatGPT制作の正式イラストへ差し替えた。
+             画像は 11_02_25.png（5シーン合成）から該当シーンを切り出したもの。
+             顔・吹き出し・主要イラストは切らず、①②③以外のシーンも混入させていない。
+           ★吹き出しは画像内にあるため、HTML側で同じ内容を重ねない（重複表示を避ける）。
+             HTMLは見出し＋短い補足だけを持つ。
+           ★画像内の「事務作業を大幅削減！」「再来店が増える！」は、
+             漫画・イラスト内の演出的コピーとして代表判断で使用を許可されたもの。
+             HTML本文には効果保証表現を書かない（営業SSOT §18 を本文では厳守）。 -->
       <ul class="sa-changes">
 
         <li class="sa-change reveal">
           <div class="sa-change__art">
-            <svg viewBox="0 0 240 200" role="img" aria-label="事務作業が減って時間が生まれたサロンスタッフのイラスト" class="sa-change__illust">
-              <circle cx="120" cy="104" r="86" fill="#FBE1E8"/>
-              <!-- 人物 -->
-              <path d="M64 200c0-32 25-56 56-56s56 24 56 56z" fill="#C2415F"/>
-              <path d="M100 146h40v18c0 10-9 16-20 16s-20-6-20-16z" fill="#F2C9D3"/>
-              <path d="M100 166h40l10 34H90z" fill="#FFF4EC"/>
-              <circle cx="120" cy="112" r="34" fill="#F9E3D2"/>
-              <path d="M120 74c25 0 38 16 38 37 0 7-2 13-5 17-2-15-8-23-18-27-10 15-32 16-43 5-4 7-5 15-4 22-4-5-6-11-6-17 0-21 13-37 38-37z" fill="#4A3A34"/>
-              <path d="M109 111c2-3 6-3 8 0M123 111c2-3 6-3 8 0" stroke="#4A3A34" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M114 126c4 4 9 4 13 0" stroke="#C2415F" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <!-- 時計 -->
-              <circle cx="190" cy="60" r="34" fill="#FFFFFF" stroke="#A8511F" stroke-width="6"/>
-              <path d="M190 40v22l14 9" stroke="#A8511F" stroke-width="6" stroke-linecap="round" fill="none"/>
-              <!-- 余白の星 -->
-              <path d="M46 54l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="#F6D9C4"/>
-            </svg>
-            <p class="sa-bubble sa-bubble--a">事務作業をもっとシンプルに！</p>
+            <img src="assets/images/salon/lp/salon-lp-benefit-time.webp"
+                 width="560" height="440" loading="lazy" decoding="async"
+                 alt="Smart Labo Salonで予約確認や事務作業を効率化するサロンスタッフのイメージ">
           </div>
           <h3 class="sa-change__title">時間を生み出す</h3>
-          <p class="sa-change__text">予約の受付・確認、お客様の情報探し、店舗ページの更新依頼が減ります。空いた時間は、施術と接客へ。</p>
+          <p class="sa-change__text">予約確認や顧客情報の整理をシンプルに。空いた時間を、施術や接客に使えます。</p>
         </li>
 
         <li class="sa-change reveal">
           <div class="sa-change__art">
-            <svg viewBox="0 0 240 200" role="img" aria-label="再来店が増えて笑顔のサロンオーナーとグラフのイラスト" class="sa-change__illust">
-              <circle cx="120" cy="104" r="86" fill="#F6D9C4"/>
-              <!-- グラフ -->
-              <rect x="150" y="96" width="20" height="46" rx="6" fill="#EAD9C6"/>
-              <rect x="178" y="74" width="20" height="68" rx="6" fill="#F2C9D3"/>
-              <rect x="206" y="48" width="20" height="94" rx="6" fill="#C2415F"/>
-              <path d="M150 78l28-22 28-24" stroke="#A8511F" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M198 26h16v16" stroke="#A8511F" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- 人物 -->
-              <path d="M40 200c0-32 25-56 56-56s56 24 56 56z" fill="#A8511F"/>
-              <path d="M76 146h40v18c0 10-9 16-20 16s-20-6-20-16z" fill="#F6D9C4"/>
-              <path d="M76 166h40l10 34H66z" fill="#FFF4EC"/>
-              <circle cx="96" cy="112" r="34" fill="#F9E3D2"/>
-              <path d="M96 74c26 0 40 18 38 40-6-4-10-12-12-20-12 14-34 18-50 10-2 8-2 16 0 22-8-6-12-16-12-26 0-16 12-26 36-26z" fill="#3A2A22"/>
-              <path d="M85 111c2-3 6-3 8 0M99 111c2-3 6-3 8 0" stroke="#3A2A22" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M86 124c7 8 17 8 24 0" stroke="#C2415F" stroke-width="3.4" stroke-linecap="round" fill="none"/>
-            </svg>
-            <p class="sa-bubble sa-bubble--b">今いるお客様との関係を<br>もっと大切に！</p>
+            <img src="assets/images/salon/lp/salon-lp-benefit-repeat.webp"
+                 width="560" height="440" loading="lazy" decoding="async"
+                 alt="顧客情報を活用して再来店につなげるサロンスタッフのイメージ">
           </div>
-          <h3 class="sa-change__title">売上につなげる</h3>
-          <p class="sa-change__text">「誰に、何をご案内するか」を日々の記録から決められます。広告に頼りきらない土台をつくります。</p>
+          <h3 class="sa-change__title">リピーターにつなげる</h3>
+          <p class="sa-change__text">来店履歴や接客メモを次回のご案内へ。今いるお客様との関係づくりを支えます。</p>
         </li>
 
         <li class="sa-change reveal">
           <div class="sa-change__art">
-            <svg viewBox="0 0 240 200" role="img" aria-label="前回の話を覚えていて喜ぶお客様とスタッフのイラスト" class="sa-change__illust">
-              <circle cx="120" cy="104" r="86" fill="#EAD9C6"/>
-              <!-- スタッフ（左） -->
-              <path d="M18 200c0-28 22-50 50-50s50 22 50 50z" fill="#C2415F"/>
-              <circle cx="68" cy="118" r="30" fill="#F9E3D2"/>
-              <path d="M68 84c22 0 34 14 34 33 0 6-2 11-4 15-2-13-7-20-16-24-9 13-28 14-38 4-3 6-4 13-3 20-4-5-5-10-5-15 0-19 10-33 32-33z" fill="#4A3A34"/>
-              <path d="M59 117c2-3 5-3 7 0M71 117c2-3 5-3 7 0" stroke="#4A3A34" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M62 131c4 4 9 4 13 0" stroke="#C2415F" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <!-- お客様（右） -->
-              <path d="M124 200c0-28 22-50 50-50s50 22 50 50z" fill="#F6D9C4"/>
-              <circle cx="174" cy="118" r="30" fill="#F9E3D2"/>
-              <path d="M174 84c22 0 32 12 32 30 0 10-2 18-6 24 0-14-4-24-12-30-10 14-30 14-40 2-2 8-2 18 0 26-4-8-6-16-6-24 0-18 10-28 32-28z" fill="#6B4A38"/>
-              <path d="M165 117c2-3 5-3 7 0M177 117c2-3 5-3 7 0" stroke="#6B4A38" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M167 130c5 6 12 6 17 0" stroke="#C2415F" stroke-width="3.4" stroke-linecap="round" fill="none"/>
-              <!-- ハート -->
-              <path d="M120 78c-14-10-30-2-30 12 0 16 22 28 30 34 8-6 30-18 30-34 0-14-16-22-30-12z" fill="#C2415F"/>
-            </svg>
-            <p class="sa-bubble sa-bubble--c">前回のことを<br>覚えてくれてる！</p>
+            <img src="assets/images/salon/lp/salon-lp-benefit-satisfaction.webp"
+                 width="560" height="440" loading="lazy" decoding="async"
+                 alt="前回の接客情報を確認しながらお客様を接客するサロンスタッフのイメージ">
           </div>
           <h3 class="sa-change__title">お客様満足度UP</h3>
-          <p class="sa-change__text">前回の内容やお好みを踏まえて接客できます。担当が変わっても引き継げます。</p>
+          <p class="sa-change__text">前回の内容やお好みを確認して接客。担当が変わっても情報を引き継げます。</p>
         </li>
 
       </ul>

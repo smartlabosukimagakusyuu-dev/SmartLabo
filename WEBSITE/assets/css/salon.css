@@ -521,12 +521,19 @@
 
 
 /* ==========================================================================
-   06. 導入すると、こんなに変わる（イラスト＋吹き出し）
+   06. 導入すると、こんなに変わる（正式イラストが主役）
+   --------------------------------------------------------------------------
+   ★Phase 4C: 画像をカードの中に小さく置くのではなく、画像そのものを主役にする。
+     枠線は使わず、十分な角丸とやわらかい影だけで浮かせる（白カード3枚に戻さない）。
+   ★吹き出しは画像内にあるため、HTML側では .sa-bubble を使わない。
+     .sa-bubble の定義自体は「攻める集客」で使うので残してある（削除しないこと）。
+   ★画像は 560x440。object-fit は使わず、常に縦横比を保った縮小表示にする
+     （顔・吹き出しが切れるため）。
    ========================================================================== */
 
 .sa-changes {
   list-style: none;
-  margin: 26px 0 0;
+  margin: 30px 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -534,43 +541,49 @@
 }
 .sa-change { text-align: center; }
 
-.sa-change__art { position: relative; padding-bottom: 26px; }
-.sa-change__illust {
+.sa-change__art {
+  border-radius: var(--sa-r-lg);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--sa-sh-md);
+}
+.sa-change__art img {
+  display: block;
   width: 100%;
-  max-width: 260px;
-  height: auto;
-  margin-inline: auto;
+  height: auto;            /* 560:440 の比率を維持。crop しない */
 }
-.sa-change__art .sa-bubble {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: 100%;
-  text-align: center;
-}
-.sa-change__art .sa-bubble::after { left: 50%; margin-left: -9px; }
 
 .sa-change__title {
-  margin: 22px 0 8px;
+  margin: 18px 0 0;
   font-size: clamp(21px, 2.6vw, 25px);
   font-weight: 800;
   color: var(--sa-ink);
 }
+/* 見出し下の短いピンクの線。枠線を増やさずにLPらしいアクセントを付ける */
+.sa-change__title::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 4px;
+  margin: 10px auto 0;
+  border-radius: 2px;
+  background: var(--sa-pink);
+}
 .sa-change__text {
-  margin: 0;
+  margin: 12px auto 0;
   font-size: var(--sa-fs-sm);
   line-height: 1.85;
   color: var(--sa-ink-2);
   text-align: left;
   max-width: 30em;
-  margin-inline: auto;
 }
 
 @media (max-width: 860px) {
-  .sa-changes { grid-template-columns: 1fr; gap: 34px; }
-  .sa-change__illust { max-width: 216px; }
+  .sa-changes { grid-template-columns: 1fr; gap: 30px; }
+  /* ★スマホでもサムネイルにしない。ただし画像の実寸は560pxなので、
+       それ以上に引き伸ばすとぼやける。上限480pxに留めて拡大ボケを防ぐ。
+       375px ではコンテンツ幅(343px)いっぱいに表示される。 */
+  .sa-change__art { max-width: 480px; margin-inline: auto; }
 }
 
 
