@@ -65,6 +65,22 @@ UI アイコン（線画のピクトグラム）は Claude Code が inline SVG �
 
 ---
 
+## 代表判断で確定済み（戻さないこと）
+
+過去に一度承認された内容でも、あとから代表判断で上書きされたものがある。
+**新しい判断が勝つ。** 以下は差し戻し禁止。
+
+| 確定日 | 内容 | 旧ルール（無効） |
+|---|---|---|
+| 2026-08-28 REBUILD-2 | **セクション順は MASTER COMP に従う**。`#screens`（できること）を `#benefits`（導入メリット）より前に置く | Phase 2 の順序（導入メリットが先） |
+| 2026-08-28 REBUILD-2 | **最終CTA は明るいSalonトーン**（淡ピンク／白／Salon Pink） | 「最終CTA＝暖色ダーク」 |
+| 2026-08-28 REBUILD-2 | 最終CTAに **QR・LINE相談・メール直書きを置かない**。正式フォームへのCTAが主役 | — |
+
+詳細は `references/MASTER_COMP.md` §3-A2・§3-G と
+`references/PAGE_STRUCTURE.md` を参照。
+
+---
+
 ## 判断に迷ったときの順序
 
 0. **MASTER COMP（`references/MASTER_COMP.md`）を見たか** → デザインはこれが最優先。

@@ -149,12 +149,7 @@
   box-shadow: var(--sa-sh-sm);
 }
 .salon-theme .btn--secondary:hover { border-color: var(--sa-pink); background: var(--sa-bg-pink); color: var(--sa-pink-deep); }
-.salon-theme .btn--on-inverse {
-  background: transparent;
-  border: 2px solid rgba(255, 255, 255, .7);
-  color: #fff;
-}
-.salon-theme .btn--on-inverse:hover { background: rgba(255, 255, 255, .14); border-color: #fff; }
+/* .btn--on-inverse（暗色地の白抜きボタン）は最終CTAのダーク廃止に伴い削除した。 */
 .salon-theme .btn--lg { padding: 14px 28px; font-size: 17px; }
 
 .salon-theme .site-footer {
@@ -1381,61 +1376,91 @@
 
 
 /* ==========================================================================
-   14. 最終CTA（暖色ダーク）
+   14. 最終CTA（明るいSalonトーン）
+   --------------------------------------------------------------------------
+   ★REBUILD-2 代表判断: 暖色ダークを廃止した。MASTER COMP 下部の
+     「まずは相談してみよう」という軽さに合わせ、淡いピンク／白／Salon Pink で組む。
+     ダーク背景・白抜き文字へ戻さないこと（PAGE_STRUCTURE.md の旧ルールは上書き済み）。
+   ★このセクションは白カードの列にしない。中央寄せ1本の呼びかけとして扱う。
    ========================================================================== */
 
 .sa-cta {
   padding: clamp(48px, 7vw, 84px) 0;
   text-align: center;
-  color: var(--sa-on-deep);
-  background:
-    radial-gradient(620px 320px at 50% 0%, #4C3B41 0%, transparent 70%),
-    var(--sa-bg-deep);
-}
-.sa-cta .sa-eyebrow {
-  background: rgba(255, 255, 255, .12);
-  border-color: rgba(255, 255, 255, .34);
-  color: #fff;
+  color: var(--sa-ink);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF3F6 46%, #FFEDF2 100%);
 }
 .sa-cta__title {
   margin: 0 0 14px;
   font-size: var(--sa-fs-h2);
   font-weight: 800;
   line-height: 1.34;
-  color: var(--sa-on-deep);
+  color: var(--sa-pink-deep);
 }
 .sa-cta__lead {
   margin: 0 auto 6px;
   max-width: 52ch;
   font-size: var(--sa-fs-lead);
   line-height: 1.85;
-  color: var(--sa-on-deep-2);
+  color: var(--sa-ink-2);
 }
+
+/* --- 「何を相談できるか」の安心材料。カードではなく小さなチップ --- */
+.sa-cta__topics {
+  list-style: none;
+  margin: 18px auto 4px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 10px;
+  max-width: 40rem;
+}
+.sa-cta__topics li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  border-radius: var(--sa-r-pill);
+  background: #fff;
+  border: 1px solid var(--sa-pink-line);
+  color: var(--sa-pink-deep);
+  font-size: var(--sa-fs-sm);
+  font-weight: 700;
+}
+.sa-cta__topics li::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sa-pink);
+}
+
 .sa-cta__price {
   display: inline-block;
   margin: 22px auto 0;
   padding: 14px 22px;
   border-radius: var(--sa-r-md);
-  background: rgba(255, 255, 255, .1);
-  border: 1px solid rgba(255, 255, 255, .26);
+  background: #fff;
+  border: 1px solid var(--sa-pink-line);
   font-size: var(--sa-fs-sm);
   line-height: 1.85;
-  color: var(--sa-on-deep);
+  color: var(--sa-ink-2);
   text-align: left;
 }
-.sa-cta__price b { display: block; color: #FFD9E2; font-size: var(--sa-fs-body); }
-.sa-cta__price a { color: #FFD9E2; text-decoration: underline; text-underline-offset: 3px; }
+.sa-cta__price b { display: block; color: var(--sa-pink-deep); font-size: var(--sa-fs-body); }
+.sa-cta__price a { color: var(--sa-pink-deep); text-decoration: underline; text-underline-offset: 3px; }
 
 
 /* ==========================================================================
    15. アウトロ（CTA → フッターを色の切れ目なくつなぐ）
    --------------------------------------------------------------------------
-   ★Phase 2 では暗色CTAのあと白背景の帯が入り、フッターとの間に
-     意図しない色の切れ目ができていた。ここをフッターと同じアイボリーにした。
+   ★REBUILD-2: CTAが明るいピンクになったため、この帯もCTA末端と同じ #FFEDF2 にし、
+     CTA → アウトロ → フッター（アイボリー）が段階的につながるようにした。
    ========================================================================== */
 
 .sa-outro {
-  background: var(--sa-bg-ivory);
+  background: #FFEDF2;
   padding: 26px 0 22px;
 }
 .sa-othersvc {

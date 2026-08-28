@@ -170,8 +170,8 @@
     <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
       <a class="site-nav__cta" href="#screens">実際の画面を見る</a>
       <a href="#features">機能紹介</a>
-      <a href="#benefits">導入メリット</a>
       <a href="#screens">実際の画面</a>
+      <a href="#benefits">導入メリット</a>
       <a href="#pricing">料金プラン</a>
       <a href="#faq">よくある質問</a>
       <a class="site-nav__cta" href="contact.html?type=consult&amp;topic=salon#interests">無料で相談してみる</a>
@@ -331,83 +331,13 @@
   </section>
 
 
-  <!-- ============================== 04. 導入すると、こんなに変わる ==============================
-       ★Phase 4D: 「白いカード3枚」をやめ、セクションそのものを1本の漫画ストーリーにした。
-         PC/タブレット … 3シーンが1枚につながった横長イラスト（継ぎ目なし・全幅の帯）
-         スマホ        … 同じ3シーンを個別素材で縦に再構成（横スクロールはしない）
-       ★見出し・説明文・リンクは必ずHTMLで保持する。画像内に文字を焼き込んで
-         意味を完結させない（検索性・A11y・更新性のため）。
-       ★番号バッジは帯の下端にまたがせ、イラストとテキストを視覚的に縫い合わせている。
-         カード枠・角丸・影は使わない。
-       ★画像内の「事務作業を大幅削減！」「再来店が増える！」は、漫画・イラスト内の
-         演出的コピーとして代表判断で使用を許可されたもの。
-         HTML本文には効果保証表現を書かない（営業SSOT §18 は本文で厳守）。
-       ★将来、正式な横長漫画素材が届いたら .sa-story__wide の src を差し替えるだけでよい。 -->
-  <section class="sa-section sa-story" id="benefits" aria-labelledby="benefits-title">
-
-    <div class="container sa-story__head">
-      <p class="sa-eyebrow">導入メリット</p>
-      <h2 class="sa-h2 sa-h2--center" id="benefits-title">導入すると、<span class="sa-nb">こんなに変わります。</span></h2>
-    </div>
-
-    <!-- PC/タブレット：継ぎ目のない横長1枚（全幅の帯として置き、カードに見せない） -->
-    <div class="sa-story__strip">
-      <img class="sa-story__wide"
-           src="assets/images/salon/lp/salon-lp-benefits-wide.webp"
-           width="1507" height="420" loading="lazy" decoding="async"
-           alt="タブレットで事務作業を進めるサロンスタッフ、お客様との関係づくりに集中するスタッフ、前回の記録を見ながら接客するスタッフとお客様を、ひとつづきに描いたイラスト">
-    </div>
-
-    <ol class="sa-story__items">
-
-      <li class="sa-story__item">
-        <span class="sa-story__no" aria-hidden="true">1</span>
-        <!-- スマホ用のシーン（860px以下で表示）。Phase 4C の個別素材を再利用している -->
-        <div class="sa-story__scene">
-          <img src="assets/images/salon/lp/salon-lp-benefit-time.webp"
-               width="560" height="440" loading="lazy" decoding="async"
-               alt="Smart Labo Salonで予約確認や事務作業を効率化するサロンスタッフのイメージ">
-        </div>
-        <h3 class="sa-story__title">時間を生み出す</h3>
-        <p class="sa-story__text">予約確認や顧客情報の整理をシンプルに。空いた時間を、施術や接客に使えます。</p>
-        <a class="sa-story__link" href="#screens">予約管理を見る<span aria-hidden="true">→</span></a>
-      </li>
-
-      <li class="sa-story__item">
-        <span class="sa-story__no" aria-hidden="true">2</span>
-        <div class="sa-story__scene">
-          <img src="assets/images/salon/lp/salon-lp-benefit-repeat.webp"
-               width="560" height="440" loading="lazy" decoding="async"
-               alt="顧客情報を活用して再来店につなげるサロンスタッフのイメージ">
-        </div>
-        <h3 class="sa-story__title">リピーターにつなげる</h3>
-        <p class="sa-story__text">来店履歴や接客メモを次回のご案内へ。今いるお客様との関係づくりを支えます。</p>
-        <a class="sa-story__link" href="#revisit">再来店の仕組みを見る<span aria-hidden="true">→</span></a>
-      </li>
-
-      <li class="sa-story__item">
-        <span class="sa-story__no" aria-hidden="true">3</span>
-        <div class="sa-story__scene">
-          <img src="assets/images/salon/lp/salon-lp-benefit-satisfaction.webp"
-               width="560" height="440" loading="lazy" decoding="async"
-               alt="前回の接客情報を確認しながらお客様を接客するサロンスタッフのイメージ">
-        </div>
-        <h3 class="sa-story__title">お客様満足度UP</h3>
-        <p class="sa-story__text">前回の内容やお好みを確認して接客。担当が変わっても情報を引き継げます。</p>
-        <a class="sa-story__link" href="#screens">顧客カルテを見る<span aria-hidden="true">→</span></a>
-      </li>
-
-    </ol>
-  </section>
-
-
-  <!-- ============================== 05. Smart Labo Salonでできること ==============================
+  <!-- ============================== 04. Smart Labo Salonでできること ==============================
        ★MASTER COMP 準拠: 左に番号付きの機能説明（約32%）、右に実画面を2x2で
          まとめて大きく見せる（約68%）。実画面1枚ごとに巨大なブロックを作らない。
        ★正式スクリーンショット4点をそのまま使用。不足する画面（予約管理カレンダー・
          オーナー件数表示）について架空UIは作らない。文章で補っている。
        ★実画面はデモ用の架空データ。節の末尾に必ず明示する。 -->
-  <section class="sa-section" id="screens" aria-labelledby="screens-title">
+  <section class="sa-section sa-section--ivory" id="screens" aria-labelledby="screens-title">
     <div class="sa-wrap">
 
       <p class="sa-deco-h2" aria-hidden="true">✦</p>
@@ -478,6 +408,76 @@
 
       <p class="sa-demo-note">※掲載画面はデモ用の架空データです。</p>
     </div>
+  </section>
+
+
+  <!-- ============================== 05. 導入すると、こんなに変わる ==============================
+       ★Phase 4D: 「白いカード3枚」をやめ、セクションそのものを1本の漫画ストーリーにした。
+         PC/タブレット … 3シーンが1枚につながった横長イラスト（継ぎ目なし・全幅の帯）
+         スマホ        … 同じ3シーンを個別素材で縦に再構成（横スクロールはしない）
+       ★見出し・説明文・リンクは必ずHTMLで保持する。画像内に文字を焼き込んで
+         意味を完結させない（検索性・A11y・更新性のため）。
+       ★番号バッジは帯の下端にまたがせ、イラストとテキストを視覚的に縫い合わせている。
+         カード枠・角丸・影は使わない。
+       ★画像内の「事務作業を大幅削減！」「再来店が増える！」は、漫画・イラスト内の
+         演出的コピーとして代表判断で使用を許可されたもの。
+         HTML本文には効果保証表現を書かない（営業SSOT §18 は本文で厳守）。
+       ★将来、正式な横長漫画素材が届いたら .sa-story__wide の src を差し替えるだけでよい。 -->
+  <section class="sa-section sa-story" id="benefits" aria-labelledby="benefits-title">
+
+    <div class="container sa-story__head">
+      <p class="sa-eyebrow">導入メリット</p>
+      <h2 class="sa-h2 sa-h2--center" id="benefits-title">導入すると、<span class="sa-nb">こんなに変わります。</span></h2>
+    </div>
+
+    <!-- PC/タブレット：継ぎ目のない横長1枚（全幅の帯として置き、カードに見せない） -->
+    <div class="sa-story__strip">
+      <img class="sa-story__wide"
+           src="assets/images/salon/lp/salon-lp-benefits-wide.webp"
+           width="1507" height="420" loading="lazy" decoding="async"
+           alt="タブレットで事務作業を進めるサロンスタッフ、お客様との関係づくりに集中するスタッフ、前回の記録を見ながら接客するスタッフとお客様を、ひとつづきに描いたイラスト">
+    </div>
+
+    <ol class="sa-story__items">
+
+      <li class="sa-story__item">
+        <span class="sa-story__no" aria-hidden="true">1</span>
+        <!-- スマホ用のシーン（860px以下で表示）。Phase 4C の個別素材を再利用している -->
+        <div class="sa-story__scene">
+          <img src="assets/images/salon/lp/salon-lp-benefit-time.webp"
+               width="560" height="440" loading="lazy" decoding="async"
+               alt="Smart Labo Salonで予約確認や事務作業を効率化するサロンスタッフのイメージ">
+        </div>
+        <h3 class="sa-story__title">時間を生み出す</h3>
+        <p class="sa-story__text">予約確認や顧客情報の整理をシンプルに。空いた時間を、施術や接客に使えます。</p>
+        <a class="sa-story__link" href="#screens">予約管理を見る<span aria-hidden="true">→</span></a>
+      </li>
+
+      <li class="sa-story__item">
+        <span class="sa-story__no" aria-hidden="true">2</span>
+        <div class="sa-story__scene">
+          <img src="assets/images/salon/lp/salon-lp-benefit-repeat.webp"
+               width="560" height="440" loading="lazy" decoding="async"
+               alt="顧客情報を活用して再来店につなげるサロンスタッフのイメージ">
+        </div>
+        <h3 class="sa-story__title">リピーターにつなげる</h3>
+        <p class="sa-story__text">来店履歴や接客メモを次回のご案内へ。今いるお客様との関係づくりを支えます。</p>
+        <a class="sa-story__link" href="#revisit">再来店の仕組みを見る<span aria-hidden="true">→</span></a>
+      </li>
+
+      <li class="sa-story__item">
+        <span class="sa-story__no" aria-hidden="true">3</span>
+        <div class="sa-story__scene">
+          <img src="assets/images/salon/lp/salon-lp-benefit-satisfaction.webp"
+               width="560" height="440" loading="lazy" decoding="async"
+               alt="前回の接客情報を確認しながらお客様を接客するサロンスタッフのイメージ">
+        </div>
+        <h3 class="sa-story__title">お客様満足度UP</h3>
+        <p class="sa-story__text">前回の内容やお好みを確認して接客。担当が変わっても情報を引き継げます。</p>
+        <a class="sa-story__link" href="#screens">顧客カルテを見る<span aria-hidden="true">→</span></a>
+      </li>
+
+    </ol>
   </section>
 
 
@@ -623,7 +623,56 @@
   </section>
 
 
-  <!-- ============================== 08. 料金プラン ==============================
+  <!-- ============================== 08. ホームページから、集客の仕組みをつくる ==============================
+       ★「HP制作」を Salon 標準商品として書かない（営業SSOT §13・§18）。
+         別サービスとして案内し、Salon とつながることを図で示す。 -->
+  <section class="sa-section sa-section--pinktint" id="website" aria-labelledby="web-title">
+    <div class="container">
+      <p class="sa-eyebrow">ホームページ制作</p>
+      <h2 class="sa-h2 sa-h2--left" id="web-title">ホームページから、<span class="sa-nb"><span class="sa-mark">集客の仕組み</span>をつくる。</span></h2>
+      <p class="sa-lead">
+        「作って終わり」にはしません。お客様が見つけてから、また来ていただくまでを1本につなげます。
+      </p>
+
+      <ol class="sa-chain">
+        <li class="sa-chain__item is-key">
+          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 13h8M8 16.5h5"/></svg></span>
+          ホームページ
+        </li>
+        <li class="sa-chain__item">
+          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H7l-3 3z"/><path d="M9 11h6"/></svg></span>
+          お問い合わせ
+        </li>
+        <li class="sa-chain__item">
+          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></span>
+          WEB予約
+        </li>
+        <li class="sa-chain__item">
+          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></span>
+          ご来店
+        </li>
+        <li class="sa-chain__item">
+          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6v2H9z"/><path d="M15 5h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3"/><path d="M8 12h8M8 16h5"/></svg></span>
+          顧客カルテ
+        </li>
+        <li class="sa-chain__item is-loop">
+          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span>
+          再来店
+        </li>
+      </ol>
+
+      <p class="sa-note sa-note--center">
+        店舗ホームページ制作は 50,000円〜（税別）の別サービスです。基本範囲は<a href="#pricing">料金プラン</a>に記載しています。
+      </p>
+
+      <div class="sa-actions sa-actions--center">
+        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--secondary btn--lg">ホームページ制作について相談する</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== 09. 料金プラン ==============================
        ★MASTER COMP 準拠: 3プランを横一列で比較。色付きヘッダーバーで役割を示す。
          創業メンバー=ピンク（主役） / Standard=ピンク / HP制作=オレンジ（別商品）。
        ★縦に大きくせず、高密度の料金表にする。
@@ -691,55 +740,6 @@
         LINE公式アカウントのご契約料金・メッセージ通数の料金は月額に含まれず店舗のご負担となります。
         契約条件の詳細は、ご契約前に契約書と料金確認書でご説明します。
       </p>
-    </div>
-  </section>
-
-
-  <!-- ============================== 09. ホームページから、集客の仕組みをつくる ==============================
-       ★「HP制作」を Salon 標準商品として書かない（営業SSOT §13・§18）。
-         別サービスとして案内し、Salon とつながることを図で示す。 -->
-  <section class="sa-section sa-section--pinktint" id="website" aria-labelledby="web-title">
-    <div class="container">
-      <p class="sa-eyebrow">ホームページ制作</p>
-      <h2 class="sa-h2 sa-h2--left" id="web-title">ホームページから、<span class="sa-nb"><span class="sa-mark">集客の仕組み</span>をつくる。</span></h2>
-      <p class="sa-lead">
-        「作って終わり」にはしません。お客様が見つけてから、また来ていただくまでを1本につなげます。
-      </p>
-
-      <ol class="sa-chain">
-        <li class="sa-chain__item is-key">
-          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 13h8M8 16.5h5"/></svg></span>
-          ホームページ
-        </li>
-        <li class="sa-chain__item">
-          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H7l-3 3z"/><path d="M9 11h6"/></svg></span>
-          お問い合わせ
-        </li>
-        <li class="sa-chain__item">
-          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></span>
-          WEB予約
-        </li>
-        <li class="sa-chain__item">
-          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></span>
-          ご来店
-        </li>
-        <li class="sa-chain__item">
-          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6v2H9z"/><path d="M15 5h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3"/><path d="M8 12h8M8 16h5"/></svg></span>
-          顧客カルテ
-        </li>
-        <li class="sa-chain__item is-loop">
-          <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span>
-          再来店
-        </li>
-      </ol>
-
-      <p class="sa-note sa-note--center">
-        店舗ホームページ制作は 50,000円〜（税別）の別サービスです。基本範囲は<a href="#pricing">料金プラン</a>に記載しています。
-      </p>
-
-      <div class="sa-actions sa-actions--center">
-        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--secondary btn--lg">ホームページ制作について相談する</a>
-      </div>
     </div>
   </section>
 
@@ -895,10 +895,19 @@
 
 
   <!-- ============================== 12. 最終CTA ==============================
+       ★REBUILD-2 代表判断: 暖色ダークを廃止し、MASTER COMP 下部の
+         「まずは相談してみよう」の軽さ（淡いピンク／白／Salon Pink）に合わせた。
+         PAGE_STRUCTURE.md の旧ルール「最終CTA＝暖色ダーク」は上書き済み。
+         ダーク背景へ戻さないこと。
+       ★カンプ下部にある QRコード・LINE相談・メールアドレス直書きは追加しない
+         （代表判断）。正式な問い合わせフォームへのCTAを主役にする。
        ★LINE相談は、Smart Labo 公式LINEアカウントが未確認のため置かない
-         （空リンク・ダミーリンク禁止）。確認できしだい並列表示に追加する。 -->
+         （空リンク・ダミーリンク禁止）。確認できしだい並列表示に追加する。
+       ★.sa-cta__topics は「何を相談できるか」の安心材料。新しい機能・実績・
+         効果保証は書かない（営業SSOT §12・§18）。 -->
   <section class="sa-cta" id="cta" aria-labelledby="cta-title">
-    <div class="container container--narrow">
+    <div class="sa-wrap">
+      <p class="sa-deco-h2" aria-hidden="true">✦</p>
       <p class="sa-eyebrow">無料相談</p>
       <h2 class="sa-cta__title" id="cta-title">まずは、<span class="sa-nb">無料で相談してみませんか？</span></h2>
       <p class="sa-cta__lead">
@@ -906,9 +915,15 @@
         合う使い方をご提案します。実際の画面をご覧いただきながらご説明します。
       </p>
 
+      <ul class="sa-cta__topics">
+        <li>導入について相談</li>
+        <li>自分のサロンに合うか相談</li>
+        <li>料金や機能について相談</li>
+      </ul>
+
       <div class="sa-actions sa-actions--center">
-        <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">無料相談を申し込む</a>
-        <a href="contact.html?type=docs&amp;topic=salon#form" class="btn btn--on-inverse btn--lg">資料を請求する</a>
+        <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">まずは無料で相談してみる</a>
+        <a href="contact.html?type=docs&amp;topic=salon#form" class="btn btn--secondary btn--lg">資料を請求する</a>
       </div>
 
       <p class="sa-cta__price">
