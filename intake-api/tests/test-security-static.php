@@ -416,8 +416,8 @@ test('静的: SSOT の版とコードの版が揃っている', function (): voi
 
     preg_match('/VERSION\s+:\s+v(\d+\.\d+)/', $ssot, $m);
     $version = $m[1] ?? '';
-    assertSame('1.12', $version, 'SSOT の版が想定と違う');
-    assertTrue(str_contains($readme, 'v1.12'), 'README が SSOT の版を指していない');
+    assertSame('1.13', $version, 'SSOT の版が想定と違う');
+    assertTrue(str_contains($readme, 'v1.13'), 'README が SSOT の版を指していない');
 
     // 8表・スキーマ版4
     assertSame(4, Migrator::SCHEMA_VERSION, 'スキーマ版が想定と違う');

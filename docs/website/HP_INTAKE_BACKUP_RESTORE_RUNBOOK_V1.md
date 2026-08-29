@@ -2,11 +2,12 @@
 
 ```text
 STATUS      : APPROVED / HP-ONBOARDING-4H-R0 まで反映（**ローカル検証のみ。本番未実施**）
-VERSION     : v1.1
-DATE        : 2026-08-28（v1.0 制定 / v1.1 改定）
+VERSION     : v1.2
+DATE        : 2026-08-28（v1.0 制定 / v1.1 改定）／ 2026-08-29（v1.2 改定）
 工程        : HP-ONBOARDING-4G（SQLiteバックアップ・復元・世代管理・保持削除整合性）
               ／ -4H-R0（配置境界の可変化・preflight 分離を反映）
-SSOT        : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.12** §9.5 / §9.10 / §10.11
+              ／ -4H-3（APP_ROOT 解決経路の実機確定を反映）
+SSOT        : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.13** §9.5 / §9.10 / §10.11
 実装         : intake-api/src/Backup/ ／ intake-api/bin/intake-backup.php
 本番配置     : **未実施**。パス確定・実測・権限確認は **4H** で行う
 ```
@@ -34,7 +35,7 @@ SSOT        : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.12** §9.5
 
 ## 1. 前提
 
-### 1.0 配置（v1.1 で改定・SSOT v1.12 §10.11）
+### 1.0 配置（v1.1 で新設・v1.2 で改定・SSOT v1.13 §10.11）
 
 docroot と APP_ROOT は**別階層でよい**。XServer のサブドメインは
 `public_html` の下に作られるため、正式配置は次のとおりとする。
@@ -53,9 +54,9 @@ smartlaboworks.com/
 
 | # | 条件 |
 |---|---|
-| 1 | APP_ROOT は `.user.ini` の `auto_prepend_file` が読む**非公開 bootstrap** が教える（第一候補）。<br>雛形: `intake-api/private/app-root-bootstrap.example.php` |
-| 2 | それが使えない環境では、docroot の祖先の `private/hp-intake/` を自動で探す（代替方式） |
-| 3 | **どちらを正式採用するかは 4H で実機確認して決める** |
+| 1 | **XServer 本番は docroot の祖先の `private/hp-intake/` を探す経路で APP_ROOT を解決する**（v1.2・4H-3 で確定）。<br>**APP_ROOT の解決に固定の絶対パスを使わない** |
+| 2 | `.user.ini` の `auto_prepend_file` は**空のままとする**。定数・環境変数・リポジトリ配置の経路は CLI・ローカル確認・他環境用として実装に残る（雛形: `intake-api/private/app-root-bootstrap.example.php`も残す） |
+| 3 | これは「`auto_prepend_file` が使えない」という意味ではない。4H-3 では設定した**絶対パスでファイルを開けず** `Failed opening required` となった。<br>`auto_prepend_file` は **require 相当**のため、開けないと**主スクリプトが実行されず**、全 PHP 応答が **HTTP 500・本文 0 バイト**になる。単一障害点を避けるため本番では使わない |
 | 4 | APP_ROOT が未設定・不正・`public_html` 内なら**起動しない**（fail closed） |
 
 ### 1.1 設定
@@ -323,7 +324,7 @@ DB の削除（トランザクション）とバックアップファイルの�
 | # | 事項 |
 |---|---|
 | 1 | XServer 上の**正確な絶対パス**を確定する（`${DOMAIN_ROOT}/private/hp-intake/private/backups` 候補） |
-| 1.1 | `auto_prepend_file` が使えるかを実機で確認する（使えなければ代替方式を採る） |
+| ~~1.1~~ | ~~`auto_prepend_file` が使えるかを実機で確認する~~ → **4H-3 で完了**。本番は**祖先探索方式**を採用し、`auto_prepend_file` は空のままとした（§1.0） |
 | 2 | そのパスが **public_html の外**であることを実機で確認する |
 | 3 | ディレクトリ 700 / ファイル 600 を実機で確認する |
 | 4 | XServer 上で `SQLite3::backup()` が動くことを実測する |
@@ -342,3 +343,4 @@ DB の削除（トランザクション）とバックアップファイルの�
 |---|---|---|
 | v1.0 | 2026-08-28 | HP-ONBOARDING-4G で新規作成。SSOT v1.11 §9.5 に対応 |
 | v1.1 | 2026-08-28 | HP-ONBOARDING-4H-R0 を反映。§1.0 配置（docroot と APP_ROOT の分離）を新設。<br>backup_dir の候補パスを新配置へ更新。§6.4 preflight の世代を本番へ混ぜない を新設<br>（旧 §6.4 は §6.5 へ繰り下げ）。§7 へ `auto_prepend_file` の実機確認を追加。<br>SSOT 参照を v1.12（§9.5 / §9.10 / §10.11）へ更新 |
+| v1.2 | 2026-08-29 | HP-ONBOARDING-4H-3 を反映。§1.0 の条件を更新し、**XServer 本番は docroot の祖先探索で APP_ROOT を解決する**ことを確定（`auto_prepend_file` は空のまま）。<br>実際の失敗原因は設定した**絶対パスでファイルを開けず** `Failed opening required` となったことであり、**「使えない」と断定していない**。require 相当のためパス誤りで全 PHP 応答が HTTP 500・本文 0 バイトになることを実測し、単一障害点を避ける判断として本番では使わない。<br>§7 の残作業 #1.1 を**完了**へ更新。SSOT 参照を **v1.13** へ更新。<br>**バックアップ・復元の手順そのものは変更していない** |

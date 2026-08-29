@@ -1,12 +1,13 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4H-R0）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4H-3）
 
 ```text
-STATUS : ローカル実装（受付API＋店舗入力画面＋内部確認画面＋保持削除＋バックアップ＋配置境界＋提出通知）。**本番未配置**
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.12**
-手順書  : docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md v1.1（バックアップ・復元）
+STATUS : 本体コードは **4H-3 で XServer へ配置済み**（docroot 19 / APP_ROOT 47 ファイル）。
+         **設定・DB・管理者資格情報は未投入のため未稼働（fail closed）**。一般公開も未実施
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.13**
+手順書  : docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md v1.2（バックアップ・復元）
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
-配置予定: intake.smartlaboworks.com（**未作成**。サブドメイン・SSL は 4H で代表作業）
+配置先  : intake.smartlaboworks.com（サブドメイン・SSL は作成済み。APP_ROOT は非公開領域）
 ```
 
 > ★このディレクトリは **GitHub Pages の公開対象に含まれない**。
@@ -237,12 +238,11 @@ X-Intake-Export-Sha256: <本文の SHA-256>
    - ★`expose_php` は `PHP_INI_SYSTEM` のため、共用サーバーでは `.user.ini` から
      **効かないことがある**。`X-Powered-By` が消えたかを**実機で確認**する。
      消えない場合は `.htaccess` の `Header always unset X-Powered-By` が受け止める
-4. **APP_ROOT を public_html の外へ作る**（SSOT v1.12 §10.11・4H-R0 で確定）
+4. **APP_ROOT を public_html の外へ作る**（SSOT v1.13 §10.11・4H-R0 で確定・4H-3 で実機確定）
    - `smartlaboworks.com/private/hp-intake/` に `src/` `bin/` `private/` を置く
    - docroot は `public_html/intake.smartlaboworks.com/`（`public/` の中身19ファイル）
-   - `auto_prepend_file` で非公開 bootstrap を読ませる（雛形
-     `private/app-root-bootstrap.example.php`）。**使えるかは実機で確認**する
-   - 使えない場合は代替方式（docroot の祖先の `private/hp-intake/` を自動探索）で動く
+   - **本番は代替方式（docroot の祖先の `private/hp-intake/` を自動探索）を採用**する（4H-3 で実機確定）。`.user.ini` の `auto_prepend_file` は**空のまま**とする
+   - `auto_prepend_file` 経路（雛形 `private/app-root-bootstrap.example.php`）は**他環境用として残す**。採用しない理由は §「配置境界」を参照
    - 権限は ディレクトリ 700 / 設定ファイル 600
 5. `private/intake-config.php` を作成し、**別々に生成した**鍵を設定する
    ```bash
@@ -508,7 +508,7 @@ php -c intake-api/dev/php.ini intake-api/dev/retention-walkthrough.php
 毎回新しい使い捨てDBを作り、**終わったら消す**。
 `dev/.preview/` を含む**既存DBへは一切接続しない**。
 
-### 配置境界（4H-R0・SSOT v1.12 §10.11）
+### 配置境界（4H-R0 で新設・4H-3 で実機確定・SSOT v1.13 §10.11）
 
 **docroot と APP_ROOT は別階層でよい。**
 
@@ -528,10 +528,26 @@ smartlaboworks.com/
 APP_ROOT の解決順（**どの経路でも同じ検査**を通る）
 
 1. 定数 `INTAKE_APP_ROOT` … `.user.ini` の `auto_prepend_file` が読む**非公開 bootstrap**
-   （雛形 `private/app-root-bootstrap.example.php`）。**第一候補**
+   （雛形 `private/app-root-bootstrap.example.php`）。**XServer 本番では採用しない**
 2. 環境変数 `INTAKE_APP_ROOT` … CLI・ローカル確認
 3. `docroot/../src` … リポジトリのままの配置
-4. docroot の祖先の `private/hp-intake/src` … `auto_prepend_file` が使えない環境の代替方式
+4. docroot の祖先の `private/hp-intake/src` … **XServer 本番はこれを採用**（4H-3 で実機確定）
+
+> ★**本番の正式採用は 4（祖先探索）である**（4H-3・SSOT v1.13 §10.11）。
+> 探索順の実装は**変えない**。1・2・3 は CLI・ローカル確認・他環境のために残す。
+>
+> ★これは「**XServer では `auto_prepend_file` が使えない**」という意味ではない。
+> 4H-3 では、設定した**絶対パスでファイルを開けず** `Failed opening required` となった。
+> **正しいパスであれば動く可能性は否定しない**。
+>
+> ★それでも本番で使わないのは、`auto_prepend_file` が **require 相当**で実行され、
+> prepend を開けないと**主スクリプトが実行されない**ためである。
+> 実測では当該サブドメインの全 PHP 応答が **HTTP 500・本文 0 バイト**になった
+> （`display_errors = Off` のため外部への漏えいは 0 件）。設定値の誤りが**単一障害点**になる。
+>
+> ★祖先探索を選ぶ理由は、**実機で成立済み**であることと、
+> **APP_ROOT の解決に固定の絶対パスを使わない**ことの2点。
+> （`error_log` など **APP_ROOT 解決以外の設定では絶対パスを使っている**）
 
 - **Web の入力から APP_ROOT を変えられない**（解決コードはスーパーグローバルを読まない）
 - **docroot 内に APP_ROOT を書いたファイルを置かない**（`.app-root.php` 方式は不採用）
@@ -733,7 +749,7 @@ H リンク再発行／I 確定／J 保持期限／K closed 後の拒否／L 保
 | ~~15~~ | ~~docroot と APP_ROOT が同一親でないと動かない~~ | **4H-R0 で是正**（SSOT v1.12 §10.11）。<br>配置境界を可変化し、`public_html` 内・不正・不在は fail closed |
 | ~~16~~ | ~~SSOT が確定した提出通知が未実装~~ | **4H-R0 で実装**（SSOT v1.12 §9.11）。<br>3項目のみ・1宛先・`mail()` は1ファイル限定・失敗しても提出は成功 |
 | ~~17~~ | ~~本番確認の架空案件を正式DBへ入れる計画~~ | **4H-R0 で是正**（SSOT v1.12 §9.10）。<br>preflight 専用領域で確認し、削除してから正式DBを作る |
-| 18 | `auto_prepend_file` が XServer で使えるか | **4H で実機確認**。使えない場合は代替方式（祖先探索）で動く |
+| ~~18~~ | ~~`auto_prepend_file` が XServer で使えるか~~ | **4H-3 で実機確認済み**。本番は**祖先探索方式**を採用し、`auto_prepend_file` は空のままとした。<br>失敗原因は設定した**絶対パスでファイルを開けず** `Failed opening required` となったことであり、**「使えない」とは断定していない**。<br>require 相当のためパス誤りで全 PHP 応答が 500・本文 0 バイトになることを実測し、単一障害点を避ける判断とした（SSOT v1.13 §10.11） |
 | 19 | 未通知の把握を管理画面に出すか | 未実装。非PIIの最小限の表示を検討する（SSOT v1.12 §9.11-7） |
 | 6 | `expose_php` が実機で効くか | **4H で確認**。ローカルの PHP 内蔵サーバーでは<br>`.user.ini`（`PHP_INI_SYSTEM`）も `.htaccess`（Apache）も適用されないため、<br>**この2つの対策はローカルでは検証できない**（4F で実測） |
 | ~~7~~ | ~~本番バックアップの世代・削除方針~~ | **4G で確定**（SSOT v1.11 §9.5）。<br>残るのは **XServer 上の絶対パス・権限・`SQLite3::backup()` の実測**（4H）。<br>★**§9.9 の条件が揃うまで `backup_policy_confirmed` を true にしない。**<br>　**4G 終了時点でも false のまま**である |
