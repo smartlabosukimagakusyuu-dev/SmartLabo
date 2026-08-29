@@ -564,21 +564,30 @@
         </li>
       </ol>
 
-      <div class="sa-push__human">
-        <svg class="sa-push__figure" viewBox="0 0 140 150" role="img" aria-label="送る内容を確認するサロンオーナーのイラスト">
-          <circle cx="70" cy="66" r="52" fill="rgba(255,255,255,.55)"/>
-          <path d="M14 150c0-28 25-50 56-50s56 22 56 50z" fill="#C2415F"/>
-          <path d="M50 100h40v14c0 8-8 14-20 14s-20-6-20-14z" fill="#F2C9D3"/>
-          <path d="M50 116h40l8 34H42z" fill="#FFF4EC"/>
-          <circle cx="70" cy="70" r="30" fill="#F9E3D2"/>
-          <path d="M70 34c22 0 34 14 34 33 0 6-2 12-4 16-2-13-7-21-16-25-9 13-28 14-38 4-3 6-4 13-3 20-4-5-5-10-5-15 0-19 10-33 32-33z" fill="#4A3A34"/>
-          <path d="M61 70c2-3 5-3 7 0M73 70c2-3 5-3 7 0" stroke="#4A3A34" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <path d="M64 84c4 4 9 4 13 0" stroke="#C2415F" stroke-width="3" stroke-linecap="round" fill="none"/>
-        </svg>
-        <p class="sa-bubble sa-bubble--push">
-          送るかどうかは、<b>必ず人が決めます。</b><br>
-          AIが対象を選んで自動で送ることはありません。
-        </p>
+      <!-- ★FINAL-INTEGRATION-1: ここにあった Claude 自作の人物SVG（.sa-push__figure）を撤去した。
+             人物・情景を Claude が描かないという原則（SKILL.md「役割分担」）に反していたため。
+             人物SVGを別の人物SVGへ置き換えることもしない。
+             代わりに、承認済みの実画面「確認待ちのAI整理（未確定）」を主役に据える。
+             「人が確認しなければ何も登録・送信されない」ことは、イラストより
+             実際の画面で示すほうが営業資料として強い。新規画像は1点も制作していない。 -->
+      <div class="sa-proof">
+        <figure class="sa-proof__shot">
+          <figcaption class="sa-proof__cap">確認待ちのAI整理（例）</figcaption>
+          <div class="sa-proof__frame">
+            <img src="assets/images/salon/salon-ui-ai-review-unchecked.webp"
+                 alt="AIが整理した接客メモを、登録するかどうかスタッフが1件ずつ選ぶ画面"
+                 width="1360" height="1581" loading="lazy" decoding="async">
+          </div>
+        </figure>
+        <div class="sa-proof__body">
+          <p class="sa-proof__lead">送る相手も、送る内容も、<b>最後は人が確認します。</b></p>
+          <p class="sa-proof__text">
+            AIが行うのは、接客メモを読みやすく整理するところまでです。
+            整理された内容は<b>「未確定」のまま止まり</b>、スタッフが確認して登録したものだけが顧客カルテに残ります。
+            ご案内も同じで、対象を選ぶのも、文面を確認して送信するのもスタッフです。
+          </p>
+          <p class="sa-demo-note sa-demo-note--left">※掲載画面はデモ用の架空データです。</p>
+        </div>
       </div>
 
       <p class="sa-note">
@@ -627,13 +636,15 @@
        ★「HP制作」を Salon 標準商品として書かない（営業SSOT §13・§18）。
          別サービスとして案内し、Salon とつながることを図で示す。 -->
   <section class="sa-section sa-section--pinktint" id="website" aria-labelledby="web-title">
-    <div class="container">
-      <p class="sa-eyebrow">ホームページ制作</p>
-      <h2 class="sa-h2 sa-h2--left" id="web-title">ホームページから、<span class="sa-nb"><span class="sa-mark">集客の仕組み</span>をつくる。</span></h2>
+    <div class="sa-wrap">
+      <div class="sa-webv">
+        <div class="sa-webv__body">
+      <p class="sa-eyebrow">ホームページから</p>
+      <h2 class="sa-h2 sa-h2--left" id="web-title">作って終わりではなく、<span class="sa-nb"><span class="sa-mark">予約・顧客管理</span>までつながるホームページへ。</span></h2>
       <p class="sa-lead">
-        「作って終わり」にはしません。お客様が見つけてから、また来ていただくまでを1本につなげます。
+        お客様が見つけてから、また来ていただくまでを1本にします。
+        予約はそのまま Salon の予約管理と顧客カルテへつながります。
       </p>
-
       <ol class="sa-chain">
         <li class="sa-chain__item is-key">
           <span class="sa-chain__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 13h8M8 16.5h5"/></svg></span>
@@ -660,13 +671,31 @@
           再来店
         </li>
       </ol>
+        </div>
+        <!-- ★正式素材。これまで未使用だった「お客様が見る予約画面」を、
+               ここで初めて掲載する。人物イラストの新規生成はしていない。 -->
+        <figure class="sa-webv__shot">
+          <figcaption class="sa-proof__cap">お客様が見る予約画面（例）</figcaption>
+          <div class="sa-proof__frame sa-proof__frame--tall">
+            <img src="assets/images/salon/salon-public-booking.webp"
+                 alt="担当・日付・時間を順に選んで予約するお客様側の画面"
+                 width="1040" height="2052" loading="lazy" decoding="async">
+          </div>
+          <p class="sa-demo-note sa-demo-note--left">※掲載画面はデモ用の架空データです。</p>
+        </figure>
+      </div>
 
-      <p class="sa-note sa-note--center">
-        店舗ホームページ制作は 50,000円〜（税別）の別サービスです。基本範囲は<a href="#pricing">料金プラン</a>に記載しています。
-      </p>
-
-      <div class="sa-actions sa-actions--center">
-        <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--secondary btn--lg">ホームページ制作について相談する</a>
+      <div class="sa-webv__offer">
+        <p class="sa-webv__offerlead">
+          <b>店舗ホームページ制作は、Salon とは別サービス</b>です（50,000円〜・税別）。
+          いまお使いのホームページを活かした導入にも対応します。
+        </p>
+        <p class="sa-note">
+          基本範囲は<a href="#pricing">料金プラン</a>に記載しています。標準範囲を超える構成・機能・個別デザインは追加見積りとなります。
+        </p>
+        <div class="sa-actions">
+          <a href="contact.html?type=consult&amp;topic=website#form" class="btn btn--secondary btn--lg">ホームページ制作について相談する</a>
+        </div>
       </div>
     </div>
   </section>
