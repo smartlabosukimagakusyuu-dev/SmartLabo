@@ -240,7 +240,11 @@ X-Intake-Export-Sha256: <本文の SHA-256>
      消えない場合は `.htaccess` の `Header always unset X-Powered-By` が受け止める
 4. **APP_ROOT を public_html の外へ作る**（SSOT v1.13 §10.11・4H-R0 で確定・4H-3 で実機確定）
    - `smartlaboworks.com/private/hp-intake/` に `src/` `bin/` `private/` を置く
-   - docroot は `public_html/intake.smartlaboworks.com/`（`public/` の中身19ファイル）
+   - docroot は `public_html/intake.smartlaboworks.com/`
+     ・リポジトリの `public/` の追跡ファイルは **20件**
+     ・うち **19件**を 4H-3 で新規配置した（`.htaccess` / `index.php` / `start.html` / `form.html` / `assets/` 4 / `assets/lib/` 11）
+     ・残り **1件の `.user.ini`** は 4H-2 から存在し、4H-3 では**上書きせず行単位で変更**した
+     ・本番の `.user.ini` は**本番固有の `error_log` 設定を保持**するため、リポジトリ版で置き換えない
    - **本番は代替方式（docroot の祖先の `private/hp-intake/` を自動探索）を採用**する（4H-3 で実機確定）。`.user.ini` の `auto_prepend_file` は**空のまま**とする
    - `auto_prepend_file` 経路（雛形 `private/app-root-bootstrap.example.php`）は**他環境用として残す**。採用しない理由は §「配置境界」を参照
    - 権限は ディレクトリ 700 / 設定ファイル 600
@@ -519,7 +523,7 @@ XServer のサブドメインは `smartlaboworks.com/public_html/<sub>/` の下�
 ```text
 smartlaboworks.com/
 ├── public_html/
-│   └── intake.smartlaboworks.com/   ← docroot（公開・19ファイル）
+│   └── intake.smartlaboworks.com/   ← docroot（公開・ファイル20件 = 新規配置19 + 既存 .user.ini 1）
 └── private/
     └── hp-intake/                    ← APP_ROOT（公開しない）
         ├── src/  bin/  private/  preflight/
