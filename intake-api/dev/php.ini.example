@@ -27,7 +27,11 @@ error_reporting        = E_ALL
 log_errors             = On
 
 ; --- 本番と揃える上限（SSOT §0.2: 最大body 1MB / 画像アップロードなし） ---
+; ★public/.user.ini と同じ値にそろえる（理由は同ファイルのコメントを参照）。
+;   `upload_max_filesize = 0` は「上限なし」の意味になるため使わない。
+;   アップロードを実際に止めるのは `max_file_uploads = 0` である。
 post_max_size       = 2M
-upload_max_filesize = 0
+upload_max_filesize = 1
+max_file_uploads    = 0
 memory_limit        = 128M
 date.timezone       = Asia/Tokyo

@@ -55,6 +55,25 @@ function cspDirectives(string $csp): array
     return $out;
 }
 
+/** `dev/php.ini.example`の有効行を key => value で読む（4H-3） */
+function devPhpIniValues(): array
+{
+    $out  = [];
+    $text = (string)file_get_contents(__DIR__ . '/../dev/php.ini.example');
+    foreach (explode("\n", $text) as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, ';')) {
+            continue;
+        }
+        $parts = explode('=', $line, 2);
+        if (count($parts) === 2) {
+            $out[trim($parts[0])] = trim($parts[1]);
+        }
+    }
+
+    return $out;
+}
+
 /* ==================================================== P3-1 expose_php */
 
 test('P3-1: .user.ini が expose_php = Off を指定している', function (): void {
@@ -71,7 +90,13 @@ test('P3-1: 既存の PHP 設定を壊していない（SSOT §10.4.1）', funct
     assertSame('Off', $values['display_startup_errors'] ?? null, 'display_startup_errors が Off でない');
     assertSame('On', $values['log_errors'] ?? null, 'log_errors が On でない');
     assertSame('2M', $values['post_max_size'] ?? null, 'post_max_size が変わっている');
-    assertSame('0', $values['upload_max_filesize'] ?? null, 'upload_max_filesize が変わっている');
+
+    // ★下の2行は SSOT §10.4.1 の必須項目ではない（§11.2-7 の上乗せ・4H-3 で是正）。
+    //   `upload_max_filesize = 0` は「禁止」ではなく「上限なし」であり、
+    //   実際にアップロードを止めるのは `max_file_uploads = 0` である。
+    //   根拠は public/.user.ini のコメントと tests/test-security-static.php を参照。
+    assertSame('1', $values['upload_max_filesize'] ?? null, 'upload_max_filesize が 1 でない');
+    assertSame('0', $values['max_file_uploads'] ?? null, 'max_file_uploads が 0 でない');
 
     // error_log は配置時に実パスを入れる。**値をここへ書き込まない**（雛形のまま）
     assertTrue(!isset($values['error_log']), '.user.ini に error_log の実パスが書かれている');
@@ -291,4 +316,22 @@ test('P3-3: 公開領域に、自分で拒否しているファイルが実在�
         }
     }
     assertSame([], $found, '公開領域に置いてはいけないファイルがある: ' . implode(', ', $found));
+});
+
+/* ==================================================== 4H-3 上限設定の一致 */
+
+/*
+ * 本番の `public/.user.ini` とローカル雛形 `dev/php.ini.example` で
+ * body 上限とアップロード抑止の値がずれると、
+ * ローカルで再現できない差が生まれる。両方を同じ値で固定する。
+ */
+test('4H-3: public/.user.ini と dev/php.ini.example の上限設定が一致する', function (): void {
+    $user = userIniValues();
+    $dev  = devPhpIniValues();
+
+    foreach (['post_max_size', 'upload_max_filesize', 'max_file_uploads'] as $key) {
+        assertTrue(isset($user[$key]), 'public/.user.ini に ' . $key . ' が無い');
+        assertTrue(isset($dev[$key]), 'dev/php.ini.example に ' . $key . ' が無い');
+        assertSame($user[$key], $dev[$key], $key . ' が .user.ini と php.ini.example でずれている');
+    }
 });

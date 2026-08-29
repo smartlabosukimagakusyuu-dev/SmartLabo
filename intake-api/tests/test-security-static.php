@@ -342,13 +342,48 @@ test('静的: .htaccess がディレクトリ一覧と設定ファイルを止�
     }
 });
 
-test('静的: .user.ini が本番の必須設定を持つ（SSOT §10.4.1）', function (): void {
+test('静的: .user.ini が SSOT §10.4.1 の必須設定を持つ', function (): void {
     $ini = (string)file_get_contents(__DIR__ . '/../public/.user.ini');
 
     assertTrue(preg_match('/^\s*display_errors\s*=\s*Off/mi', $ini) === 1, 'display_errors が Off でない');
     assertTrue(preg_match('/^\s*display_startup_errors\s*=\s*Off/mi', $ini) === 1, 'display_startup_errors が Off でない');
     assertTrue(preg_match('/^\s*log_errors\s*=\s*On/mi', $ini) === 1, 'log_errors が On でない');
-    assertTrue(preg_match('/^\s*upload_max_filesize\s*=\s*0/mi', $ini) === 1, 'アップロードが無効化されていない');
+});
+
+/*
+ * アップロード抑止（HP-ONBOARDING-4H-3 で是正）。
+ *
+ * ★これは **SSOT §10.4.1 の要求ではない**。§10.4.1 が必須としているのは
+ *   display_errors / display_startup_errors / log_errors / error_log / expose_php の5項目。
+ *   ここで固定するのは SSOT §11.2-7「$_FILES を扱わない」を設定側でも二重に担保する上乗せである。
+ *
+ * ★`upload_max_filesize = 0` は「禁止」ではなく **「上限なし」** である。
+ *   php-src (PHP-8.3) main/rfc1867.c:
+ *     if (PG(upload_max_filesize) > 0 && (zend_long)(total_bytes+blen) > PG(upload_max_filesize))
+ *   0 のときは左辺が偽になり、サイズ検査そのものが働かない。
+ *   PHP 8.3.32 の実測でも 0 では 100KB のファイルが err=0 で受理された。
+ *
+ * ★実際に止めるのは `max_file_uploads = 0`。同ファイル:
+ *     } else if (upload_cnt <= 0) { skip_upload = 1; ... }
+ *   0バイトのファイルを含めて1件も受理されない。
+ *
+ * ★`file_uploads = Off` は PHP_INI_SYSTEM のため `.user.ini` からは効かない。
+ */
+test('静的: .user.ini がアップロードを実際に止める設定を持つ（SSOT §11.2-7 の上乗せ）', function (): void {
+    $ini = (string)file_get_contents(__DIR__ . '/../public/.user.ini');
+
+    assertTrue(
+        preg_match('/^[ \t]*max_file_uploads[ \t]*=[ \t]*0[ \t]*\r?$/mi', $ini) === 1,
+        'max_file_uploads = 0 が無い（これが無ければアップロードは止まらない）'
+    );
+    assertTrue(
+        preg_match('/^[ \t]*upload_max_filesize[ \t]*=[ \t]*0[ \t]*\r?$/mi', $ini) !== 1,
+        'upload_max_filesize = 0 は「上限なし」の意味になるため使ってはならない'
+    );
+    assertTrue(
+        preg_match('/^[ \t]*upload_max_filesize[ \t]*=[ \t]*[1-9][0-9]*[ \t]*\r?$/mi', $ini) === 1,
+        'upload_max_filesize に 1 以上の値が設定されていない'
+    );
 });
 
 /* ==================================================== schema */
