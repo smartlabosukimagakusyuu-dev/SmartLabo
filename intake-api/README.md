@@ -1,10 +1,10 @@
-# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4H-3）
+# intake-api — 店舗向けHP導入フォーム（HP-ONBOARDING-4B 〜 -4H-4）
 
 ```text
 STATUS : 本体コードは **4H-3 で XServer へ配置済み**（docroot 19 / APP_ROOT 47 ファイル）。
          **設定・DB・管理者資格情報は未投入のため未稼働（fail closed）**。一般公開も未実施
-SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.13**
-手順書  : docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md v1.2（バックアップ・復元）
+SSOT   : docs/website/HP_ONBOARDING_INTAKE_DATA_MODEL_V1.md **v1.14**
+手順書  : docs/website/HP_INTAKE_BACKUP_RESTORE_RUNBOOK_V1.md v1.3（バックアップ・復元）
 上位    : docs/website/HP_ONBOARDING_INTAKE_FORM_SPEC_V1.md v1.2（入力項目）
          docs/website/WEBSITE_PRODUCTION_AND_MAINTENANCE_PRICE_V1.md VERSION 3（価格・範囲）
 配置先  : intake.smartlaboworks.com（サブドメイン・SSL は作成済み。APP_ROOT は非公開領域）
@@ -607,7 +607,7 @@ rate_limit_dir / backup_dir / preflight_root を**分けて**持つ。
 
 ★**実送信テストは 4H で当社 info@ 宛て1通のみ。代表の直前承認が必要。**
 
-### preflight 専用環境（4H-R0・SSOT v1.12 §9.10）
+### preflight 専用環境（4H-R0 で新設・4H-4 で実施方法を確定・SSOT v1.14 §9.10）
 
 **本番配置後の通し確認を、正式DBで行わない。**
 
@@ -625,10 +625,25 @@ APP_ROOT/preflight/
 - **正式DBをテスト目的で削除・作り直す運用にしない**
 
 ```bash
-php -c intake-api/dev/php.ini intake-api/bin/intake-preflight.php preflight:status
-php -c intake-api/dev/php.ini intake-api/bin/intake-preflight.php preflight:remove
-php -c intake-api/dev/php.ini intake-api/bin/intake-preflight.php preflight:remove --apply --confirm="DELETE PREFLIGHT AREA"
+# ★位置は APP_ROOT/preflight に固定（--root は受け付けない）
+php bin/intake-preflight.php preflight:init
+php bin/intake-preflight.php preflight:run
+php bin/intake-preflight.php preflight:status
+php bin/intake-preflight.php preflight:remove
+php bin/intake-preflight.php preflight:remove --apply --confirm="DELETE PREFLIGHT AREA"
+php bin/intake-preflight.php preflight:verify-empty
 ```
+
+- **正式 `intake-config.php` を配置する前**に実施する。
+  正式設定または正式DBがあると `init` / `run` は**順序違反で止まる**
+- 正式設定を **require しない**（overrides だけで Config を組む）
+- 鍵は CLI が2つ別々に生成する。**値を表示しない**
+- 管理者情報は `run` のプロセス内だけで作る（Argon2id）。**設定へ書かない**
+- 通知は `NullNotifier`。**実メールを1通も送らない**
+- 通し確認は**本物の App / AdminApp / Guard / RateLimiter** を通す
+- `run` の前後で**正式領域と配置物（src / bin 全件）の SHA-256** を比べる
+- ログは**消失と権限 600 の崩れだけ STOP**。サイズ増減は記録に留める
+- `init` が失敗しても**自動削除しない**（status → dry-run → 承認 → apply）
 
 - **dry-run が既定**。`--apply` と確認文字列の完全一致が無ければ1件も消さない
 - symlink をたどらない。**preflight 領域の外を1バイトも消さない**
