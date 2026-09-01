@@ -1,586 +1,537 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- ============================================================
-     Smart Labo Salon 専用営業ページ（WEB-V3-SALON-URGENT-4）
-       - 主題は「導入すると変わること」。デモは主役ではなく裏付け。
-       - 掲載する機能は Salon 営業SSOT（SALON_SALES_TERMS_SUMMARY_V1.md §11）の
-         範囲のみ。未実装機能（AIチャット・誕生日/曜日・時間帯の絞り込み等）は
-         現在機能として書かない（問い合わせフォームの「今後追加してほしい機能」のみ）。
-       - LINE表現の約束（代表判断 2026-08-25）:
-         店舗のLINE公式アカウント接続・導入設定が必要／連携済みのお客様が対象／
-         最終来店日や利用メニュー等で対象を絞る／送信前に人数と本文をスタッフが確認／
-         選択したお客様へ個別に送信／LINE側の契約・料金は店舗負担／導入時に利用開始確認。
-         ×一斉配信 ×自動配信 ×AIが自動送信 ×全顧客へ配信 ×開封率・効果測定
-       - 動画・再生ボタン・動画があるかのような表現は置かない（後日制作）。
-       - 実画面6枚は assets/images/salon/ の既存アセットを参照のみ（複製しない）。
-     ============================================================ -->
+  <!-- ============================================================
+       Smart Labo Salon 正式ページ
+         - 本文は完成済みの Image LP（実行される JS は 0／自己完結 CSS 1 本）。
+         - meta / OG / JSON-LD は旧 salon.html から必要分だけを移植し、
+           文面は「このページで実際に確認できる内容」に合わせて書き直した。
+           本文で確認できない機能は書かない（SSOT で確定した範囲のみ）。
+         - 法定表示は公開ページへ複製せず、契約確定前の最終確認・同意段階で
+           確認できる方式（2026-09-01 代表決定・WEBSITE/README.md に記録）。
+       ============================================================ -->
 
-<title>Smart Labo Salon｜予約・顧客カルテ・再来店をひとつに</title>
-<meta name="description" content="Smart Labo Salonは、予約・来店・顧客カルテ・接客メモ・AI整理・LINEでの再来店支援・店舗ホームページをひとつにつなぐ、美容室・サロン向けの店舗運営サービスです。導入前と導入後の変化を実際の画面でご覧いただけます。">
-<link rel="canonical" href="https://smartlaboworks.com/salon.html">
-<link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
-<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <title>Smart Labo Salon｜予約・顧客カルテ・再来店をひとつに</title>
+  <meta name="description" content="Smart Labo Salonは、WEB予約・顧客カルテ・来店履歴・接客メモの整理から、次回来店の準備、必要なお客様への個別のLINEご案内、店舗ページの公開までをひとつにまとめた、美容室・サロン向けの店舗運営サービスです。AIが行うのは情報の整理までで、送信前に人が確認します。">
+  <link rel="canonical" href="https://smartlaboworks.com/salon.html">
+  <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
 
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Smart Labo">
-<meta property="og:title" content="Smart Labo Salon｜予約・顧客カルテ・再来店をひとつに">
-<meta property="og:description" content="予約・来店・顧客カルテ・接客メモ・AI整理・LINEでの再来店支援・店舗ホームページをひとつにつなぐ、美容室・サロン向けの店舗運営サービスです。">
-<meta property="og:url" content="https://smartlaboworks.com/salon.html">
-<meta property="og:locale" content="ja_JP">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Smart Labo Salon｜予約・顧客カルテ・再来店をひとつに">
-<meta name="twitter:description" content="予約・来店・顧客カルテ・接客メモ・AI整理・LINEでの再来店支援・店舗ホームページをひとつにつなぐ店舗運営サービスです。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Smart Labo">
+  <meta property="og:title" content="Smart Labo Salon｜予約・顧客カルテ・再来店をひとつに">
+  <meta property="og:description" content="WEB予約・顧客カルテ・来店履歴・接客メモの整理、次回来店の準備、個別のLINEご案内、店舗ページの公開をひとつにまとめた、美容室・サロン向けの店舗運営サービスです。">
+  <meta property="og:url" content="https://smartlaboworks.com/salon.html">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Smart Labo Salon｜予約・顧客カルテ・再来店をひとつに">
+  <meta name="twitter:description" content="WEB予約・顧客カルテ・来店履歴・接客メモの整理、次回来店の準備、個別のLINEご案内、店舗ページの公開をひとつにまとめた、美容室・サロン向けの店舗運営サービスです。">
 
-<link rel="stylesheet" href="assets/css/tokens.css">
-<link rel="stylesheet" href="assets/css/base.css">
-<link rel="stylesheet" href="assets/css/components.css">
-<link rel="stylesheet" href="assets/css/renewal.css">
+  <link rel="stylesheet" href="assets/css/salon-image-lp.css">
 
-<script>document.documentElement.classList.add('js');</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Service",
-  "@id": "https://smartlaboworks.com/salon.html#service",
-  "name": "Smart Labo Salon",
-  "serviceType": "美容室・サロン向け 予約・顧客管理・店舗ページ・AI接客支援サービス",
-  "description": "予約・来店・顧客カルテ・接客メモ・AIによる情報整理・LINEでの再来店支援・店舗ホームページをひとつにつなぐ店舗運営サービス。",
-  "url": "https://smartlaboworks.com/salon.html",
-  "areaServed": "JP",
-  "provider": { "@id": "https://smartlaboworks.com/#organization" }
-}
-</script>
+  <!-- 構造化データ。価格は Offer / PriceSpecification として持たせない
+       （契約条件の表示は契約フロー側で行う方針のため）。 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": "https://smartlaboworks.com/salon.html#service",
+    "name": "Smart Labo Salon",
+    "serviceType": "美容室・サロン向け 予約・顧客管理・店舗ページ・接客メモのAI整理サービス",
+    "description": "WEB予約・顧客カルテ・来店履歴・接客メモの整理から、次回来店の準備、必要なお客様への個別のLINEご案内、店舗ページの公開までをひとつにまとめた、美容室・サロン向けの店舗運営サービス。",
+    "url": "https://smartlaboworks.com/salon.html",
+    "areaServed": "JP",
+    "provider": { "@id": "https://smartlaboworks.com/#organization" }
+  }
+  </script>
 </head>
-
-<body class="sl-page">
-
-<a class="skip-link" href="#main">本文へスキップ</a>
-
-<!-- ============================== 01. ヘッダー（TOPと共通構造） ============================== -->
-<header class="site-header" id="siteHeader">
-  <div class="container site-header__inner">
-    <a href="index.html" class="logo" aria-label="Smart Labo ホーム">
-      <img class="logo__icon" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
-      <span class="logo__text">Smart Labo</span>
-    </a>
-
-    <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
-      <!-- ↓CTA2件はスマホドロワー用の相談導線（1081px以上ではrenewal.cssで非表示） -->
-      <a class="site-nav__cta" href="#screens">実際の画面で見る</a>
-      <a href="salon.html" aria-current="page">Salon</a>
-      <a href="index.html#website">ホームページ制作</a>
-      <a href="features.html">Smart Labo Works</a>
-      <a href="company.html">会社情報</a>
-      <a href="contact.html">お問い合わせ</a>
-      <a class="site-nav__cta" href="contact.html?type=consult&amp;topic=salon#interests">Salonについて無料相談</a>
-    </nav>
-
-    <div class="site-header__actions">
-      <!-- 汎用の「無料相談」はWorks/HP制作の相談と誤認されるため、Salonページには置かない -->
-      <a href="#screens" class="btn btn--secondary btn--sm site-header__sub">実際の画面を見る</a>
-      <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--sm">
-        <span class="btn__label-full">Salonについて無料相談</span><span class="btn__label-short">無料相談</span>
-      </a>
-    </div>
-
-    <button class="nav-toggle" type="button" data-nav-toggle
-            aria-controls="site-nav" aria-expanded="false">
-      <span class="visually-hidden">メニューを開閉</span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-        <path d="M3 6h18M3 12h18M3 18h18"/>
-      </svg>
-    </button>
-  </div>
-</header>
-
-<main id="main">
-
-  <!-- ============================== 02. HERO ============================== -->
-  <section class="sl-hero" id="hero" aria-labelledby="hero-title">
-    <div class="container sl-hero__inner">
-
-      <div class="sl-hero__copy">
-        <p class="sl-eyebrow">美容室・サロンの店舗運営を、ひとつに。</p>
-        <h1 class="sl-hero__title" id="hero-title"><span class="sl-nb">予約・</span><span class="sl-nb">接客・</span><span class="sl-nb">再来店が、</span><br>ひとつにつながる。</h1>
-        <p class="sl-hero__sub">
-          Smart Labo Salonは、予約、顧客情報、接客メモ、
-          LINEでの再来店支援、店舗ホームページを
-          ひとつにつなぐ店舗運営サービスです。
-        </p>
-
-        <div class="sl-actions">
-          <a href="#before-after" class="btn btn--primary btn--lg">導入すると変わることを見る</a>
-          <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--secondary btn--lg">気になる機能を選んで相談する</a>
+<body>
+  <a class="sl-skip" href="#main">本文へスキップ</a>
+  <main class="salon-image-lp" id="main">
+    <!-- ======================================================================
+         Section 01 (Design Base Y0-263) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-01-hero.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         座標は VISUAL SSOT の実測値に合わせている（1440px PC専用）。
+         ====================================================================== -->
+    <section class="image-section image-section--01 s01" aria-label="Smart Labo Salon">
+      <header class="s01__header">
+        <a class="s01__logo" href="#main">
+          <span class="s01__logomark" aria-hidden="true">S</span>
+          <span class="s01__logotext">Smart Labo<br>Salon</span>
+        </a>
+        <details class="s01__menu">
+          <summary class="s01__menubtn" aria-label="メニュー"><span class="s01__menubars" aria-hidden="true"></span></summary>
+        <nav class="s01__nav" aria-label="メインナビゲーション">
+          <a href="#features">機能紹介</a>
+          <a class="is-active" href="#benefits">導入メリット</a>
+          <a href="#pricing">料金プラン</a>
+          <a href="#screens">実際の画面</a>
+          <a href="#faq">よくある質問</a>
+        </nav>
+        </details>
+        <div class="s01__actions">
+          <a class="s01__btn s01__btn--primary" href="contact.html?type=consult&amp;topic=salon#interests">まずは無料で相談してみる</a>
+          <a class="s01__btn s01__btn--ghost" href="#screens">実際の画面を見る</a>
         </div>
-        <p class="sl-note">実際の画面をご覧いただきながらご説明します。</p>
-      </div>
+      </header>
 
-      <!-- 実画面1枚を静的に置く（スライダー・動画は使わない） -->
-      <div class="sl-hero__visual sl-hero__visual--static">
-        <p class="sl-hero__chip">実際の画面</p>
-        <div class="sl-media sl-media--briefing">
-          <div class="sl-window">
-            <div class="sl-window__bar" aria-hidden="true">
-              <span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span>
-              <span class="sl-window__title">Smart Labo Salon ／ 次回来店の接客準備</span>
-            </div>
-            <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128"
-                 alt="確認済みの顧客記録から、前回のポイント・前回の会話・今回の提案候補をまとめた接客準備の画面"
-                 fetchpriority="high">
-          </div>
-        </div>
-        <p class="sl-demo-note">※掲載画面はデモ用の架空データです。</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ============================== 03. 導入効果（変化カード4枚・R1） ==============================
-       ★R1: 機能の羅列（左右2カードのリスト）をやめ、
-         「テーマ → 導入前 → 導入後 → 店舗にもたらす効果」の4カードに作り替えた。
-         効果文をカード最下部・最大の階層に置き、何が楽になるかを一目で伝える。
-       ★数値効果（○時間削減・○%向上等）は保証できないため書かない。定性的効果のみ。
-       ★アイコンはinline SVG（外部ライブラリ0）。aria-hidden とし、意味は必ずテキストで持つ。 -->
-  <section class="sl-section sl-section--greige" id="before-after" aria-labelledby="ba-title">
-    <div class="container">
-      <h2 class="sl-h2" id="ba-title"><span class="sl-nb">機能が増えるだけでは</span><span class="sl-nb">ありません。</span><br><span class="sl-nb">店舗の毎日が、</span><span class="sl-nb">こう変わります。</span></h2>
-      <p class="sl-lead">
-        予約確認、接客の引き継ぎ、お客様へのご案内、店舗ページの更新まで。
-        日々の手間を減らし、お客様と向き合う時間をつくります。
-      </p>
-
-      <ul class="sl-change">
-
-        <li class="sl-change__card reveal">
-          <p class="sl-change__theme">
-            <span class="sl-change__icon" aria-hidden="true">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg>
+      <div class="s01__copy">
+        <p class="s01__eyebrow">サロンの毎日を、もっとスマートに。</p>
+        <h1 class="s01__title">Smart Labo <span>Salon</span></h1>
+        <p class="s01__lead">店舗ページ・予約・顧客カルテ・再来店まで、ひとつにまとめたオールインワン。<br>あなたのサロンに、ゆとりとリピーターを。</p>
+        <ul class="s01__benefits">
+          <li class="s01__benefit s01__benefit--1">
+            <span class="s01__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
             </span>
-            予約確認
-          </p>
-          <div class="sl-change__flow">
-            <p class="sl-change__before"><span class="sl-change__tag">導入前</span>予約情報を何か所も確認</p>
-            <p class="sl-change__arrow" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg>
-            </p>
-            <p class="sl-change__after"><span class="sl-change__tag">導入後</span>予約・来店・顧客情報を一画面で確認</p>
-          </div>
-          <p class="sl-change__effect">探す手間を減らし、受付をスムーズに。</p>
-        </li>
-
-        <li class="sl-change__card reveal">
-          <p class="sl-change__theme">
-            <span class="sl-change__icon" aria-hidden="true">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6v2H9z"/><path d="M15 5h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3"/><path d="M8 12h8M8 16h5"/></svg>
+            <b>時間を<em>生み出す</em></b>
+            <span class="s01__sub">予約と顧客情報を整理</span>
+          </li>
+          <li class="s01__benefit s01__benefit--2">
+            <span class="s01__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.3-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.7-7 9-7 9z"/></svg>
             </span>
-            接客の引き継ぎ
-          </p>
-          <div class="sl-change__flow">
-            <p class="sl-change__before"><span class="sl-change__tag">導入前</span>前回の内容が担当者の記憶頼み</p>
-            <p class="sl-change__arrow" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg>
-            </p>
-            <p class="sl-change__after"><span class="sl-change__tag">導入後</span>短いメモをAIが整理し、次回来店前に表示</p>
-          </div>
-          <p class="sl-change__effect">担当が変わっても、前回を踏まえた接客へ。</p>
-        </li>
-
-        <li class="sl-change__card reveal">
-          <p class="sl-change__theme">
-            <span class="sl-change__icon" aria-hidden="true">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3.5L10.5 14"/><path d="M21 3.5l-6.6 17.2-3.9-7.7-7.7-3.9z"/></svg>
+            <b>リピーターにつなげる</b>
+            <span class="s01__sub">来店履歴から個別にご案内</span>
+          </li>
+          <li class="s01__benefit s01__benefit--3">
+            <span class="s01__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 14a4.5 4.5 0 0 0 7 0"/></svg>
             </span>
-            再来店のご案内
-          </p>
-          <div class="sl-change__flow">
-            <p class="sl-change__before"><span class="sl-change__tag">導入前</span>誰に何を案内するか決めにくい</p>
-            <p class="sl-change__arrow" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg>
-            </p>
-            <p class="sl-change__after"><span class="sl-change__tag">導入後</span>最終来店日や利用メニューで対象を絞り、スタッフが確認して個別送信</p>
-          </div>
-          <p class="sl-change__effect">必要なお客様へ、必要なご案内を。</p>
-        </li>
-
-        <li class="sl-change__card reveal">
-          <p class="sl-change__theme">
-            <span class="sl-change__icon" aria-hidden="true">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M6.2 6.5h.01M8.7 6.5h.01"/><path d="M14 17.5l3.6-3.6 1.6 1.6-3.6 3.6H14z"/></svg>
-            </span>
-            店舗ページの更新
-          </p>
-          <div class="sl-change__flow">
-            <p class="sl-change__before"><span class="sl-change__tag">導入前</span>写真やメニューの変更を制作会社へ依頼</p>
-            <p class="sl-change__arrow" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg>
-            </p>
-            <p class="sl-change__after"><span class="sl-change__tag">導入後</span>店舗の管理画面から自分たちで更新</p>
-          </div>
-          <p class="sl-change__effect">依頼の手間と反映までの待ち時間を減らす。</p>
-        </li>
-
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============================== 04. ひとつにまとまる機能 ==============================
-       ★現在利用できる機能のみ（営業SSOT §11）。売上分析・シフト管理・AIチャット・
-         一斉送信・自動送信・クーポン発行管理は掲載しない。 -->
-  <section class="sl-section" id="features" aria-labelledby="features-title">
-    <div class="container">
-      <p class="sl-eyebrow">機能</p>
-      <h2 class="sl-h2" id="features-title">ひとつにまとまる機能</h2>
-      <p class="sl-lead">店舗運営に必要な機能を、ひとつの月額で。すべて現在ご利用いただける機能です。</p>
-
-      <ul class="sl-featgrid">
-        <li class="sl-card reveal"><b>1. 予約・来店管理</b><span>WEB予約、手動予約、予約なし来店、来店中、接客終了</span></li>
-        <li class="sl-card reveal"><b>2. 顧客カルテ・接客メモ</b><span>顧客情報、来店履歴、接客後の短いメモ</span></li>
-        <li class="sl-card reveal"><b>3. AIによる情報整理</b><span>AIがメモを整理し、残す内容はスタッフが確認して決定</span></li>
-        <li class="sl-card reveal"><b>4. 次回来店前の接客準備</b><span>前回のポイント、会話、提案候補を来店前に確認</span></li>
-        <li class="sl-card reveal"><b>5. LINE再来店支援</b><span>最終来店日や利用メニュー等から対象を選び、人数と本文を確認して個別送信</span></li>
-        <li class="sl-card reveal"><b>6. 店舗ホームページ・WEB予約</b><span>写真、メニュー、営業時間、スタッフ情報等を店舗で更新</span></li>
-        <li class="sl-card reveal"><b>7. オーナー向け管理</b><span>PINで保護された件数確認とCSV書き出し</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============================== 05. 再来店施策 ==============================
-       ★「現在できる例」のみ。平日午後割・誕生日クーポン・AI自動選定は書かない
-         （未実装。問い合わせフォームの「今後追加してほしい機能」でのみ扱う）。 -->
-  <section class="sl-section sl-section--ivory" id="revisit" aria-labelledby="revisit-title">
-    <div class="container">
-      <p class="sl-eyebrow">再来店</p>
-      <h2 class="sl-h2" id="revisit-title">お客様に合わせた<br>再来店のきっかけをつくる</h2>
-      <p class="sl-lead">
-        「誰に・何を送るか」をスタッフが決められるように、対象の絞り込みと確認の仕組みを用意しています。
-      </p>
-
-      <div class="sl-card sl-revisit reveal">
-        <h3 class="sl-revisit__head">現在できる例</h3>
-        <ul class="sl-list sl-list--check">
-          <li>しばらく来店のないお客様へ、再来店のご案内</li>
-          <li>特定メニューを利用したお客様へ、関連メニューのご案内</li>
-          <li>担当スタッフや未来の予約有無などで対象を絞る</li>
-          <li>送信前に対象人数と本文を確認する</li>
+            <b>お客様満足度UP</b>
+            <span class="s01__sub">前回の内容を確認して接客</span>
+          </li>
         </ul>
       </div>
 
-      <p class="sl-note sl-note--line">
-        LINE連携済みのお客様が対象です。店舗のLINE公式アカウントのご契約・設定が必要で、
-        LINE側の利用料金は店舗のご負担となります。送信はスタッフが内容を確認したうえで行います。
-        ご利用の開始にあたっては、導入時に当社と利用開始確認を行います。
-      </p>
-    </div>
-  </section>
-
-  <!-- ============================== 06. 店舗で更新できるHP ============================== -->
-  <section class="sl-section" id="self-update" aria-labelledby="update-title">
-    <div class="container">
-      <p class="sl-eyebrow">店舗ホームページ</p>
-      <h2 class="sl-h2" id="update-title">店舗の情報を、<br>自分たちで更新できます。</h2>
-      <p class="sl-lead">
-        写真・メニュー・営業時間・スタッフ紹介は、店舗の管理画面からいつでも更新できます。
-        軽微な変更のたびに制作会社へ依頼する手間を減らせます。
-      </p>
-
-      <ul class="sl-update__items sl-update__items--wide" aria-label="店舗の管理画面から更新できる内容">
-        <li><b>店舗写真</b><span>店内・外観の写真の差し替え</span></li>
-        <li><b>メニュー</b><span>名称・料金・掲載可否</span></li>
-        <li><b>営業時間</b><span>営業時間・臨時休業</span></li>
-        <li><b>スタッフ紹介</b><span>紹介文・スタッフ写真</span></li>
-        <li><b>予約不可時間</b><span>予約を受けない時間帯の設定</span></li>
-        <li><b>キャンペーン掲載</b><span>期間を決めて店舗ページに掲載</span></li>
-        <li><b>LINE友だち追加リンク</b><span>店舗ページからの友だち追加導線</span></li>
-        <li><b>公開／非公開</b><span>メニュー・スタッフごとの掲載切り替え</span></li>
+      <!-- Hero右ビジュアル: Design Base X800-1440 / Y0-263 の切り出し（代表許可 HTMLIZE-01B）。
+           人物・ノートPC UI・スマホUI・サロン背景を1枚の composite として使用する。
+           再生成・描き直し・色調整・フィルターは一切かけていない（切り出しのみ）。 -->
+      <div class="s01__visual">
+        <img src="assets/images/salon/image-lp/salon-image-lp-hero-visual.png"
+             alt="タブレットで予約と顧客情報を確認するサロンスタッフと、予約管理画面"
+             width="640" height="263">
+      </div>
+    </section>
+    <!-- ======================================================================
+         Section 02 (Design Base Y263-340) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-02-feature-strip.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         白カード X49-1389 / Y264-336、7項目の左端と区切り線位置は SSOT 実測値。
+         ★掲載内容は営業SSOTを優先し、画像内コピーを無条件転記していない。
+           5番目の補足「口コミや情報を自動で整理」→「接客メモをAIが整理」へ置換した。
+           口コミ収集は未提供機能であり、AI整理はスタッフ確認が前提のため。
+         ====================================================================== -->
+    <section class="image-section image-section--02 s02" id="features" aria-label="Smart Labo Salon の主な機能">
+      <div class="s02__card" aria-hidden="true"></div>
+      <ul class="s02__list">
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h20v12H5z"/><path d="M4 7h22l-2 5H6z" fill="#F3B87E"/><path d="M12 24v-6h6v6"/></svg>
+          </span>
+          <b>店舗ページ作成</b>
+          <span class="s02__sub">お店の情報を発信</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="7" width="21" height="18" rx="2.5"/><path d="M9.5 4.5v5M20.5 4.5v5M4.5 13h21"/><circle cx="10" cy="17" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="17" r="1.1" fill="currentColor" stroke="none"/><circle cx="20" cy="17" r="1.1" fill="currentColor" stroke="none"/><circle cx="10" cy="21" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="21" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <b>WEB予約</b>
+          <span class="s02__sub">24時間いつでも予約</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="7" width="21" height="18" rx="2.5"/><path d="M9.5 4.5v5M20.5 4.5v5M4.5 13h21"/><path d="M11 19l3 3 5-5"/></svg>
+          </span>
+          <b>予約・顧客管理</b>
+          <span class="s02__sub">管理がラクに</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="11" r="4.2"/><path d="M6.5 25a8.5 8.5 0 0 1 17 0z" fill="#F3B87E"/></svg>
+          </span>
+          <b>顧客カルテ</b>
+          <span class="s02__sub">履歴・メモを一元管理</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="22" height="15" rx="2"/><path d="M11 25h8M15 21v4"/><path d="M9 11h5M9 15h8"/><circle cx="20.5" cy="11" r="1.6" fill="#F3B87E" stroke="none"/></svg>
+          </span>
+          <b>AI整理（人が確認）</b>
+          <span class="s02__sub">接客メモをAIが整理</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h9l5 5v17H7z"/><path d="M16 4v5h5"/><path d="M10.5 13h7M10.5 17h5"/><path d="M18.5 22.5l4.5-4.5 2.5 2.5-4.5 4.5-3 .5z" fill="#F3B87E"/></svg>
+          </span>
+          <b>次回来店準備</b>
+          <span class="s02__sub">ご来店前にしっかり準備</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 8.5h13v9h-6l-4 3v-3h-3z" fill="#7DC77A"/><path d="M12.5 14.5h13v9h-3v3l-4-3h-6z" fill="#A9DCA4"/></svg>
+          </span>
+          <b>個別LINE案内</b>
+          <span class="s02__sub">必要な方へ個別にご案内</span>
+        </li>
       </ul>
-      <p class="sl-note">大きなデザイン変更や新しいページの追加、特別な制作はSmart Laboへご相談ください。</p>
-    </div>
-  </section>
+      <div class="s02__rules" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </section>
+    <!-- ======================================================================
+         Section 03 (Design Base Y340-543) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-03-y340-543.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         左 = Salon Gallery（X43-934）／右 = 料金プラン上部（X966-1391）。
+         縦積みに再設計せず、SSOT どおり同一 203px 帯の左右カラムとして構成する。
+         ★Gallery のサムネイル6点は、既存正式素材に一致するものが無いため
+           Design Base の該当座標（Y388-490）から切り出した画像を使用している
+           （再生成・色変更なし・切り出しのみ）。文字はすべて実HTML。
+         ★掲載内容は営業SSOTを優先。5枚目のキャプション
+           「AIが口コミ・情報を整理」→「AIが接客メモを整理」へ置換した
+           （口コミ収集は未提供機能のため）。
+         ★料金は正式価格SSOTのみ。Section04 に続く下部は今回実装しない。
+         ====================================================================== -->
+    <section class="image-section image-section--03 s03" aria-label="Salon Gallery と料金プラン">
 
-  <!-- ============================== 07. 実際の画面で見る ==============================
-       ★URGENT-2でTOPに作った6ステップツアーをこのページへ移設した（画像は同一アセットを参照）。
-       ★動画ではない。再生ボタン・動画的な表現を置かない（動画は後日制作）。 -->
-  <section class="sl-section sl-section--ivory sl-tour" id="screens" aria-labelledby="screens-title">
-    <div class="container">
-      <p class="sl-eyebrow">実際の画面</p>
-      <h2 class="sl-h2" id="screens-title">実際の画面で、利用の流れを見る</h2>
-      <p class="sl-lead">
-        予約の入り方から、接客メモ、AIの整理、
-        次回の接客準備までを実際の画面のままご覧いただけます。
-      </p>
-
-      <ol class="sl-tour__list">
-
-        <li class="sl-tour__item reveal">
-          <div class="sl-tour__text">
-            <p class="sl-tour__step"><span class="sl-tour__num">1</span>WEB予約が入る</p>
-            <h3 class="sl-tour__title">お客様は、24時間いつでも予約できる。</h3>
-            <p class="sl-tour__desc">
-              店舗ページから担当・日付・時間を選ぶだけ。電話番のために手を止める必要がありません。
-            </p>
-          </div>
-          <div class="sl-tour__media sl-tour__media--phone">
-            <div class="sl-phone"><div class="sl-phone__screen">
-              <img src="assets/images/salon/salon-public-booking.webp" width="1040" height="2052" loading="lazy" decoding="async"
-                   alt="店舗ページからのWEB予約画面。担当・日付・時間を選ぶ途中の状態">
-            </div></div>
-          </div>
-        </li>
-
-        <li class="sl-tour__item reveal">
-          <div class="sl-tour__text">
-            <p class="sl-tour__step"><span class="sl-tour__num">2</span>来店・接客メモを残す</p>
-            <h3 class="sl-tour__title">接客のあと、その場で30秒。</h3>
-            <p class="sl-tour__desc">
-              スマートフォンから短く残すだけ。きれいな文章に整える必要はありません。
-            </p>
-          </div>
-          <div class="sl-tour__media sl-tour__media--phone">
-            <div class="sl-phone"><div class="sl-phone__screen">
-              <img src="assets/images/salon/salon-ui-memo-phone.webp" width="1040" height="1726" loading="lazy" decoding="async"
-                   alt="接客後にスマートフォンから短いメモを入力するSmart Labo Salonの接客メモ画面">
-            </div></div>
-          </div>
-        </li>
-
-        <li class="sl-tour__item reveal">
-          <div class="sl-tour__text">
-            <p class="sl-tour__step"><span class="sl-tour__num">3</span>AIが情報を整理する</p>
-            <h3 class="sl-tour__title">短いメモから、次に使える形へ。</h3>
-            <p class="sl-tour__desc">
-              好み・会話の内容・次回の提案候補に仕分けされ、確認待ちの状態で並びます。
-            </p>
-          </div>
-          <div class="sl-tour__media">
-            <div class="sl-window">
-              <div class="sl-window__bar" aria-hidden="true">
-                <span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span>
-                <span class="sl-window__title">来店 ／ 確認待ちのAI整理</span>
-              </div>
-              <img src="assets/images/salon/salon-ui-ai-review-unchecked.webp" width="1360" height="1581" loading="lazy" decoding="async"
-                   alt="AIが整理した項目のうち、登録しない項目のチェックを外している画面">
-            </div>
-          </div>
-        </li>
-
-        <li class="sl-tour__item reveal">
-          <div class="sl-tour__text">
-            <p class="sl-tour__step"><span class="sl-tour__num">4</span>スタッフが内容を確認する</p>
-            <h3 class="sl-tour__title">残す内容は、人が決める。</h3>
-            <p class="sl-tour__desc">
-              チェックを外した項目は登録されません。AIが勝手に顧客情報を書き換えることはありません。
-            </p>
-          </div>
-          <div class="sl-tour__media">
-            <div class="sl-window">
-              <div class="sl-window__bar" aria-hidden="true">
-                <span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span>
-                <span class="sl-window__title">来店 ／ スタッフ確認済み</span>
-              </div>
-              <img src="assets/images/salon/salon-ui-ai-review.webp" width="1360" height="1581" loading="lazy" decoding="async"
-                   alt="スタッフが内容を確認し、登録する項目だけにチェックを付けた状態のAI整理画面">
-            </div>
-          </div>
-        </li>
-
-        <li class="sl-tour__item reveal">
-          <div class="sl-tour__text">
-            <p class="sl-tour__step"><span class="sl-tour__num">5</span>次回の接客準備につなげる</p>
-            <h3 class="sl-tour__title">思い出すところから、始めない。</h3>
-            <p class="sl-tour__desc">
-              次の来店前に、前回のポイント・前回の会話・今回の提案候補がそろっています。
-            </p>
-          </div>
-          <div class="sl-tour__media">
-            <div class="sl-window">
-              <div class="sl-window__bar" aria-hidden="true">
-                <span class="sl-window__dot"></span><span class="sl-window__dot"></span><span class="sl-window__dot"></span>
-                <span class="sl-window__title">Smart Labo Salon ／ 次回来店の接客準備</span>
-              </div>
-              <img src="assets/images/salon/salon-ui-briefing.webp" width="1360" height="1128" loading="lazy" decoding="async"
-                   alt="確認済みの顧客記録から、前回のポイント・前回の会話・今回の提案候補をまとめた接客準備の画面">
-            </div>
-          </div>
-        </li>
-
-        <li class="sl-tour__item reveal">
-          <div class="sl-tour__text">
-            <p class="sl-tour__step"><span class="sl-tour__num">6</span>店舗ページとWEB予約を確認する</p>
-            <h3 class="sl-tour__title">お客様から見える入口も、ひとつに。</h3>
-            <p class="sl-tour__desc">
-              店内写真・メニュー・スタッフ・WEB予約までが、そのまま次のご来店の入口になります。
-            </p>
-          </div>
-          <div class="sl-tour__media sl-tour__media--phone">
-            <div class="sl-phone"><div class="sl-phone__screen">
-              <img src="assets/images/salon/salon-public-shop.webp" width="1040" height="1803" loading="lazy" decoding="async"
-                   alt="スマートフォンで表示した店舗ページ。店内写真と店舗名、WEB予約のボタンが並ぶ">
-            </div></div>
-          </div>
-        </li>
-
-      </ol>
-
-      <p class="sl-demo-note">※掲載画面はデモ用の架空データです。実在の店舗・お客様の情報は含みません。</p>
-    </div>
-  </section>
-
-  <!-- ============================== 07-B. 料金プラン（ROUTING-CLARITY-4-R1） ==============
-       ★通常価格(Standard)と創業メンバープランを「別カード」で表示する。
-         限定価格が通常価格に見えないよう、Standardを基準として明示する。
-       ★打ち消し線による二重価格表示はしない。割引率も出さない。
-       ★店舗ホームページ制作費は Salon初期費用とは別であることを下部で明記する。 -->
-  <section class="sl-section sl-section--greige" id="pricing" aria-labelledby="pricing-title">
-    <div class="container">
-      <p class="sl-eyebrow">料金</p>
-      <h2 class="sl-h2" id="pricing-title">料金プラン</h2>
-      <p class="sl-lead">
-        通常プランに加え、先行導入にご協力いただける先着20店舗限定の創業メンバープランをご用意しています。
-      </p>
-
-      <div class="sl-plans">
-
-        <!-- 通常価格（基準として明確に読めるが、創業メンバーより弱い） -->
-        <div class="sl-plan sl-plan--std reveal">
-          <p class="sl-plan__label">通常価格</p>
-          <h3 class="sl-plan__name">Standard</h3>
-          <p class="sl-plan__price">
-            <span class="sl-plan__unit">月額</span><span class="sl-plan__num">19,800</span><span class="sl-plan__unit">円</span><span class="sl-plan__tax">（税別）</span>
-          </p>
-          <p class="sl-plan__sub">税込 21,780円</p>
-          <ul class="sl-plan__list">
-            <li><span>初期費用</span><b>30,000円（税別）</b></li>
-            <li><span>年間一括</span><b>198,000円（税別）</b></li>
-            <li><span>年間一括の目安</span><b>月払い10か月分相当</b></li>
-          </ul>
-          <p class="sl-plan__cta">
-            <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--secondary">料金について相談する</a>
-          </p>
-        </div>
-
-        <!-- 創業メンバー（今回の主提案・Smart Blueで強調。全面塗りにはしない） -->
-        <div class="sl-plan sl-plan--founder reveal">
-          <p class="sl-plan__badges">
-            <span class="sl-plan__badge">先着20店舗限定</span><span class="sl-plan__badge sl-plan__badge--soft">先行導入</span>
-          </p>
-          <h3 class="sl-plan__name">創業メンバープラン</h3>
-          <p class="sl-plan__price">
-            <span class="sl-plan__unit">月額</span><span class="sl-plan__num">14,800</span><span class="sl-plan__unit">円</span><span class="sl-plan__tax">（税別）</span>
-          </p>
-          <p class="sl-plan__sub">税込 16,280円</p>
-          <ul class="sl-plan__list">
-            <li><span>初期費用</span><b>0円</b></li>
-            <li><span>年間一括</span><b>148,000円（税別）</b></li>
-            <li><span>年間一括の目安</span><b>月払い10か月分相当</b></li>
-            <li><span>価格保証</span><b>24か月間</b></li>
-          </ul>
-          <p class="sl-plan__note">25か月目以降は、その時点のStandard通常価格へ移行します。</p>
-          <p class="sl-plan__cta">
-            <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary">創業メンバープランについて相談する</a>
-          </p>
-        </div>
-
-      </div>
-
-      <!-- HP制作費は Salon料金に含まれない -->
-      <div class="sl-plannote reveal">
-        <h3 class="sl-plannote__title">店舗ホームページ制作について</h3>
-        <p class="sl-plannote__body">
-          店舗ホームページ制作は、Salonの初期費用とは別で、50,000円〜（税別）です。
-          標準範囲を超えるページ構成・機能・個別デザイン等は、別途お見積りとなります。
+      <div class="s03__gallery" id="screens">
+        <p class="s03__gico" aria-hidden="true">
+          <svg viewBox="0 0 30 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="28" height="20" rx="3"/><circle cx="9" cy="9" r="2.4"/><path d="M2 19l8-7 6 5 4-3 8 6"/></svg>
         </p>
+        <h2 class="s03__gtitle">Salon Gallery</h2>
+        <p class="s03__glead">導入イメージや実際の画面を、まとめてご覧いただけます。</p>
+        <span class="s03__gprev" aria-hidden="true">&#8249;</span>
+        <ul class="s03__cards">
+          <li class="s03__card" style="left:43px;width:127px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-1.png" alt="悩むサロンオーナーの漫画" width="127" height="103">
+            <span class="s03__cap">サロンオーナーの悩み</span>
+          </li>
+          <li class="s03__card" style="left:178px;width:155px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-2.png" alt="導入後の変化を描いた漫画" width="155" height="103">
+            <span class="s03__cap">導入すると、こんなに変わる！</span>
+          </li>
+          <li class="s03__card" style="left:341px;width:143px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-3.png" alt="スマートフォンの予約画面" width="143" height="103">
+            <span class="s03__cap">お客様向けWEB予約</span>
+          </li>
+          <li class="s03__card" style="left:491px;width:143px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-4.png" alt="ノートパソコンに表示した店舗ページ" width="143" height="103">
+            <span class="s03__cap">店舗ページ（公開画面）</span>
+          </li>
+          <li class="s03__card" style="left:643px;width:142px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-5.png" alt="AIが整理した接客メモの確認画面" width="142" height="103">
+            <span class="s03__cap">AIが接客メモを整理</span>
+          </li>
+          <li class="s03__card" style="left:793px;width:142px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-6.png" alt="スマートフォンの顧客カルテ画面" width="142" height="103">
+            <span class="s03__cap">顧客カルテ・履歴管理</span>
+          </li>
+        </ul>
+        <div class="s03__dots" aria-hidden="true">
+          <i class="is-current"></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ============================== 08. 相談CTA ============================== -->
-  <section class="sl-section sl-section--navy sl-final" aria-labelledby="salon-cta-title">
-    <div class="container container--narrow">
-      <h2 class="sl-h2" id="salon-cta-title">気になる機能から、<br>お聞かせください。</h2>
-      <p class="sl-lead">
-        現在の進め方をうかがったうえで、店舗に合う使い方をご提案します。
-        実際の画面をご覧いただきながらご説明します。
-      </p>
-      <div class="sl-actions">
-        <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--primary btn--lg">気になる機能を選んで相談する</a>
-        <a href="contact.html?type=consult&amp;topic=salon#interests" class="btn btn--on-inverse btn--lg">Salonについて無料相談</a>
+      <div class="s03__pricing">
+        <h2 class="s03__ptitle">料金プラン</h2>
+        <span class="s03__pnav" aria-hidden="true"><i>&#8249;</i><i>&#8250;</i></span>
+          <div class="s03__plan s03__plan--a" style="left:966px;width:132px">
+            <p class="s03__pbar">創業メンバープラン</p>
+            <p class="s03__pprice"><b>14,800</b><span class="u">円/月</span><span class="t">（税別）</span></p>
+            <p class="s03__ptax">（税込16,280円）</p>
+            <ul class="s03__plist">
+              <li>初期費用：0円</li>
+              <li>24ヶ月価格保証</li>
+              <li>25ヶ月目以降は<br>Standard適用</li>
+              <li>最低契約期間：6ヶ月</li>
+            </ul>
+          </div>
+          <div class="s03__plan s03__plan--b" style="left:1108px;width:134px">
+            <p class="s03__pbar">Standardプラン</p>
+            <p class="s03__pprice"><b>19,800</b><span class="u">円/月</span><span class="t">（税別）</span></p>
+            <p class="s03__ptax">（税込21,780円）</p>
+            <ul class="s03__plist">
+              <li>初期費用：30,000円<br>（税別）</li>
+              <li>年間一括：198,000円<br>（税別）</li>
+              <li>最低契約期間：6ヶ月</li>
+            </ul>
+          </div>
+          <div class="s03__plan s03__plan--c" style="left:1252px;width:140px">
+            <p class="s03__pbar">HP制作（別サービス）</p>
+            <p class="s03__pprice"><b>50,000</b><span class="u">円〜</span><span class="t">（税別）</span></p>
+            <ul class="s03__plist">
+              <li>5〜10ページ程度のHP制作</li>
+              <li>スマホ対応・SSL対応</li>
+              <li>SEO基本対策</li>
+              <li>修正2回まで</li>
+            </ul>
+          </div>
       </div>
-      <p class="sl-note">
-        先着20店舗限定・創業メンバープラン 月額14,800円（税別）／初期費用0円。
-        通常価格は月額19,800円（税別）・初期費用30,000円（税別）です。
-        <a href="#pricing" style="color:#cfe0ff">料金の詳細を見る</a>
-      </p>
-    </div>
-  </section>
 
-  <!-- ============================== 09. その他のサービス（弱い導線・ROUTING-CLARITY-1） ====
-       ★Salonの主CTAより目立たせない。ボタンにせずテキストリンクに留める。 -->
-  <p class="sl-othersvc">
-    <span class="sl-othersvc__label">その他のサービス</span>
-    <a href="index.html#website">店舗ホームページ制作</a>
-    <a href="features.html">Smart Labo Works（法人向け）</a>
-  </p>
+      <!-- ---------- Responsive 専用の料金プラン（≤1439px） ----------
+           PC（≥1440px）では display:none。
+           PC の料金 DOM は S03上半分（.s03__pricing）＋ S04下半分（.s04__plan）に
+           分割されているため、縦 1 枚のカードへ CSS だけで統合するより
+           Responsive 専用 DOM を持つ方が PC 保護・保守性ともに安全。
+           内容は既存の正式表記をそのまま複製（新規文言・新機能の追加なし）。
+           同一 viewport で二重表示されないよう、両方を display:none で切り替える。 -->
+      <!-- 料金プランのアンカー。PC は料金カード上端、Responsive は Mobile 料金ブロックの
+           直前に位置する 0px の目印。id の重複を避けるため 1 箇所だけに置く。 -->
+      <span class="s03__anchor" id="pricing" aria-hidden="true"></span>
+      <div class="s03m" aria-label="料金プラン">
+        <h2 class="s03m__title">料金プラン</h2>
+        <div class="s03m__cards">
+          <div class="s03m__card s03m__card--a">
+            <p class="s03m__bar">創業メンバープラン</p>
+            <p class="s03m__badge">先着20店舗限定</p>
+            <p class="s03m__price"><b>14,800</b><span class="s03m__u">円/月</span><span class="s03m__t">（税別）</span></p>
+            <p class="s03m__tax">（税込16,280円）</p>
+            <ul class="s03m__list">
+              <li>初期費用：0円</li>
+              <li>24ヶ月価格保証</li>
+              <li>25ヶ月目以降はStandard適用</li>
+              <li>年間一括：148,000円（税別）</li>
+              <li>最低契約期間：6ヶ月</li>
+            </ul>
+          </div>
+          <div class="s03m__card s03m__card--b">
+            <p class="s03m__bar">Standardプラン</p>
+            <p class="s03m__price"><b>19,800</b><span class="s03m__u">円/月</span><span class="s03m__t">（税別）</span></p>
+            <p class="s03m__tax">（税込21,780円）</p>
+            <ul class="s03m__list">
+              <li>初期費用：30,000円（税別）</li>
+              <li>年間一括：198,000円（税別）</li>
+              <li>最低契約期間：6ヶ月</li>
+            </ul>
+          </div>
+          <div class="s03m__card s03m__card--c">
+            <p class="s03m__bar">HP制作（別サービス）</p>
+            <p class="s03m__price"><b>50,000</b><span class="s03m__u">円〜</span><span class="s03m__t">（税別）</span></p>
+            <ul class="s03m__list">
+              <li>5〜10ページ程度のHP制作</li>
+              <li>スマホ対応・SSL対応</li>
+              <li>SEO基本対策</li>
+              <li>修正2回まで</li>
+            </ul>
+          </div>
+        </div>
+        <p class="s03m__note">※ すべての機能をご利用いただけます。</p>
+        <a class="s03m__more" href="contact.html?type=docs&amp;topic=salon#form">資料請求する &#8250;</a>
+      </div>
+    </section>
+    <!-- ======================================================================
+         Section 04 (Design Base Y543-731) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-04-y543-731.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         左 = 導入メリット3枚（X45-534）／中 = 実際の画面（X556-935）／
+         右上 = 料金カード下部（X966-1391 / Y0-53）／右下 = CTA（X966-1391 / Y88-）。
+         SSOT の水平構図を維持し、縦積みへ再設計していない。
+         ★人物イラスト・ノートPC・CTA写真は Design Base からの切り出し（代表許可の方式）。
+           文字はすべて実HTML。再生成・色変更・AI生成なし。
+         ★掲載内容は営業SSOTを優先し、画像内コピーを無条件転記していない。
+           ・カード1「予約受付やリマインドを…」→ リマインド自動化は §11 に記載がないため置換
+           ・カード2「最適なタイミングで再来店と紹介が自然に増えます。」→
+             効果保証・未提供の紹介機能のため置換
+           ・CTA「資料をダウンロードする」→「資料を請求する」（提供形態は問い合わせフォーム）
+         ★料金は Section03 と同じ正式価格SSOTのみ。追加・変更なし。
+         ====================================================================== -->
+    <section class="image-section image-section--04 s04" id="benefits" aria-label="導入メリットと実際の画面、料金プランのつづき">
 
-  <!-- ============================== 10. 運営（1行導線） ============================== -->
-  <p class="sl-operator">
-    運営：株式会社スマートラボ<a href="company.html">会社情報を見る</a>
-  </p>
+      <!-- ---------- 導入メリット ---------- -->
+      <h2 class="s04__btitle">導入すると、こんなに変わる！</h2>
+      <div class="s04__bcard s04__bcard--1">
+        <span class="s04__bico" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="14" cy="14" r="12"/><path d="M14 7v7l4 3" stroke-linecap="round"/></svg>
+        </span>
+        <b class="s04__bname">時間を生み出す</b>
+        <p class="s04__btext">予約や顧客情報の<br>整理をシンプルに。<br>お客様のために。</p>
+        <img class="s04__bart" src="assets/images/salon/image-lp/salon-image-lp-04-benefit-1.png" alt="ノートパソコンで予約を確認するスタッフのイラスト" width="59" height="90">
+      </div>
+      <div class="s04__bcard s04__bcard--2">
+        <span class="s04__bico s04__bico--heart" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="currentColor"><path d="M14 25S3 18.2 3 11.2A6.2 6.2 0 0 1 14 7.4 6.2 6.2 0 0 1 25 11.2C25 18.2 14 25 14 25z"/></svg>
+        </span>
+        <b class="s04__bname">リピーター<br>につなげる</b>
+        <p class="s04__btext">来店履歴をもとに、<br>スタッフが個別に<br>ご案内します。</p>
+        <img class="s04__bart" src="assets/images/salon/image-lp/salon-image-lp-04-benefit-2.png" alt="お客様に寄り添うスタッフのイラスト" width="61" height="82">
+      </div>
+      <div class="s04__bcard s04__bcard--3">
+        <span class="s04__bico" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M2 5h13v9H8l-4 3v-3H2z"/><path d="M11 11h15v9h-3v3l-4-3h-8z"/></svg>
+        </span>
+        <p class="s04__btext s04__btext--3">一人ひとりに寄り添う<br>「また来たい！」<br>をつくります。</p>
+        <img class="s04__bart" src="assets/images/salon/image-lp/salon-image-lp-04-benefit-3.png" alt="お客様と話すスタッフのイラスト" width="61" height="144">
+      </div>
 
-</main>
+      <!-- ---------- 実際の画面 ---------- -->
+      <h2 class="s04__utitle"><em>実際</em>の画面で、毎日の業務が変わります</h2>
+      <img class="s04__uart" src="assets/images/salon/image-lp/salon-image-lp-04-realui.png" alt="ノートパソコンに表示した一覧画面と、次回来店の接客準備へつながる流れ" width="246" height="144">
+      <div class="s04__upanel" id="revisit">
+        <b class="s04__uname">次回来店の接客準備画面</b>
+        <ul class="s04__ulist">
+          <li>来店履歴の確認</li>
+          <li>前回のメモ</li>
+          <li>おすすめメニュー</li>
+          <li>次回のアプローチ内容</li>
+        </ul>
+        <p class="s04__unote">一斉配信や自動配信は行いません。</p>
+      </div>
+      <p class="s04__demo">※ 掲載画面はデモ用の架空データです。</p>
 
-<!-- ============================== 18. フッター ============================== -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="site-footer__inner">
+      <!-- ---------- 料金カード下部（Section03 からの続き） ---------- -->
+      <div class="s04__plan s04__plan--a">
+        <ul class="s04__plist"><li>年間一括：148,000円<br>（税別）</li></ul>
+        <p class="s04__pbadge">先着20店舗限定</p>
+      </div>
+      <div class="s04__plan s04__plan--b"></div>
+      <div class="s04__plan s04__plan--c">
+        <a class="s04__pmore" href="contact.html?type=docs&amp;topic=salon#form">資料請求する &#8250;</a>
+      </div>
+      <p class="s04__pnote">※ すべての機能をご利用いただけます。</p>
 
-      <div class="site-footer__col">
-        <a href="index.html" class="logo" aria-label="Smart Labo ホーム">
-          <img class="logo__icon logo__icon--tile" src="assets/brand/icon-color-64.webp" alt="" aria-hidden="true">
-          <span class="logo__text">Smart Labo</span>
+      <!-- ---------- CTA（Section05 へ続く） ---------- -->
+      <div class="s04__cta">
+        <img class="s04__ctaart" src="assets/images/salon/image-lp/salon-image-lp-04-cta-photo.png" alt="ヘッドセットを付けて相談に応じるスタッフ" width="130" height="100">
+        <p class="s04__ctatitle"><em>まずは無料で</em>相談してみませんか？</p>
+        <p class="s04__ctalead">サロンの課題や目標をお聞きし、最適な活用方法をご提案します。</p>
+        <a class="s04__btn s04__btn--primary" href="contact.html?type=consult&amp;topic=salon#interests">まずは無料で相談してみる</a>
+        <a class="s04__btn s04__btn--ghost" href="contact.html?type=docs&amp;topic=salon#form">資料を請求する</a>
+      </div>
+    </section>
+    <!-- ======================================================================
+         Section 05 (Design Base Y731-899) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-05-y731-899.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         Y0-9   = Section04 から続く CTA の下端（X965-1391）
+         X44-723   = 導入までの流れ（5ステップ）
+         X724-1076 = よくある質問
+         X1089-1391= 安心して使っていただくために
+         SSOT の水平構図を維持し、縦積みへ再設計していない。
+         ★Design Base からの切り出しは一切なし。100% HTML / CSS / inline SVG。
+         ★掲載内容は正式仕様を優先。安心パネル1項目目
+           「個人情報はAIへ送信しません」→「AIが行うのは整理までです」へ置換した。
+           前者はデータ取扱いに関する断定で、正式仕様として確認できていないため。
+         ★FAQ の開閉は CSS のみ（新規 JS なし）。SSOT どおり1問目のみ開いた状態。
+         ====================================================================== -->
+    <section class="image-section image-section--05 s05" aria-label="導入までの流れとよくある質問">
+
+      <div class="s05__ctafoot" aria-hidden="true"></div>
+
+      <!-- ---------- 導入までの流れ ---------- -->
+      <div class="s05__panel s05__panel--flow">
+        <h2 class="s05__ptitle">導入までの流れ</h2>
+        <ol class="s05__steps">
+        <li class="s05__step" style="left:18px">
+          <span class="s05__num">01</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6.6" r="3.2"/><path d="M2.6 16.4a6.4 6.4 0 0 1 12.8 0"/></svg></span>
+          <b class="s05__sname">お問い合わせ</b>
+          <span class="s05__ssub">フォームからご連絡</span>
+        </li>
+        <li class="s05__step" style="left:139px">
+          <span class="s05__num">02</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.2" y="2.6" width="13.6" height="12.8" rx="2.4"/><path d="M9 6.2c1.6-1.4 4 .2 0 3.2-4-3-1.6-4.6 0-3.2z"/><path d="M6 17.4l2.4-2h4"/></svg></span>
+          <b class="s05__sname">ヒアリング</b>
+          <span class="s05__ssub">課題や目標を確認</span>
+        </li>
+        <li class="s05__step" style="left:263px">
+          <span class="s05__num">03</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 8.6a6.4 6.4 0 1 1 3 5.4l-3.2.9.9-3.1a6.3 6.3 0 0 1-.7-3.2z"/><path d="M6.6 8.4h4.8M6.6 11h3"/></svg></span>
+          <b class="s05__sname">ご提案・お見積り</b>
+          <span class="s05__ssub">最適なプランをご提案</span>
+        </li>
+        <li class="s05__step" style="left:414px">
+          <span class="s05__num">04</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.2" y="3.4" width="13.6" height="11.2" rx="1.8"/><path d="M5.4 7.2h7.2M5.4 10h4.4"/><path d="M4.4 17h9.2"/></svg></span>
+          <b class="s05__sname">ご契約</b>
+          <span class="s05__ssub">ご利用開始のご案内</span>
+        </li>
+        <li class="s05__step" style="left:528px">
+          <span class="s05__num">05</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 9.4a6.4 6.4 0 0 1 12.8 0v4.2a2 2 0 0 1-2 2h-1.4"/><rect x="1.6" y="9" width="3" height="4.6" rx="1.4"/><rect x="13.4" y="9" width="3" height="4.6" rx="1.4"/></svg></span>
+          <b class="s05__sname">導入・運用サポート</b>
+          <span class="s05__ssub">使い方まで丁寧にサポート</span>
+        </li>
+        </ol>
+        <div class="s05__arrows" aria-hidden="true">
+        <i style="left:120px"></i>
+        <i style="left:244px"></i>
+        <i style="left:395px"></i>
+        <i style="left:510px"></i>
+        </div>
+      </div>
+
+      <!-- ---------- よくある質問 ---------- -->
+      <div class="s05__panel s05__panel--faq" id="faq">
+        <h2 class="s05__ptitle">よくある質問</h2>
+        <div class="s05__fbox">
+        <div class="s05__fitem is-open">
+          <p class="s05__fq">AIが勝手にお客様へ連絡することはありますか？<span class="s05__fchev" aria-hidden="true">&#9652;</span></p>
+          <p class="s05__fa">いいえ。人が確認して個別にご案内します。</p>
+        </div>
+        <div class="s05__fitem">
+          <p class="s05__fq">最低契約期間はありますか？<span class="s05__fchev" aria-hidden="true">&#9662;</span></p>
+        </div>
+        <div class="s05__fitem">
+          <p class="s05__fq">どのようなサロンに向いていますか？<span class="s05__fchev" aria-hidden="true">&#9662;</span></p>
+        </div>
+        </div>
+        <a class="s05__fmore" href="#faq">よくある質問を見る &#8250;</a>
+      </div>
+
+      <!-- ---------- 安心して使っていただくために ---------- -->
+      <div class="s05__panel s05__panel--safe">
+        <h2 class="s05__ptitle s05__ptitle--safe"><em>安心</em>して使っていただくために</h2>
+        <ul class="s05__slist">
+          <li>AIが行うのは整理までです</li>
+          <li>確認画面で必ず最終チェック</li>
+          <li>一斉配信・自動配信は行いません</li>
+          <li>デモデータは実在する人物情報ではありません</li>
+        </ul>
+        <a class="s05__smore" href="#revisit">詳しく見る &#8250;</a>
+      </div>
+    </section>
+    <!-- ======================================================================
+         Section 06 (Design Base Y899-960) : HTML/CSS 化済み — PC最終セクション
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-06-y899-960.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         Y0-14  = 上のセクションと同じ地色／Y15-61 = 暗色フッター帯（全幅）
+         ロゴ X49 Y30 16x16 ／ ブランド名 X72 ／ ナビ X190・243・341・456・508
+         Copyright X1230-1382（右寄せ）
+         ★画像・切り出しは0件。100% HTML / CSS。新しいロゴは作っていない。
+         ★リンクは WEBSITE 直下に実在するページのみに張っている。
+           法定表示は公開LPへ複製掲載せず、契約確定前の最終確認・同意段階で
+           確認できる方式（2026-09-01 代表決定・WEBSITE/README.md に記録）。
+           そのため該当項目はリンクを持たない span のままとし、
+           表記を「法定表示は契約時に確認」とする（推測URLを作らない）。
+         ====================================================================== -->
+    <section class="image-section image-section--06 s06" aria-label="フッター">
+      <div class="s06__bar">
+        <a class="s06__brand" href="index.html">
+          <span class="s06__mark" aria-hidden="true">S</span>
+          <span class="s06__bname">Smart Labo</span>
         </a>
-        <p class="site-footer__brand-note">
-          AIを売るのではなく、<br>
-          仕事が変わる仕組みをつくる。<br>
-          株式会社スマートラボ
-        </p>
+        <nav class="s06__nav" aria-label="フッターナビゲーション">
+          <a class="s06__nlink" style="left:190px" href="company.html">会社概要</a>
+          <a class="s06__nlink" style="left:243px" href="privacy.html">プライバシーポリシー</a>
+          <span class="s06__nlink" style="left:341px">法定表示は契約時に確認</span>
+          <a class="s06__nlink" style="left:456px" href="terms.html">利用規約</a>
+          <a class="s06__nlink" style="left:508px" href="contact.html">お問い合わせ</a>
+        </nav>
+        <p class="s06__copy">&#169; 株式会社スマートラボ</p>
       </div>
-
-      <div class="site-footer__col">
-        <h4>店舗向け</h4>
-        <a href="index.html#salon">Smart Labo Salon</a>
-        <a href="index.html#website">店舗ホームページ制作</a>
-        <a href="contact.html?type=consult&amp;topic=salon#interests">Salonについて無料相談</a>
-      </div>
-
-      <div class="site-footer__col">
-        <h4>法人向け</h4>
-        <a href="features.html">Smart Labo Works</a>
-        <a href="pricing.html">料金</a>
-        <a href="apply.html">お申し込み</a>
-        <a href="company-brain.html">Company Brain</a>
-      </div>
-
-      <div class="site-footer__col">
-        <h4>会社・お問い合わせ</h4>
-        <a href="company.html">会社情報</a>
-        <a href="contact.html">お問い合わせ</a>
-        <a href="contact.html?type=docs#form">資料請求</a>
-        <a href="privacy.html">プライバシーポリシー</a>
-        <a href="terms.html">利用規約</a>
-      </div>
-
-    </div>
-
-    <p class="site-footer__copy">&copy; 株式会社スマートラボ</p>
-  </div>
-</footer>
-
-<script src="assets/js/main.js" defer></script>
+    </section>
+  </main>
 </body>
 </html>
