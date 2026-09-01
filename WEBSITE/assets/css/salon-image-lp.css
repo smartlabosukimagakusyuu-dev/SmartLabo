@@ -1,0 +1,2248 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #fff;
+}
+
+.salon-image-lp {
+  width: 100%;
+  min-width: 1440px;
+  margin: 0;
+  padding: 0;
+}
+
+.image-section {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==========================================================================
+   Section 01 : Header + Hero （HTML/CSS化済み・1440px PC専用）
+   --------------------------------------------------------------------------
+   VISUAL SSOT: assets/images/salon/image-lp/salon-image-lp-01-hero.png
+   各座標は同画像から実測した値。Section 02 の開始 Y263 を動かさないため、
+   セクション高さは 263px に固定する。
+   ========================================================================== */
+
+.image-section--01.s01 {
+  position: relative;
+  width: 1440px;
+  height: 263px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #FEFCFB;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
+               "Helvetica Neue", Arial, sans-serif;
+  color: #1C1C1E;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- 右のビジュアル（既存正式素材。原寸比のまま高さ263pxで右寄せ） --- */
+.s01__visual {
+  position: absolute;
+  top: 0;
+  left: 800px;
+  width: 640px;
+  height: 263px;
+  z-index: 0;
+}
+.s01__visual img {
+  display: block;
+  width: 640px;
+  height: 263px;
+}
+
+/* --- ヘッダー --- */
+.s01__header { position: static; }
+
+.s01__logo {
+  position: absolute;
+  left: 50px;
+  top: 21px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.s01__logomark {
+  display: grid;
+  place-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #E05C78;
+  color: #fff;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+}
+.s01__logotext {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #D1355B;
+  letter-spacing: .01em;
+}
+
+.s01__nav {
+  position: absolute;
+  left: 365px;
+  top: 30px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.s01__nav a {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 13px;
+  color: #57504C;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.s01__nav a.is-active { color: #9A663C; }
+.s01__nav a:hover { color: #D1355B; }
+
+/* 切り出し画像には SSOT と同じヘッダーCTAが焼き込まれている。
+   二重表示を避けるため、実HTMLのCTAが焼き込み矩形
+   （primary X1235-1386/Y16-44・secondary X1236-1385/Y51-76）を
+   完全に覆う位置とサイズにしている（SSOT比 1-2px の拡張）。 */
+.s01__actions {
+  position: absolute;
+  left: 1234px;
+  top: 15px;
+  z-index: 2;
+  display: grid;
+  gap: 5px;
+}
+.s01__btn {
+  box-sizing: border-box;
+  display: grid;
+  place-content: center;
+  /* A11Y-S01-CTA-WIDTH-01: 154px -> 168px。13px の主CTA（テキスト153.8px）に
+     左右それぞれ約7pxの視覚余白を確保する。右端は 1402px でビューポート内。
+     切り出し画像に焼き込まれたCTA（X1235-1386）の被覆も維持される。 */
+  width: 168px;
+  height: 30px;
+  border-radius: 6px;
+  /* A11Y-S01-FINAL-01: 12px -> 13px。
+     14px では主CTAのテキストが 166px となり枠を 12px はみ出すため 13px を上限とする。 */
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.s01__btn--primary { background: #D1355B; color: #fff; }
+.s01__btn--primary:hover { background: #B92C4E; }
+.s01__btn--ghost {
+  background: #fff;
+  color: #3C3C3C;
+  border: 1px solid #E8DED7;
+}
+.s01__btn--ghost:hover { border-color: #D1355B; color: #D1355B; }
+
+/* --- 左のコピー --- */
+.s01__copy { position: static; z-index: 1; }
+
+.s01__eyebrow {
+  position: absolute;
+  left: 137px;
+  top: 74px;
+  margin: 0;
+  z-index: 1;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #2E2A28;
+}
+
+.s01__title {
+  position: absolute;
+  left: 137px;
+  top: 96px;
+  margin: 0;
+  z-index: 1;
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 46px;
+  letter-spacing: -.035em;
+  color: #1C1C1E;
+  white-space: nowrap;
+}
+.s01__title span { color: #D1355B; }
+
+.s01__lead {
+  position: absolute;
+  left: 137px;
+  top: 148px;
+  margin: 0;
+  z-index: 1;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 23px;
+  color: #3C3C3C;
+}
+
+.s01__benefits {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  z-index: 1;
+}
+.s01__benefit {
+  position: absolute;
+  top: 206px;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 8px 9px;
+}
+.s01__benefit--1 { left: 137px; }
+.s01__benefit--2 { left: 299px; }
+.s01__benefit--3 { left: 487px; }
+
+.s01__ico {
+  grid-row: span 2;
+  align-self: start;
+  margin-top: 2px;
+  color: #D98B72;
+}
+.s01__ico svg { display: block; width: 20px; height: 20px; }
+
+.s01__benefit b {
+  align-self: center;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #2E2A28;
+  white-space: nowrap;
+}
+.s01__benefit b em { font-style: normal; color: #D1355B; }
+
+/* A11Y-S01-BENEFIT-COLLISION-FIX-01: 14px -> 12px（差し戻し）。
+   ★重要: 補足3件は同じY帯(234-250)に横並びで、隣の補足との実余白は
+     14px:-60.3/-78.0  13px:-44.5/-59.0  12px:-28.6/-40.0
+     11px:-12.7/-21.0  10px:+3.2/-2.0    9px:+19.1/+17.0
+   となり、10px以上では必ず文字が重なる。原因は font-size ではなく、
+   実装コピーが VISUAL SSOT の約2.3倍の長さであること（SSOT実測 96/120/112px）。
+   指定範囲(13px→12px)では解消できないため、A11Y前の 12px へ戻して報告する。
+   恒久対応は補足文の短縮（HTML変更）またはベネフィット列の再配置。 */
+.s01__sub {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #6E6E6E;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Section 02 : Feature Strip （HTML/CSS化済み・1440px PC専用）
+   --------------------------------------------------------------------------
+   VISUAL SSOT: assets/images/salon/image-lp/salon-image-lp-02-feature-strip.png
+   白カード X49-1389 / Y1-73（帯内座標）、アイコン30x30 / Y22、
+   見出し字 Y25-35、補足字 Y45-53、区切り線 X256/437/605/786/996/1181。
+   Section 03 の開始 Y340 を動かさないため、帯の高さは 77px に固定する。
+   ========================================================================== */
+
+.image-section--02.s02 {
+  position: relative;
+  width: 1440px;
+  height: 77px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #FDFAF8;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
+               "Helvetica Neue", Arial, sans-serif;
+  color: #1F1D1C;
+  -webkit-font-smoothing: antialiased;
+}
+
+.s02__card {
+  position: absolute;
+  left: 49px;
+  top: 1px;
+  width: 1341px;
+  height: 73px;
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* --- 区切り線（項目の間） --- */
+.s02__rules i {
+  position: absolute;
+  top: 22px;
+  width: 1px;
+  height: 34px;
+  background: #F0E7E2;
+}
+.s02__rules i:nth-child(1) { left: 256px; }
+.s02__rules i:nth-child(2) { left: 437px; }
+.s02__rules i:nth-child(3) { left: 605px; }
+.s02__rules i:nth-child(4) { left: 786px; }
+.s02__rules i:nth-child(5) { left: 996px; }
+/* A11Y-S02-FINAL-01: 区切り線6のみ X1181 -> X1194（+13px）。
+   補足11px化で項目6の列右端が 1188 となるため。VISUAL SSOT からの唯一の意図的な差分。
+   結果、項目6/7の列幅は 198px / 196px となり、変更前（185/209）よりむしろ均等になる。 */
+.s02__rules i:nth-child(6) { left: 1194px; }
+
+/* --- 7項目 --- */
+.s02__list {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.s02__item {
+  position: absolute;
+  top: 22px;
+  display: grid;
+  grid-template-columns: 30px auto;
+  align-content: start;
+  gap: 5px 10px;
+}
+.s02__item:nth-child(1) { left: 104px; }
+.s02__item:nth-child(2) { left: 290px; }
+.s02__item:nth-child(3) { left: 465px; }
+.s02__item:nth-child(4) { left: 632px; }
+.s02__item:nth-child(5) { left: 819px; }
+.s02__item:nth-child(6) { left: 1027px; }
+.s02__item:nth-child(7) { left: 1209px; }
+
+.s02__ico {
+  grid-row: span 2;
+  width: 30px;
+  height: 30px;
+  color: #2A2724;
+}
+.s02__ico svg { display: block; width: 30px; height: 30px; }
+
+.s02__item b {
+  /* A11Y-S02-01: 12px -> 13px。7項目同時拡大で実測し、最小余白は 4.0px（項目6）で
+     現状と同一＝新たな切迫を生まない。14px では項目3が区切り線まで 2.0px に接近するため不採用。 */
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 16px;
+  color: #1F1D1C;
+  white-space: nowrap;
+}
+/* SSOT の補足行は実測 8.5px 相当。HTMLでは判読できないため 10px まで引き上げている。
+   本番HP化の工程では 14px 以上へ引き上げるか、項目数・配置を再設計すること。 */
+.s02__sub {
+  /* A11Y-S02-FINAL-01: 10px -> 11px。7項目同時＋区切り線6の移動で実測し、
+     跨ぎ0・最小余白 4.0px（項目4）を確認。12px は区切り線3本の移動でも成立しない。 */
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 11px;
+  color: #727171;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Section 03 : Salon Gallery ＋ 料金プラン上部 （HTML/CSS化済み・1440px PC専用）
+   --------------------------------------------------------------------------
+   VISUAL SSOT: assets/images/salon/image-lp/salon-image-lp-03-y340-543.png
+   Gallery ヘッダー Y17-34 / サムネ Y48-150 / キャプション Y161-169 /
+   ドット Y184-190、料金 見出し Y21-32 / バー Y50-72 / 価格 Y90-108 /
+   税込 Y117-124 / チェック行 Y147・166・185（HPのみ Y132起点）。
+   Section 04 の開始 Y543 を動かさないため、帯の高さは 203px に固定する。
+   料金カードは SSOT どおり下端で切れる（続きは Section 04）。
+   ========================================================================== */
+
+.image-section--03.s03 {
+  position: relative;
+  width: 1440px;
+  height: 203px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #FEFCFB;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
+               "Helvetica Neue", Arial, sans-serif;
+  color: #1F1D1C;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------- Gallery ---- */
+.s03__gico {
+  position: absolute;
+  left: 44px;
+  top: 17px;
+  margin: 0;
+  width: 30px;
+  height: 24px;
+  color: #2A2724;
+}
+.s03__gico svg { display: block; width: 30px; height: 24px; }
+
+.s03__gtitle {
+  position: absolute;
+  left: 93px;
+  top: 16px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 20px;
+  letter-spacing: -.01em;
+  color: #16130F;
+}
+
+.s03__glead {
+  position: absolute;
+  left: 194px;
+  top: 21px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #6E6864;
+  white-space: nowrap;
+}
+
+.s03__gprev {
+  position: absolute;
+  left: 20px;
+  top: 126px;
+  width: 14px;
+  height: 18px;
+  font-size: 18px;
+  line-height: 18px;
+  text-align: center;
+  color: #4A443F;
+}
+
+.s03__cards {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.s03__card {
+  position: absolute;
+  top: 48px;
+}
+.s03__card img {
+  display: block;
+  width: 100%;
+  height: 103px;
+  border-radius: 6px;
+}
+.s03__cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 111px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 12px;
+  color: #2E2A26;
+  white-space: nowrap;
+}
+
+.s03__dots {
+  position: absolute;
+  left: 397px;
+  top: 184px;
+  display: flex;
+  gap: 8px;
+}
+.s03__dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #E2DCD6;
+}
+.s03__dots i.is-current { background: #DA3258; }
+
+/* ---------------------------------------------------------- Pricing ---- */
+.s03__ptitle {
+  position: absolute;
+  left: 1089px;
+  top: 17px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 18px;
+  color: #16130F;
+}
+
+.s03__pnav {
+  position: absolute;
+  left: 1337px;
+  top: 15px;
+  display: flex;
+  gap: 6px;
+}
+.s03__pnav i {
+  display: grid;
+  place-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #E4DCD5;
+  background: #fff;
+  font-size: 15px;
+  font-style: normal;
+  line-height: 1;
+  color: #6E6864;
+}
+
+/* 料金カード。SSOT どおり Section03 下端で切れる（続きは Section04 の画像） */
+.s03__plan {
+  position: absolute;
+  top: 50px;
+  height: 160px;
+  background: #fff;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+.s03__pbar {
+  margin: 0;
+  height: 23px;
+  display: grid;
+  place-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  white-space: nowrap;
+}
+.s03__plan--a .s03__pbar { background: #D13A5F; }
+.s03__plan--b .s03__pbar { background: #955427; }
+.s03__plan--c .s03__pbar { background: #A0661D; }
+
+.s03__pprice {
+  margin: 12px 0 0;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
+}
+.s03__pprice b { font-size: 21px; font-weight: 800; letter-spacing: -.01em; }
+.s03__pprice .u { font-size: 11px; font-weight: 800; margin-left: 1px; }
+.s03__pprice .t { font-size: 9px; font-weight: 600; color: #6E6864; margin-left: 2px; }
+.s03__plan--a .s03__pprice b, .s03__plan--a .s03__pprice .u { color: #D8375D; }
+.s03__plan--b .s03__pprice b, .s03__plan--b .s03__pprice .u { color: #2E2A26; }
+.s03__plan--c .s03__pprice b, .s03__plan--c .s03__pprice .u { color: #A0661D; }
+
+.s03__ptax {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: #6E6864;
+}
+
+.s03__plist {
+  margin: 26px 0 0;
+  padding: 0 0 0 10px;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+/* 料金カードの特典リスト：Section03 の底 Y543 を越えないよう縦を詰める。
+   長い項目は HTML 側の <br> で意味単位に改行する（white-space: nowrap は維持）。
+   3カードともリスト開始 Y472 に揃う。料金文言・料金数字は一切変更しない。 */
+.s03__plan--a .s03__plist,
+.s03__plan--b .s03__plist { margin-top: 9px; gap: 6px; }
+.s03__plan--c .s03__plist { margin-top: 26px; gap: 6px; }
+.s03__plist li {
+  position: relative;
+  padding-left: 13px;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 11px;
+  color: #3B3733;
+  white-space: nowrap;
+}
+.s03__plist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+}
+.s03__plan--a .s03__plist li::before { color: #D8375D; }
+.s03__plan--b .s03__plist li::before { color: #955427; }
+.s03__plan--c .s03__plist li::before { color: #A0661D; }
+
+/* ==========================================================================
+   Section 04 : 導入メリット ＋ 実際の画面 ＋ 料金下部 ＋ CTA
+                （HTML/CSS化済み・1440px PC専用）
+   --------------------------------------------------------------------------
+   VISUAL SSOT: assets/images/salon/image-lp/salon-image-lp-04-y543-731.png
+   メリット見出し Y15-27 / カード Y38-181（X45-197・207-362・373-534）
+   実画面見出し Y15-26 / ノートPC X556-801 Y38-181 / 右パネル X802-935
+   料金カード下部 X966-1391 Y0-53 / 注記 Y67-74 / CTA X966-1391 Y88-（05へ継続）
+   Section 05 の開始 Y731 を動かさないため、帯の高さは 188px に固定する。
+   ========================================================================== */
+
+.image-section--04.s04 {
+  position: relative;
+  width: 1440px;
+  height: 188px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #FEFCFB;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
+               "Helvetica Neue", Arial, sans-serif;
+  color: #1F1D1C;
+  -webkit-font-smoothing: antialiased;
+}
+.s04 img { display: block; }
+
+/* ------------------------------------------------------- 導入メリット -- */
+.s04__btitle {
+  position: absolute;
+  left: 45px;
+  top: 11px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 20px;
+  letter-spacing: -.01em;
+  color: #16130F;
+}
+
+.s04__bcard {
+  position: absolute;
+  top: 38px;
+  height: 144px;
+  border-radius: 10px;
+  background: #FEF7F0;
+  overflow: hidden;
+}
+.s04__bcard--1 { left: 45px; width: 153px; }
+.s04__bcard--2 { left: 207px; width: 156px; }
+.s04__bcard--3 { left: 373px; width: 162px; }
+
+.s04__bico {
+  position: absolute;
+  left: 20px;
+  top: 19px;
+  width: 28px;
+  height: 28px;
+  color: #6B6660;
+}
+.s04__bcard--2 .s04__bico { left: 25px; color: #E4574E; }
+.s04__bcard--3 .s04__bico { left: 14px; color: #B9B3AC; }
+.s04__bico svg { display: block; width: 28px; height: 28px; }
+
+.s04__bname {
+  position: absolute;
+  left: 59px;
+  top: 22px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 16px;
+  color: #16130F;
+  white-space: nowrap;
+}
+.s04__bcard--2 .s04__bname { left: 77px; top: 18px; }
+
+.s04__btext {
+  position: absolute;
+  left: 59px;
+  top: 56px;
+  margin: 0;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 17px;
+  color: #4A443F;
+  white-space: nowrap;
+}
+.s04__bcard--2 .s04__btext { left: 64px; top: 68px; }
+.s04__btext--3 { left: 14px; top: 70px; }
+
+.s04__bart { position: absolute; }
+.s04__bcard--1 .s04__bart { left: 0; top: 54px; }
+.s04__bcard--2 .s04__bart { left: 0; top: 62px; }
+.s04__bcard--3 .s04__bart { left: 101px; top: 0; }
+
+/* ------------------------------------------------------- 実際の画面 ---- */
+.s04__utitle {
+  position: absolute;
+  left: 570px;
+  top: 11px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 20px;
+  letter-spacing: -.01em;
+  color: #16130F;
+}
+.s04__utitle em { font-style: normal; color: #A26323; }
+
+.s04__uart { position: absolute; left: 556px; top: 38px; }
+
+.s04__upanel { position: absolute; left: 812px; top: 44px; width: 128px; }
+.s04__uname {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 14px;
+  color: #16130F;
+  white-space: nowrap;
+}
+.s04__ulist {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+.s04__ulist li {
+  position: relative;
+  padding-left: 15px;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 11px;
+  color: #3B3733;
+  white-space: nowrap;
+}
+.s04__ulist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid #E09A4A;
+  border-radius: 2px;
+}
+.s04__unote {
+  margin: 16px 0 0;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 11px;
+  color: #4A443F;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------- 料金カード下部 ---- */
+.s04__plan {
+  position: absolute;
+  top: 0;
+  height: 53px;
+  background: #fff;
+  border-radius: 0 0 8px 8px;
+}
+.s04__plan--a { left: 966px; width: 132px; }
+.s04__plan--b { left: 1108px; width: 134px; }
+.s04__plan--c { left: 1252px; width: 140px; }
+
+.s04__plist { margin: 0; padding: 2px 0 0 10px; list-style: none; }
+.s04__plist li {
+  position: relative;
+  padding-left: 13px;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 11px;
+  color: #3B3733;
+  white-space: nowrap;
+}
+.s04__plist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #D8375D;
+  border-radius: 2px;
+}
+.s04__pbadge {
+  position: absolute;
+  left: 14px;
+  top: 25px;
+  margin: 0;
+  width: 104px;
+  height: 19px;
+  display: grid;
+  place-content: center;
+  border-radius: 4px;
+  background: #C9265A;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+.s04__pmore {
+  position: absolute;
+  left: 46px;
+  top: 27px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 12px;
+  color: #986A2A;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.s04__pnote {
+  position: absolute;
+  left: 965px;
+  top: 64px;
+  margin: 0;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 12px;
+  color: #4A443F;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------- CTA ---- */
+/* SSOT どおり Section05 へ続くため、下端は帯で切れる（Section05画像は変更しない） */
+.s04__cta {
+  position: absolute;
+  left: 966px;
+  top: 88px;
+  width: 426px;
+  height: 110px;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(90deg, #FDE9DC 0%, #FCE3D2 100%);
+  overflow: hidden;
+}
+.s04__ctaart { position: absolute; right: 0; top: 0; }
+.s04__ctatitle {
+  position: absolute;
+  left: 17px;
+  top: 15px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 18px;
+  letter-spacing: -.01em;
+  color: #2B2622;
+  white-space: nowrap;
+}
+.s04__ctatitle em { font-style: normal; color: #9A6622; }
+.s04__ctalead {
+  position: absolute;
+  left: 17px;
+  top: 43px;
+  margin: 0;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 12px;
+  color: #4A443F;
+  white-space: nowrap;
+}
+.s04__btn {
+  position: absolute;
+  top: 70px;
+  height: 25px;
+  display: grid;
+  place-content: center;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.s04__btn--primary { left: 17px; width: 150px; background: #C9265A; color: #fff; }
+.s04__btn--primary:hover { background: #AC1F4C; }
+.s04__btn--ghost {
+  left: 174px;
+  width: 118px;
+  background: #fff;
+  color: #3B3733;
+  border: 1px solid #EBD9CB;
+}
+.s04__btn--ghost:hover { border-color: #C9265A; color: #C9265A; }
+
+/* ==========================================================================
+   Section 05 : CTA下端 ＋ 導入までの流れ ＋ よくある質問 ＋ 安心パネル
+                （HTML/CSS化済み・1440px PC専用）
+   --------------------------------------------------------------------------
+   VISUAL SSOT: assets/images/salon/image-lp/salon-image-lp-05-y731-899.png
+   CTA下端 X965-1391 Y0-9 ／ 3パネルとも Y24-166
+   Flow  X44-723   見出し字Y40-51 / 番号字Y78-91 / アイコン Y103 / 補足字Y120-130
+   FAQ   X724-1076 内枠 X743-1055 Y61-153 / Q字Y69・113・137 / A字Y89
+   安心  X1089-1391 見出し字Y41-51 / 項目字Y67・87・107・126 / 詳しく見る Y154
+   Section 06 の開始 Y899 を動かさないため、帯の高さは 168px に固定する。
+   ========================================================================== */
+
+.image-section--05.s05 {
+  position: relative;
+  width: 1440px;
+  height: 168px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #FEFCFB;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
+               "Helvetica Neue", Arial, sans-serif;
+  color: #2E2A26;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Section04 から続く CTA の下端。Section04 の DOM は変更していない */
+.s05__ctafoot {
+  position: absolute;
+  left: 965px;
+  top: 0;
+  width: 427px;
+  height: 10px;
+  border-radius: 0 0 10px 10px;
+  background: #FDECE1;
+}
+
+/* ------------------------------------------------------------ パネル -- */
+.s05__panel {
+  position: absolute;
+  top: 24px;
+  height: 143px;
+  border: 1px solid #F2EAE3;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+.s05__panel--flow { left: 44px; width: 680px; }
+.s05__panel--faq  { left: 724px; width: 353px; }
+.s05__panel--safe { left: 1089px; width: 303px; }
+
+.s05__ptitle {
+  position: absolute;
+  left: 18px;
+  top: 12px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 16px;
+  letter-spacing: -.01em;
+  color: #2E2A26;
+  white-space: nowrap;
+}
+.s05__panel--faq .s05__ptitle { left: 18px; }
+.s05__panel--safe .s05__ptitle { left: 20px; top: 13px; }
+.s05__ptitle--safe em { font-style: normal; color: #A95F1B; }
+
+/* ------------------------------------------------------ 導入までの流れ -- */
+.s05__steps { position: absolute; left: 0; top: 0; margin: 0; padding: 0; list-style: none; }
+.s05__step { position: absolute; top: 49px; }
+
+.s05__num {
+  position: absolute;
+  left: 2px;
+  top: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: .02em;
+  color: #A4621D;
+}
+.s05__sico {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  width: 18px;
+  height: 18px;
+  color: #7A6A5C;
+}
+.s05__sico svg { display: block; width: 18px; height: 18px; }
+
+.s05__sname {
+  position: absolute;
+  left: 26px;
+  top: 27px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 18px;
+  color: #2E2A26;
+  white-space: nowrap;
+}
+.s05__ssub {
+  position: absolute;
+  left: 0;
+  top: 45px;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 11px;
+  color: #6E6660;
+  white-space: nowrap;
+}
+
+.s05__arrows i {
+  position: absolute;
+  top: 82px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #E8C9A8;
+  border-right: 2px solid #E8C9A8;
+  transform: rotate(45deg);
+}
+
+/* ------------------------------------------------------ よくある質問 -- */
+.s05__fbox {
+  position: absolute;
+  left: 19px;
+  top: 37px;
+  width: 313px;
+  height: 93px;
+  border: 1px solid #EFE9E3;
+  border-radius: 6px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.s05__fitem { position: relative; padding: 0 8px; }
+.s05__fitem + .s05__fitem { border-top: 1px solid #F1ECE7; }
+.s05__fitem.is-open { background: #FEFCFA; }
+.s05__fitem:not(.is-open) .s05__fq { padding-bottom: 4px; }
+
+.s05__fq {
+  position: relative;
+  margin: 0;
+  padding: 8px 24px 0 0;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 11px;
+  color: #2E2A26;
+  white-space: nowrap;
+}
+.s05__fchev {
+  position: absolute;
+  right: 0;
+  top: 7px;
+  /* A11Y-IMPLEMENT-01: 8px -> 12px（親の padding-right 24px 内に収まることを実測） */
+  font-size: 12px;
+  line-height: 11px;
+  color: #7D7065;
+}
+.s05__fa {
+  margin: 6px 0 8px;
+  /* A11Y-FAQ-FIX-01: 回答文を簡潔化したうえで 8.5px -> 14px。
+     実測 テキスト幅 277px / 表示可能幅 295px / 右余白 18px で見切れ 0。
+     line-height は 11px のまま（Q2・Q3 の位置を動かさないため）。 */
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 11px;
+  color: #5A534D;
+  white-space: nowrap;
+}
+
+.s05__fmore {
+  position: absolute;
+  left: 253px;
+  top: 133px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 12px;
+  color: #7A706A;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------- 安心 -- */
+.s05__slist {
+  position: absolute;
+  left: 21px;
+  top: 41px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 9px;
+}
+.s05__slist li {
+  position: relative;
+  padding-left: 17px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 11px;
+  color: #2E2A26;
+  white-space: nowrap;
+}
+.s05__slist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #E9A25B;
+  border-radius: 2px;
+}
+.s05__smore {
+  position: absolute;
+  left: 236px;
+  top: 128px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 12px;
+  color: #7A706A;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Section 06 : フッター （HTML/CSS化済み・1440px PC専用・PC最終セクション）
+   --------------------------------------------------------------------------
+   VISUAL SSOT: assets/images/salon/image-lp/salon-image-lp-06-y899-960.png
+   帯 Y15-61（#252628）／ロゴ X49 Y30 16x16 ／ブランド名 X72 字Y35-42
+   ナビ X190 / 243 / 341 / 456 / 508 字Y35-42 ／Copyright X1230-1382 字Y35-43
+   ページ全長 960px を動かさないため、帯の高さは 61px に固定する。
+   ========================================================================== */
+
+.image-section--06.s06 {
+  position: relative;
+  width: 1440px;
+  height: 61px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #FEFCFB;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
+               "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.s06__bar {
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 1440px;
+  height: 46px;
+  background: #252628;
+}
+
+.s06__brand {
+  position: absolute;
+  left: 49px;
+  top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+}
+.s06__mark {
+  display: grid;
+  place-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: #B2B1B0;
+  color: #252628;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+.s06__bname {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: .01em;
+  color: #E4E2E1;
+  white-space: nowrap;
+}
+
+.s06__nav { position: static; }
+.s06__nlink {
+  position: absolute;
+  top: 18px;
+  /* A11Y-IMPLEMENT-01: 8px -> 9px。10px では「プライバシーポリシー」「特定商取引法に基づく表記」が
+     次項目と -2px / -5px 重なるため、項目間隔を変えない範囲での安全上限は 9.5px、余裕をみて 9px。 */
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 12px;
+  color: #9C9A99;
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.s06__nlink:hover { color: #E4E2E1; }
+
+.s06__copy {
+  position: absolute;
+  left: 1230px;
+  top: 18px;
+  margin: 0;
+  /* A11Y-IMPLEMENT-01: 8.5px -> 10px（右端まで 22px の余白を確保）。
+     11px でも溢れないが右端まで 4px しか残らないため採用しない。 */
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 12px;
+  color: #918F8E;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   MOBILE / TABLET FOUNDATION （max-width: 1439px）
+   --------------------------------------------------------------------------
+   PC（1440px 以上）は 1440px 固定キャンバスのまま一切変更しない。
+   ここでは Mobile / Tablet 実装の「土台」だけを用意する。
+
+   1) 1440px 固定キャンバス（min-width / width）を解除し、
+      ラッパーとセクションを viewport 幅に追従させる。
+   2) セクションの固定 height を height:auto へ移行し、
+      子要素が絶対配置のままでも 0-height にならないよう
+      暫定 min-height（PC 値）を残す。各 Section 工程で置き換える。
+   3) overflow:hidden を visible に戻す。幅を 100% にしたまま hidden だと
+      横方向のコンテンツが到達不能に隠れてしまうため。
+      （overflow-x:hidden で問題を覆い隠す実装はしない）
+
+   ★この段階では各 Section 内部の絶対配置はまだ解除しない。
+     Gallery の scroll-snap / nav ドロワー / 料金カード統合は次工程以降。
+   ========================================================================== */
+
+/* ==========================================================================
+   PRODUCTION FINAL A-1 : デモデータ注記（ページ内で 1 回だけ）
+   「実際の画面」見出し行の右、パネル上の空き領域に置く。
+   X820-940 / Y551-575（セクション内 Y8-32）で、Real UI 画像（Y581）と 6px あける。
+   色は既存の #4A443F（AA 合格済みの本文色）を使う。
+   ========================================================================== */
+
+.s04__demo {
+  position: absolute;
+  left: 820px;
+  top: 8px;
+  margin: 0;
+  width: 120px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 12px;
+  color: #4A443F;
+}
+
+/* ==========================================================================
+   PRODUCTION FINAL A-2 : 非操作の装飾コントロールを全幅で非表示にする。
+   この LP は <script> 0 の静的ページで、以下は押しても動作しない。
+   「操作できそうに見えて動かない UI」を本番に残さないため PC でも隠す。
+   画像 6 枚の横一列表示と料金カードの位置は変わらない（いずれも絶対配置）。
+   JS カルーセルは今回実装しない。新しい偽コントロールも追加しない。
+   ========================================================================== */
+
+.s03__gprev,
+.s03__dots,
+.s03__pnav { display: none; }
+
+/* Responsive 専用の料金プランは PC（≥1440px）では常に非表示。 */
+.s03m { display: none; }
+
+@media (max-width: 1439px) {
+
+  /* Mobile 専用トークン。PC 側の既存トークンには一切触れない。 */
+  :root {
+    --mobile-gutter: 16px;
+    --tablet-gutter: 24px;
+    /* Responsive 共通の左右余白とコンテンツ最大幅。
+       390:16/390  768:26/716  1024:75/875  1439:200/1040 になる。 */
+    --rw-gutter: clamp(16px, 3vw, 24px);
+    --rw-max: clamp(320px, calc(62vw + 240px), 1040px);
+  }
+
+  /* --- 1) 固定キャンバス解除 --- */
+  .salon-image-lp {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .image-section {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* --- 2) セクション：固定 height → auto ＋ 暫定 min-height --- */
+  .image-section--01.s01,
+  .image-section--02.s02,
+  .image-section--03.s03,
+  .image-section--04.s04,
+  .image-section--05.s05,
+  .image-section--06.s06 {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* 暫定値。中身が通常フロー化した Section から順に不要になる。 */
+  .image-section--01.s01 { min-height: 263px; }
+  .image-section--02.s02 { min-height:  77px; }
+  .image-section--03.s03 { min-height: 203px; }
+  .image-section--04.s04 { min-height: 188px; }
+  .image-section--05.s05 { min-height: 168px; }
+  .image-section--06.s06 { min-height:  61px; }
+
+  /* ------------------------------------------------------------------ *
+     Section 01 : Responsive（PC の絶対配置を解除し、縦フローへ再構築）
+     DOM 順： Header → Hero copy → Hero visual → CTA → Benefits
+     .s01__header / .s01__copy は position:static のラッパーなので
+     display:contents で透過させ、子を .s01 のグリッド項目にしている。
+     ------------------------------------------------------------------ */
+
+  .image-section--01.s01 {
+    min-height: 0;                       /* foundation の暫定値を解除 */
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-content: start;
+    box-sizing: border-box;
+    /* 背景は全幅のまま、中身だけ中央寄せの最大幅に収める */
+    padding: 0 max(var(--rw-gutter), calc((100% - var(--rw-max)) / 2)) 32px;
+  }
+
+  .s01__header,
+  .s01__copy { display: contents; }
+
+  /* --- ヘッダー行（ロゴ ｜ メニューボタン） --- */
+  .s01__logo {
+    position: static;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    min-height: 56px;
+  }
+
+  .s01__menu {
+    position: relative;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    justify-self: end;
+  }
+  .s01__menubtn {
+    box-sizing: border-box;
+    display: grid;
+    place-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid #E8DED7;
+    background: #fff;
+    cursor: pointer;
+    list-style: none;
+  }
+  .s01__menubtn::-webkit-details-marker { display: none; }
+  .s01__menubtn::marker { content: ""; }
+  .s01__menubars {
+    position: relative;
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 1px;
+    background: #57504C;
+  }
+  .s01__menubars::before,
+  .s01__menubars::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 2px;
+    border-radius: 1px;
+    background: #57504C;
+  }
+  .s01__menubars::before { top: -6px; }
+  .s01__menubars::after  { top:  6px; }
+
+  /* メニューパネル（既存 .s01__nav をそのまま流用・JS なし） */
+  .s01__menu .s01__nav {
+    position: absolute;
+    left: auto;
+    right: 0;
+    top: calc(100% + 8px);
+    z-index: 20;
+    display: grid;
+    gap: 2px;
+    box-sizing: border-box;
+    width: 232px;
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid #EFE6DF;
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(28, 20, 16, .14);
+  }
+  .s01__menu .s01__nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 20px;
+    white-space: normal;
+  }
+  .s01__menu .s01__nav a:hover { background: #FDF2F5; }
+
+  /* --- Hero copy --- */
+  .s01__eyebrow {
+    position: static;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin: 18px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .s01__title {
+    position: static;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    margin: 6px 0 0;
+    font-size: 32px;
+    line-height: 39px;
+    letter-spacing: -.02em;
+    white-space: normal;
+  }
+  .s01__lead {
+    position: static;
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin: 10px 0 0;
+    font-size: 15px;
+    line-height: 25px;
+  }
+  .s01__lead br { display: none; }      /* PC 用の改行を解除して自然折返し */
+
+  /* --- Hero visual --- */
+  .s01__visual {
+    position: static;
+    grid-column: 1 / -1;
+    grid-row: 5;
+    width: 100%;
+    /* 原寸 640x263 を超えて拡大しない（600px 幅で高さ約 262px = ほぼ原寸） */
+    max-width: 600px;
+    margin: 18px auto 0;
+    height: auto;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .s01__visual img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 7;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* --- CTA（Hero visual 直下・全幅2段） --- */
+  .s01__actions {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-column: 1 / -1;
+    grid-row: 6;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    /* 広い画面でボタンが極端に横長にならないよう上限を置く */
+    max-width: 600px;
+    margin: 16px auto 0;
+    width: 100%;
+  }
+  .s01__btn {
+    width: 100%;
+    height: auto;
+    min-height: 48px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 22px;
+    white-space: normal;
+  }
+
+  /* --- Benefits（縦3カード） --- */
+  .s01__benefits {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-column: 1 / -1;
+    grid-row: 7;
+    display: grid;
+    gap: 10px;
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto 0;
+  }
+  .s01__benefit {
+    position: static;
+    left: auto;
+    top: auto;
+    box-sizing: border-box;
+    grid-template-columns: 20px 1fr;
+    gap: 4px 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: #FEF7F0;
+  }
+  .s01__benefit b {
+    font-size: 16px;
+    line-height: 22px;
+    white-space: normal;
+  }
+  .s01__sub {
+    font-size: 13px;
+    line-height: 19px;
+    white-space: normal;
+  }
+
+  /* ------------------------------------------------------------------ *
+     Section 02 : Responsive（PC 横一列 → 2列grid × 3行 ＋ 7件目全幅）
+     レイアウトは「アイコン上 ＋ テキスト下」を採用。
+     アイコン左方式も実ブラウザで比較したが、390px では
+     「AI整理（人が確認）」「履歴・メモを一元管理」等が
+     途中で折り返され、カード高さも不揃いになるため不採用。
+     PC の区切り線（.s02__rules）は Responsive では使わず、
+     カード化（白背景＋細罫線）と gap で区切る。
+     ------------------------------------------------------------------ */
+
+  .image-section--02.s02 {
+    min-height: 0;                       /* foundation の暫定 77px を解除 */
+    box-sizing: border-box;
+    padding: 16px max(var(--rw-gutter), calc((100% - var(--rw-max)) / 2)) 18px;
+  }
+
+  /* PC の白カード地と区切り線は Responsive では使わない */
+  .s02__card,
+  .s02__rules { display: none; }
+
+  .s02__list {
+    position: static;
+    inset: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .s02__item {
+    position: static;
+    left: auto;
+    top: auto;
+    box-sizing: border-box;
+    grid-template-columns: 1fr;          /* PC の 30px auto を解除 */
+    gap: 4px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #F2E9E3;
+    background: #fff;
+  }
+  .s02__item:nth-child(7) { grid-column: 1 / -1; }
+
+  .s02__ico {
+    grid-row: auto;                      /* PC の span 2 を解除 */
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+  .s02__ico svg { width: 24px; height: 24px; }
+
+  .s02__item b {
+    font-size: 14px;
+    line-height: 19px;
+    white-space: normal;
+  }
+  .s02__sub {
+    font-size: 12px;
+    line-height: 16px;
+    white-space: normal;
+  }
+
+  /* ------------------------------------------------------------------ *
+     Section 03 — Gallery のみ Responsive 化（Pricing は次工程）
+     .s03__gallery / .s03__pricing は position:static の透過ラッパーで、
+     子はいずれも .s03 を基準に絶対配置されている。
+     Gallery を通常フロー化すると .s03 の高さが伸びるが、
+     Pricing は .s03 基準の top:17/50 のままなので Gallery と重なる。
+     そこで .s03__pricing だけを位置基準（relative）にし、
+     PC と同じ内部座標を保ったままフローの下へ退避させる。
+     Pricing のデザイン自体は一切変えていない。
+     ------------------------------------------------------------------ */
+
+  .image-section--03.s03 {
+    min-height: 0;
+    box-sizing: border-box;
+    padding: 22px max(var(--rw-gutter), calc((100% - var(--rw-max)) / 2)) 30px;
+  }
+
+  /* --- Gallery 見出し --- */
+  .s03__gallery {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 10px;
+  }
+  .s03__gico {
+    position: static;
+    grid-column: 1;
+    grid-row: 1;
+    width: 26px;
+    height: 21px;
+  }
+  .s03__gico svg { width: 26px; height: 21px; }
+
+  .s03__gtitle {
+    position: static;
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 20px;
+    line-height: 27px;
+  }
+  .s03__glead {
+    position: static;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 21px;
+    white-space: normal;
+  }
+
+  /* --- PC 装飾の操作子は Responsive では使わない（実際にスワイプできる） --- */
+  .s03__gprev,
+  .s03__dots { display: none; }
+
+  /* --- 横スクロール Gallery（CSS scroll-snap のみ・JS なし） --- */
+  .s03__cards {
+    position: static;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    padding-bottom: 2px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .s03__cards::-webkit-scrollbar { display: none; }
+
+  .s03__card {
+    position: relative;
+    top: auto;
+    /* HTML の inline style（left / width）を Responsive でだけ上書きする */
+    left: auto !important;
+    width: clamp(292px, 38vw, 360px) !important;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+  .s03__card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 143 / 103;
+    object-fit: cover;
+    object-position: center;
+  }
+  .s03__cap {
+    position: static;
+    top: auto;
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 20px;
+    white-space: normal;
+  }
+
+  /* ------------------------------------------------------------------ *
+     Pricing — PC の分割 DOM（S03上半分＋S04下半分）を非表示にし、
+     Responsive 専用の縦 3 カード（.s03m）を表示する。
+     同一 viewport で料金が二重に読まれないよう display:none を使う。
+     ------------------------------------------------------------------ */
+  .s03__pricing { display: none; }
+  .s04__plan { display: none; }
+
+  .s03m { display: block; margin-top: 32px; }
+
+  .s03m__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 27px;
+    letter-spacing: -.01em;
+    color: #16130F;
+  }
+
+  .s03m__cards {
+    display: grid;
+    gap: 16px;
+    margin: 16px auto 0;
+    max-width: 680px;
+  }
+
+  .s03m__card {
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #F2E9E3;
+    background: #fff;
+  }
+  /* 創業メンバーを最も目立たせる（既存ピンク系トークンを少量使用） */
+  .s03m__card--a {
+    border-color: #F0C4D0;
+    box-shadow: 0 6px 18px rgba(209, 53, 91, .10);
+  }
+
+  .s03m__bar {
+    margin: 0;
+    display: inline-grid;
+    place-content: center;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .s03m__card--a .s03m__bar { background: #D13A5F; }
+  .s03m__card--b .s03m__bar { background: #955427; }
+  .s03m__card--c .s03m__bar { background: #A0661D; }
+
+  .s03m__badge {
+    margin: 10px 0 0;
+    display: inline-grid;
+    place-content: center;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: 4px;
+    background: #C9265A;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .s03m__price { margin: 14px 0 0; line-height: 1; white-space: nowrap; }
+  .s03m__price b { font-size: 30px; font-weight: 800; letter-spacing: -.01em; }
+  .s03m__u { font-size: 14px; font-weight: 800; margin-left: 2px; }
+  .s03m__t { font-size: 13px; font-weight: 600; color: #6E6864; margin-left: 4px; }
+  .s03m__card--a .s03m__price b, .s03m__card--a .s03m__u { color: #D8375D; }
+  .s03m__card--b .s03m__price b, .s03m__card--b .s03m__u { color: #2E2A26; }
+  .s03m__card--c .s03m__price b, .s03m__card--c .s03m__u { color: #A0661D; }
+
+  .s03m__tax {
+    margin: 8px 0 0;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 19px;
+    color: #6E6864;
+  }
+
+  .s03m__list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .s03m__list li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 21px;
+    color: #3B3733;
+  }
+  .s03m__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+  }
+  .s03m__card--a .s03m__list li::before { color: #D8375D; }
+  .s03m__card--b .s03m__list li::before { color: #955427; }
+  .s03m__card--c .s03m__list li::before { color: #A0661D; }
+
+  .s03m__more {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 12px;
+    padding: 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    color: #986A2A;
+    text-decoration: none;
+  }
+
+  /* ------------------------------------------------------------------ *
+     Section 04 : Responsive（Benefits → Real UI → CTA の縦フロー）
+     PC の絶対配置を Responsive 側だけ解除し、DOM 順をそのまま使う。
+     料金カード下半分（.s04__plan）は PHASE A で非表示済み。
+     料金注記（.s04__pnote）も Pricing 側へ移したのでここでは非表示。
+     ------------------------------------------------------------------ */
+
+  .image-section--04.s04 {
+    min-height: 0;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    padding: 28px max(var(--rw-gutter), calc((100% - var(--rw-max)) / 2)) 34px;
+  }
+
+  .s04__pnote { display: none; }   /* Pricing 側（.s03m__note）へ移設済み */
+
+  /* --- 導入メリット --- */
+  .s04__btitle {
+    position: static;
+    grid-row: 1;
+    margin: 0;
+    font-size: 20px;
+    line-height: 27px;
+  }
+
+  .s04__bcard {
+    position: relative;
+    top: auto;
+    left: auto !important;
+    width: auto !important;
+    height: auto;
+    box-sizing: border-box;
+    max-width: 680px;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    column-gap: 12px;
+    align-items: start;
+    padding: 16px;
+    overflow: visible;
+  }
+  .s04__bcard--1 { grid-row: 2; margin-top: 16px; }
+  .s04__bcard--2 { grid-row: 3; margin-top: 12px; }
+  .s04__bcard--3 { grid-row: 4; margin-top: 12px; }
+
+  .s04__bico {
+    position: static;
+    left: auto !important;
+    top: auto;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+  .s04__bname {
+    position: static;
+    left: auto !important;
+    top: auto !important;
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 16px;
+    line-height: 22px;
+    white-space: normal;
+  }
+  .s04__btext {
+    position: static;
+    left: auto !important;
+    top: auto !important;
+    grid-column: 2;
+    grid-row: 2;
+    margin: 6px 0 0;
+    font-size: 14px;
+    line-height: 21px;
+    white-space: normal;
+  }
+  .s04__btext--3 { grid-row: 1 / span 2; align-self: center; margin: 0; }
+  .s04__bart {
+    position: static;
+    left: auto !important;
+    top: auto !important;
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: end;
+    width: auto;
+    height: auto;
+    max-height: 96px;
+  }
+
+  /* --- 実際の画面 --- */
+  .s04__utitle {
+    position: static;
+    grid-row: 5;
+    margin: 30px 0 0;
+    font-size: 20px;
+    line-height: 27px;
+    white-space: normal;
+  }
+  .s04__uart {
+    position: static;
+    grid-row: 6;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    margin: 14px auto 0;
+    border-radius: 10px;
+  }
+  .s04__upanel {
+    position: static;
+    grid-row: 7;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 560px;
+    margin: 16px auto 0;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid #F2E9E3;
+    background: #fff;
+  }
+  .s04__uname { font-size: 16px; line-height: 22px; white-space: normal; }
+  .s04__ulist { margin: 12px 0 0; gap: 10px; }
+  .s04__ulist li {
+    padding-left: 22px;
+    font-size: 14px;
+    line-height: 21px;
+    white-space: normal;
+  }
+  .s04__ulist li::before { width: 12px; height: 12px; top: 4px; }
+  .s04__unote {
+    margin: 14px 0 0;
+    font-size: 13px;
+    line-height: 19px;
+    white-space: normal;
+  }
+
+  /* --- CTA --- */
+  .s04__cta {
+    position: static;
+    grid-row: 9;
+    left: auto;
+    top: auto;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 28px auto 0;
+    padding: 20px;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 130px;
+    column-gap: 14px;
+  }
+  .s04__ctaart {
+    position: static;
+    right: auto;
+    top: auto;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+    width: 130px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  .s04__ctatitle {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 18px;
+    line-height: 25px;
+    white-space: normal;
+  }
+  .s04__ctalead {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-column: 1;
+    grid-row: 2;
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 21px;
+    white-space: normal;
+  }
+  .s04__btn {
+    position: static;
+    left: auto !important;
+    top: auto;
+    grid-column: 1 / -1;
+    box-sizing: border-box;
+    width: auto !important;
+    height: auto;
+    min-height: 48px;
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 22px;
+    white-space: normal;
+  }
+  .s04__btn--primary { grid-row: 3; }
+  .s04__btn--ghost { grid-row: 4; margin-top: 10px; }
+
+  /* デモデータ注記（Responsive）— Real UI パネルの直下へ */
+  .s04__demo {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-row: 8;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 560px;
+    margin: 10px auto 0;
+    font-size: 13px;
+    line-height: 19px;
+  }
+
+  /* Responsive Pricing の注記 */
+  .s03m__note {
+    margin: 12px 0 0;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 19px;
+    color: #4A443F;
+  }
+
+  /* ------------------------------------------------------------------ *
+     Section 05 : Responsive（導入の流れ・FAQ・安心 を縦積み）
+     PC の絶対配置を Responsive 側だけ解除。HTML 変更なし、JS 追加なし。
+     FAQ の開閉は既存の CSS のまま（accordion 化しない）。
+     申し送り#9（.s05__fmore の line-box 2px 超過）は通常フロー化で自然解消。
+     ------------------------------------------------------------------ */
+
+  .image-section--05.s05 {
+    min-height: 0;
+    box-sizing: border-box;
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    padding: 28px max(var(--rw-gutter), calc((100% - var(--rw-max)) / 2)) 34px;
+  }
+
+  /* PC の CTA 下端の飾り帯（aria-hidden）は Responsive では不要 */
+  .s05__ctafoot { display: none; }
+
+  .s05__panel {
+    position: static;
+    left: auto;
+    top: auto;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 680px;
+    height: auto;
+    margin-inline: auto;
+    padding: 18px 16px 20px;
+    background: #fff;
+  }
+  .s05__panel--flow,
+  .s05__panel--faq,
+  .s05__panel--safe { width: 100%; }
+
+  .s05__panel .s05__ptitle {
+    position: static;
+    left: auto;
+    top: auto;
+    margin: 0 0 12px;
+    font-size: 18px;
+    line-height: 25px;
+    white-space: normal;
+  }
+
+  /* --- 導入までの流れ（5STEP を縦に） --- */
+  .s05__steps {
+    position: static;
+    left: auto;
+    top: auto;
+    display: grid;
+  }
+  .s05__step {
+    position: static;
+    left: auto !important;
+    top: auto;
+    display: grid;
+    grid-template-columns: 32px 20px minmax(0, 1fr);
+    column-gap: 10px;
+    align-items: center;
+    padding: 10px 0;
+  }
+  .s05__step + .s05__step { border-top: 1px solid #F3EDE7; }
+  .s05__num {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .s05__sico {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .s05__sname {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-column: 3;
+    grid-row: 1;
+    font-size: 16px;
+    line-height: 22px;
+    white-space: normal;
+  }
+  .s05__ssub {
+    position: static;
+    left: auto;
+    top: auto;
+    grid-column: 3;
+    grid-row: 2;
+    font-size: 14px;
+    line-height: 20px;
+    white-space: normal;
+  }
+  /* PC の横方向コネクターは縦積みでは使わない */
+  .s05__arrows { display: none; }
+
+  /* --- よくある質問 --- */
+  .s05__fbox {
+    position: static;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+  .s05__fitem { padding: 0 12px; }
+  .s05__fbox .s05__fq {
+    padding: 12px 30px 12px 0;
+    font-size: 15px;
+    line-height: 22px;
+    white-space: normal;
+  }
+  .s05__fitem:not(.is-open) .s05__fq { padding-bottom: 12px; }
+  .s05__fbox .s05__fchev { top: 13px; right: 4px; font-size: 14px; line-height: 20px; }
+  .s05__fbox .s05__fa {
+    margin: 0 0 12px;
+    font-size: 14px;
+    line-height: 21px;
+    white-space: normal;
+  }
+  .s05__fmore {
+    position: static;
+    left: auto;
+    top: auto;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  /* --- 安心して使っていただくために --- */
+  .s05__slist {
+    position: static;
+    left: auto;
+    top: auto;
+    gap: 10px;
+  }
+  .s05__slist li {
+    padding-left: 24px;
+    font-size: 14px;
+    line-height: 21px;
+    white-space: normal;
+  }
+  .s05__slist li::before { width: 12px; height: 12px; top: 4px; }
+  .s05__smore {
+    position: static;
+    left: auto;
+    top: auto;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  /* ------------------------------------------------------------------ *
+     Section 06 : Responsive（ブランド → ナビ 2列 → copyright の縦構成）
+     PC の 9px ナビを Mobile へ継承せず、13px と 44px タップ領域を確保する。
+     特定商取引法はページ未存在のため <span> のまま（URL を作らない）。
+     ------------------------------------------------------------------ */
+
+  .image-section--06.s06 {
+    min-height: 0;
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  .s06__bar {
+    position: static;
+    left: auto;
+    top: auto;
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    padding: 22px max(var(--rw-gutter), calc((100% - var(--rw-max)) / 2)) 24px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .s06__brand {
+    position: static;
+    left: auto;
+    top: auto;
+    min-height: 44px;
+  }
+  .s06__bname { font-size: 15px; line-height: 20px; }
+
+  .s06__nav {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 12px;
+    max-width: 560px;
+  }
+  .s06__nlink {
+    position: static;
+    left: auto !important;
+    top: auto;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 13px;
+    line-height: 19px;
+    white-space: normal;
+  }
+  /* リンクでない項目（特定商取引法）はカーソルを変えず、一段暗くして区別 */
+  span.s06__nlink { color: #918F8E; }
+
+  .s06__copy {
+    position: static;
+    left: auto;
+    top: auto;
+    font-size: 12px;
+    line-height: 18px;
+    white-space: normal;
+  }
+}
+
+/* Section02: 幅に余裕がある Responsive 帯では 4 列にする。
+   PC の横 7 列には戻さない。breakpoint はこの 1 本のみ追加。 */
+@media (min-width: 640px) and (max-width: 1439px) {
+  .s02__list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .s02__item:nth-child(7) { grid-column: auto; }
+}
+
+@media (max-width: 430px) {
+  /* Section01: 狭幅での微調整のみ。 */
+  .s01__title { font-size: 30px; line-height: 37px; }
+}
+
+/* ==========================================================================
+   PC（min-width: 1440px）: Section01 のモバイルメニュー用ラッパーを透過させる。
+   <details> は閉じていると中身が描画されないため、PC では明示的に表示に戻す。
+   既存の PC ルールは一切書き換えていない（この追加ブロックのみ）。
+   ========================================================================== */
+
+@media (min-width: 1440px) {
+  .s01__menu { display: contents; }
+  .s01__menubtn { display: none; }
+  .s01__menu::details-content { content-visibility: visible; block-size: auto; }
+  .s01__menu:not([open]) > .s01__nav { display: flex; }
+}
