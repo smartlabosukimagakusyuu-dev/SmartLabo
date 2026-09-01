@@ -66,7 +66,7 @@ Smart Labo Works の唯一の正式コードベースは、別リポジトリ
   所在地・電話番号・受付時間は、**Lite のお支払いへ進む前の最終確認画面**および
   **ご契約後の設定画面**で確認できる。公開Websiteへは本文を複製せず、直接リンクも置かない
   （正本は Lite 側の `server/services/legal/legalDocuments.js` の1か所だけ）
-- **Smart Labo Salon LP（`salon-image-lp.html`）の法務表示方針（2026-09-01 / 代表決定）**：
+- **Smart Labo Salon LP（正式URL `salon.html`）の法務表示方針（2026-09-01 / 代表決定）**：
   Salon についても上記 8L-R と同じ方式を採用し、**公開LPへ所在地・電話番号等の
   法定情報を複製掲載しない**。Salon 公開LP は販売契約をこのページ単体で成立させる
   ページではなく、主要導線は **無料相談**（`contact.html?type=consult&topic=salon#interests`）と

@@ -557,6 +557,9 @@ body {
    3カードともリスト開始 Y472 に揃う。料金文言・料金数字は一切変更しない。 */
 .s03__plan--a .s03__plist,
 .s03__plan--b .s03__plist { margin-top: 9px; gap: 6px; }
+/* Founding は契約条件が 4 項目（5 行）になるため、このカードだけ行間を 1px 詰めて
+   Section03 の底 Y543 を越えないようにする（他の値は変えない）。 */
+.s03__plan--a .s03__plist { gap: 5px; }
 .s03__plan--c .s03__plist { margin-top: 26px; gap: 6px; }
 .s03__plist li {
   position: relative;
@@ -2245,4 +2248,50 @@ a.s06__nlink:hover { color: #E4E2E1; }
   .s01__menubtn { display: none; }
   .s01__menu::details-content { content-visibility: visible; block-size: auto; }
   .s01__menu:not([open]) > .s01__nav { display: flex; }
+}
+
+/* ==========================================================================
+   PROMOTION : 正式 salon.html 昇格にともなう追加分（視覚デザインは変えない）
+   --------------------------------------------------------------------------
+   1) .sl-skip   : スキップリンク。通常は画面外、キーボードフォーカス時のみ表示。
+   2) .s03__anchor : #pricing の到達点。PC は料金カード上端（Section03 の top:50px、
+      すなわち Y390）、Responsive は Mobile 料金ブロック直前の通常フロー位置。
+      display:none の要素へは飛ばさない。
+   ========================================================================== */
+
+.sl-skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 12px 16px;
+  background: #1F1D1C;
+  color: #FFFFFF;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
+               "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  text-decoration: none;
+  border-radius: 0 0 6px 0;
+}
+.sl-skip:focus { left: 0; }
+
+.s03__anchor {
+  position: absolute;
+  left: 0;
+  top: 50px;
+  width: 0;
+  height: 0;
+}
+
+@media (max-width: 1439px) {
+  .s03__anchor {
+    position: static;
+    display: block;
+    width: auto;
+    height: 0;
+  }
 }
