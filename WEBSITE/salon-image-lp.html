@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Labo Salon</title>
+  <link rel="stylesheet" href="assets/css/salon-image-lp.css">
+</head>
+<body>
+  <main class="salon-image-lp">
+    <!-- ======================================================================
+         Section 01 (Design Base Y0-263) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-01-hero.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         座標は VISUAL SSOT の実測値に合わせている（1440px PC専用）。
+         ====================================================================== -->
+    <section class="image-section image-section--01 s01" aria-label="Smart Labo Salon">
+      <header class="s01__header">
+        <a class="s01__logo" href="salon.html">
+          <span class="s01__logomark" aria-hidden="true">S</span>
+          <span class="s01__logotext">Smart Labo<br>Salon</span>
+        </a>
+        <details class="s01__menu">
+          <summary class="s01__menubtn" aria-label="メニュー"><span class="s01__menubars" aria-hidden="true"></span></summary>
+        <nav class="s01__nav" aria-label="メインナビゲーション">
+          <a href="salon.html#features">機能紹介</a>
+          <a class="is-active" href="salon.html#benefits">導入メリット</a>
+          <a href="salon.html#pricing">料金プラン</a>
+          <a href="salon.html#screens">実際の画面</a>
+          <a href="salon.html#faq">よくある質問</a>
+        </nav>
+        </details>
+        <div class="s01__actions">
+          <a class="s01__btn s01__btn--primary" href="contact.html?type=consult&amp;topic=salon#interests">まずは無料で相談してみる</a>
+          <a class="s01__btn s01__btn--ghost" href="salon.html#screens">実際の画面を見る</a>
+        </div>
+      </header>
+
+      <div class="s01__copy">
+        <p class="s01__eyebrow">サロンの毎日を、もっとスマートに。</p>
+        <h1 class="s01__title">Smart Labo <span>Salon</span></h1>
+        <p class="s01__lead">店舗ページ・予約・顧客カルテ・再来店まで、ひとつにまとめたオールインワン。<br>あなたのサロンに、ゆとりとリピーターを。</p>
+        <ul class="s01__benefits">
+          <li class="s01__benefit s01__benefit--1">
+            <span class="s01__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+            </span>
+            <b>時間を<em>生み出す</em></b>
+            <span class="s01__sub">予約と顧客情報を整理</span>
+          </li>
+          <li class="s01__benefit s01__benefit--2">
+            <span class="s01__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.3-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.7-7 9-7 9z"/></svg>
+            </span>
+            <b>リピーターにつなげる</b>
+            <span class="s01__sub">来店履歴から個別にご案内</span>
+          </li>
+          <li class="s01__benefit s01__benefit--3">
+            <span class="s01__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 14a4.5 4.5 0 0 0 7 0"/></svg>
+            </span>
+            <b>お客様満足度UP</b>
+            <span class="s01__sub">前回の内容を確認して接客</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Hero右ビジュアル: Design Base X800-1440 / Y0-263 の切り出し（代表許可 HTMLIZE-01B）。
+           人物・ノートPC UI・スマホUI・サロン背景を1枚の composite として使用する。
+           再生成・描き直し・色調整・フィルターは一切かけていない（切り出しのみ）。 -->
+      <div class="s01__visual">
+        <img src="assets/images/salon/image-lp/salon-image-lp-hero-visual.png"
+             alt="タブレットで予約と顧客情報を確認するサロンスタッフと、予約管理画面"
+             width="640" height="263">
+      </div>
+    </section>
+    <!-- ======================================================================
+         Section 02 (Design Base Y263-340) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-02-feature-strip.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         白カード X49-1389 / Y264-336、7項目の左端と区切り線位置は SSOT 実測値。
+         ★掲載内容は営業SSOTを優先し、画像内コピーを無条件転記していない。
+           5番目の補足「口コミや情報を自動で整理」→「接客メモをAIが整理」へ置換した。
+           口コミ収集は未提供機能であり、AI整理はスタッフ確認が前提のため。
+         ====================================================================== -->
+    <section class="image-section image-section--02 s02" aria-label="Smart Labo Salon の主な機能">
+      <div class="s02__card" aria-hidden="true"></div>
+      <ul class="s02__list">
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h20v12H5z"/><path d="M4 7h22l-2 5H6z" fill="#F3B87E"/><path d="M12 24v-6h6v6"/></svg>
+          </span>
+          <b>店舗ページ作成</b>
+          <span class="s02__sub">お店の情報を発信</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="7" width="21" height="18" rx="2.5"/><path d="M9.5 4.5v5M20.5 4.5v5M4.5 13h21"/><circle cx="10" cy="17" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="17" r="1.1" fill="currentColor" stroke="none"/><circle cx="20" cy="17" r="1.1" fill="currentColor" stroke="none"/><circle cx="10" cy="21" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="21" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <b>WEB予約</b>
+          <span class="s02__sub">24時間いつでも予約</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="7" width="21" height="18" rx="2.5"/><path d="M9.5 4.5v5M20.5 4.5v5M4.5 13h21"/><path d="M11 19l3 3 5-5"/></svg>
+          </span>
+          <b>予約・顧客管理</b>
+          <span class="s02__sub">管理がラクに</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="11" r="4.2"/><path d="M6.5 25a8.5 8.5 0 0 1 17 0z" fill="#F3B87E"/></svg>
+          </span>
+          <b>顧客カルテ</b>
+          <span class="s02__sub">履歴・メモを一元管理</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="22" height="15" rx="2"/><path d="M11 25h8M15 21v4"/><path d="M9 11h5M9 15h8"/><circle cx="20.5" cy="11" r="1.6" fill="#F3B87E" stroke="none"/></svg>
+          </span>
+          <b>AI整理（人が確認）</b>
+          <span class="s02__sub">接客メモをAIが整理</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h9l5 5v17H7z"/><path d="M16 4v5h5"/><path d="M10.5 13h7M10.5 17h5"/><path d="M18.5 22.5l4.5-4.5 2.5 2.5-4.5 4.5-3 .5z" fill="#F3B87E"/></svg>
+          </span>
+          <b>次回来店準備</b>
+          <span class="s02__sub">ご来店前にしっかり準備</span>
+        </li>
+        <li class="s02__item">
+          <span class="s02__ico" aria-hidden="true">
+            <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 8.5h13v9h-6l-4 3v-3h-3z" fill="#7DC77A"/><path d="M12.5 14.5h13v9h-3v3l-4-3h-6z" fill="#A9DCA4"/></svg>
+          </span>
+          <b>個別LINE案内</b>
+          <span class="s02__sub">必要な方へ個別にご案内</span>
+        </li>
+      </ul>
+      <div class="s02__rules" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </section>
+    <!-- ======================================================================
+         Section 03 (Design Base Y340-543) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-03-y340-543.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         左 = Salon Gallery（X43-934）／右 = 料金プラン上部（X966-1391）。
+         縦積みに再設計せず、SSOT どおり同一 203px 帯の左右カラムとして構成する。
+         ★Gallery のサムネイル6点は、既存正式素材に一致するものが無いため
+           Design Base の該当座標（Y388-490）から切り出した画像を使用している
+           （再生成・色変更なし・切り出しのみ）。文字はすべて実HTML。
+         ★掲載内容は営業SSOTを優先。5枚目のキャプション
+           「AIが口コミ・情報を整理」→「AIが接客メモを整理」へ置換した
+           （口コミ収集は未提供機能のため）。
+         ★料金は正式価格SSOTのみ。Section04 に続く下部は今回実装しない。
+         ====================================================================== -->
+    <section class="image-section image-section--03 s03" aria-label="Salon Gallery と料金プラン">
+
+      <div class="s03__gallery">
+        <p class="s03__gico" aria-hidden="true">
+          <svg viewBox="0 0 30 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="28" height="20" rx="3"/><circle cx="9" cy="9" r="2.4"/><path d="M2 19l8-7 6 5 4-3 8 6"/></svg>
+        </p>
+        <h2 class="s03__gtitle">Salon Gallery</h2>
+        <p class="s03__glead">導入イメージや実際の画面を、まとめてご覧いただけます。</p>
+        <span class="s03__gprev" aria-hidden="true">&#8249;</span>
+        <ul class="s03__cards">
+          <li class="s03__card" style="left:43px;width:127px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-1.png" alt="悩むサロンオーナーの漫画" width="127" height="103">
+            <span class="s03__cap">サロンオーナーの悩み</span>
+          </li>
+          <li class="s03__card" style="left:178px;width:155px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-2.png" alt="導入後の変化を描いた漫画" width="155" height="103">
+            <span class="s03__cap">導入すると、こんなに変わる！</span>
+          </li>
+          <li class="s03__card" style="left:341px;width:143px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-3.png" alt="スマートフォンの予約画面" width="143" height="103">
+            <span class="s03__cap">お客様向けWEB予約</span>
+          </li>
+          <li class="s03__card" style="left:491px;width:143px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-4.png" alt="ノートパソコンに表示した店舗ページ" width="143" height="103">
+            <span class="s03__cap">店舗ページ（公開画面）</span>
+          </li>
+          <li class="s03__card" style="left:643px;width:142px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-5.png" alt="AIが整理した接客メモの確認画面" width="142" height="103">
+            <span class="s03__cap">AIが接客メモを整理</span>
+          </li>
+          <li class="s03__card" style="left:793px;width:142px">
+            <img src="assets/images/salon/image-lp/salon-image-lp-03-thumb-6.png" alt="スマートフォンの顧客カルテ画面" width="142" height="103">
+            <span class="s03__cap">顧客カルテ・履歴管理</span>
+          </li>
+        </ul>
+        <div class="s03__dots" aria-hidden="true">
+          <i class="is-current"></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+      </div>
+
+      <div class="s03__pricing">
+        <h2 class="s03__ptitle">料金プラン</h2>
+        <span class="s03__pnav" aria-hidden="true"><i>&#8249;</i><i>&#8250;</i></span>
+          <div class="s03__plan s03__plan--a" style="left:966px;width:132px">
+            <p class="s03__pbar">創業メンバープラン</p>
+            <p class="s03__pprice"><b>14,800</b><span class="u">円/月</span><span class="t">（税別）</span></p>
+            <p class="s03__ptax">（税込16,280円）</p>
+            <ul class="s03__plist">
+              <li>初期費用：0円</li>
+              <li>24ヶ月価格保証</li>
+              <li>25ヶ月目以降は<br>Standard適用</li>
+            </ul>
+          </div>
+          <div class="s03__plan s03__plan--b" style="left:1108px;width:134px">
+            <p class="s03__pbar">Standardプラン</p>
+            <p class="s03__pprice"><b>19,800</b><span class="u">円/月</span><span class="t">（税別）</span></p>
+            <p class="s03__ptax">（税込21,780円）</p>
+            <ul class="s03__plist">
+              <li>初期費用：30,000円<br>（税別）</li>
+              <li>年間一括：198,000円<br>（税別）</li>
+              <li>最低契約期間：6ヶ月</li>
+            </ul>
+          </div>
+          <div class="s03__plan s03__plan--c" style="left:1252px;width:140px">
+            <p class="s03__pbar">HP制作（別サービス）</p>
+            <p class="s03__pprice"><b>50,000</b><span class="u">円〜</span><span class="t">（税別）</span></p>
+            <ul class="s03__plist">
+              <li>5〜10ページ程度のHP制作</li>
+              <li>スマホ対応・SSL対応</li>
+              <li>SEO基本対策</li>
+              <li>修正2回まで</li>
+            </ul>
+          </div>
+      </div>
+
+      <!-- ---------- Responsive 専用の料金プラン（≤1439px） ----------
+           PC（≥1440px）では display:none。
+           PC の料金 DOM は S03上半分（.s03__pricing）＋ S04下半分（.s04__plan）に
+           分割されているため、縦 1 枚のカードへ CSS だけで統合するより
+           Responsive 専用 DOM を持つ方が PC 保護・保守性ともに安全。
+           内容は既存の正式表記をそのまま複製（新規文言・新機能の追加なし）。
+           同一 viewport で二重表示されないよう、両方を display:none で切り替える。 -->
+      <div class="s03m" aria-label="料金プラン">
+        <h2 class="s03m__title">料金プラン</h2>
+        <div class="s03m__cards">
+          <div class="s03m__card s03m__card--a">
+            <p class="s03m__bar">創業メンバープラン</p>
+            <p class="s03m__badge">先着20店舗限定</p>
+            <p class="s03m__price"><b>14,800</b><span class="s03m__u">円/月</span><span class="s03m__t">（税別）</span></p>
+            <p class="s03m__tax">（税込16,280円）</p>
+            <ul class="s03m__list">
+              <li>初期費用：0円</li>
+              <li>24ヶ月価格保証</li>
+              <li>25ヶ月目以降はStandard適用</li>
+              <li>年間一括：148,000円（税別）</li>
+            </ul>
+          </div>
+          <div class="s03m__card s03m__card--b">
+            <p class="s03m__bar">Standardプラン</p>
+            <p class="s03m__price"><b>19,800</b><span class="s03m__u">円/月</span><span class="s03m__t">（税別）</span></p>
+            <p class="s03m__tax">（税込21,780円）</p>
+            <ul class="s03m__list">
+              <li>初期費用：30,000円（税別）</li>
+              <li>年間一括：198,000円（税別）</li>
+              <li>最低契約期間：6ヶ月</li>
+            </ul>
+          </div>
+          <div class="s03m__card s03m__card--c">
+            <p class="s03m__bar">HP制作（別サービス）</p>
+            <p class="s03m__price"><b>50,000</b><span class="s03m__u">円〜</span><span class="s03m__t">（税別）</span></p>
+            <ul class="s03m__list">
+              <li>5〜10ページ程度のHP制作</li>
+              <li>スマホ対応・SSL対応</li>
+              <li>SEO基本対策</li>
+              <li>修正2回まで</li>
+            </ul>
+          </div>
+        </div>
+        <p class="s03m__note">※ すべての機能をご利用いただけます。</p>
+        <a class="s03m__more" href="salon.html#pricing">詳しく見る &#8250;</a>
+      </div>
+    </section>
+    <!-- ======================================================================
+         Section 04 (Design Base Y543-731) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-04-y543-731.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         左 = 導入メリット3枚（X45-534）／中 = 実際の画面（X556-935）／
+         右上 = 料金カード下部（X966-1391 / Y0-53）／右下 = CTA（X966-1391 / Y88-）。
+         SSOT の水平構図を維持し、縦積みへ再設計していない。
+         ★人物イラスト・ノートPC・CTA写真は Design Base からの切り出し（代表許可の方式）。
+           文字はすべて実HTML。再生成・色変更・AI生成なし。
+         ★掲載内容は営業SSOTを優先し、画像内コピーを無条件転記していない。
+           ・カード1「予約受付やリマインドを…」→ リマインド自動化は §11 に記載がないため置換
+           ・カード2「最適なタイミングで再来店と紹介が自然に増えます。」→
+             効果保証・未提供の紹介機能のため置換
+           ・CTA「資料をダウンロードする」→「資料を請求する」（提供形態は問い合わせフォーム）
+         ★料金は Section03 と同じ正式価格SSOTのみ。追加・変更なし。
+         ====================================================================== -->
+    <section class="image-section image-section--04 s04" aria-label="導入メリットと実際の画面、料金プランのつづき">
+
+      <!-- ---------- 導入メリット ---------- -->
+      <h2 class="s04__btitle">導入すると、こんなに変わる！</h2>
+      <div class="s04__bcard s04__bcard--1">
+        <span class="s04__bico" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="14" cy="14" r="12"/><path d="M14 7v7l4 3" stroke-linecap="round"/></svg>
+        </span>
+        <b class="s04__bname">時間を生み出す</b>
+        <p class="s04__btext">予約や顧客情報の<br>整理をシンプルに。<br>お客様のために。</p>
+        <img class="s04__bart" src="assets/images/salon/image-lp/salon-image-lp-04-benefit-1.png" alt="ノートパソコンで予約を確認するスタッフのイラスト" width="59" height="90">
+      </div>
+      <div class="s04__bcard s04__bcard--2">
+        <span class="s04__bico s04__bico--heart" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="currentColor"><path d="M14 25S3 18.2 3 11.2A6.2 6.2 0 0 1 14 7.4 6.2 6.2 0 0 1 25 11.2C25 18.2 14 25 14 25z"/></svg>
+        </span>
+        <b class="s04__bname">リピーター<br>につなげる</b>
+        <p class="s04__btext">来店履歴をもとに、<br>スタッフが個別に<br>ご案内します。</p>
+        <img class="s04__bart" src="assets/images/salon/image-lp/salon-image-lp-04-benefit-2.png" alt="お客様に寄り添うスタッフのイラスト" width="61" height="82">
+      </div>
+      <div class="s04__bcard s04__bcard--3">
+        <span class="s04__bico" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M2 5h13v9H8l-4 3v-3H2z"/><path d="M11 11h15v9h-3v3l-4-3h-8z"/></svg>
+        </span>
+        <p class="s04__btext s04__btext--3">一人ひとりに寄り添う<br>「また来たい！」<br>をつくります。</p>
+        <img class="s04__bart" src="assets/images/salon/image-lp/salon-image-lp-04-benefit-3.png" alt="お客様と話すスタッフのイラスト" width="61" height="144">
+      </div>
+
+      <!-- ---------- 実際の画面 ---------- -->
+      <h2 class="s04__utitle"><em>実際</em>の画面で、毎日の業務が変わります</h2>
+      <img class="s04__uart" src="assets/images/salon/image-lp/salon-image-lp-04-realui.png" alt="ノートパソコンに表示した一覧画面と、次回来店の接客準備へつながる流れ" width="246" height="144">
+      <div class="s04__upanel">
+        <b class="s04__uname">次回来店の接客準備画面</b>
+        <ul class="s04__ulist">
+          <li>来店履歴の確認</li>
+          <li>前回のメモ</li>
+          <li>おすすめメニュー</li>
+          <li>次回のアプローチ内容</li>
+        </ul>
+        <p class="s04__unote">一斉配信や自動配信は行いません。</p>
+      </div>
+      <p class="s04__demo">※ 掲載画面はデモ用の架空データです。</p>
+
+      <!-- ---------- 料金カード下部（Section03 からの続き） ---------- -->
+      <div class="s04__plan s04__plan--a">
+        <ul class="s04__plist"><li>年間一括：148,000円<br>（税別）</li></ul>
+        <p class="s04__pbadge">先着20店舗限定</p>
+      </div>
+      <div class="s04__plan s04__plan--b"></div>
+      <div class="s04__plan s04__plan--c">
+        <a class="s04__pmore" href="salon.html#pricing">詳しく見る &#8250;</a>
+      </div>
+      <p class="s04__pnote">※ すべての機能をご利用いただけます。</p>
+
+      <!-- ---------- CTA（Section05 へ続く） ---------- -->
+      <div class="s04__cta">
+        <img class="s04__ctaart" src="assets/images/salon/image-lp/salon-image-lp-04-cta-photo.png" alt="ヘッドセットを付けて相談に応じるスタッフ" width="130" height="100">
+        <p class="s04__ctatitle"><em>まずは無料で</em>相談してみませんか？</p>
+        <p class="s04__ctalead">サロンの課題や目標をお聞きし、最適な活用方法をご提案します。</p>
+        <a class="s04__btn s04__btn--primary" href="contact.html?type=consult&amp;topic=salon#interests">まずは無料で相談してみる</a>
+        <a class="s04__btn s04__btn--ghost" href="contact.html?type=docs&amp;topic=salon#form">資料を請求する</a>
+      </div>
+    </section>
+    <!-- ======================================================================
+         Section 05 (Design Base Y731-899) : HTML/CSS 化済み
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-05-y731-899.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         Y0-9   = Section04 から続く CTA の下端（X965-1391）
+         X44-723   = 導入までの流れ（5ステップ）
+         X724-1076 = よくある質問
+         X1089-1391= 安心して使っていただくために
+         SSOT の水平構図を維持し、縦積みへ再設計していない。
+         ★Design Base からの切り出しは一切なし。100% HTML / CSS / inline SVG。
+         ★掲載内容は正式仕様を優先。安心パネル1項目目
+           「個人情報はAIへ送信しません」→「AIが行うのは整理までです」へ置換した。
+           前者はデータ取扱いに関する断定で、正式仕様として確認できていないため。
+         ★FAQ の開閉は CSS のみ（新規 JS なし）。SSOT どおり1問目のみ開いた状態。
+         ====================================================================== -->
+    <section class="image-section image-section--05 s05" aria-label="導入までの流れとよくある質問">
+
+      <div class="s05__ctafoot" aria-hidden="true"></div>
+
+      <!-- ---------- 導入までの流れ ---------- -->
+      <div class="s05__panel s05__panel--flow">
+        <h2 class="s05__ptitle">導入までの流れ</h2>
+        <ol class="s05__steps">
+        <li class="s05__step" style="left:18px">
+          <span class="s05__num">01</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6.6" r="3.2"/><path d="M2.6 16.4a6.4 6.4 0 0 1 12.8 0"/></svg></span>
+          <b class="s05__sname">お問い合わせ</b>
+          <span class="s05__ssub">フォームからご連絡</span>
+        </li>
+        <li class="s05__step" style="left:139px">
+          <span class="s05__num">02</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.2" y="2.6" width="13.6" height="12.8" rx="2.4"/><path d="M9 6.2c1.6-1.4 4 .2 0 3.2-4-3-1.6-4.6 0-3.2z"/><path d="M6 17.4l2.4-2h4"/></svg></span>
+          <b class="s05__sname">ヒアリング</b>
+          <span class="s05__ssub">課題や目標を確認</span>
+        </li>
+        <li class="s05__step" style="left:263px">
+          <span class="s05__num">03</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 8.6a6.4 6.4 0 1 1 3 5.4l-3.2.9.9-3.1a6.3 6.3 0 0 1-.7-3.2z"/><path d="M6.6 8.4h4.8M6.6 11h3"/></svg></span>
+          <b class="s05__sname">ご提案・お見積り</b>
+          <span class="s05__ssub">最適なプランをご提案</span>
+        </li>
+        <li class="s05__step" style="left:414px">
+          <span class="s05__num">04</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.2" y="3.4" width="13.6" height="11.2" rx="1.8"/><path d="M5.4 7.2h7.2M5.4 10h4.4"/><path d="M4.4 17h9.2"/></svg></span>
+          <b class="s05__sname">ご契約</b>
+          <span class="s05__ssub">ご利用開始のご案内</span>
+        </li>
+        <li class="s05__step" style="left:528px">
+          <span class="s05__num">05</span>
+          <span class="s05__sico" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 9.4a6.4 6.4 0 0 1 12.8 0v4.2a2 2 0 0 1-2 2h-1.4"/><rect x="1.6" y="9" width="3" height="4.6" rx="1.4"/><rect x="13.4" y="9" width="3" height="4.6" rx="1.4"/></svg></span>
+          <b class="s05__sname">導入・運用サポート</b>
+          <span class="s05__ssub">使い方まで丁寧にサポート</span>
+        </li>
+        </ol>
+        <div class="s05__arrows" aria-hidden="true">
+        <i style="left:120px"></i>
+        <i style="left:244px"></i>
+        <i style="left:395px"></i>
+        <i style="left:510px"></i>
+        </div>
+      </div>
+
+      <!-- ---------- よくある質問 ---------- -->
+      <div class="s05__panel s05__panel--faq">
+        <h2 class="s05__ptitle">よくある質問</h2>
+        <div class="s05__fbox">
+        <div class="s05__fitem is-open">
+          <p class="s05__fq">AIが勝手にお客様へ連絡することはありますか？<span class="s05__fchev" aria-hidden="true">&#9652;</span></p>
+          <p class="s05__fa">いいえ。人が確認して個別にご案内します。</p>
+        </div>
+        <div class="s05__fitem">
+          <p class="s05__fq">最低契約期間はありますか？<span class="s05__fchev" aria-hidden="true">&#9662;</span></p>
+        </div>
+        <div class="s05__fitem">
+          <p class="s05__fq">どのようなサロンに向いていますか？<span class="s05__fchev" aria-hidden="true">&#9662;</span></p>
+        </div>
+        </div>
+        <a class="s05__fmore" href="salon.html#faq">すべての質問を見る &#8250;</a>
+      </div>
+
+      <!-- ---------- 安心して使っていただくために ---------- -->
+      <div class="s05__panel s05__panel--safe">
+        <h2 class="s05__ptitle s05__ptitle--safe"><em>安心</em>して使っていただくために</h2>
+        <ul class="s05__slist">
+          <li>AIが行うのは整理までです</li>
+          <li>確認画面で必ず最終チェック</li>
+          <li>一斉配信・自動配信は行いません</li>
+          <li>デモデータは実在する人物情報ではありません</li>
+        </ul>
+        <a class="s05__smore" href="salon.html#revisit">詳しく見る &#8250;</a>
+      </div>
+    </section>
+    <!-- ======================================================================
+         Section 06 (Design Base Y899-960) : HTML/CSS 化済み — PC最終セクション
+         VISUAL SSOT = assets/images/salon/image-lp/salon-image-lp-06-y899-960.png
+         同ファイルは比較基準として保持する（削除・変更しない）。表示のみ外した。
+         Y0-14  = 上のセクションと同じ地色／Y15-61 = 暗色フッター帯（全幅）
+         ロゴ X49 Y30 16x16 ／ ブランド名 X72 ／ ナビ X190・243・341・456・508
+         Copyright X1230-1382（右寄せ）
+         ★画像・切り出しは0件。100% HTML / CSS。新しいロゴは作っていない。
+         ★リンクは WEBSITE 直下に実在するページのみに張っている。
+           法定表示は公開LPへ複製掲載せず、契約確定前の最終確認・同意段階で
+           確認できる方式（2026-09-01 代表決定・WEBSITE/README.md に記録）。
+           そのため該当項目はリンクを持たない span のままとし、
+           表記を「法定表示は契約時に確認」とする（推測URLを作らない）。
+         ====================================================================== -->
+    <section class="image-section image-section--06 s06" aria-label="フッター">
+      <div class="s06__bar">
+        <a class="s06__brand" href="index.html">
+          <span class="s06__mark" aria-hidden="true">S</span>
+          <span class="s06__bname">Smart Labo</span>
+        </a>
+        <nav class="s06__nav" aria-label="フッターナビゲーション">
+          <a class="s06__nlink" style="left:190px" href="company.html">会社概要</a>
+          <a class="s06__nlink" style="left:243px" href="privacy.html">プライバシーポリシー</a>
+          <span class="s06__nlink" style="left:341px">法定表示は契約時に確認</span>
+          <a class="s06__nlink" style="left:456px" href="terms.html">利用規約</a>
+          <a class="s06__nlink" style="left:508px" href="contact.html">お問い合わせ</a>
+        </nav>
+        <p class="s06__copy">&#169; 2026 Smart Labo. All Rights Reserved.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
