@@ -2295,3 +2295,34 @@ a.s06__nlink:hover { color: #E4E2E1; }
     height: 0;
   }
 }
+
+/* ==========================================================================
+   Gallery のデモ注記。Gallery 画像とこの注記以外は変更しない。
+   PC   : 見出し行の右側の空き。基準は .s03（Y340）なので top は 22px＝絶対 Y362。
+          リード文の右端は x516、料金ブロックは x966 から。その間に置く。
+   Mobile: .s03__gallery のグリッド 4 行目＝カード群の直下（通常フロー）
+   ========================================================================== */
+
+.s03__gnote {
+  position: absolute;
+  left: 530px;
+  top: 22px;
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 12px;
+  color: #4A443F;
+  white-space: nowrap;
+}
+
+@media (max-width: 1439px) {
+  .s03__gnote {
+    position: static;
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin-top: 10px;
+    white-space: normal;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
