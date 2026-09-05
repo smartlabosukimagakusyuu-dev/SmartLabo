@@ -173,11 +173,42 @@
 /* ------------------------------------------------------- ファーストビュー -- */
 
 .sl-hero {
-  background:
-    radial-gradient(1100px 460px at 82% -8%, rgba(56, 189, 248, .16), transparent 60%),
-    linear-gradient(180deg, var(--sl-blue-pale) 0%, #fff 82%);
-  padding: 56px 0 72px;
+  /* 白地 + 濃紺の細い区切り。淡色の面を広く取らず、濃紺と青ボタンを最も濃い要素にする */
+  background: #fff;
+  border-bottom: 1px solid var(--c-border, #E4E8F0);
+  padding: 64px 0 76px;
   overflow: hidden;
+}
+
+/* ヒーロー内は影を使わず罫線で輪郭を作る（安っぽさの主因を外す） */
+.sl-hero .sl-hero__visual,
+.sl-hero .sl-slide__body,
+.sl-hero .sl-media,
+.sl-hero .sl-window { box-shadow: none; }
+.sl-hero .sl-media,
+.sl-hero .sl-window,
+.sl-hero .sl-slide__body { border: 1px solid var(--c-border, #E4E8F0); }
+
+/* eyebrow はピル型をやめ、縦罫で受ける */
+.sl-hero .sl-eyebrow {
+  background: none;
+  border-radius: 0;
+  border-left: 3px solid var(--c-navy, #0A1B3D);
+  padding: 0 0 0 10px;
+  color: var(--text-secondary, #5C6B82);
+}
+
+.sl-hero .sl-hero__title { color: var(--c-navy, #0A1B3D); letter-spacing: -.005em; }
+
+.sl-hero .sl-hero__chip { background: var(--c-navy, #0A1B3D); border-radius: 2px; }
+
+/* スローガン下の一行（サービス名を含む） */
+.sl-hero__claim {
+  margin: 0 0 18px;
+  font-size: clamp(1rem, .9rem + .5vw, 1.2rem);
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--c-navy, #0A1B3D);
 }
 .sl-hero__inner {
   display: grid;
