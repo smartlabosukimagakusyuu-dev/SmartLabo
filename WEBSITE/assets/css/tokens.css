@@ -101,8 +101,12 @@
   /* ------------------------------------------------------------------
      Typography
      ------------------------------------------------------------------ */
-  --font-sans: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", -apple-system,
-               BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  /* Webフォント（Noto Sans JP）を先頭に置き、OS差による見え方のばらつきを無くす。
+     Windows の游ゴシックは太字が細く古く見えるため、フォールバックの2番手以降に下げた。
+     読み込み失敗時は従来どおりシステムフォントで表示される。 */
+  --font-sans: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+               "Yu Gothic", Meiryo, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", system-ui, sans-serif;
 
   --fs-display: clamp(32px, 5vw, 56px);   /* h1 / hero */
   --fs-h2: clamp(26px, 3vw, 34px);        /* v1 .section__title と一致 */

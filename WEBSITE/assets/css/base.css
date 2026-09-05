@@ -27,6 +27,8 @@ body {
   background: var(--bg-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 約物（「」、。）の余白を詰める。和文組版が締まり、字面が現代的になる */
+  font-feature-settings: "palt" 1;
 }
 
 img, svg, video { display: block; max-width: 100%; }

@@ -15,6 +15,7 @@ body {
 }
 
 .salon-image-lp {
+  font-feature-settings: "palt" 1;
   width: 100%;
   min-width: 1440px;
   margin: 0;
@@ -42,8 +43,8 @@ body {
   margin: 0 auto;
   overflow: hidden;
   background: #FAF7F3;
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
-               "Helvetica Neue", Arial, sans-serif;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic",
+               Meiryo, "Helvetica Neue", Arial, sans-serif;
   color: #1C1C1E;
   -webkit-font-smoothing: antialiased;
 }
@@ -267,8 +268,8 @@ body {
   margin: 0 auto;
   overflow: hidden;
   background: #FDFAF8;
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
-               "Helvetica Neue", Arial, sans-serif;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic",
+               Meiryo, "Helvetica Neue", Arial, sans-serif;
   color: #1F1D1C;
   -webkit-font-smoothing: antialiased;
 }
@@ -372,8 +373,8 @@ body {
   margin: 0 auto;
   overflow: hidden;
   background: #FAF7F3;
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
-               "Helvetica Neue", Arial, sans-serif;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic",
+               Meiryo, "Helvetica Neue", Arial, sans-serif;
   color: #1F1D1C;
   -webkit-font-smoothing: antialiased;
 }
@@ -608,8 +609,8 @@ body {
   margin: 0 auto;
   overflow: hidden;
   background: #FAF7F3;
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
-               "Helvetica Neue", Arial, sans-serif;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic",
+               Meiryo, "Helvetica Neue", Arial, sans-serif;
   color: #1F1D1C;
   -webkit-font-smoothing: antialiased;
 }
@@ -895,8 +896,8 @@ body {
   margin: 0 auto;
   overflow: hidden;
   background: #FAF7F3;
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
-               "Helvetica Neue", Arial, sans-serif;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic",
+               Meiryo, "Helvetica Neue", Arial, sans-serif;
   color: #2E2A26;
   -webkit-font-smoothing: antialiased;
 }
@@ -1114,8 +1115,8 @@ body {
   margin: 0 auto;
   overflow: hidden;
   background: #FAF7F3;
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
-               "Helvetica Neue", Arial, sans-serif;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic",
+               Meiryo, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -2275,8 +2276,8 @@ a.s06__nlink:hover { color: #E4E2E1; }
   padding: 12px 16px;
   background: #1F1D1C;
   color: #FFFFFF;
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP",
-               "Helvetica Neue", Arial, sans-serif;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic",
+               Meiryo, "Helvetica Neue", Arial, sans-serif;
   font-size: 14px;
   font-weight: 700;
   line-height: 20px;
