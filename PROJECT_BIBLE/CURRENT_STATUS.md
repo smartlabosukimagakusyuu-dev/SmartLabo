@@ -545,8 +545,8 @@ CEOより「Release Candidate 2完了後、正式リリース前の『v1.0 Relea
 | Project Bible Version | [README.md](README.md) 冒頭「PROJECT_BIBLE Version」 |
 | Brand Version | [00_Foundation/07_Brand_Identity.md](00_Foundation/07_Brand_Identity.md) 末尾の変更履歴(最新バージョン) |
 | Design Bible Version | [../PROMPTS/DESIGN/SmartLabo_Design_Bible.md](../PROMPTS/DESIGN/SmartLabo_Design_Bible.md) 末尾の変更履歴 |
-| Homepage Version | 設計: [../PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) / 実装: [WEBSITE/](../WEBSITE/README.md) |
-| デモサイト Version（`WEBSITE/app.html`） | 実装: [WEBSITE/](../WEBSITE/README.md)。設計上のデザイン意図は[../PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md)を参考にしているが、2026-07-10以降はSmart Labo Works本体の設計基準としては扱わない |
+| Homepage Version | 設計: [../PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) / 実装: [WEBSITE/](../docs/website/README.md) |
+| デモサイト Version（`WEBSITE/app.html`） | 実装: [WEBSITE/](../docs/website/README.md)。設計上のデザイン意図は[../PROMPTS/DESIGN/Dashboard.md](../PROMPTS/DESIGN/Dashboard.md)を参考にしているが、2026-07-10以降はSmart Labo Works本体の設計基準としては扱わない |
 | Smart Labo Works Version | 別リポジトリ`smartlabo-works`(Node.js版・唯一の正式コードベース)の`PRODUCT_REQUIREMENTS.md`を参照。本リポジトリの`SmartLaboWorks/`フォルダは`README.md`のみでコード実体を持たない |
 | Smart Labo Platform Version | 別リポジトリ`smartlabo-platform`の`README.md`／`ARCHITECTURE.md`を参照。会社公式記録としての要約は[13_Smart_Labo_Platform_Architecture.md](13_Smart_Labo_Platform_Architecture.md) |
 
@@ -578,7 +578,7 @@ CEOより「Release Candidate 2完了後、正式リリース前の『v1.0 Relea
 - CTAボタンの動作(スクロール遷移を確認)
 - 表示崩れ(デスクトップ・モバイル双方で全セクションを確認)
 - 画像読み込み(Hero背景・ロゴ・favicon、すべて200 OKを確認)
-- README([WEBSITE/README.md](../WEBSITE/README.md))・本ファイルの更新
+- README([WEBSITE/README.md](../docs/website/README.md))・本ファイルの更新
 
 **Homepageは2026-07-05、GitHub Pagesで正式に公開されました。**
 

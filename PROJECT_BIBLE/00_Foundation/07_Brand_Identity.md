@@ -240,7 +240,7 @@ Smart Laboのデザインが目指すのは、世界トップクラスのBtoB Sa
 
 このブランド思想は、以下すべてに一貫して適用されます。
 
-- コーポレートサイト・ホームページ([WEBSITE/](../../WEBSITE/README.md))
+- コーポレートサイト・ホームページ([WEBSITE/](../../docs/website/README.md))
 - プロダクトUI・管理画面([SmartLaboWorks/](../../SmartLaboWorks/README.md))
 - 名刺・営業資料・提案書・パンフレット([BRAND/](../../BRAND/README.md)、[DOCUMENT/SALES/](../../DOCUMENT/SALES/README.md))
 - デモ画面

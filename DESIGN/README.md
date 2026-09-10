@@ -42,7 +42,7 @@ DESIGN/
 
 ## 更新ルール
 
-- デザインシステムを変更する際は、影響を受ける [SmartLaboWorks/](../SmartLaboWorks/README.md) や [WEBSITE/](../WEBSITE/README.md) 側の実装も合わせて更新してください。
+- デザインシステムを変更する際は、影響を受ける [SmartLaboWorks/](../SmartLaboWorks/README.md) や [WEBSITE/](../docs/website/README.md) 側の実装も合わせて更新してください。
 - 使われなくなったコンポーネントは削除するか、[ARCHIVE/](../ARCHIVE/README.md) に移動してください。
 
 ---

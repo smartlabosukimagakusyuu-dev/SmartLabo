@@ -6,7 +6,7 @@
 
 ## このフォルダの目的
 
-株式会社スマートラボのコーポレートサイトに関するソースコード・コンテンツ・運用資料を管理します。会社の「顔」となるサイトであるため、[PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) および [PROJECT_BIBLE/20_UI_UX_Rules.md](../PROJECT_BIBLE/20_UI_UX_Rules.md) に厳密に準拠します。
+株式会社スマートラボのコーポレートサイトに関するソースコード・コンテンツ・運用資料を管理します。会社の「顔」となるサイトであるため、[PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) および [PROJECT_BIBLE/20_UI_UX_Rules.md](../../PROJECT_BIBLE/20_UI_UX_Rules.md) に厳密に準拠します。
 
 ---
 
@@ -25,7 +25,7 @@
 Smart Labo Works の唯一の正式コードベースは、別リポジトリ
 `smartlabo-works-lite`(Node.js版・実際のAI Provider連携あり)です。
 
-詳細は [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](../PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md)「製品境界」節、および`smartlabo-works`リポジトリの`PRODUCT_BOUNDARY.md`を参照してください。
+詳細は [PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md](../../PROJECT_BIBLE/00_Foundation/08_SmartLaboWorks_Concept.md)「製品境界」節、および`smartlabo-works`リポジトリの`PRODUCT_BOUNDARY.md`を参照してください。
 
 ---
 
@@ -94,7 +94,7 @@ Smart Labo Works の唯一の正式コードベースは、別リポジトリ
 - 料金(`pricing.html`)・申込案内(`apply.html`)には、最終確認画面で法務文書を確認し、
   すべての項目へ同意した場合にのみお支払いへ進む旨の案内を掲載
 - **アクセス解析（GTM/GA4/dataLayer）は全ページ・全JSから撤去**。再導入条件は
-  [docs/website/ANALYTICS_REINTRODUCTION.md](../docs/website/ANALYTICS_REINTRODUCTION.md) を参照
+  [docs/website/ANALYTICS_REINTRODUCTION.md](ANALYTICS_REINTRODUCTION.md) を参照
 - 未リンクだった `signup.html` を削除（現行の申込経路では不要）
 - 実施していない創業記念キャンペーンの記載を撤去（Lite本体の販売条件と一致させるため）
 - SEO対応(`robots.txt`・`sitemap.xml`・構造化データ)
@@ -106,16 +106,16 @@ Smart Labo Works の唯一の正式コードベースは、別リポジトリ
 - Google Search Console登録
 - アクセス解析の再導入（上記の条件を満たしてから）
 
-公開前チェックの最新状況は[PROJECT_BIBLE/61_Release_Checklist.md](../PROJECT_BIBLE/61_Release_Checklist.md)（v1.0 Release Checklist）を参照してください。
+公開前チェックの最新状況は[PROJECT_BIBLE/61_Release_Checklist.md](../../PROJECT_BIBLE/61_Release_Checklist.md)（v1.0 Release Checklist）を参照してください。
 
-詳細は [PROJECT_BIBLE/CURRENT_STATUS.md](../PROJECT_BIBLE/CURRENT_STATUS.md) を参照してください。
+詳細は [PROJECT_BIBLE/CURRENT_STATUS.md](../../PROJECT_BIBLE/CURRENT_STATUS.md) を参照してください。
 
 ---
 
 ## 利用ルール
 
-- ページ追加・変更の際は、必ずブランドガイドライン(Enterprise AI Platform: Premium・Trust・Innovation・AI First)に沿っているか確認してください。特にHomepageは [PROMPTS/DESIGN/Homepage.md](../PROMPTS/DESIGN/Homepage.md) の指示に従ってください。
-- 法務ページ(利用規約、プライバシーポリシー、特定商取引法に基づく表記など)を追加・変更する場合は、[LEGAL/](../LEGAL/README.md) の内容と整合性を取ってください。
+- ページ追加・変更の際は、必ずブランドガイドライン(Enterprise AI Platform: Premium・Trust・Innovation・AI First)に沿っているか確認してください。特にHomepageは [PROMPTS/DESIGN/Homepage.md](../../PROMPTS/DESIGN/Homepage.md) の指示に従ってください。
+- 法務ページ(利用規約、プライバシーポリシー、特定商取引法に基づく表記など)を追加・変更する場合は、[LEGAL/](../../LEGAL/README.md) の内容と整合性を取ってください。
 - 新規ページを追加した場合は、フッター等のナビゲーションからの導線も確認してください。
 
 ---
@@ -129,7 +129,7 @@ Smart Labo Works の唯一の正式コードベースは、別リポジトリ
 ## 更新ルール
 
 - コンテンツの誤字脱字・軽微な修正は随時反映して構いません。
-- デザインに影響する変更は、[DESIGN/](../DESIGN/README.md) のデザインシステムとの整合性を確認してから反映してください。
+- デザインに影響する変更は、[DESIGN/](../../DESIGN/README.md) のデザインシステムとの整合性を確認してから反映してください。
 
 ---
 

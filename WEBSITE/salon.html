@@ -11,25 +11,30 @@
            文面は「このページで実際に確認できる内容」に合わせて書き直した。
            本文で確認できない機能は書かない（SSOT で確定した範囲のみ）。
          - 法定表示は公開ページへ複製せず、契約確定前の最終確認・同意段階で
-           確認できる方式（2026-09-01 代表決定・WEBSITE/README.md に記録）。
+           確認できる方式（2026-09-01 代表決定・docs/website/README.md に記録）。
        ============================================================ -->
 
   <title>Smart Labo Salon｜美容室・エステ・整体の集客と予約管理</title>
-  <meta name="description" content="WEB予約・顧客カルテ・来店履歴・接客メモのAI整理から、次回来店の準備、個別のLINEご案内、店舗ページの公開までをひとつに。美容室・エステ・整体など時間予約のお店のための店舗運営サービスです。AIが行うのは整理までで、送信前に人が確認します。">
+  <meta name="description" content="HP・Googleマップ集客・予約・顧客管理・再来店までをひとつにつなぐSmart Labo Salon。まずは2か月、0円でお試しいただけます。">
   <link rel="canonical" href="https://smartlaboworks.com/salon.html">
   <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Smart Labo">
+  <meta property="og:site_name" content="Smart Labo Salon">
   <meta property="og:title" content="Smart Labo Salon｜美容室・エステ・整体の集客と予約管理">
-  <meta property="og:description" content="美容室・エステ・整体など時間予約のお店のための店舗運営サービス。WEB予約・顧客カルテ・接客メモのAI整理・個別のLINEご案内・店舗ページをひとつにまとめました。">
+  <meta property="og:description" content="HP・Googleマップ集客・予約・顧客管理・再来店までをひとつにつなぐSmart Labo Salon。まずは2か月、0円でお試しいただけます。">
   <meta property="og:url" content="https://smartlaboworks.com/salon.html">
+  <meta property="og:image" content="https://smartlaboworks.com/assets/images/ogp-salon-1200x630.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Smart Labo Salon — 待つ集客から、攻める集客へ。">
   <meta property="og:locale" content="ja_JP">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Smart Labo Salon｜美容室・エステ・整体の集客と予約管理">
-  <meta name="twitter:description" content="美容室・エステ・整体など時間予約のお店のための店舗運営サービス。WEB予約・顧客カルテ・接客メモのAI整理・個別のLINEご案内・店舗ページをひとつにまとめました。">
+  <meta name="twitter:description" content="HP・Googleマップ集客・予約・顧客管理・再来店までをひとつにつなぐSmart Labo Salon。まずは2か月、0円でお試しいただけます。">
+  <meta name="twitter:image" content="https://smartlaboworks.com/assets/images/ogp-salon-1200x630.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,7 +83,7 @@
         </nav>
         </details>
         <div class="s01__actions">
-          <a class="s01__btn s01__btn--primary" href="contact.html?type=consult&amp;topic=salon#interests">まずは無料で相談してみる</a>
+          <a class="s01__btn s01__btn--primary" href="contact.html?type=consult&amp;topic=salon#interests">2か月無料で試す</a>
           <a class="s01__btn s01__btn--ghost" href="#screens">実際の画面を見る</a>
         </div>
       </header>
@@ -114,9 +119,12 @@
 
       <!-- Hero右ビジュアル: Design Base X800-1440 / Y0-263 の切り出し（代表許可 HTMLIZE-01B）。
            人物・ノートPC UI・スマホUI・サロン背景を1枚の composite として使用する。
-           再生成・描き直し・色調整・フィルターは一切かけていない（切り出しのみ）。 -->
+           2026-09-10：右上に焼き込まれていた旧CTAボタン2つ（無料相談へ誘導する旧文言のボタンと、
+           画面案内のボタン）を、周囲のボケ背景で塗りつぶした -v2 に差し替えた
+           （x430-591 / y12-79 のみ。人物・画面・その他の画素は元のまま）。
+           元の salon-image-lp-hero-visual.png は比較用に残している（ページでは使わない）。 -->
       <div class="s01__visual">
-        <img src="assets/images/salon/image-lp/salon-image-lp-hero-visual.png"
+        <img src="assets/images/salon/image-lp/salon-image-lp-hero-visual-v2.png"
              alt="タブレットで予約と顧客情報を確認するサロンスタッフと、予約管理画面"
              width="640" height="263">
       </div>
@@ -252,34 +260,31 @@
         <h2 class="s03__ptitle">料金プラン</h2>
         <span class="s03__pnav" aria-hidden="true"><i>&#8249;</i><i>&#8250;</i></span>
           <div class="s03__plan s03__plan--a" style="left:966px;width:132px">
-            <p class="s03__pbar">創業メンバープラン</p>
-            <p class="s03__pprice"><b>14,800</b><span class="u">円/月</span><span class="t">（税別）</span></p>
-            <p class="s03__ptax">（税込16,280円）</p>
+            <p class="s03__pbar">導入から2か月間</p>
+            <p class="s03__pprice"><b>0</b><span class="u">円</span></p>
+            <p class="s03__ptax">お試し期間</p>
             <ul class="s03__plist">
-              <li>初期費用：0円</li>
-              <li>24ヶ月価格保証</li>
-              <li>25ヶ月目以降は<br>Standard適用</li>
-              <li>最低契約期間：6ヶ月</li>
+              <li>ホームページ</li>
+              <li>Googleマップ集客支援</li>
+              <li>予約・顧客管理</li>
+              <li>接客記憶・再来店支援</li>
             </ul>
           </div>
           <div class="s03__plan s03__plan--b" style="left:1108px;width:134px">
-            <p class="s03__pbar">Standardプラン</p>
-            <p class="s03__pprice"><b>19,800</b><span class="u">円/月</span><span class="t">（税別）</span></p>
-            <p class="s03__ptax">（税込21,780円）</p>
+            <p class="s03__pbar">3か月目以降</p>
+            <p class="s03__pprice"><b>29,800</b><span class="u">円/月</span><span class="t">（税別）</span></p>
+            <p class="s03__ptax">フルパッケージ</p>
             <ul class="s03__plist">
-              <li>初期費用：30,000円<br>（税別）</li>
-              <li>年間一括：198,000円<br>（税別）</li>
-              <li>最低契約期間：6ヶ月</li>
+              <li>無料期間のあとに開始</li>
+              <li>お試し後に継続を判断</li>
             </ul>
           </div>
           <div class="s03__plan s03__plan--c" style="left:1252px;width:140px">
-            <p class="s03__pbar">HP制作（別サービス）</p>
-            <p class="s03__pprice"><b>50,000</b><span class="u">円〜</span><span class="t">（税別）</span></p>
+            <p class="s03__pbar">月額の内訳</p>
             <ul class="s03__plist">
-              <li>5〜10ページ程度のHP制作</li>
-              <li>スマホ対応・SSL対応</li>
-              <li>SEO基本対策</li>
-              <li>修正2回まで</li>
+              <li>Smart Labo Salon<br>19,800円／月</li>
+              <li>HP保守<br>5,000円／月</li>
+              <li>Googleマップ集客支援<br>5,000円／月</li>
             </ul>
           </div>
       </div>
@@ -289,7 +294,7 @@
            PC の料金 DOM は S03上半分（.s03__pricing）＋ S04下半分（.s04__plan）に
            分割されているため、縦 1 枚のカードへ CSS だけで統合するより
            Responsive 専用 DOM を持つ方が PC 保護・保守性ともに安全。
-           内容は既存の正式表記をそのまま複製（新規文言・新機能の追加なし）。
+           内容は PC 版と同じフルパッケージ料金（2026-09-10 改定：2か月0円／3か月目以降 月額29,800円）。
            同一 viewport で二重表示されないよう、両方を display:none で切り替える。 -->
       <!-- 料金プランのアンカー。PC は料金カード上端、Responsive は Mobile 料金ブロックの
            直前に位置する 0px の目印。id の重複を避けるため 1 箇所だけに置く。 -->
@@ -298,41 +303,36 @@
         <h2 class="s03m__title">料金プラン</h2>
         <div class="s03m__cards">
           <div class="s03m__card s03m__card--a">
-            <p class="s03m__bar">創業メンバープラン</p>
-            <p class="s03m__badge">先着20店舗限定</p>
-            <p class="s03m__price"><b>14,800</b><span class="s03m__u">円/月</span><span class="s03m__t">（税別）</span></p>
-            <p class="s03m__tax">（税込16,280円）</p>
+            <p class="s03m__bar">導入から2か月間</p>
+            <p class="s03m__price"><b>0</b><span class="s03m__u">円</span></p>
+            <p class="s03m__tax">HP・Googleマップ集客・予約・顧客管理・再来店まで、Smart Labo Salonのフルパッケージを実際の店舗でお試しいただけます。</p>
             <ul class="s03m__list">
-              <li>初期費用：0円</li>
-              <li>24ヶ月価格保証</li>
-              <li>25ヶ月目以降はStandard適用</li>
-              <li>年間一括：148,000円（税別）</li>
-              <li>最低契約期間：6ヶ月</li>
+              <li>ホームページ</li>
+              <li>Googleマップ集客支援</li>
+              <li>予約・顧客管理</li>
+              <li>接客記憶・再来店支援</li>
             </ul>
           </div>
           <div class="s03m__card s03m__card--b">
-            <p class="s03m__bar">Standardプラン</p>
-            <p class="s03m__price"><b>19,800</b><span class="s03m__u">円/月</span><span class="s03m__t">（税別）</span></p>
-            <p class="s03m__tax">（税込21,780円）</p>
+            <p class="s03m__bar">3か月目以降</p>
+            <p class="s03m__price"><b>29,800</b><span class="s03m__u">円/月</span><span class="s03m__t">（税別）</span></p>
+            <p class="s03m__tax">3か月目以降は月額29,800円（税別）です。</p>
             <ul class="s03m__list">
-              <li>初期費用：30,000円（税別）</li>
-              <li>年間一括：198,000円（税別）</li>
-              <li>最低契約期間：6ヶ月</li>
+              <li>無料期間のあとに開始</li>
+              <li>お試し後に継続を判断</li>
             </ul>
           </div>
           <div class="s03m__card s03m__card--c">
-            <p class="s03m__bar">HP制作（別サービス）</p>
-            <p class="s03m__price"><b>50,000</b><span class="s03m__u">円〜</span><span class="s03m__t">（税別）</span></p>
+            <p class="s03m__bar">月額の内訳</p>
             <ul class="s03m__list">
-              <li>5〜10ページ程度のHP制作</li>
-              <li>スマホ対応・SSL対応</li>
-              <li>SEO基本対策</li>
-              <li>修正2回まで</li>
+              <li>Smart Labo Salon：19,800円／月</li>
+              <li>HP保守：5,000円／月</li>
+              <li>Googleマップ集客支援：5,000円／月</li>
             </ul>
           </div>
         </div>
         <p class="s03m__note">※ すべての機能をご利用いただけます。</p>
-        <a class="s03m__more" href="contact.html?type=docs&amp;topic=salon#form">資料請求する &#8250;</a>
+        <a class="s03m__more" href="contact.html?type=docs&amp;topic=salon#form">資料を見る &#8250;</a>
       </div>
     </section>
     <!-- ======================================================================
@@ -395,23 +395,20 @@
       <p class="s04__demo">※ 掲載画面はデモ用の架空データです。</p>
 
       <!-- ---------- 料金カード下部（Section03 からの続き） ---------- -->
-      <div class="s04__plan s04__plan--a">
-        <ul class="s04__plist"><li>年間一括：148,000円<br>（税別）</li></ul>
-        <p class="s04__pbadge">先着20店舗限定</p>
-      </div>
+      <div class="s04__plan s04__plan--a"></div>
       <div class="s04__plan s04__plan--b"></div>
       <div class="s04__plan s04__plan--c">
-        <a class="s04__pmore" href="contact.html?type=docs&amp;topic=salon#form">資料請求する &#8250;</a>
+        <a class="s04__pmore" href="contact.html?type=docs&amp;topic=salon#form">資料を見る &#8250;</a>
       </div>
       <p class="s04__pnote">※ すべての機能をご利用いただけます。</p>
 
       <!-- ---------- CTA（Section05 へ続く） ---------- -->
       <div class="s04__cta">
         <img class="s04__ctaart" src="assets/images/salon/image-lp/salon-image-lp-04-cta-photo.png" alt="ヘッドセットを付けて相談に応じるスタッフ" width="130" height="100">
-        <p class="s04__ctatitle"><em>まずは無料で</em>相談してみませんか？</p>
-        <p class="s04__ctalead">サロンの課題や目標をお聞きし、最適な活用方法をご提案します。</p>
-        <a class="s04__btn s04__btn--primary" href="contact.html?type=consult&amp;topic=salon#interests">まずは無料で相談してみる</a>
-        <a class="s04__btn s04__btn--ghost" href="contact.html?type=docs&amp;topic=salon#form">資料を請求する</a>
+        <p class="s04__ctatitle"><em>まずは2か月、</em>0円。</p>
+        <p class="s04__ctalead">HP・Googleマップ集客・予約・顧客管理・再来店まで、<br>フルパッケージを実際の店舗でお試しいただけます。</p>
+        <a class="s04__btn s04__btn--primary" href="contact.html?type=consult&amp;topic=salon#interests">2か月無料で試す</a>
+        <a class="s04__btn s04__btn--ghost" href="contact.html?type=consult&amp;topic=salon#interests">無料導入を相談する</a>
       </div>
     </section>
     <!-- ======================================================================
@@ -485,9 +482,6 @@
           <p class="s05__fa">いいえ。人が確認して個別にご案内します。</p>
         </div>
         <div class="s05__fitem">
-          <p class="s05__fq">最低契約期間はありますか？<span class="s05__fchev" aria-hidden="true">&#9662;</span></p>
-        </div>
-        <div class="s05__fitem">
           <p class="s05__fq">どのようなサロンに向いていますか？<span class="s05__fchev" aria-hidden="true">&#9662;</span></p>
         </div>
         </div>
@@ -516,7 +510,7 @@
          ★画像・切り出しは0件。100% HTML / CSS。新しいロゴは作っていない。
          ★リンクは WEBSITE 直下に実在するページのみに張っている。
            法定表示は公開LPへ複製掲載せず、契約確定前の最終確認・同意段階で
-           確認できる方式（2026-09-01 代表決定・WEBSITE/README.md に記録）。
+           確認できる方式（2026-09-01 代表決定・docs/website/README.md に記録）。
            そのため該当項目はリンクを持たない span のままとし、
            表記を「法定表示は契約時に確認」とする（推測URLを作らない）。
          ====================================================================== -->

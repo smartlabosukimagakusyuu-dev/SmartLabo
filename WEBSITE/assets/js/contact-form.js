@@ -92,10 +92,11 @@
    * 本文(message)の先頭へ識別行を入れておく。利用者が消すことも書き換えることも
    * できる、あくまで下書きの補助である。
    */
+  // 2026-09-10：公開サイトは Smart Labo Salon に一本化したため works は削除した。
+  // 旧URLの ?topic=works は「未知のtopic」として無視される（識別行もバナーも出さない）。
   var TOPIC_LINES = {
     salon:   '【ご相談内容】Smart Labo Salon',
-    website: '【ご相談内容】店舗ホームページ制作',
-    works:   '【ご相談内容】Smart Labo Works'
+    website: '【ご相談内容】店舗ホームページ制作'
   };
 
   if ('URLSearchParams' in window) {
@@ -142,11 +143,8 @@
     website: {
       title: '店舗ホームページ制作のご相談',
       note: '新規制作・リニューアル・更新方法などについてご相談いただけます。'
-    },
-    works: {
-      title: 'Smart Labo Worksのご相談',
-      note: '法人向けAI活用・業務支援についてご相談いただけます。'
     }
+    // works は 2026-09-10 に削除（TOPIC_LINES と同じ理由）。
   };
 
   (function showTopicBanner() {

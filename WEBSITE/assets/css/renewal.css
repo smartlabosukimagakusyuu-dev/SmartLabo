@@ -1175,7 +1175,7 @@
 
 
 /* ==========================================================================
-   WEB-V3-ROUTING-CLARITY-4-R1（料金プラン：通常価格／創業メンバーの分離）
+   WEB-V3-ROUTING-CLARITY-4-R1（料金プラン：2列カードの見た目）
    ★salon.html #pricing と index.html の価格節だけで使う。共有CSSは変更しない。
    ★高さは固定しない（文字切れを作らない）。打ち消し線は使わない。
    ========================================================================== */
@@ -1194,13 +1194,13 @@
   border-radius: var(--sl-radius);
   background: var(--c-white);
 }
-/* 通常価格：基準として明確に読めるが、創業メンバーより弱い */
+/* 基準カード：明確に読めるが、強調カードより弱い */
 .sl-plan--std {
   border: 1px solid #E2E6EC;
   background: #FAFBFC;
   box-shadow: none;
 }
-/* 創業メンバー：今回の主提案。枠と価格で強調し、全面塗りにはしない */
+/* 強調カード：枠と価格で強調し、全面塗りにはしない */
 .sl-plan--founder {
   border: 2px solid var(--sl-blue);
   box-shadow: var(--sl-shadow);

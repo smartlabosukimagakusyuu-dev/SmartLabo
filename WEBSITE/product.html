@@ -5,25 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ============================================================
-     WEB-V3-4: 旧ページの転送用（Version 1 に存在した product.html）
-     Version 3 では機能の説明を features.html へ統合したため、
-     このURLへ来た訪問者と検索エンジンを features.html へ送る。
-
+     2026-09-10：Smart Labo Salon 中心のサイトへ一本化。
+     旧 product.html（Version 1 の製品ページ。以前は features.html へ転送していた）は公開を終了し、index.html へ転送する。
+     旧内容は git 履歴（37a077a 以前）に残っている。
      GitHub Pages はサーバー側の301リダイレクトを設定できないため、
-     静的ページで次の3つを同時に行う。
-       ① canonical で正規URLを features.html と宣言する
-       ② meta refresh（0秒）で即時転送する
-       ③ JavaScript の location.replace で履歴を汚さず転送する
-     いずれも無効な環境でも、本文のリンクから移動できるようにしている。
-
-     このページは sitemap.xml へ載せない（正規URLは features.html）。
+     meta refresh（0秒）と location.replace で転送し、どちらも無効な環境では本文のリンクから移動できる。
+     noindex と canonical を併用すると転送先へ noindex が伝わるおそれがあるため、canonical は置かない。
+     このページは sitemap.xml へ載せない。
      ============================================================ -->
 
-<title>ページの移動｜Smart Labo Works</title>
-<meta name="description" content="このページは移動しました。Smart Labo Works の機能ページへご案内します。">
-<link rel="canonical" href="https://smartlaboworks.com/features.html">
-<meta http-equiv="refresh" content="0; url=features.html">
+<title>ページを移動しました｜Smart Labo Salon</title>
+<meta name="description" content="このページは公開を終了しました。Smart Labo Salon のページへご案内します。">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url=index.html">
 <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,21 +33,20 @@
 
 <main id="main" class="section">
   <div class="container container--narrow">
-    <h1>ページの場所が変わりました</h1>
+    <h1>このページは公開を終了しました</h1>
     <p>
-      このページの内容は、機能ページへ統合しました。
+      現在は Smart Labo Salon をご案内しています。
       自動で移動しない場合は、下のリンクからお進みください。
     </p>
     <p>
-      <a href="features.html" class="btn btn--primary btn--lg">機能ページへ進む</a>
-      <a href="index.html" class="btn btn--secondary btn--lg">トップページへ</a>
+      <a href="index.html" class="btn btn--primary btn--lg">Smart Labo Salon のトップへ</a>
     </p>
   </div>
 </main>
 
 <script>
   // 履歴を汚さずに転送する（戻るボタンでこのページへ戻らない）
-  location.replace('features.html');
+  location.replace('index.html');
 </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 # Homepage — コーポレートサイト トップページ 設計プロンプト
 
-> 使用前に [SmartLabo_Design_Bible.md](SmartLabo_Design_Bible.md) を必ず読み込ませてください。このファイルは、そのブランド思想を「トップページ」という具体的な成果物に落とし込むための指示書です。対象実装は [WEBSITE/](../../WEBSITE/README.md)。
+> 使用前に [SmartLabo_Design_Bible.md](SmartLabo_Design_Bible.md) を必ず読み込ませてください。このファイルは、そのブランド思想を「トップページ」という具体的な成果物に落とし込むための指示書です。対象実装は [WEBSITE/](../../docs/website/README.md)。
 
 ---
 
@@ -129,7 +129,7 @@ Heroと同じ3つのアクション(無料デモを見る/導入相談をする/
 - [SmartLabo_Design_Bible.md](SmartLabo_Design_Bible.md)
 - [CompanyBrain.md](CompanyBrain.md) — Company Brainのコピー・利用シナリオ・UI方針の正本
 - [PROJECT_BIBLE/20_UI_UX_Rules.md](../../PROJECT_BIBLE/20_UI_UX_Rules.md)
-- [WEBSITE/README.md](../../WEBSITE/README.md)
+- [WEBSITE/README.md](../../docs/website/README.md)
 
 ---
 

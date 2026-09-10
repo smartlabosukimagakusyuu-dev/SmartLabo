@@ -16,6 +16,30 @@ body {
   padding: 0;
 }
 
+/* PC 1440〜1454px（Windows 等のクラシックスクロールバー環境）の横スクロール対策。
+   原因：メディアクエリの幅はスクロールバー（約15px）を含む viewport 幅で判定される。
+   そのため viewport 1440〜1454px では PC 用の 1440px 固定キャンバスが適用される一方、
+   実際に使える描画幅（html の clientWidth）は 1425〜1439px しかなく、
+   上の min-width:1440px と各セクションの width:1440px が最大 15px はみ出していた。
+   対策：PC 幅では min-width を外して .salon-image-lp をコンテナにし、
+   実際の描画幅が 1440px 未満のときだけ各セクションを 1425/1440 に縮小（zoom）して収める。
+   座標・レイアウトは変えず比率だけを縮めるので、1455px 以上や、1440px でも描画幅が
+   1440px あるオーバーレイスクロールバー環境（Mac 等）の表示はこれまでと同一。
+   zoom / コンテナクエリ非対応の古いブラウザは従来どおりの表示になるだけで崩れない。
+   （overflow-x:hidden で覆い隠す実装はしない方針を維持する） */
+@media (min-width: 1440px) {
+  .salon-image-lp {
+    min-width: 0;
+    container-type: inline-size;
+  }
+
+  @container (max-width: 1439.98px) {
+    .salon-image-lp > .image-section {
+      zoom: 0.98958;
+    }
+  }
+}
+
 .image-section {
   width: 100%;
   margin: 0;
@@ -553,7 +577,7 @@ body {
   display: grid;
   gap: 8px;
 }
-/* 料金カードの特典リスト：Section03 の底 Y543 を越えないよう縦を詰める。
+/* 料金カードの項目リスト：Section03 の底 Y543 を越えないよう縦を詰める。
    長い項目は HTML 側の <br> で意味単位に改行する（white-space: nowrap は維持）。
    3カードともリスト開始 Y472 に揃う。料金文言・料金数字は一切変更しない。 */
 .s03__plan--a .s03__plist,
@@ -1428,7 +1452,9 @@ a.s06__nlink:hover { color: #E4E2E1; }
   .s01__visual img {
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 7;
+    /* 2026-09-10：16/7 で左右を切り取ると人物の手元・タブレットが見切れるため、
+       画像本来の比率（640x263）で全体を表示する。 */
+    aspect-ratio: 640 / 263;
     object-fit: cover;
     object-position: center;
   }
@@ -1686,7 +1712,7 @@ a.s06__nlink:hover { color: #E4E2E1; }
     border: 1px solid #F2E9E3;
     background: #fff;
   }
-  /* 創業メンバーを最も目立たせる（既存ピンク系トークンを少量使用） */
+  /* 1枚目（2か月0円）を最も目立たせる（既存ピンク系トークンを少量使用） */
   .s03m__card--a {
     border-color: #F0C4D0;
     box-shadow: 0 6px 18px rgba(209, 53, 91, .10);

@@ -53,7 +53,7 @@ Smart Labo Works全体を支える技術的なバックエンド基盤として�
 
 Smart Labo Worksの**唯一の正式コードベースは`smartlabo-works`(Node.js版・別リポジトリ)**である。今後のSmart Labo Works機能追加・仕様変更は、すべて`smartlabo-works`側でのみ行う。
 
-このリポジトリ内の`WEBSITE/app.html`(GitHub Pages公開版)は、**Smart Labo Worksの正式製品ではない。** 位置づけを「デモサイト／マーケティング用プレビュー」に変更し、営業・採用・投資家向けに見た目のイメージを伝えるための静的デモとして扱う。実データ・実際のAI処理・顧客データの保存は行わない。詳細は [WEBSITE/README.md](../../WEBSITE/README.md) を参照。
+このリポジトリ内の`WEBSITE/app.html`(GitHub Pages公開版)は、**Smart Labo Worksの正式製品ではない。** 位置づけを「デモサイト／マーケティング用プレビュー」に変更し、営業・採用・投資家向けに見た目のイメージを伝えるための静的デモとして扱う。実データ・実際のAI処理・顧客データの保存は行わない。詳細は [WEBSITE/README.md](../../docs/website/README.md) を参照。
 
 詳細は [11_Development_Principles.md](../11_Development_Principles.md)「製品境界の定義」を参照。
 

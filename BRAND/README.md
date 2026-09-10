@@ -46,7 +46,7 @@ BRAND/
 ## 更新ルール
 
 - ブランド素材の変更(ロゴリニューアル等)は、[PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md](../PROJECT_BIBLE/00_Foundation/07_Brand_Identity.md) の更新ルール(経営層承認)に従ってください。
-- 更新後は、[WEBSITE/](../WEBSITE/README.md) や [SmartLaboWorks/](../SmartLaboWorks/README.md) など、ブランド素材を使用している箇所への反映漏れがないか確認してください。
+- 更新後は、[WEBSITE/](../docs/website/README.md) や [SmartLaboWorks/](../SmartLaboWorks/README.md) など、ブランド素材を使用している箇所への反映漏れがないか確認してください。
 
 ---
 
