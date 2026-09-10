@@ -25,3 +25,6 @@ nav a{font-size:12px;letter-spacing:.08em}
 
 /* Mobile price breakdown: one item per line so the three prices never run together. */
 @media(max-width:700px){.price-breakdown span{display:block}}
+
+/* Hero title: keep "攻める集客へ。" together so it never splits after "攻". */
+.intro h1 span{display:inline-block}
