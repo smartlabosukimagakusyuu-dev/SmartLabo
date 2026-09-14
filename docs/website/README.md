@@ -10,6 +10,51 @@
 
 ---
 
+## Smart Labo Estate 営業用LP `estate.html`(2026-09-14 / feature/estate-lp-v1・未公開)
+
+不動産会社の経営者・営業責任者向けに、Smart Labo Estate(独立製品・開発中)の
+「FP相談 → 購入価格帯 → メーカー比較 → 物件提案 → 次回案内」という初回商談の流れを紹介するページ。
+
+- 限定公開(2026-09-14 代表判断)。`<meta name="robots" content="noindex, follow">` を置き、sitemap.xml には追加しない。
+  既存ページ(index / salon / contact ほか)からはリンクせず、営業時にURLを直接お送りする。
+  canonical・og:url は `https://smartlaboworks.com/estate.html`。OGP画像は `assets/images/estate/ogp-estate-1200x630.jpg`
+  (FVの夕景写真・濃紺・Smart Blue・ロゴ・キャッチコピーで作成。twitter:card は summary_large_image)。
+  JSON-LD は Service(価格・導入実績・評価は入れない。provider は index.html の Organization)
+- 未実装機能は各セクションの「開発中」「構想中」ラベルと、ページ末尾の開発状況一覧(#status)で示す。
+  区分の根拠は `smartlabo-estate` の CURRENT_STATUS(2026-09-14 時点)。
+  機能の状況が変わったら、ラベルと一覧を同時に更新する
+- 金額・メーカー・物件・マンションはすべて架空のサンプル。導入実績・効果の数値・導入事例・お客様の声は載せない。
+  条件との照合は「一致した項目の数」で示す(Estate RE-12 の代表承認:重み付きの総合点を持たない)
+- CTA は「資料を受け取る」(最終CTAは「サービス資料を受け取る」)を主に、「導入について相談する」を副に置く。
+  資料請求は `contact.html?type=docs&topic=estate#form`(既存の種別「資料請求」)、
+  導入相談は `contact.html?type=consult&topic=estate#form`(既存の種別「無料相談」)。新しい種別は増やしていない。
+  2026-09-14 代表判断で、営業の手段としての「デモ」という表現は使わない。説明の手段(資料・電話・オンライン・
+  画面共有・訪問など)は相手企業ごとに使い分けるため、LPでは固定しない。CTAに「先行導入」も使わない
+- contact-form.js は `topic=estate` のときだけ、種別に合わせてページ見出し・document.title・識別表示・本文先頭の識別行を切り替える。
+  資料請求は「Smart Labo Estate サービス資料」と「【ご相談内容】Smart Labo Estate サービス資料請求(Estate LP 経由)」。
+  無料相談は「Smart Labo Estate 導入のご相談」と「【ご相談内容】Smart Labo Estate 導入相談(Estate LP 経由)」。
+  それ以外の種別へ変えた場合は識別行を外す。人数欄は「営業担当者数」。Salon専用の機能選択欄は出ない。
+  Estate 用の文言は Salon と共有の TOPIC_LINES / TOPIC_BANNERS に入れず、独立したブロックで扱う。contact-api は変更していない。
+  通知メールの件名は「【Smart Labo】資料請求／無料相談」のままなので、Estate 由来は本文の先頭行で見分ける
+- 2026-09-14 v4(v2「商談室」・v3「白＋青の業務SaaS」は不採用)。方向は「高級不動産 × modern SaaS × 営業プレゼンツール」。
+  白・アイボリー・濃紺・チャコールを基調に、Smart Blue・Electric Blue、ごく少量のグリーン。見出しは明朝(OSの和文明朝)。
+  ファーストビューは住宅写真＋大きな商談画面＋大きなコピー。
+  代表が方向性を採用し、全セクションを実装済み(以後は大幅なレイアウト変更をしない)。
+  購入プランの名前は Estate 本体(CX-01)と同じ「安心重視・バランス重視・希望重視」
+- CSS は `assets/css/estate.css` だけを読み込む(共通の tokens / base / components、共通ヘッダー・フッターは使わない)。
+  JS は共通の main.js だけ(メニューの開閉。`id="site-nav"`・`data-nav-toggle`・`id="siteHeader"` を合わせている)
+- 物件写真 `assets/images/estate/*.jpg` は Unsplash License の写真(商用利用可・表記不要。2026-09-14 代表承認で取得、横2000px)。
+  実物件の写真へ差し替える前提で、同名ファイルの置き換えだけで差し替わる。
+  `estate-hero-dusk-house.jpg`(Michael Brown・https://unsplash.com/photos/G48h926L2qo・FVとOGP画像)／
+  `estate-photo-new-house.jpg`(Arthur BAUDRY・https://unsplash.com/photos/4vioYQ9Nn9Y)／
+  `estate-photo-used-house.jpg`(Minh・https://unsplash.com/photos/NpsF_YOkAhs・京都の住宅。2026-09-14 に米国風の写真から差し替え)／
+  `estate-photo-condo.jpg`(Doug Bagg・https://unsplash.com/photos/HDxvXqUJ3BQ)／
+  `estate-photo-similar-done.jpg`(Alex Zhao・https://unsplash.com/photos/s5dBQmg_9Tk・類似物件の完成済み参考物件)／
+  `estate-photo-interior.jpg`(Roberto Nickson・https://unsplash.com/photos/rEJxpBskj3Q・最終CTAの背景)。
+  いずれも取得時に Unsplash+(有料)でないこと・「Unsplashライセンス」表示を確認済み
+
+---
+
 ## `app.html`の廃止(2026-08-12 / WEB-SALES-8M)
 
 **旧デモ `app.html` は削除しました。** 公開Websiteから配信しません。

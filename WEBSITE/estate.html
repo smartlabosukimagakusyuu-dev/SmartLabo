@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     Smart Labo Estate — 不動産会社向け 営業用LP（estate.html）
+     v4 2026-09-14（branch: feature/estate-lp-v1）
+     方向: 高級不動産 × modern SaaS × 営業プレゼンツール（2026-09-14 代表が方向性を承認）。
+     構成: FV → STEP1-2 FP相談 → STEP3 地域メーカー比較 → STEP4 物件提案 → 類似物件 → 中古マンション
+           → STEP5 次回案内 → BEFORE/AFTER → 開発状況 → 最終CTA
+
+     厳守:
+       - Smart Labo Estate は開発中。未実装の機能を「利用できる」と書かない（開発中／構想中を明記）。
+       - 導入実績・成約率・売上などの数値、導入事例、お客様の声を作らない。
+       - 金額はすべてシミュレーション上の参考値（サンプル）。借入・融資・審査を保証する表現を使わない。
+       - 物件・住所・日程・メーカー・マンションはすべて架空のサンプル。
+       - 扱う物件種別は 新築戸建て／中古戸建て／中古マンション の3種だけ（新築マンション・賃貸は載せない）。
+       - 写真: assets/images/estate/*.jpg は Unsplash License の写真（2026-09-14 代表承認で取得）。
+         実物件の写真へ差し替える前提。差し替えは同名ファイルの置き換えで済む。
+           estate-hero-dusk-house.jpg    … Michael Brown   https://unsplash.com/photos/G48h926L2qo（FV・OGP画像）
+           estate-photo-new-house.jpg    … Arthur BAUDRY   https://unsplash.com/photos/4vioYQ9Nn9Y
+           estate-photo-used-house.jpg   … Minh            https://unsplash.com/photos/NpsF_YOkAhs
+                                           （京都の住宅。2026-09-14 に米国風の写真から差し替え）
+           estate-photo-condo.jpg        … Doug Bagg       https://unsplash.com/photos/HDxvXqUJ3BQ
+           estate-photo-similar-done.jpg … Alex Zhao       https://unsplash.com/photos/s5dBQmg_9Tk（類似物件の完成済み参考物件）
+           estate-photo-interior.jpg     … Roberto Nickson https://unsplash.com/photos/rEJxpBskj3Q（最終CTAの背景）
+       - 照合は「希望条件との一致 n / 6」（Estate RE-12：重み付きの総合点を持たない＝％は使わない）。
+       - プラン名は Estate 本体（CX-01）と同じ「安心重視・バランス重視・希望重視」。
+       - 営業方針は「顧客条件を優先したうえで反映できる設計を予定」（構想中）。
+       - 限定公開（2026-09-14 代表判断）: noindex・sitemap.xml へ追加しない・既存ページからリンクしない。
+         canonical / og:url は https://smartlaboworks.com/estate.html。
+         OGP画像は assets/images/estate/ogp-estate-1200x630.jpg（FVの夕景写真から作成）。
+       - CSS は estate.css だけ。JS は共通の main.js だけ（メニューの開閉）。外部CDN・Webフォントなし。
+     ============================================================ -->
+
+<title>Smart Labo Estate｜不動産営業の初回商談を強くする営業支援システム</title>
+<meta name="description" content="不動産会社向けの営業支援システム「Smart Labo Estate」（開発中）。FP相談から購入価格帯を整理し、物件提案、次回案内まで、初回商談をその場で進める仕組みを目指しています。">
+<!-- 限定公開（2026-09-14 代表判断）: 検索結果に出さない（noindex）。sitemap.xml には追加せず、
+     既存ページからもリンクしない。営業時にURLを直接お送りする。 -->
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://smartlaboworks.com/estate.html">
+<link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/brand/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Smart Labo Estate">
+<meta property="og:title" content="Smart Labo Estate｜不動産営業の初回商談を強くする営業支援システム">
+<meta property="og:description" content="不動産会社向けの営業支援システム「Smart Labo Estate」（開発中）。FP相談から購入価格帯を整理し、物件提案、次回案内まで、初回商談をその場で進める仕組みを目指しています。">
+<meta property="og:url" content="https://smartlaboworks.com/estate.html">
+<meta property="og:image" content="https://smartlaboworks.com/assets/images/estate/ogp-estate-1200x630.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Smart Labo Estate — 初回商談で、「この会社に任せたい」をつくる。">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Smart Labo Estate｜不動産営業の初回商談を強くする営業支援システム">
+<meta name="twitter:description" content="不動産会社向けの営業支援システム「Smart Labo Estate」（開発中）。FP相談から購入価格帯を整理し、物件提案、次回案内まで、初回商談をその場で進める仕組みを目指しています。">
+<meta name="twitter:image" content="https://smartlaboworks.com/assets/images/estate/ogp-estate-1200x630.jpg">
+
+<!-- 価格・導入実績・評価は載せない（開発中のため）。provider は index.html の Organization を参照する。 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Smart Labo Estate",
+  "serviceType": "不動産会社向け営業支援システム（開発中）",
+  "description": "FP相談から購入価格帯を整理し、物件提案、次回案内まで、不動産営業の初回商談をその場で進めるための営業支援システム。現在開発中。",
+  "url": "https://smartlaboworks.com/estate.html",
+  "areaServed": "JP",
+  "audience": { "@type": "BusinessAudience", "audienceType": "不動産会社" },
+  "provider": { "@id": "https://smartlaboworks.com/#organization" }
+}
+</script>
+
+<link rel="preload" as="image" href="assets/images/estate/estate-hero-dusk-house.jpg">
+<link rel="stylesheet" href="assets/css/estate.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="estate">
+
+<a class="es-skip" href="#main">本文へスキップ</a>
+
+<aside class="es-topbar" aria-label="開発状況のお知らせ">
+  <p class="es-wrap">Smart Labo Estateは現在開発中です。掲載画面は開発中のイメージを含み、機能・仕様は変更となる場合があります。</p>
+</aside>
+
+<!-- id="siteHeader" / id="site-nav" / data-nav-toggle は共通 main.js の開閉用。
+     メニューボタンをナビより前に置き、開いた後の Tab がナビのリンクへ進むようにしている。 -->
+<header class="es-header" id="siteHeader">
+  <div class="es-wrap es-header__inner">
+    <a href="estate.html" class="es-logo" aria-label="Smart Labo Estate トップ">
+      <img class="es-logo__icon" src="assets/brand/icon-color-64.webp" alt="" width="32" height="32">
+      <span class="es-logo__text">Smart Labo <b>Estate</b></span>
+    </a>
+
+    <button class="es-menu" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false">
+      <span class="es-menu__bars" aria-hidden="true"></span>
+      <span class="es-sr">メニューを開閉</span>
+    </button>
+
+    <nav class="es-nav" id="site-nav" aria-label="メインナビゲーション">
+      <a href="#fp">資金計画</a>
+      <a href="#makers">メーカー比較</a>
+      <a href="#proposal">物件提案</a>
+      <a href="#next">次回案内</a>
+      <a href="#status">開発状況</a>
+    </nav>
+
+    <!-- お問い合わせ（既存の種別だけを使う。contact-api の SLW_TYPES は変更しない）:
+           資料を受け取る       … contact.html?type=docs&topic=estate#form（資料請求）※主のCTA
+           導入について相談する … contact.html?type=consult&topic=estate#form（無料相談）
+         contact-form.js が topic=estate のときだけ、見出し・表示・本文の識別行を種別に合わせて切り替える。
+         説明の手段（電話・オンライン・訪問・画面共有など）は相手企業ごとに決めるため、LPでは固定しない。 -->
+    <div class="es-header__actions">
+      <a class="es-btn es-btn--quiet es-btn--sm es-header__sub" href="contact.html?type=consult&amp;topic=estate#form">導入について相談する</a>
+      <!-- 520px以下はロゴ・メニューと並ぶ幅が足りないため、同じリンクを短い「資料請求」で表示する -->
+      <a class="es-btn es-btn--primary es-btn--sm" href="contact.html?type=docs&amp;topic=estate#form"><span><span class="es-hide-sm">資料を受け取る</span><span class="es-show-sm">資料請求</span></span></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================== ファーストビュー ============================== -->
+  <section class="es-hero" aria-labelledby="hero-title">
+    <div class="es-hero__photo" aria-hidden="true">
+      <img src="assets/images/estate/estate-hero-dusk-house.jpg" alt="" width="2000" height="1128" fetchpriority="high">
+    </div>
+
+    <div class="es-wrap es-hero__inner">
+      <div class="es-hero__copy">
+        <p class="es-kicker"><span class="es-kicker__tag">開発中</span>不動産会社向け　営業支援システム</p>
+        <h1 class="es-hero__title" id="hero-title">初回商談で、<br><span class="es-hero__quote">「この会社に任せたい」</span>を<wbr>つくる。</h1>
+        <p class="es-hero__lead">FP相談から購入価格帯を整理し、<br>メーカー比較、物件提案、次の案内まで。<br>Smart Labo Estateは、<br class="es-br-sm">不動産営業の初回商談を強くする<br class="es-br-sm">営業支援システムです。</p>
+        <p class="es-hero__punch">説明の時間から、<em>提案の時間へ。</em></p>
+        <div class="es-hero__actions">
+          <a class="es-btn es-btn--primary es-btn--lg" href="contact.html?type=docs&amp;topic=estate#form">資料を受け取る
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="es-btn es-btn--ghost es-btn--lg" href="contact.html?type=consult&amp;topic=estate#form">導入について相談する</a>
+        </div>
+        <dl class="es-hero__facts">
+          <div><dt>FINANCIAL PLAN</dt><dd>3つの購入価格帯</dd></div>
+          <div><dt>COMPARE</dt><dd>地域メーカー比較</dd></div>
+          <div><dt>PROPOSAL</dt><dd>物件提案・次回案内</dd></div>
+        </dl>
+      </div>
+
+      <!-- 商談画面のイメージ（HTML/CSS）。読み上げでは role="img" の説明文1つにまとめる。 -->
+      <figure class="es-hero__visual">
+        <div class="es-deck" role="img" aria-label="Smart Labo Estate の初回商談画面のイメージ。お客様の条件（夫婦と子ども1人・年収520万円・自己資金300万円・希望エリア鳥取市・希望の月々10万円）、3つの資金計画（安心重視・バランス重視・希望重視）と購入価格帯3,500万〜3,900万円、写真付きの物件候補3件、今週末の内見のご案内が1画面に並んでいる。">
+          <div class="es-deck__bar">
+            <span class="es-deck__brand"><img src="assets/brand/icon-color-64.webp" alt="" width="18" height="18">Smart Labo Estate</span>
+            <span class="es-deck__mode">初回商談</span>
+            <span class="es-deck__who">A様ご家族（サンプル）</span>
+          </div>
+
+          <ol class="es-deck__steps">
+            <li class="is-done"><i>1</i>FP相談</li>
+            <li class="is-done"><i>2</i>資金計画</li>
+            <li class="is-done"><i>3</i>メーカー比較</li>
+            <li class="is-now"><i>4</i>物件提案</li>
+            <li><i>5</i>次回案内</li>
+          </ol>
+
+          <div class="es-deck__grid">
+            <div class="es-deck__block">
+              <p class="es-deck__label">顧客条件</p>
+              <ul class="es-deck__conds">
+                <li><span>家族</span>夫婦＋子ども1人</li>
+                <li><span>年収</span>520万円</li>
+                <li><span>自己資金</span>300万円</li>
+                <li><span>エリア</span>鳥取市</li>
+                <li><span>月々</span>10万円まで</li>
+              </ul>
+            </div>
+            <div class="es-deck__block es-deck__block--plan">
+              <p class="es-deck__label">資金計画<span>3つの購入価格帯</span></p>
+              <ul class="es-deck__plans">
+                <li><span>安心重視</span><b>3,000〜3,400</b><i style="--w:40%"></i></li>
+                <li class="is-on"><span>バランス重視</span><b>3,500〜3,900</b><i style="--w:62%"></i></li>
+                <li><span>希望重視</span><b>4,000〜4,300</b><i style="--w:82%"></i></li>
+              </ul>
+              <p class="es-deck__price"><small>購入価格帯</small><b>3,500〜3,900<span>万円</span></b><small>月々 約10万円</small></p>
+            </div>
+          </div>
+
+          <div class="es-deck__props">
+            <p class="es-deck__label">物件候補<span>希望条件で絞り込み</span></p>
+            <div class="es-deck__prop-list">
+              <div class="es-deck__prop">
+                <img src="assets/images/estate/estate-photo-new-house.jpg" alt="" width="2000" height="1556">
+                <p><b>3,680万円</b><span>新築戸建て・4LDK</span><em>一致 6 / 6</em></p>
+              </div>
+              <div class="es-deck__prop">
+                <img src="assets/images/estate/estate-photo-used-house.jpg" alt="" width="2000" height="1326">
+                <p><b>3,280万円</b><span>中古戸建て・4LDK</span><em>一致 5 / 6</em></p>
+              </div>
+              <div class="es-deck__prop">
+                <img src="assets/images/estate/estate-photo-condo.jpg" alt="" width="2000" height="3000">
+                <p><b>2,980万円</b><span>中古マンション・3LDK</span><em>一致 5 / 6</em></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="es-deck__next">
+            <span class="es-deck__next-tag">次回案内</span>
+            <span>今週末　気になる物件 2件の内見をご案内</span>
+          </div>
+        </div>
+        <figcaption class="es-hero__cap">画面イメージ（開発中）。表示内容・物件・写真はサンプルです。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============================== STEP 1–2 FP相談 → 3つの購入価格帯 ============================== -->
+  <!-- 金額はサンプル（シミュレーション上の参考値）。中央のバランス重視を主役にし、左右を補助として置く。
+       3枚とも同じ項目を同じ順（物件価格・月々返済・自己資金・返済期間）で並べ、比べやすくする。 -->
+  <section class="es-fp" id="fp" aria-labelledby="fp-title">
+    <div class="es-wrap">
+      <div class="es-sec-head">
+        <div>
+          <p class="es-eyebrow"><span class="es-eyebrow__en">STEP 1–2 ｜ FINANCIAL PLANNING</span><span class="es-status es-status--dev">開発中</span></p>
+          <h2 class="es-h2" id="fp-title">FP相談から、<br>3つの購入価格帯を提示。</h2>
+        </div>
+        <div>
+          <p class="es-lead">年収、自己資金、現在の住居費、既存借入、家族構成、希望する毎月返済額などから、購入価格帯を整理します。お客様と同じ画面を見ながら、無理のない予算を一緒に確かめます。</p>
+          <ul class="es-hearing" aria-label="伺う項目">
+            <li>年収</li><li>自己資金</li><li>現在の住居費</li><li>既存借入</li><li>家族構成</li><li>希望する月々</li>
+          </ul>
+        </div>
+      </div>
+
+      <ul class="es-plans" aria-label="3つの購入価格帯（例）">
+        <li class="es-plan es-plan--side es-plan--safe">
+          <p class="es-plan__name">安心重視プラン</p>
+          <p class="es-plan__desc">将来支出や貯蓄余力を残したい方向け</p>
+          <p class="es-plan__label">物件価格の目安</p>
+          <p class="es-plan__price"><span class="es-num">3,000〜3,400</span><small>万円</small></p>
+          <dl class="es-plan__stats">
+            <div><dt>月々返済</dt><dd><span class="es-num">約8.5</span>万円</dd></div>
+            <div><dt>自己資金</dt><dd><span class="es-num">300</span>万円</dd></div>
+            <div><dt>返済期間</dt><dd><span class="es-num">35</span>年</dd></div>
+          </dl>
+          <p class="es-plan__delta">バランス重視より　月々 <b>約1.5万円 少なく</b></p>
+          <a class="es-plan__link" href="#proposal">この価格帯で物件を見る<span class="es-sr">（安心重視プラン）</span><span aria-hidden="true">→</span></a>
+        </li>
+        <li class="es-plan es-plan--main">
+          <p class="es-plan__flag">ご希望の月々から試算</p>
+          <p class="es-plan__name">バランス重視プラン</p>
+          <p class="es-plan__desc">希望条件と毎月の返済負担をバランス</p>
+          <p class="es-plan__label">物件価格の目安</p>
+          <p class="es-plan__price"><span class="es-num">3,500〜3,900</span><small>万円</small></p>
+          <dl class="es-plan__stats">
+            <div><dt>月々返済</dt><dd><span class="es-num">約10</span>万円</dd></div>
+            <div><dt>自己資金</dt><dd><span class="es-num">300</span>万円</dd></div>
+            <div><dt>返済期間</dt><dd><span class="es-num">35</span>年</dd></div>
+          </dl>
+          <a class="es-plan__link" href="#proposal">この価格帯で物件を見る<span class="es-sr">（バランス重視プラン）</span><span aria-hidden="true">→</span></a>
+        </li>
+        <li class="es-plan es-plan--side es-plan--hope">
+          <p class="es-plan__name">希望重視プラン</p>
+          <p class="es-plan__desc">立地や広さなど、希望条件をより優先した場合</p>
+          <p class="es-plan__label">物件価格の目安</p>
+          <p class="es-plan__price"><span class="es-num">4,000〜4,300</span><small>万円</small></p>
+          <dl class="es-plan__stats">
+            <div><dt>月々返済</dt><dd><span class="es-num">約11</span>万円</dd></div>
+            <div><dt>自己資金</dt><dd><span class="es-num">300</span>万円</dd></div>
+            <div><dt>返済期間</dt><dd><span class="es-num">35</span>年</dd></div>
+          </dl>
+          <p class="es-plan__delta">バランス重視より　月々 <b>約1万円 多く</b></p>
+          <a class="es-plan__link" href="#proposal">この価格帯で物件を見る<span class="es-sr">（希望重視プラン）</span><span aria-hidden="true">→</span></a>
+        </li>
+      </ul>
+
+      <figure class="es-console">
+        <div class="es-console__head">
+          <span class="es-console__title">ローンシミュレーション</span>
+          <span class="es-console__tag">画面イメージ（開発中）</span>
+        </div>
+        <div class="es-console__body">
+          <dl class="es-console__inputs">
+            <div><dt>年収</dt><dd><span class="es-num">520</span>万円</dd></div>
+            <div><dt>自己資金</dt><dd><span class="es-num">300</span>万円</dd></div>
+            <div><dt>既存借入</dt><dd>なし</dd></div>
+            <div><dt>返済期間</dt><dd><span class="es-num">35</span>年</dd></div>
+            <div><dt>金利（試算条件）</dt><dd><span class="es-num">1.0</span>%</dd></div>
+          </dl>
+          <span class="es-console__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+          <dl class="es-console__result">
+            <div><dt>借入の目安</dt><dd><span class="es-num">約3,400</span>万円</dd></div>
+            <div><dt>月々返済</dt><dd><span class="es-num">約10</span>万円</dd></div>
+          </dl>
+        </div>
+        <figcaption class="es-sr">ローンシミュレーションの画面イメージ（開発中）。操作・計算はできません。数値はサンプルです。</figcaption>
+      </figure>
+
+      <div class="es-notes">
+        <p>表示される金額はシミュレーション上の参考値です。実際の借入可能額・金利・融資条件を保証するものではありません。掲載画面は操作・計算できないイメージで、数値はサンプルです。</p>
+        <p>「FP相談」は、担当者がお客様と資金計画を整理するための機能の呼び名です。ファイナンシャル・プランナー資格者による助言や、金融機関の事前審査に代わるものではありません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== STEP 3 地域メーカー比較（構想中） ============================== -->
+  <!-- メーカーは架空のサンプル（A社・B社・C社）。特徴の説明にとどめ、優劣・推奨区分を付けない。
+       価格帯・保証の帯は共通の目盛りに置いた事実の比較で、評価点ではない。
+       狭い画面では比較軸ごとに A/B/C を縦に並べる（display を変えても表として読めるよう role を付ける）。 -->
+  <section class="es-makers" id="makers" aria-labelledby="makers-title">
+    <div class="es-wrap">
+      <div class="es-sec-head">
+        <div>
+          <p class="es-eyebrow"><span class="es-eyebrow__en">STEP 3 ｜ COMPARE</span><span class="es-status es-status--idea">構想中</span></p>
+          <h2 class="es-h2" id="makers-title">地域メーカーの違いを、<br>その場で説明できる。</h2>
+        </div>
+        <p class="es-lead">価格帯・性能・デザイン・保証・得意エリアを、お客様に見せる1画面に。比べる軸をそろえ、新人でも同じ順番で説明しやすくする構想です。</p>
+      </div>
+
+      <figure class="es-board">
+        <div class="es-board__bar">
+          <span class="es-board__title">メーカー比較</span>
+          <span class="es-board__area"><span>地域</span>鳥取東部
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+          <span class="es-board__meta">登録メーカー 3社（サンプル）</span>
+          <span class="es-board__budget"><i aria-hidden="true"></i>A様のご予算　3,900万円まで</span>
+        </div>
+        <div class="es-board__body">
+          <table class="es-mk" role="table">
+            <caption class="es-sr">鳥取東部の地域メーカー比較（サンプル）</caption>
+            <thead role="rowgroup">
+              <tr role="row">
+                <td class="es-mk__corner" role="cell"></td>
+                <th scope="col" role="columnheader"><span class="es-mk__mark" aria-hidden="true">A</span><span class="es-mk__name">A社<small>サンプル</small></span><span class="es-mk__tagline">規格型で、価格を抑えやすい</span></th>
+                <th scope="col" role="columnheader"><span class="es-mk__mark" aria-hidden="true">B</span><span class="es-mk__name">B社<small>サンプル</small></span><span class="es-mk__tagline">自由設計で、素材と間取りにこだわれる</span></th>
+                <th scope="col" role="columnheader"><span class="es-mk__mark" aria-hidden="true">C</span><span class="es-mk__name">C社<small>サンプル</small></span><span class="es-mk__tagline">デザインと価格のバランスを取りやすい</span></th>
+              </tr>
+            </thead>
+            <tbody role="rowgroup">
+              <tr role="row">
+                <th scope="row" role="rowheader"><span>PRICE</span>価格帯</th>
+                <td role="cell" data-label="A社"><div class="es-mk__range es-mk__range--a" aria-hidden="true"><i></i></div><b>2,000万円台〜</b></td>
+                <td role="cell" data-label="B社"><div class="es-mk__range es-mk__range--b" aria-hidden="true"><i></i></div><b>3,000万円台〜</b></td>
+                <td role="cell" data-label="C社"><div class="es-mk__range es-mk__range--c" aria-hidden="true"><i></i></div><b>2,000万円台後半〜</b></td>
+              </tr>
+              <tr role="row">
+                <th scope="row" role="rowheader"><span>PERFORMANCE</span>性能</th>
+                <td role="cell" data-label="A社"><ul class="es-mk__chips"><li>高断熱仕様が標準</li><li>耐震等級3が標準</li></ul></td>
+                <td role="cell" data-label="B社"><ul class="es-mk__chips"><li>断熱性能を重視</li><li>耐震等級3が標準</li></ul></td>
+                <td role="cell" data-label="C社"><ul class="es-mk__chips"><li>断熱オプションを選べる</li><li>耐震等級3相当</li></ul></td>
+              </tr>
+              <tr role="row">
+                <th scope="row" role="rowheader"><span>DESIGN</span>デザイン</th>
+                <td role="cell" data-label="A社">シンプル・規格型</td>
+                <td role="cell" data-label="B社">自由設計・和モダン</td>
+                <td role="cell" data-label="C社">北欧・ナチュラル</td>
+              </tr>
+              <tr role="row">
+                <th scope="row" role="rowheader"><span>WARRANTY</span>保証</th>
+                <td role="cell" data-label="A社"><div class="es-mk__years es-mk__years--30" aria-hidden="true"><i></i></div><b>最長30年</b><small>延長条件あり</small></td>
+                <td role="cell" data-label="B社"><div class="es-mk__years es-mk__years--60" aria-hidden="true"><i></i></div><b>最長60年</b><small>点検条件あり</small></td>
+                <td role="cell" data-label="C社"><div class="es-mk__years es-mk__years--20" aria-hidden="true"><i></i></div><b>最長20年</b><small>&nbsp;</small></td>
+              </tr>
+              <tr role="row">
+                <th scope="row" role="rowheader"><span>AREA</span>得意エリア</th>
+                <td role="cell" data-label="A社">鳥取市中心部</td>
+                <td role="cell" data-label="B社">鳥取市郊外・岩美町</td>
+                <td role="cell" data-label="C社">八頭町・智頭町</td>
+              </tr>
+              <tr role="row">
+                <th scope="row" role="rowheader"><span>FOR</span>向いている顧客</th>
+                <td role="cell" data-label="A社">月々の負担を抑えたい子育て世帯</td>
+                <td role="cell" data-label="B社">間取りや素材にこだわりたい方</td>
+                <td role="cell" data-label="C社">デザインと価格のバランスを重視する方</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="es-board__foot">
+          <span class="es-status es-status--idea-dark">構想中</span>
+          <p>会社・店舗ごとの提案方針を、営業方針として反映できる設計を予定しています。お客様の条件を優先したうえで反映する考え方です。</p>
+        </div>
+      </figure>
+      <p class="es-foot es-foot--light">※画面イメージ（構想中）。メーカー名・掲載内容はサンプルで、実在の企業・商品を示すものではありません。帯は共通の目盛りに置いた価格帯・保証年数で、評価点ではありません。</p>
+    </div>
+  </section>
+
+  <!-- ============================== STEP 4 物件提案 ============================== -->
+  <!-- 物件・住所・日程はすべて架空のサンプル。写真は差し替え前提（上部のコメント参照）。 -->
+  <section class="es-proposal" id="proposal" aria-labelledby="proposal-title">
+    <div class="es-wrap">
+      <div class="es-sec-head">
+        <div>
+          <p class="es-eyebrow es-eyebrow--dark"><span class="es-eyebrow__en">STEP 4 ｜ PROPOSAL</span><span class="es-status es-status--dev-dark">開発中</span></p>
+          <h2 class="es-h2 es-h2--dark" id="proposal-title">お客様に合う物件を、<br>こちらから提案。</h2>
+        </div>
+        <p class="es-lead es-lead--dark">FP相談で整理した購入価格帯と、希望エリア・間取り・物件種別などをもとに、提案候補を表示する機能を開発しています。対象の物件種別は、新築戸建て・中古戸建て・中古マンションを予定しています。</p>
+      </div>
+
+      <div class="es-wishes">
+        <p class="es-wishes__label">このお客様の希望条件<span>6項目・例</span></p>
+        <ul class="es-wishes__list">
+          <li>予算 3,900万円まで</li>
+          <li>鳥取市</li>
+          <li>3LDK以上</li>
+          <li>駐車 2台</li>
+          <li>入居 2027年春まで</li>
+          <li>小学校まで徒歩15分以内</li>
+        </ul>
+      </div>
+
+      <article class="es-feature" aria-labelledby="prop-1-title">
+        <div class="es-feature__photo">
+          <img src="assets/images/estate/estate-photo-new-house.jpg" alt="新築戸建ての外観（イメージ写真）" width="2000" height="1556" loading="lazy">
+          <p class="es-feature__tags"><span class="es-tag es-tag--rank">提案候補 1</span><span class="es-tag">新築戸建て</span></p>
+          <div class="es-feature__caption">
+            <h3 class="es-feature__title" id="prop-1-title"><span class="es-feature__price"><span class="es-num">3,680</span>万円</span><span class="es-feature__addr">鳥取市 南部エリア（サンプル）・4LDK</span></h3>
+          </div>
+          <p class="es-imgnote">写真はイメージです</p>
+        </div>
+
+        <div class="es-sheet">
+          <div class="es-sheet__score">
+            <p>希望条件との一致</p>
+            <p class="es-sheet__num"><span class="es-num">6</span> / 6</p>
+          </div>
+          <ul class="es-sheet__checks">
+            <li><span>予算</span><b>3,680万円</b><small>3,900万円まで</small></li>
+            <li><span>エリア</span><b>鳥取市 南部</b><small>鳥取市</small></li>
+            <li><span>間取り</span><b>4LDK</b><small>3LDK以上</small></li>
+            <li><span>駐車</span><b>2台</b><small>2台</small></li>
+            <li><span>入居</span><b>2027年2月完成予定</b><small>2027年春まで</small></li>
+            <li><span>小学校</span><b>徒歩10分</b><small>徒歩15分以内</small></li>
+          </ul>
+          <dl class="es-sheet__spec">
+            <div><dt>土地面積</dt><dd>165.3㎡</dd></div>
+            <div><dt>建物面積</dt><dd>105.9㎡</dd></div>
+            <div><dt>物件種別</dt><dd>新築戸建て</dd></div>
+          </dl>
+          <div class="es-sheet__why">
+            <p>おすすめ理由</p>
+            <ul>
+              <li>バランス重視の価格帯の中にあります</li>
+              <li>希望条件の6項目すべてに一致しています</li>
+              <li>建築中ですが、完成予定（2027年2月）が入居希望の2027年春に間に合います</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <div class="es-cands">
+        <article class="es-cand" aria-labelledby="prop-2-title">
+          <div class="es-cand__photo">
+            <img src="assets/images/estate/estate-photo-used-house.jpg" alt="中古戸建ての外観（イメージ写真）" width="2000" height="1326" loading="lazy">
+            <p class="es-feature__tags"><span class="es-tag es-tag--rank">提案候補 2</span><span class="es-tag">中古戸建て</span></p>
+            <p class="es-imgnote">写真はイメージです</p>
+          </div>
+          <div class="es-cand__body">
+            <h3 class="es-cand__title" id="prop-2-title"><span class="es-cand__price"><span class="es-num">3,280</span>万円</span><span class="es-cand__addr">鳥取市 中心部エリア（サンプル）・築8年</span></h3>
+            <p class="es-cand__spec">4LDK　土地 198.4㎡　建物 112.6㎡</p>
+            <p class="es-cand__match"><span>希望条件との一致</span><b><span class="es-num">5</span> / 6</b></p>
+            <p class="es-cand__note">駐車台数は要確認</p>
+          </div>
+        </article>
+        <article class="es-cand" aria-labelledby="prop-3-title">
+          <div class="es-cand__photo">
+            <img src="assets/images/estate/estate-photo-condo.jpg" alt="中古マンションの外観（イメージ写真）" width="2000" height="3000" loading="lazy">
+            <p class="es-feature__tags"><span class="es-tag es-tag--rank">提案候補 3</span><span class="es-tag">中古マンション</span></p>
+            <p class="es-imgnote">写真はイメージです</p>
+          </div>
+          <div class="es-cand__body">
+            <h3 class="es-cand__title" id="prop-3-title"><span class="es-cand__price"><span class="es-num">2,980</span>万円</span><span class="es-cand__addr">鳥取市 駅南エリア（サンプル）・築14年</span></h3>
+            <p class="es-cand__spec">3LDK　専有 72.8㎡　5階</p>
+            <p class="es-cand__match"><span>希望条件との一致</span><b><span class="es-num">5</span> / 6</b></p>
+            <p class="es-cand__note">駐車場の空きは要確認</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="es-policy">
+        <span class="es-status es-status--idea-dark">構想中</span>
+        <p><b>顧客条件を優先しながら、会社・店舗の営業方針も反映。</b>重点的に案内したい物件や、地域ごとの提案方針を、営業方針として反映できる設計を予定しています。お客様の希望条件で絞り込んだうえで、並び順の参考にする考え方です。</p>
+      </div>
+
+      <p class="es-foot">※掲載物件・住所・日程はすべて架空のサンプルです。写真はイメージです。</p>
+    </div>
+  </section>
+
+  <!-- ============================== 類似物件検索（構想中） ============================== -->
+  <!-- 未完成の新築戸建て（左）から、参考になる完成物件（右）へつなぐ。写真はイメージ。 -->
+  <section class="es-similar" id="similar" aria-labelledby="similar-title">
+    <div class="es-wrap">
+      <div class="es-sec-head">
+        <div>
+          <p class="es-eyebrow"><span class="es-eyebrow__en">STEP 4 ｜ SIMILAR HOMES</span><span class="es-status es-status--idea">構想中</span></p>
+          <h2 class="es-h2" id="similar-title">『似た物件ありますか？』<br>に、その場で答える。</h2>
+        </div>
+        <p class="es-lead">未完成の新築戸建てを検討しているお客様から「同じような間取りの完成物件はありますか？」と聞かれたとき。その場で、参考になる完成物件を探せる仕組みを構想しています。</p>
+      </div>
+
+      <div class="es-sflow">
+        <article class="es-sf-current" aria-labelledby="sf-current-title">
+          <p class="es-sf-ask"><span>お客様</span>同じような間取りの完成物件はありますか？</p>
+          <div class="es-sf-current__photo">
+            <img src="assets/images/estate/estate-photo-new-house.jpg" alt="検討中の新築戸建て（完成予想のイメージ写真）" width="2000" height="1556" loading="lazy">
+            <p class="es-feature__tags"><span class="es-tag es-tag--rank">検討中</span><span class="es-tag">新築戸建て・建築中</span></p>
+            <p class="es-imgnote">完成予想のイメージ</p>
+          </div>
+          <div class="es-sf-current__body">
+            <h3 class="es-sf-current__title" id="sf-current-title"><span class="es-num">3,680</span>万円<span>4LDK・延床 105.9㎡・A社（サンプル）</span></h3>
+            <p class="es-sf-current__status"><b>2027年2月完成予定</b>まだ建物の中を見学できない</p>
+          </div>
+        </article>
+
+        <div class="es-sf-link" aria-hidden="true"><span>その場で検索</span></div>
+
+        <ol class="es-sf-results" aria-label="見つかった参考物件（例）">
+          <li class="es-sf-card es-sf-card--done">
+            <div class="es-sf-card__media">
+              <img src="assets/images/estate/estate-photo-similar-done.jpg" alt="完成済みの参考物件の外観（イメージ写真）" width="2000" height="1600" loading="lazy">
+              <p class="es-imgnote">写真はイメージです</p>
+            </div>
+            <div class="es-sf-card__body">
+              <p class="es-sf-card__kind">完成済み参考物件</p>
+              <p class="es-sf-card__title">同じメーカー・似た間取りの完成物件</p>
+              <p class="es-sf-card__meta">4LDK・延床 104.3㎡・A社（サンプル）</p>
+              <ul class="es-sf-card__tags"><li>似た間取り</li><li>同じメーカー</li><li>完成済み</li></ul>
+              <p class="es-sf-card__note">見学のご案内ができるかは要確認</p>
+            </div>
+          </li>
+          <li class="es-sf-card">
+            <div class="es-sf-card__media es-sf-card__media--plan" aria-hidden="true">
+              <svg viewBox="0 0 240 150" focusable="false">
+                <g fill="none" stroke="#0B1A33" stroke-width="3"><rect x="8" y="8" width="200" height="130"/><path stroke-width="1.6" d="M112 8v52M158 8v52M112 60h96M148 60v78M8 82h104M70 82v56M112 82v56M112 102h36"/></g>
+                <g fill="none" stroke="#3D7BFF" stroke-width="2" stroke-dasharray="6 4" transform="translate(22 6)"><rect x="8" y="8" width="200" height="130"/><path d="M112 8v52M158 8v52M112 60h96M148 60v78M8 82h104M70 82v56M112 82v56M112 102h36"/></g>
+              </svg>
+            </div>
+            <div class="es-sf-card__body">
+              <p class="es-sf-card__kind">似た間取り</p>
+              <p class="es-sf-card__title">LDKと水回りの配置が近い 4LDK</p>
+              <p class="es-sf-card__meta">延床 104〜110㎡・LDK 18畳前後・2件（サンプル）</p>
+            </div>
+          </li>
+          <li class="es-sf-card">
+            <div class="es-sf-card__media es-sf-card__media--price" aria-hidden="true">
+              <div class="es-pricemap">
+                <span class="es-pricemap__dot es-pricemap__dot--a"><b>3,590</b></span>
+                <span class="es-pricemap__dot es-pricemap__dot--now"><b>3,680</b>検討中</span>
+                <span class="es-pricemap__dot es-pricemap__dot--b"><b>3,720</b></span>
+              </div>
+            </div>
+            <div class="es-sf-card__body">
+              <p class="es-sf-card__kind">近い価格帯</p>
+              <p class="es-sf-card__title">検討中の物件と近い価格の完成物件</p>
+              <p class="es-sf-card__meta">3,590万円・3,720万円 など 2件（サンプル）</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <p class="es-sf-answer"><span>担当者</span>近い条件の完成済み物件を、お見せしますね。</p>
+    </div>
+  </section>
+
+  <!-- ============================== 中古マンション建物情報（構想中） ============================== -->
+  <section class="es-mansion" id="mansion" aria-labelledby="mansion-title">
+    <div class="es-wrap es-mansion__grid">
+      <div class="es-mansion__photo">
+        <img src="assets/images/estate/estate-photo-condo.jpg" alt="中古マンションの外観（イメージ写真）" width="2000" height="3000" loading="lazy">
+        <div class="es-mansion__label">
+          <p class="es-mansion__name">サンプルレジデンス駅南（架空）</p>
+          <p>築14年・8階建て・総戸数 52戸（サンプル）</p>
+        </div>
+        <p class="es-imgnote">写真はイメージです</p>
+      </div>
+
+      <div class="es-mansion__body">
+        <p class="es-eyebrow"><span class="es-eyebrow__en">STEP 4 ｜ CONDOMINIUM</span><span class="es-status es-status--idea">構想中</span></p>
+        <h2 class="es-h2" id="mansion-title">一度調べた建物情報を、<br>会社の資産に。</h2>
+        <p class="es-lead">管理規約や修繕の情報を、マンション単位で蓄積する構想です。同じマンションの別の住戸を扱うときに、建物の共通情報を再利用できるようにする考え方です。</p>
+
+        <div class="es-bldg">
+          <p class="es-bldg__head"><span>建物の共通情報</span><span class="es-bldg__saved">以前の調査から再利用（例）</span></p>
+          <dl class="es-bldg__list">
+            <div><dt>管理規約</dt><dd>2022年の改定版を保存</dd></div>
+            <div><dt>ペット可否</dt><dd>小型犬・猫 1匹まで</dd></div>
+            <div><dt>駐車場</dt><dd>月額8,000円・空きは要確認</dd></div>
+            <div><dt>管理費</dt><dd>月額9,800円（70㎡台の例）</dd></div>
+            <div><dt>修繕積立金</dt><dd>月額12,400円（70㎡台の例）</dd></div>
+            <div><dt>リフォーム制限</dt><dd>床材の遮音等級に規定あり</dd></div>
+            <div><dt>修繕関連情報</dt><dd>2019年 大規模修繕／長期修繕計画 2045年まで</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="es-wrap">
+      <ol class="es-reuse" aria-label="建物情報を再利用する流れ（例）">
+        <li><span class="es-reuse__unit">302号室</span><span>以前の取引で、建物の情報を調べて登録</span></li>
+        <li class="is-shared"><span class="es-reuse__unit">建物の共通情報</span><span>マンション単位で会社に蓄積</span></li>
+        <li><span class="es-reuse__unit">705号室</span><span>共通情報を再利用し、住戸ごとの情報だけ確認</span></li>
+      </ol>
+      <p class="es-foot es-foot--light">※画面イメージ（構想中）。マンション名・値はすべて架空のサンプルです。</p>
+    </div>
+  </section>
+
+  <!-- ============================== STEP 5 次回案内 ============================== -->
+  <!-- 「商談が終わる」ではなく「次の行動が決まる」を1画面で見せる。日程・物件はサンプル。 -->
+  <section class="es-next" id="next" aria-labelledby="next-title">
+    <div class="es-wrap">
+      <div class="es-sec-head">
+        <div>
+          <p class="es-eyebrow es-eyebrow--dark"><span class="es-eyebrow__en">STEP 5 ｜ NEXT VISIT</span><span class="es-status es-status--dev-dark">開発中</span></p>
+          <h2 class="es-h2 es-h2--dark" id="next-title">お客様が帰る前に、<br>次の案内まで決める。</h2>
+        </div>
+        <p class="es-lead es-lead--dark">「商談が終わる」のではなく、「次の行動が決まる」。今日見た物件、気になった物件、次回の日時と確認事項を、お客様と同じ画面で整理します。</p>
+      </div>
+
+      <figure class="es-wrapup">
+        <div class="es-wrapup__bar">
+          <span class="es-deck__brand"><img src="assets/brand/icon-color-64.webp" alt="" width="18" height="18">Smart Labo Estate</span>
+          <span class="es-wrapup__title">商談のまとめ</span>
+          <span class="es-deck__who">A様ご家族（サンプル）</span>
+        </div>
+        <div class="es-wrapup__grid">
+          <div class="es-wrapup__col es-wrapup__col--seen">
+            <p class="es-wrapup__label">今日見た物件<span>3件</span></p>
+            <ul class="es-wrapup__props">
+              <li class="is-fav"><img src="assets/images/estate/estate-photo-new-house.jpg" alt="" width="2000" height="1556" loading="lazy"><div><b>3,680万円</b><span>新築戸建て・4LDK</span></div><em>気になる</em></li>
+              <li class="is-fav"><img src="assets/images/estate/estate-photo-used-house.jpg" alt="" width="2000" height="1326" loading="lazy"><div><b>3,280万円</b><span>中古戸建て・4LDK</span></div><em>気になる</em></li>
+              <li><img src="assets/images/estate/estate-photo-condo.jpg" alt="" width="2000" height="3000" loading="lazy"><div><b>2,980万円</b><span>中古マンション・3LDK</span></div></li>
+            </ul>
+          </div>
+          <div class="es-wrapup__col">
+            <p class="es-wrapup__label">次回案内候補</p>
+            <ul class="es-wrapup__visits">
+              <li><span class="es-wrapup__check" aria-hidden="true"></span>気になる物件 2件の内見</li>
+              <li><span class="es-wrapup__check" aria-hidden="true"></span>完成済みの参考物件の見学</li>
+            </ul>
+            <p class="es-wrapup__label">日時</p>
+            <ul class="es-wrapup__slots">
+              <li>9/19（金）<b>18:00</b></li>
+              <li class="is-on">9/20（土）<b>10:00</b><span class="es-sr">（選択中）</span></li>
+              <li>9/21（日）<b>14:00</b></li>
+            </ul>
+          </div>
+          <div class="es-wrapup__col">
+            <p class="es-wrapup__label">次回までの確認事項</p>
+            <ul class="es-wrapup__todos">
+              <li><b>担当者</b>中古戸建ての駐車台数を確認</li>
+              <li><b>担当者</b>参考物件の見学ができるか確認</li>
+              <li><b>お客様</b>自己資金の予定額を確認</li>
+            </ul>
+          </div>
+        </div>
+        <div class="es-wrapup__decided">
+          <span class="es-wrapup__decided-tag">次の行動</span>
+          <p><b>9月20日（土）10:00</b>　内見 2件 ＋ 完成済み参考物件の見学</p>
+        </div>
+        <figcaption class="es-sr">商談のまとめ画面のイメージ（開発中）。物件・日程はサンプルです。</figcaption>
+      </figure>
+      <p class="es-foot">※画面イメージ（開発中）。物件・日程はサンプルです。</p>
+    </div>
+  </section>
+
+  <!-- ============================== BEFORE / AFTER ============================== -->
+  <section class="es-ba" id="before-after" aria-labelledby="ba-title">
+    <div class="es-wrap">
+      <div class="es-sec-head es-sec-head--center">
+        <p class="es-eyebrow es-eyebrow--center"><span class="es-eyebrow__en">BEFORE / AFTER</span></p>
+        <h2 class="es-h2" id="ba-title">初回商談の濃さが変わる</h2>
+      </div>
+
+      <div class="es-ba__before">
+        <p class="es-ba__label">BEFORE<span>よくある初回商談</span></p>
+        <ol class="es-ba__flow">
+          <li><span class="es-ba__step"><b>聞く</b></span></li>
+          <li><span class="es-ba__step"><b>調べる</b></span></li>
+          <li><span class="es-ba__step"><b>持ち帰る</b></span></li>
+          <li><span class="es-ba__step"><b>後日連絡</b></span></li>
+        </ol>
+        <p class="es-ba__text">情報確認に時間がかかり、提案の機会を逃してしまう。</p>
+      </div>
+
+      <div class="es-ba__after">
+        <p class="es-ba__label">AFTER<span>Smart Labo Estate の初回商談</span></p>
+        <ol class="es-ba__flow">
+          <li><span class="es-ba__step"><b>聞く</b><small>ヒアリング</small></span></li>
+          <li><span class="es-ba__step"><b>試算</b><small>FP相談・資金計画</small></span></li>
+          <li><span class="es-ba__step"><b>比較</b><small>メーカー比較</small></span></li>
+          <li><span class="es-ba__step"><b>提案</b><small>物件提案</small></span></li>
+          <li><span class="es-ba__step es-ba__step--goal"><b>次の案内</b><small>次回案内</small></span></li>
+        </ol>
+        <p class="es-ba__big">その場で、<em>次の一手</em>まで。</p>
+        <p class="es-ba__text">その場で資金計画・比較・提案を進め、初回商談から次の一歩へ。</p>
+      </div>
+      <p class="es-foot es-foot--light">※AFTERは、開発中・構想中の機能を含む、Smart Labo Estateが目指す初回商談の流れです。メーカー比較は構想中の機能です（<a href="#status">開発状況</a>）。</p>
+    </div>
+  </section>
+
+  <!-- ============================== 開発状況 ============================== -->
+  <!-- 区分は Smart Labo Estate リポジトリの CURRENT_STATUS（2026-09-14）と代表の指示に基づく。 -->
+  <section class="es-statuses" id="status" aria-labelledby="status-title">
+    <div class="es-wrap es-statuses__grid">
+      <div>
+        <p class="es-eyebrow"><span class="es-eyebrow__en">DEVELOPMENT STATUS</span></p>
+        <h2 class="es-h2" id="status-title">開発状況について</h2>
+        <p class="es-lead es-statuses__lead">Smart Labo Estateは現在開発中です。掲載画面は開発中のイメージを含み、機能・仕様は変更となる場合があります。</p>
+      </div>
+      <div class="es-statuses__groups">
+        <div class="es-sgroup">
+          <p class="es-sgroup__head"><span class="es-status es-status--dev">開発中</span>現在、開発を進めている機能</p>
+          <ul>
+            <li>FP相談</li>
+            <li>資金計画</li>
+            <li>3つの購入価格帯（安心重視・バランス重視・希望重視）</li>
+            <li>物件提案（希望条件との照合）</li>
+            <li>次回案内</li>
+          </ul>
+          <p class="es-sgroup__note">提供開始の時期は、決まり次第ご案内します。</p>
+        </div>
+        <div class="es-sgroup es-sgroup--idea">
+          <p class="es-sgroup__head"><span class="es-status es-status--idea">構想中</span>今後の対応を予定している機能</p>
+          <ul>
+            <li>地域メーカー比較</li>
+            <li>営業方針の反映</li>
+            <li>類似物件検索</li>
+            <li>中古マンション建物情報</li>
+          </ul>
+          <p class="es-sgroup__note">内容・時期は検討中です。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 最終CTA ============================== -->
+  <section class="es-final" id="contact" aria-labelledby="final-title">
+    <div class="es-final__photo" aria-hidden="true">
+      <img src="assets/images/estate/estate-photo-interior.jpg" alt="" width="2000" height="3000" loading="lazy">
+    </div>
+    <div class="es-wrap">
+      <p class="es-eyebrow es-eyebrow--dark"><span class="es-eyebrow__en">SMART LABO ESTATE</span></p>
+      <h2 class="es-final__title" id="final-title">お客様が帰る頃には、<br>次の一手まで<wbr>決まっている。</h2>
+      <div class="es-final__body">
+        <p>「一度持ち帰って調べます。」<br>そんな商談を減らし、<br>その場で調べて、その場で比較して、<br class="es-br-sm">その場で提案する。</p>
+        <p>Smart Labo Estateは、初回商談で<br>「この会社に任せたい」<br>をつくるための営業支援システムです。</p>
+      </div>
+      <p class="es-final__actions">
+        <a class="es-btn es-btn--primary es-btn--xl" href="contact.html?type=docs&amp;topic=estate#form">サービス資料を受け取る
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="es-btn es-btn--ghost es-btn--xl" href="contact.html?type=consult&amp;topic=estate#form">導入について相談する</a>
+      </p>
+      <p class="es-final__note">Smart Labo Estateは現在開発中です。<br class="es-br-sm">サービス概要・開発中の機能をまとめた資料をご案内しています。</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="es-footer">
+  <div class="es-wrap es-footer__inner">
+    <a href="estate.html" class="es-logo es-logo--footer" aria-label="Smart Labo Estate トップ">
+      <img class="es-logo__icon" src="assets/brand/icon-color-64.webp" alt="" width="32" height="32">
+      <span class="es-logo__text">Smart Labo <b>Estate</b></span>
+    </a>
+    <p class="es-footer__links">
+      <a href="contact.html?type=consult&amp;topic=estate#form">導入のご相談</a>
+      <a href="company.html">会社概要</a>
+      <a href="privacy.html">プライバシーポリシー</a>
+      <a href="terms.html">利用規約</a>
+    </p>
+    <p class="es-footer__copy">&copy; 株式会社スマートラボ</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
