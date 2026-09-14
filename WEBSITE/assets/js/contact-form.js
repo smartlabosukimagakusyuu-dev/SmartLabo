@@ -172,6 +172,7 @@
    *   topic=salon   … ラベルを「店舗スタッフ数」へ（人数課金と誤解させない）
    *   topic=website … 項目ごと非表示（ホームページ制作に人数は不要）
    *   topic=works   … 既存のまま「利用予定人数」
+   *   topic=estate  … ラベルを「営業担当者数」へ（2026-09-14）
    *   topicなし     … 既存のまま「利用予定人数」
    *
    * ★selectのname・option・値・送信仕様は一切変更しない（APIへの追加fieldなし）。
@@ -180,7 +181,7 @@
    * ★hidden属性だけでは消えない（components.css の .field { display: grid } が
    *   UAの [hidden] より優先される）。displayも明示する。
    */
-  var HEADCOUNT_LABELS = { salon: '店舗スタッフ数', works: '利用予定人数' };
+  var HEADCOUNT_LABELS = { salon: '店舗スタッフ数', works: '利用予定人数', estate: '営業担当者数' };
 
   (function setupHeadcount() {
     var field = document.getElementById('headcount-field');
@@ -202,6 +203,84 @@
       // textContentへの代入のみ（innerHTMLは使わない）
       labelEl.textContent = HEADCOUNT_LABELS[t];
     }
+  })();
+
+  /* ----------------------- Smart Labo Estate の相談（2026-09-14） -- */
+
+  /**
+   * Smart Labo Estate（不動産会社向け・開発中）の LP（estate.html）からだけ入る導線。
+   * サイト内の他ページからはリンクしない。種別は既存の値だけを使う（contact-api の SLW_TYPES は変更しない）。
+   *   資料を受け取る       … ?type=docs&topic=estate    （資料請求）
+   *   導入について相談する … ?type=consult&topic=estate （無料相談）
+   *
+   * ?topic=estate のときだけ、ページ見出し・document.title・識別表示・本文先頭の識別行を
+   * 種別に合わせて切り替える。種別を変えたときも同じ処理でそろえ直す。
+   *   資料請求 … 資料の案内と「サービス資料請求」の識別行
+   *   無料相談 … 導入相談の案内と「導入相談」の識別行
+   *   それ以外 … 導入相談の案内のまま、識別行は外す（採用などが Estate の相談として届かないように）
+   * ★topic=estate 以外では何もしない（Salon・ホームページ制作・その他の表示と送信は従来どおり）。
+   *   Estate 用の文言は TOPIC_LINES / TOPIC_BANNERS に入れず、このブロックだけで扱う。
+   * ★textContent / value への代入のみ。innerHTMLは使わない。
+   * ★人数欄の「営業担当者数」は上の HEADCOUNT_LABELS、Salon専用の機能選択欄を出さないのは
+   *   下の isSalonConsult（topic=salon かつ consult）が担当する。
+   */
+  var ESTATE_VIEWS = {
+    docs: {
+      line: '【ご相談内容】Smart Labo Estate サービス資料請求（Estate LP 経由）',
+      title: 'Smart Labo Estate サービス資料',
+      note: 'Smart Labo Estateのサービス概要、初回商談の流れ、開発中の機能についてまとめた資料をご案内します。'
+    },
+    consult: {
+      line: '【ご相談内容】Smart Labo Estate 導入相談（Estate LP 経由）',
+      title: 'Smart Labo Estate 導入のご相談',
+      note: '導入方法や現在の開発状況、利用イメージについてお気軽にご相談ください。'
+    }
+  };
+
+  (function setupEstate() {
+    if (!('URLSearchParams' in window)) return;
+    if (new URLSearchParams(location.search).get('topic') !== 'estate') return;
+
+    var typeEl = document.getElementById('f-type');
+    var msgEl = document.getElementById('f-message');
+    var box = document.getElementById('topic-banner');
+    var NL3 = String.fromCharCode(10);
+    var estateLines = [ESTATE_VIEWS.docs.line, ESTATE_VIEWS.consult.line];
+
+    function setText(selector, text) {
+      var el = document.querySelector(selector);
+      if (el) el.textContent = text;
+    }
+
+    function syncEstate() {
+      var type = typeEl ? typeEl.value : '';
+      var view = (type === 'docs') ? ESTATE_VIEWS.docs : ESTATE_VIEWS.consult;
+
+      document.title = view.title + '｜お問い合わせ';
+      setText('.page-hero__title', view.title);
+      setText('.page-hero__lead', view.note);
+      setText('#topic-banner-title', view.title);
+      setText('#topic-banner-note', view.note);
+      if (box) {
+        // hidden属性だけでは出ない場合に備え、displayも明示する（showTopicBanner と同じ）
+        box.hidden = false;
+        box.style.display = 'block';
+      }
+
+      if (!msgEl) return;
+      // Estate の識別行をいったん取り除き、種別に合う1行だけを先頭へ入れ直す（自由記述は保持する）
+      var rows = msgEl.value.split(NL3).filter(function (row) {
+        return estateLines.indexOf(row.trim()) === -1;
+      });
+      while (rows.length > 0 && rows[0].trim() === '') rows.shift();
+      var body = rows.join(NL3);
+      var line = (type === 'docs') ? ESTATE_VIEWS.docs.line
+               : (type === 'consult') ? ESTATE_VIEWS.consult.line : '';
+      msgEl.value = (line === '') ? body : line + NL3 + NL3 + body;
+    }
+
+    syncEstate();
+    if (typeEl) typeEl.addEventListener('change', syncEstate);
   })();
 
   /* --------------------- 機能選択fieldset（WEB-V3-SALON-URGENT-4 / R2） -- */
