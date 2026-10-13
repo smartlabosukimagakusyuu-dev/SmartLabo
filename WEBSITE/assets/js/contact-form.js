@@ -64,7 +64,7 @@
    *   （下の querySelector による存在確認でも二重に守っている）。
    * ★contact-api 側の許可値（SLW_TYPES）は変更していない。
    */
-  var LEGACY_TYPES = { demo: 'consult', partner: 'contact' };
+  var LEGACY_TYPES = { diagnosis: 'consult', demo: 'consult', partner: 'contact' };
 
   if ('URLSearchParams' in window) {
     var typeParam = new URLSearchParams(location.search).get('type');
@@ -411,6 +411,34 @@
     messageEl2.value = next;
   }
 
+  /* 希望日時は既存APIの許可項目を増やさず、本文の先頭へ1行だけ反映する。 */
+  function composePreferredDatetime() {
+    var input = document.getElementById('f-preferred-datetime');
+    var message = document.getElementById('f-message');
+    if (!input || !message) return;
+
+    var mark = '【ご希望の日時】';
+    var diagnosisMark = '【お申し込み】無料業務診断';
+    var nl = String.fromCharCode(10);
+    var rows = message.value.split(nl).filter(function (row) {
+      return row.trim().indexOf(mark) !== 0 && row.trim() !== diagnosisMark;
+    });
+    while (rows.length && rows[0].trim() === '') rows.shift();
+
+    if ('URLSearchParams' in window && new URLSearchParams(location.search).get('type') === 'diagnosis') {
+      rows.unshift(diagnosisMark, '');
+    }
+    if (input.value) {
+      var date = new Date(input.value);
+      var formatted = isNaN(date.getTime()) ? input.value : new Intl.DateTimeFormat('ja-JP', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false
+      }).format(date);
+      rows.unshift(mark + formatted, '');
+    }
+    message.value = rows.join(nl);
+  }
+
   /**
    * fieldsetの表示を切り替える。
    * ★hidden属性だけでは消えない: components.css の `.field { display: grid }`（著者スタイル）が
@@ -427,6 +455,7 @@
   function syncInterests() {
     setInterestsVisible(isSalonConsult());
     composeInterests();
+    composePreferredDatetime();
   }
 
   if (interestsFieldset) {

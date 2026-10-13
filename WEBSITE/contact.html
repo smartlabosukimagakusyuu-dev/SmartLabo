@@ -3075,12 +3075,22 @@ html:not(.js) .signup-step + .signup-step {
                   aria-describedby="f-type-error">
             
             <option value="">選択してください</option>
+            <option value="consult">無料業務診断を申し込む</option>
             <option value="docs">資料請求</option>
             <option value="consult">無料相談</option>
             <option value="contact">一般お問い合わせ</option>
             <option value="recruit">採用について</option>
           </select>
           <p class="field__error" id="f-type-error" data-error-for="type"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="f-preferred-datetime">
+            ご希望の日時 <span class="field__optional">任意</span>
+          </label>
+          <input class="field__input" type="datetime-local" id="f-preferred-datetime"
+                 aria-describedby="f-preferred-datetime-hint">
+          <p class="field__hint" id="f-preferred-datetime-hint">オンラインでの業務診断をご希望の場合に入力してください。</p>
         </div>
 
         
@@ -3140,6 +3150,7 @@ html:not(.js) .signup-step + .signup-step {
 
         <div class="cform__actions">
           <button class="btn btn--primary btn--lg" type="submit" id="formSubmit">送信する</button>
+          <p class="cform__note"><strong>1営業日以内にご連絡します。</strong></p>
           <p class="cform__note">
             送信いただいた内容は、ご連絡と当社サービスのご案内のために使用します。
           </p>
@@ -3521,7 +3532,7 @@ html:not(.js) .signup-step + .signup-step {
 
 
   
-  var LEGACY_TYPES = { demo: 'consult', partner: 'contact' };
+  var LEGACY_TYPES = { diagnosis: 'consult', demo: 'consult', partner: 'contact' };
 
   if ('URLSearchParams' in window) {
     var typeParam = new URLSearchParams(location.search).get('type');
@@ -3776,6 +3787,33 @@ html:not(.js) .signup-step + .signup-step {
     messageEl2.value = next;
   }
 
+  function composePreferredDatetime() {
+    var input = document.getElementById('f-preferred-datetime');
+    var message = document.getElementById('f-message');
+    if (!input || !message) return;
+
+    var mark = '【ご希望の日時】';
+    var diagnosisMark = '【お申し込み】無料業務診断';
+    var nl = String.fromCharCode(10);
+    var rows = message.value.split(nl).filter(function (row) {
+      return row.trim().indexOf(mark) !== 0 && row.trim() !== diagnosisMark;
+    });
+    while (rows.length && rows[0].trim() === '') rows.shift();
+
+    if ('URLSearchParams' in window && new URLSearchParams(location.search).get('type') === 'diagnosis') {
+      rows.unshift(diagnosisMark, '');
+    }
+    if (input.value) {
+      var date = new Date(input.value);
+      var formatted = isNaN(date.getTime()) ? input.value : new Intl.DateTimeFormat('ja-JP', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false
+      }).format(date);
+      rows.unshift(mark + formatted, '');
+    }
+    message.value = rows.join(nl);
+  }
+
   
   function setInterestsVisible(show) {
     if (!interestsFieldset) return;
@@ -3787,6 +3825,7 @@ html:not(.js) .signup-step + .signup-step {
   function syncInterests() {
     setInterestsVisible(isSalonConsult());
     composeInterests();
+    composePreferredDatetime();
   }
 
   if (interestsFieldset) {
