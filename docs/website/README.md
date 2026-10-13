@@ -138,7 +138,8 @@ Smart Labo Works の唯一の正式コードベースは、別リポジトリ
   お問い合わせフォーム）の利用条件**を定める Website 独自文書として維持。Lite の契約文書とは別物
 - 料金(`pricing.html`)・申込案内(`apply.html`)には、最終確認画面で法務文書を確認し、
   すべての項目へ同意した場合にのみお支払いへ進む旨の案内を掲載
-- **アクセス解析（GTM/GA4/dataLayer）は全ページ・全JSから撤去**。再導入条件は
+- **アクセス解析（GA4）は2026-10-13に代表承認のうえ、Works公開ページへ再導入**。
+  同意前・拒否時は読み込まず、個人情報の入力値は送信しない。対象・送信項目・保持期間等は
   [docs/website/ANALYTICS_REINTRODUCTION.md](ANALYTICS_REINTRODUCTION.md) を参照
 - 未リンクだった `signup.html` を削除（現行の申込経路では不要）
 - 実施していない創業記念キャンペーンの記載を撤去（Lite本体の販売条件と一致させるため）
@@ -149,7 +150,7 @@ Smart Labo Works の唯一の正式コードベースは、別リポジトリ
 
 - AIチャットウィジェットの実API接続(現状はデモ回答のみ)
 - Google Search Console登録
-- アクセス解析の再導入（上記の条件を満たしてから）
+- Google Analyticsの運用確認と月次レポート
 
 公開前チェックの最新状況は[PROJECT_BIBLE/61_Release_Checklist.md](../../PROJECT_BIBLE/61_Release_Checklist.md)（v1.0 Release Checklist）を参照してください。
 

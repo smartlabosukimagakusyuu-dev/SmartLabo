@@ -14,7 +14,7 @@
  *
  * 本ファイルが検査すること
  *   1. 公開ページに未確定・ドラフトを示す文字列が無いこと
- *   2. 公開ページにアクセス解析（GTM/GA4/dataLayer）の読み込みが無いこと
+ *   2. GA4が承認済みの共通同意スクリプト経由でのみ読み込まれること
  *   3. company.html に所在地・電話番号・受付時間が無いこと（8L-R）
  *   4. 公開ページに Lite 法務文書への直接リンクが無いこと（8L-R）
  *   5. Website版 tokushoho.html が存在せず、sitemap にも載っていないこと（8L-R）
@@ -44,7 +44,7 @@ const FORBIDDEN = [
   '未決定事項',
 ];
 
-/** アクセス解析の読み込み（コメントでの言及は許す。実コードのみ検出する） */
+/** 共通同意スクリプト以外では許可しないアクセス解析コード */
 const ANALYTICS_PATTERNS = [
   /<script[^>]*googletagmanager\.com/i,
   /<iframe[^>]*googletagmanager\.com/i,
@@ -53,6 +53,19 @@ const ANALYTICS_PATTERNS = [
   /gtag\(/,
   /google-analytics\.com/i,
 ];
+
+const ANALYTICS_SCRIPT = 'assets/js/analytics-consent.js';
+const ANALYTICS_PAGES = new Set([
+  '404.html',
+  'ai-business.html',
+  'business-efficiency.html',
+  'company.html',
+  'contact.html',
+  'index.html',
+  'intranet.html',
+  'privacy.html',
+  'terms.html',
+]);
 
 /**
  * 公開Websiteへ載せない情報（8L-R）。
@@ -86,6 +99,13 @@ for (const file of htmlFiles) {
   for (const re of ANALYTICS_PATTERNS) {
     if (re.test(visible)) errors.push(`${file}: アクセス解析の読み込み（${re}）が残っています`);
   }
+  const sharedTagCount = (visible.match(/assets\/js\/analytics-consent\.js/g) || []).length;
+  if (ANALYTICS_PAGES.has(file) && sharedTagCount !== 1) {
+    errors.push(`${file}: 同意管理スクリプトは1回だけ読み込む必要があります（実測 ${sharedTagCount} 回）`);
+  }
+  if (!ANALYTICS_PAGES.has(file) && sharedTagCount !== 0) {
+    errors.push(`${file}: 解析対象外ページに同意管理スクリプトがあります`);
+  }
   // ★8L-R: Lite法務文書への直接リンクを公開Websiteへ置かない
   if (LITE_LEGAL_LINK.test(visible)) {
     errors.push(`${file}: Lite法務文書への直接リンクが残っています（8L-R: 最終確認画面から読む方針）`);
@@ -98,14 +118,41 @@ for (const file of htmlFiles) {
   }
 }
 
-// JSも解析コードを持たないこと
+// 共通同意スクリプト以外のJSは解析コードを持たないこと
 const jsDir = path.join(SITE, 'assets', 'js');
 if (fs.existsSync(jsDir)) {
   for (const file of fs.readdirSync(jsDir).filter((f) => f.endsWith('.js'))) {
+    if (file === path.basename(ANALYTICS_SCRIPT)) continue;
     const src = fs.readFileSync(path.join(jsDir, file), 'utf8')
       .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
     for (const re of [/dataLayer/, /gtag\(/, /googletagmanager/i]) {
       if (re.test(src)) errors.push(`assets/js/${file}: 解析コード（${re}）が残っています`);
+    }
+  }
+}
+
+// 承認済みの解析実装が、事前同意・広告利用停止・入力値非送信の契約を維持すること
+{
+  const analyticsPath = path.join(SITE, ANALYTICS_SCRIPT);
+  if (!fs.existsSync(analyticsPath)) {
+    errors.push(`${ANALYTICS_SCRIPT}: 共通同意スクリプトが存在しません`);
+  } else {
+    const src = fs.readFileSync(analyticsPath, 'utf8');
+    const required = [
+      "var MEASUREMENT_ID = 'G-CCSLHTF6R2'",
+      "if (state !== GRANTED) return",
+      'allow_google_signals: false',
+      'allow_ad_personalization_signals: false',
+      '同意する',
+      '拒否する',
+    ];
+    for (const text of required) {
+      if (!src.includes(text)) errors.push(`${ANALYTICS_SCRIPT}: 必須の同意・計測制御「${text}」がありません`);
+    }
+    for (const field of ['company', 'name', 'email', 'tel', 'message']) {
+      if (new RegExp(`payload\\.${field}|\\[.?['\"]${field}['\"]\\]?`).test(src)) {
+        errors.push(`${ANALYTICS_SCRIPT}: 個人情報フィールド「${field}」を参照しています`);
+      }
     }
   }
 }
@@ -155,6 +202,6 @@ if (errors.length) {
   process.exit(1);
 }
 console.log(
-  '[OK] 未確定文字列0・解析タグ0・所在地/電話/受付時間の非掲載・Lite法務直リンク0・' +
+  '[OK] 未確定文字列0・GA4は事前同意方式の共通実装のみ・所在地/電話/受付時間の非掲載・Lite法務直リンク0・' +
     'Website版tokushoho不存在・最終確認画面の案内あり・Website独自文書の維持を確認しました',
 );

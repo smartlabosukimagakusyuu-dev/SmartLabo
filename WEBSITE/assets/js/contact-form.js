@@ -589,10 +589,9 @@
   /* -------------------------------------------------- 成功時の計測 -- */
 
   /*
-   * アクセス解析（GTM/GA4/dataLayer）は WEB-SALES-8L で撤去した。
-   * 以前ここにあった generate_lead の送信（送るのは種別のみ）も削除している。
-   * 再導入する場合は docs/website/ANALYTICS_REINTRODUCTION.md の条件を満たし、
-   * privacy.html の開示・Cookie同意の要否整理を済ませてから行うこと。
+   * generate_lead は送信成功後にお問い合わせ種別だけを送る。
+   * 同意状態とGA4の読み込みは analytics-consent.js が一元管理し、
+   * 氏名・会社名・メール・電話番号・本文は解析へ渡さない。
    */
 
   /* ---------------------------------------------------------- 送信 -- */
@@ -637,6 +636,9 @@
       .then(function (data) {
         if (data.result === 'ok') {
           setStatus('ok', data.message || 'お問い合わせを受け付けました。');
+          if (typeof window.slwTrack === 'function') {
+            window.slwTrack('generate_lead', { inquiry_type: payload.type || 'unknown' });
+          }
           // 成功の応答を受け取ってから初めて入力欄を消す
           form.reset();
           if (tsField) tsField.value = String(Date.now());

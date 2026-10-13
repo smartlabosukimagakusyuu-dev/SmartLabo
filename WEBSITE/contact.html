@@ -2832,7 +2832,10 @@ html:not(.js) .signup-step + .signup-step {
 }
 </script>
 
-<style>.reveal{opacity:1!important;transform:none!important}</style></head>
+<style>.reveal{opacity:1!important;transform:none!important}</style>
+<link rel="stylesheet" href="assets/css/analytics-consent.css">
+<script defer src="assets/js/analytics-consent.js"></script>
+</head>
 <body>
 
 
@@ -4000,6 +4003,10 @@ html:not(.js) .signup-step + .signup-step {
       .then(function (data) {
         if (data.result === 'ok') {
           setStatus('ok', data.message || 'お問い合わせを受け付けました。');
+
+          if (typeof window.slwTrack === 'function') {
+            window.slwTrack('generate_lead', { inquiry_type: payload.type || 'unknown' });
+          }
 
           form.reset();
           if (tsField) tsField.value = String(Date.now());
