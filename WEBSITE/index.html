@@ -8,6 +8,7 @@
   <link rel="canonical" href="https://smartlaboworks.com/">
   <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="preload" as="image" href="assets/images/app-customer.webp" type="image/webp" fetchpriority="high">
   <meta property="og:type" content="website"><meta property="og:site_name" content="Smart Labo Works">
   <meta property="og:title" content="中小企業向け社内イントラ・業務支援システム｜Smart Labo Works">
   <meta property="og:description" content="顧客・予定管理、日報・報告書、社内資料、AI検索をひとつに。社内イントラとしても使える中小企業向け業務支援システム。">
@@ -45,6 +46,8 @@
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
         "description": "社内イントラ、顧客・予定管理、日報・報告書、社内資料、AI検索などをひとつにまとめる中小企業向け業務支援システムです。",
+        "audience": { "@type": "BusinessAudience", "audienceType": "中小企業" },
+        "featureList": ["社内イントラ", "顧客・予定管理", "日報・報告書", "AIによる社内情報検索", "アルコールチェック記録"],
         "provider": { "@id": "https://smartlaboworks.com/#organization" },
         "offers": {
           "@type": "Offer",
@@ -53,6 +56,19 @@
           "description": "月額料金の目安。表示価格は税別で、機能追加・自動化は個別見積りです。"
         }
       }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "従業員が少ない会社でも使えますか？", "acceptedAnswer": { "@type": "Answer", "text": "はい。少人数の会社でも、日々の記録や情報共有をまとめたい場合にご利用いただけます。必要な人数と機能を伺ってご提案します。" } },
+      { "@type": "Question", "name": "ITが苦手でも使えますか？", "acceptedAnswer": { "@type": "Answer", "text": "できるだけ迷わず操作できる画面と、会社の運用に合わせた初期設定を重視しています。導入時に基本操作もご案内します。" } },
+      { "@type": "Question", "name": "今使っているExcelのデータは移せますか？", "acceptedAnswer": { "@type": "Answer", "text": "データの形式と内容を確認したうえで、移行できる範囲と方法をご案内します。まずは現在のファイルを拝見して判断します。" } },
+      { "@type": "Question", "name": "契約期間の縛りはありますか？", "acceptedAnswer": { "@type": "Answer", "text": "利用する機能や個別開発の内容によって条件が異なるため、お見積り時に利用期間を含む契約条件をご案内します。" } },
+      { "@type": "Question", "name": "仕様が決まっていなくても相談できますか？", "acceptedAnswer": { "@type": "Answer", "text": "はい。現在の作業を伺い、どこから仕組み化するのがよいかを一緒に整理します。相談時点で仕様書は必要ありません。" } }
     ]
   }
   </script>
@@ -66,7 +82,7 @@
 </div></header>
 <main id="main">
 <section class="works-hero"><div class="container works-hero__grid">
-  <div class="works-hero__copy"><p class="works-kicker">中小企業のための業務支援システム</p><h1>毎日の事務作業を、<br>もっとラクに。</h1><p class="works-hero__lead">顧客・予定・報告・社内情報をひとつに。<br>会社の仕事の流れに合わせて、使いやすく整えます。</p><div class="works-actions"><a class="btn btn--primary btn--lg" href="contact.html?type=diagnosis#form">無料で業務診断を受ける</a><a class="btn btn--secondary btn--lg" href="#features">機能を見る</a></div><p class="works-cta-note">オンライン30分・売り込みはしません</p></div>
+  <div class="works-hero__copy"><p class="works-kicker">中小企業のための業務支援システム</p><h1>社内イントラと業務支援を、<br>ひとつに。</h1><p class="works-hero__lead">顧客・予定・報告・社内情報をまとめ、毎日の事務作業をもっとラクに。<br>会社の仕事の流れに合わせて、使いやすく整えます。</p><div class="works-actions"><a class="btn btn--primary btn--lg" href="contact.html?type=diagnosis#form">無料で業務診断を受ける</a><a class="btn btn--secondary btn--lg" href="#features">機能を見る</a></div><p class="works-cta-note">オンライン30分・売り込みはしません</p></div>
   <div class="works-hero__visual" aria-label="Smart Labo Worksの顧客管理画面"><div class="works-hero__screen"><img src="assets/images/app-customer.webp" alt="架空データを表示したSmart Labo Worksの顧客管理画面" width="1360" height="850"></div><div class="works-hero__badge"><strong>AI</strong><span>業務の中で<br>自然に使える</span></div></div>
 </div></section>
 <section class="section works-about" id="about"><div class="container works-about__grid"><div><p class="works-eyebrow">ABOUT</p><h2 class="section__title">Worksとは</h2></div><div class="works-about__body"><p>Smart Labo Worksは、日々の業務をひとつの場所にまとめる中小企業向けの業務支援システムです。</p><p>顧客情報、予定、報告、社内資料を、担当者だけに頼らず誰でも扱える形に整えます。</p><p>既製品をそのまま押しつけるのではなく、会社ごとの仕事の流れに合わせて必要な部分を調整します。</p></div></div></section>
@@ -82,6 +98,7 @@
   <article class="works-intranet__item"><p class="works-intranet__num">02</p><h3>日々の仕事をつなぐ</h3><p>予定・タスク・顧客対応・日報を同じシステムで扱い、部署や担当者をまたぐ情報共有をスムーズにします。</p></article>
   <article class="works-intranet__item"><p class="works-intranet__num">03</p><h3>AIで社内情報を探す</h3><p>登録した資料や過去の記録をAIで探しやすくし、詳しい担当者だけに頼らない環境を目指します。</p></article>
 </div><p class="works-intranet__note">利用できる機能は、ご契約内容と会社ごとの設定によって異なります。</p></div></section>
+<section class="section works-guides" aria-labelledby="guides-title"><div class="container"><div class="works-section-head"><p class="works-eyebrow">SOLUTIONS</p><h2 class="section__title" id="guides-title">目的に合わせて、詳しく見る。</h2><p class="section__lead">現在の課題に近い内容から、Worksの使い方と導入の考え方をご確認いただけます。</p></div><div class="works-guides__grid"><a href="intranet.html"><strong>中小企業向け社内イントラ</strong><span>社内情報と日々の仕事を、ひとつの入口へ。</span><b aria-hidden="true">→</b></a><a href="business-efficiency.html"><strong>業務効率化・Excel作業の見直し</strong><span>重複入力、集計、報告書作成の流れを整理。</span><b aria-hidden="true">→</b></a><a href="ai-business.html"><strong>中小企業のAI活用</strong><span>文章作成と社内情報検索を、日常業務の中へ。</span><b aria-hidden="true">→</b></a></div></div></section>
 <section class="section section--inverse works-consult"><div class="container works-consult__grid"><div><p class="works-eyebrow">CUSTOMIZE</p><h2 class="section__title">御社の仕事に合わせて、必要な機能を追加。</h2><p>転記、集計、書類作成など、時間がかかっている業務を伺い、仕組みにできる部分をご提案します。</p></div><div><a class="btn btn--light btn--lg" href="contact.html?type=diagnosis#form">無料で業務診断を受ける</a><p class="works-cta-note">オンライン30分・売り込みはしません</p></div></div></section>
 <section class="section" id="price"><div class="container"><div class="works-section-head works-section-head--center"><p class="works-eyebrow">PRICE</p><h2 class="section__title">料金の目安</h2><p class="section__lead">共通の基盤を活用することで、導入しやすい料金に抑えています。</p></div><div class="works-price"><div class="works-price__item"><span>月額</span><strong>20,000<small>円〜</small></strong></div><div class="works-price__item"><span>初期費用</span><strong>30,000<small>円〜</small></strong></div></div><p class="works-tax">表示価格は税別です。</p><p class="works-price-note">会社ごとの機能追加・自動化は、ご相談内容に合わせて個別にお見積りします。</p></div></section>
 <section class="section section--subtle" id="flow"><div class="container"><div class="works-section-head works-section-head--center"><p class="works-eyebrow">FLOW</p><h2 class="section__title">導入の流れ</h2></div><ol class="works-flow"><li><span>01</span><div><h3>無料業務診断</h3><p>現在の管理方法と、時間がかかっている作業を伺います。</p></div></li><li><span>02</span><div><h3>ご提案・お見積り</h3><p>必要な機能、進め方、費用をご説明します。</p></div></li><li><span>03</span><div><h3>初期設定</h3><p>会社の運用に合わせて設定し、基本操作をご案内します。</p></div></li><li><span>04</span><div><h3>利用開始</h3><p>実際の業務で使いながら、必要に応じて調整します。</p></div></li></ol></div></section>
@@ -94,5 +111,5 @@
 </div></div></section>
 <section class="section section--inverse works-final"><div class="container"><p class="works-eyebrow">CONTACT</p><h2>まずは、時間がかかっている作業を<br>教えてください。</h2><p>仕組みで減らせる作業を、30分で一緒に整理します。</p><a class="btn btn--light btn--lg" href="contact.html?type=diagnosis#form">無料で業務診断を受ける</a><p class="works-cta-note">オンライン30分・売り込みはしません</p></div></section>
 </main>
-<footer class="works-footer"><div class="container works-footer__inner"><a class="logo" href="index.html"><img class="logo__icon" src="assets/brand/icon-white-64.webp" alt="" width="64" height="64"><span class="logo__text">Smart Labo Works</span></a><nav aria-label="フッターナビゲーション"><a href="company.html">会社情報</a><a href="contact.html">お問い合わせ</a><a href="privacy.html">プライバシーポリシー</a><a href="terms.html">利用規約</a></nav><small>&copy; 株式会社スマートラボ</small></div></footer>
+<footer class="works-footer"><div class="container works-footer__inner"><a class="logo" href="index.html"><img class="logo__icon" src="assets/brand/icon-white-64.webp" alt="" width="64" height="64"><span class="logo__text">Smart Labo Works</span></a><nav aria-label="フッターナビゲーション"><a href="intranet.html">社内イントラ</a><a href="business-efficiency.html">業務効率化</a><a href="ai-business.html">AI活用</a><a href="company.html">会社情報</a><a href="contact.html">お問い合わせ</a><a href="privacy.html">プライバシーポリシー</a><a href="terms.html">利用規約</a></nav><small>&copy; 株式会社スマートラボ</small></div></footer>
 </body></html>
