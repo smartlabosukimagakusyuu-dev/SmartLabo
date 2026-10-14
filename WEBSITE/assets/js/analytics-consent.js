@@ -96,6 +96,15 @@
         showConsent();
         return;
       }
+      var downloadLink = event.target.closest('[data-slw-download="brochure"]');
+      if (downloadLink) {
+        window.slwTrack('brochure_download', {
+          file_name: 'smart-labo-works-brochure.pdf',
+          link_url: downloadLink.getAttribute('href') || '',
+          link_location: sectionName(downloadLink)
+        });
+        return;
+      }
       var link = event.target.closest('a[href*="contact.html"]');
       if (!link) return;
       window.slwTrack('cta_click', {

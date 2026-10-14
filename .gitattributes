@@ -29,3 +29,6 @@
 # 回答 JSON の正式構造（生成物）。
 #   作り直し方: node intake-api/dev/generate-answer-schema.mjs
 /intake-api/src/AnswerSchema.php text eol=lf
+
+# 公開用会社パンフレット。PDFをテキスト差分として扱わない。
+/WEBSITE/assets/docs/smart-labo-works-brochure.pdf binary
