@@ -61,7 +61,7 @@
     banner.setAttribute('aria-labelledby', 'slw-consent-title');
     banner.innerHTML =
       '<p class="slw-consent__title" id="slw-consent-title">アクセス解析について</p>' +
-      '<p class="slw-consent__text">サイト改善のため、同意いただいた場合のみGoogle Analyticsを使用します。フォームへ入力した氏名・会社名・メール・電話番号・お問い合わせ本文は送信しません。詳しくは<a href="privacy.html#analytics">プライバシーポリシー</a>をご確認ください。</p>' +
+      '<p class="slw-consent__text">サイト改善のため、同意時のみアクセス解析を使用します。お問い合わせ内容は送信しません。詳しくは<a href="privacy.html#analytics">プライバシーポリシー</a>をご確認ください。</p>' +
       '<div class="slw-consent__actions">' +
         '<button class="slw-consent__button slw-consent__button--accept" type="button" data-slw-consent="granted">同意する</button>' +
         '<button class="slw-consent__button slw-consent__button--reject" type="button" data-slw-consent="denied">拒否する</button>' +
